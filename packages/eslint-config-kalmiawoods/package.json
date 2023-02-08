@@ -1,6 +1,7 @@
 {
-  "name": "eslint-config-custom",
+  "name": "eslint-config-kalmiawoods",
   "version": "0.0.0",
+  "private": true,
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
