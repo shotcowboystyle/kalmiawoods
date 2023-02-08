@@ -1,0 +1,38 @@
+{
+  "words": [
+    "astro",
+    "astrojs",
+    "astrolib",
+    "commitlint",
+    "composables",
+    "cssnano",
+    "daisyui",
+    "dangerfile",
+    "flatpickr",
+    "fontsource",
+    "iconify",
+    "jasikpark",
+    "Jocassee",
+    "kalmiawoods",
+    "Keowee",
+    "nanostores",
+    "partytown",
+    "pinst",
+    "postpublish",
+    "precss",
+    "subfont",
+    "syncpack",
+    "tabler",
+    "tailwindcss",
+    "todos",
+    "tsconfigs",
+    "unionpay",
+    "Unipay",
+    "unplugin",
+    "vueuse",
+    "xtendui"
+  ],
+  "enableFiletypes": [
+    "mdx"
+  ]
+}
