@@ -21,7 +21,7 @@ const whenExternalScripts = (items = []) =>
 // https://astro.build/config
 export default defineConfig({
   // site: SITE.origin,
-  site: 'https://kalmiawoods-client.vercel.app',
+  site: process.env.SITE_URL ?? 'https://www.kalmiawoods.com',
   base: '/',
   trailingSlash: 'never',
 
