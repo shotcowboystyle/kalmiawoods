@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Vue.js",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["DOM", "ESNext", "DOM.Iterable", "ScriptHost"],
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": false,
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "sourceMap": true,
+    "isolatedModules": true,
+    "noImplicitAny": false,
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "noUnusedParameters": true,
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "types": ["vue", "node", "vite/client", "unplugin-icons/types/vue"]
+  },
+  "exclude": ["node_modules", "dist"]
+}
