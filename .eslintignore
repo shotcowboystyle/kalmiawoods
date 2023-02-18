@@ -2,3 +2,7 @@ dist/
 !.storybook
 storybook-static
 ./commitlint.config.js
+.husky
+.vscode
+node_modules
+public
