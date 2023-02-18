@@ -1,0 +1,13 @@
+---
+import { Calendar } from '@kalmiawoods/ui';
+import '@kalmiawoods/ui/style.css';
+import Layout from '@layouts/Main.astro';
+---
+
+<Layout title="Availability">
+  <div class="mt-32">
+    <div class="container">
+      <Calendar client:only="vue" />
+    </div>
+  </div>
+</Layout>

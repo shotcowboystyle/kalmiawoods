@@ -1,0 +1,180 @@
+---
+import '@assets/styles/base.css';
+import { SITE } from '@config';
+import '@fontsource/inter/variable.css';
+import { Spa } from 'astro-spa';
+import { pwaInfo } from 'virtual:pwa-info';
+import ReloadPrompt from '../components/ReloadPrompt.astro';
+
+// const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+
+export interface Props {
+  title?: string;
+  author?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+// replaced dynamically
+// const buildDate = __DATE__;
+
+const {
+  title = SITE.title,
+  author = SITE.author,
+  description = SITE.desc,
+  ogImage = SITE.ogImage,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const socialImageURL = new URL(ogImage ? ogImage : SITE.ogImage, Astro.url.origin).href;
+
+const fallbackImageURL = new URL(SITE.ogImage, Astro.url.origin).href;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="2xl:text-[20px]">
+  <!-- class="h-full motion-safe:scroll-smooth" -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+    <link rel="mask-icon" href="/favicon.svg" color="#FFFFFF" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- General Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={socialImageURL} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta
+      property="twitter:image"
+      content={socialImageURL.endsWith('.svg') ? fallbackImageURL : socialImageURL}
+    />
+
+    <!-- Google Font -->
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
+      rel="stylesheet"
+    /> -->
+
+    <!-- {
+      // If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,
+      // include google-site-verification tag in the heading
+      // Learn more: https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag
+      googleSiteVerification && (
+        <meta name="google-site-verification" content={googleSiteVerification} />
+      )
+    } -->
+
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+  </head>
+
+  <body class="antialiased tracking-tight">
+    <slot />
+    <style is:global>
+      img {
+        content-visibility: auto;
+      }
+    </style>
+    <Spa />
+    <ReloadPrompt />
+  </body>
+</html>
+
+<script is:inline>
+  function applyColorMode(colorMode) {
+    const root = document.documentElement;
+    if (colorMode === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    root.setAttribute('data-color-mode', colorMode);
+    root.setAttribute('data-theme', colorMode);
+  }
+
+  function attachEvent(selector, event, fn) {
+    const matches = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    if (matches?.length) {
+      matches.forEach((elem) => {
+        elem.addEventListener(event, (e) => fn(e, elem), false);
+      });
+    }
+  }
+
+  window.onload = function () {
+    const colorMode = localStorage.getItem('colorMode');
+    if (
+      colorMode === 'dark' ||
+      (!colorMode && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      applyColorMode('dark');
+    } else {
+      applyColorMode('light');
+    }
+
+    let lastKnownScrollPosition = window.scrollY;
+    let ticking = true;
+
+    function appyNavbarStylesOnScroll() {
+      const navbar = document.getElementById('navbar');
+      if (lastKnownScrollPosition > 60 && !navbar?.classList.contains('scroll')) {
+        navbar.classList.add('scroll');
+      } else if (lastKnownScrollPosition <= 60 && navbar?.classList.contains('scroll')) {
+        navbar.classList.remove('scroll');
+      }
+      ticking = false;
+    }
+    appyNavbarStylesOnScroll();
+
+    attachEvent('#color-mode-toggle-button', 'click', function (_, elem) {
+      const root = document.documentElement;
+      root.classList.toggle('dark');
+      const isDark = root.classList.contains('dark');
+      const colorMode = isDark ? 'dark' : 'light';
+      localStorage.setItem('colorMode', colorMode);
+      root.setAttribute('data-color-mode', colorMode);
+      root.setAttribute('data-theme', colorMode);
+      elem.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      elem.setAttribute('aria-label', isDark ? 'Disable dark mode' : 'Enable dark mode');
+      elem.classList.toggle('swap-active');
+    });
+
+    attachEvent([document], 'scroll', function () {
+      lastKnownScrollPosition = window.scrollY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          appyNavbarStylesOnScroll();
+        });
+        ticking = true;
+      }
+    });
+  };
+
+  window.onpageshow = function () {
+    document.documentElement.classList.add('motion-safe:scroll-smooth');
+    document.getElementById('navbar')?.classList.remove('h-screen');
+    document.querySelector('#navbar nav')?.classList.add('hidden');
+  };
+</script>

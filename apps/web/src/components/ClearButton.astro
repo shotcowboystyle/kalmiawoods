@@ -1,0 +1,21 @@
+---
+import { Icon } from 'astro-icon';
+
+interface Props {
+  isDisabled?: boolean;
+  showSeparator?: boolean;
+}
+
+const { isDisabled, showSeparator } = Astro.props;
+---
+
+<div class:list={['flex items-center pr-3', { 'border-r border-gray-200 flex items-center h-8': showSeparator }]}>
+  <button
+    type="button"
+    tabindex="1"
+    class:list={['btn btn-circle btn-ghost btn-sm', { 'opacity-100': !isDisabled, 'opacity-0': isDisabled }]}
+    disabled={isDisabled}
+  >
+    <Icon name="ri:close-line" class="w-4 h-4" />
+  </button>
+</div>

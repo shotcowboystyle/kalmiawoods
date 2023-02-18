@@ -1,0 +1,26 @@
+---
+import Footer from '@components/Footer.astro';
+import Navbar from '@components/Navbar.astro';
+import { SITE } from '@config';
+import '@kalmiawoods/ui/style.css';
+import Layout from '@layouts/Layout.astro';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = SITE.title, description = SITE.desc } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <slot name="navbar">
+    <Navbar />
+  </slot>
+  <main id="main-content">
+    <slot />
+  </main>
+  <slot name="footer">
+    <Footer />
+  </slot>
+</Layout>

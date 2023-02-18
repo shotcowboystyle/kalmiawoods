@@ -1,0 +1,34 @@
+---
+const bookingOptions = [
+  {
+    type: 'button',
+    text: 'Book your stay',
+    href: 'https://github.com/onwidget/astrowind',
+  },
+  {
+    type: 'button',
+    text: 'Book an excursion',
+    href: 'https://github.com/onwidget/astrowind',
+  },
+  {
+    type: 'button',
+    text: 'Host an event',
+    href: 'https://github.com/onwidget/astrowind',
+  },
+];
+---
+
+<div
+  id="navbar-booking-options"
+  class="relative order-last col-span-2 flex flex-col items-center justify-center xl:order-none xl:col-span-1"
+>
+  <div>
+    {
+      bookingOptions.map(({ text }) => (
+        <span class="relative my-3 inline-block cursor-pointer px-4 pb-2 after:absolute after:bottom-0 after:right-1/2 after:h-[2px] after:w-5 after:translate-x-1/2 after:rounded-full after:bg-white 2xl:my-2">
+          <Fragment set:html={text} />
+        </span>
+      ))
+    }
+  </div>
+</div>

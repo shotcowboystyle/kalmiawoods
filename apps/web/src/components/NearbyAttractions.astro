@@ -1,0 +1,86 @@
+---
+import Image from '@components/Img.astro';
+// import { Image } from '@astrojs/image/components';
+
+const nearbyAttractions = [
+  {
+    name: 'Whitewater Falls',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-waterfall-one.jpeg',
+  },
+  {
+    name: 'Lake Jocassee',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-lake-jocassee-one.jpeg',
+  },
+  {
+    name: 'Lake Keowee',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-lake-keowee-one.jpeg',
+  },
+  {
+    name: 'Whitewater Falls',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-waterfall-two.jpeg',
+  },
+  {
+    name: 'Lake Jocassee',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-lake-jocassee-two.jpeg',
+  },
+  {
+    name: 'Lake Keowee',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-lake-keowee-two.jpeg',
+  },
+  {
+    name: 'Whitewater Falls',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-waterfall-three.jpeg',
+  },
+  {
+    name: 'Lake Jocassee',
+    distance: '5-minute drive',
+    href: 'https://google.com',
+    image: '@assets/images/attractions-lake-jocassee-three.jpeg',
+  },
+];
+---
+
+<section class="pt-12 container">
+  <h2 class="mb-4 font-semibold text-2xl">Explore Nearby</h2>
+  <div class="grid grid-cols-2 gap-x-1 gap-y-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-4">
+    {
+      nearbyAttractions.map((attraction) => (
+        <a href={attraction.href} target="_blank">
+          <div class="flex flex-col items-start gap-x-4 rounded-xl p-2 drop-shadow-lg duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40 md:flex-row md:items-center md:p-3">
+            <div class="image-container min-h-min">
+              <Image
+                alt={attraction.name}
+                class="h-16 w-16 rounded-xl object-cover"
+                src={attraction.image}
+                height={64}
+                width={64}
+                aspectRatio="1:1"
+              />
+            </div>
+
+            <div class="mt-2 md:mt-0">
+              <span class="block text-sm font-medium text-gray-900 dark:text-gray-800">
+                {attraction.name}
+              </span>
+              <span class="text-sm text-gray-500">{attraction.distance}</span>
+            </div>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</section>
