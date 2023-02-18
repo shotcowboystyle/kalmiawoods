@@ -1,0 +1,38 @@
+---
+import { Picture } from '@astrojs/image/components';
+import GradientText from '@components/GradientText.astro';
+---
+
+<header class="relative h-screen md:h-[80vh]">
+  <div class="absolute z-10 h-4/6 w-full bg-gradient-to-b from-black"></div>
+  <div class="absolute top-0 bottom-0 left-0 right-0 m-0 block overflow-hidden">
+    <Picture
+      alt="Kalmia Woods main house front view"
+      class="object-cover object-top w-screen h-screen md:h-full"
+      widths={[640, 750, 828, 1080, 1200, 1920, 2048, 3840]}
+      sizes="100vw"
+      loading="eager"
+      decoding="async"
+      aspectRatio={16 / 9}
+      src={import('@assets/images/house-cottage-three.jpeg')}
+    />
+  </div>
+  <div class="container">
+    <div class="absolute left-0 right-0 top-[35%] z-10 md:top-[50%] xl:top-[40%]">
+      <div class="flex flex-col content-center items-center text-center text-white">
+        <h1
+          class="mx-auto flex max-w-[250px] flex-col content-center items-center px-4 font-bold text-2xl md:px-0 md:text-3xl xl:max-w-[350px] xl:text-4xl"
+        >
+          <div>Welcome to</div>
+          <span class="text-center font-extrabold text-6xl md:text-8xl">
+            <GradientText>{import.meta.env.APP_NAME}</GradientText>
+          </span>
+        </h1>
+        <p class="py-2">
+          Our cabin is located in the heart of the <br />
+          Keowee-Toxaway wilderness of Oconee County.
+        </p>
+      </div>
+    </div>
+  </div>
+</header>

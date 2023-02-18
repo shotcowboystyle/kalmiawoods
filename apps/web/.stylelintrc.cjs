@@ -1,0 +1,41 @@
+/** @type {import("@types/stylelint").Options} */
+
+module.exports = {
+  // TODO: Split config
+
+  extends: [
+    'stylelint-config-standard',
+    'stylelint-config-tailwindcss',
+    'stylelint-config-prettier',
+    'stylelint-config-recess-order',
+  ],
+
+  plugins: ['stylelint-order'],
+
+  overrides: [
+    // NOTE: Too unstable for now
+    {
+      files: ['*.astro', '**/*.astro'],
+      customSyntax: 'postcss-html',
+    },
+  ],
+  rules: {
+    'comment-empty-line-before': null,
+    // Shorthand units make things hard to read and change
+    'shorthand-property-no-redundant-values': null,
+    'color-function-notation': null,
+    'property-no-vendor-prefix': null,
+    'value-keyword-case': null,
+    'declaration-block-no-redundant-longhand-properties': null,
+    'hue-degree-notation': null,
+    'length-zero-no-unit': null,
+    'alpha-value-notation': null,
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['global'],
+      },
+    ],
+    'max-line-length': [100, , { ignore: ['comments'] }],
+  },
+};

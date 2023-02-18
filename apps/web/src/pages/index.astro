@@ -1,0 +1,19 @@
+---
+import Layout from '@layouts/Main.astro';
+
+import Contact from '@components/Contact.astro';
+import Hero from '@components/Hero.astro';
+import NearbyAttractions from '@components/NearbyAttractions.astro';
+import PhotoGallery from '@components/PhotoGallery.astro';
+import Summary from '@components/Summary.astro';
+---
+
+<Layout>
+  <Hero />
+  <div class="pb-32 text-black bg-white dark:bg-stone-900">
+    <NearbyAttractions />
+    <PhotoGallery />
+  </div>
+  <Summary />
+  <Contact />
+</Layout>

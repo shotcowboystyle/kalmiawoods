@@ -1,0 +1,40 @@
+---
+import ClearButton from '@components/ClearButton.astro';
+import Dropdown from '@components/Dropdown.astro';
+import DropdownContent from '@components/DropdownContent.astro';
+
+interface Props {
+  isDisabled?: boolean;
+  placeholder: string;
+  showSeparator?: boolean;
+  title: string;
+}
+
+const { isDisabled, placeholder, showSeparator, title } = Astro.props;
+---
+
+<Dropdown class="group">
+  <label
+    role="button"
+    tabindex="0"
+    class="flex h-full min-h-full items-center rounded-full hover:bg-gray-200 hover:bg-opacity-40 focus:bg-white focus:shadow-lg"
+  >
+    <div class="flex min-w-[120px] flex-grow flex-col pr-3 pl-7 text-left">
+      <span class="font-semibold text-gray-900 text-xs">{title}</span>
+      <input
+        type="text"
+        placeholder={placeholder}
+        class="input input-xs w-full max-w-xs cursor-pointer truncate rounded-none bg-transparent p-0 text-gray-700 text-sm placeholder:text-slate-400 focus:border-transparent focus:outline-transparent focus:ring-0 active:ring-0 lg:max-w-none"
+        readonly
+      />
+      <!-- :id="inputElementId" -->
+      <!-- :value="value" -->
+    </div>
+
+    <ClearButton isDisabled={isDisabled} showSeparator={showSeparator} />
+  </label>
+
+  <DropdownContent>
+    <slot name="booking-quick-form-field-dropdown-content" />
+  </DropdownContent>
+</Dropdown>

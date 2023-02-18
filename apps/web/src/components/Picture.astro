@@ -1,0 +1,82 @@
+---
+import { Picture } from '@astrojs/image/components';
+import type { ColorDefinition } from '@astrojs/image/dist/loaders';
+import { findImage } from '@utils/images';
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  alt: string;
+  src: string;
+  sizes: string;
+  widths: Array<number>;
+  aspectRatio?: number | `${number}:${number}`;
+  loading?: 'eager' | 'lazy';
+  decoding?: 'async' | 'auto' | 'sync';
+  format?: 'avif' | 'jpeg' | 'png' | 'webp';
+  background?: ColorDefinition;
+  fit?: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
+  position?:
+    | 'top'
+    | 'right top'
+    | 'right'
+    | 'right bottom'
+    | 'bottom'
+    | 'left bottom'
+    | 'left'
+    | 'left top'
+    | 'north'
+    | 'northeast'
+    | 'east'
+    | 'southeast'
+    | 'south'
+    | 'southwest'
+    | 'west'
+    | 'northwest'
+    | 'center'
+    | 'centre'
+    | 'cover'
+    | 'entropy'
+    | 'attention';
+}
+
+const {
+  alt,
+  src,
+  sizes,
+  widths,
+  loading,
+  aspectRatio,
+  decoding,
+  width,
+  height,
+  format,
+  background,
+  fit,
+  position,
+  ...attrs
+} = Astro.props;
+
+// ugly hack to circumvent astro issue with dynamic import
+// https://github.com/withastro/astro/issues/3373
+// const images = import.meta.glob<ImageMetadata>('../images/*.{jpeg,jpg,png}', {
+//   import: 'default',
+// });
+
+const image = await findImage(src);
+---
+
+<Picture
+  alt={alt}
+  class={attrs.class}
+  src={image.src}
+  widths={widths}
+  sizes={sizes}
+  loading={loading}
+  aspectRatio={aspectRatio}
+  decoding={decoding}
+  width={width}
+  height={height}
+  format={format}
+  background={background}
+  fit={fit}
+  position={position}
+/>

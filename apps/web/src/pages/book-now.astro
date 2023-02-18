@@ -1,0 +1,28 @@
+---
+import { ReservationForm, ReservationFormFooter } from '@kalmiawoods/ui';
+import '@kalmiawoods/ui/style.css';
+import Layout from '@layouts/Main.astro';
+
+const title = 'Book Now';
+---
+
+<Layout title={title}>
+  <!-- <div slot="navbar">
+    <div class="flex items-center mb-2 space-x-2 md:container">
+      <a href="/" class="btn-ghost btn" rel="prefetch">
+        <Icon name="ri:arrow-left-line" class="w-6 h-6" />
+      </a>
+      <h1 class="text-2xl">{title}</h1>
+    </div>
+  </div> -->
+
+  <div class="mt-48">
+    <div class="container">
+      <ReservationForm client:only="vue" />
+    </div>
+  </div>
+
+  <div slot="footer">
+    <ReservationFormFooter client:load />
+  </div>
+</Layout>
