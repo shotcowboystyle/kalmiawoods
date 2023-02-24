@@ -1,6 +1,6 @@
 {
   "name": "@kalmiawoods/ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "dist/kalmiawoods-ui-vue.umd.js",
   "module": "dist/kalmiawoods-ui-vue.es.js",
