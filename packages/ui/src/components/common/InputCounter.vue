@@ -26,7 +26,7 @@ defineProps<{
 
     <button
       data-increase-button
-      tabindex="1"
+      tabindex="0"
       type="button"
       class="btn btn-sm btn-circle btn-outline"
       :class="{ 'btn-disabled': value === maxValue }"

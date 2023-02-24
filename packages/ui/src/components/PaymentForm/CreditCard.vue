@@ -137,26 +137,34 @@ onMounted(() => {
 
   const fields = document.querySelectorAll('[data-card-field]');
   fields.forEach((element) => {
-    element.addEventListener('focus', () => {
-      isFocused.value = true;
-      if (element.id === props.fields.cardYear || element.id === props.fields.cardMonth) {
-        currentFocus.value = 'cardDate';
-      } else {
-        currentFocus.value = element.id;
-      }
-
-      isCardFlipped.value = element.id === props.fields.cardCvv;
-    });
-
-    element.addEventListener('blur', () => {
-      isCardFlipped.value = !!(element.id === props.fields.cardCvv);
-      setTimeout(() => {
-        if (!isFocused.value) {
-          currentFocus.value = '';
+    element.addEventListener(
+      'focus',
+      () => {
+        isFocused.value = true;
+        if (element.id === props.fields.cardYear || element.id === props.fields.cardMonth) {
+          currentFocus.value = 'cardDate';
+        } else {
+          currentFocus.value = element.id;
         }
-      }, 300);
-      isFocused.value = false;
-    });
+
+        isCardFlipped.value = element.id === props.fields.cardCvv;
+      },
+      { passive: true },
+    );
+
+    element.addEventListener(
+      'blur',
+      () => {
+        isCardFlipped.value = !!(element.id === props.fields.cardCvv);
+        setTimeout(() => {
+          if (!isFocused.value) {
+            currentFocus.value = '';
+          }
+        }, 300);
+        isFocused.value = false;
+      },
+      { passive: true },
+    );
   });
 });
 </script>

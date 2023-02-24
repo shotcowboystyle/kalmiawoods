@@ -13,11 +13,11 @@ import { Icon } from 'astro-icon';
 > -->
 <button
   id="navbar-book-now-button"
-  class='hidden z-[-50] transform pl-6 relative md:flex items-center h-auto pr-0 mx-auto text-left bg-white border border-gray-200 rounded-full shadow-md cursor-pointer min-w-[220px] lg:min-w-[320px] hover:shadow-lg md:absolute left-24 md:left-auto right-2/3 lg:right-1/2 right text-sm translate-x-2/3 lg:translate-x-1/2 scale-[1.33] translate-y-[75px] md:opacity-0 duration-200'
+  class="right relative left-24 right-2/3 z-[-50] mx-auto hidden h-auto min-w-[220px] translate-x-2/3 translate-y-[75px] scale-[1.33] transform cursor-pointer items-center rounded-full border border-gray-200 bg-white pl-6 pr-0 text-left text-sm shadow-md duration-200 hover:shadow-lg md:absolute md:left-auto md:flex md:opacity-0 lg:right-1/2 lg:min-w-[320px] lg:translate-x-1/2"
 >
   <span class="flex-grow text-sm font-medium tracking-wide text-gray-500">Book Now</span>
   <span
-    class="flex items-center justify-center w-8 h-8 m-2 ml-0 rounded-full bg-primary hover:saturate-200"
+    class="m-2 ml-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary hover:saturate-200"
   >
     <Icon name="ri:arrow-right-line" class="h-4 text-white" />
   </span>
@@ -28,17 +28,25 @@ import { Icon } from 'astro-icon';
   const navbar = document.getElementById('navbar');
   // Each time the button is clicked, update the count.
   if (navbarBookingButton) {
-    navbarBookingButton.addEventListener('click', () => {
-      if (navbar) {
-        navbar.classList.add('show-booking-quick-form');
-      }
-    });
+    navbarBookingButton.addEventListener(
+      'click',
+      () => {
+        if (navbar) {
+          navbar.classList.add('show-booking-quick-form');
+        }
+      },
+      { passive: true },
+    );
 
-    document.addEventListener('click', (event) => {
-      const isNavbarClick = navbar?.contains(event.target as HTMLElement);
-      if (!isNavbarClick) {
-        navbar?.classList.remove('show-booking-quick-form');
-      }
-    });
+    document.addEventListener(
+      'click',
+      (event) => {
+        const isNavbarClick = navbar?.contains(event.target as HTMLElement);
+        if (!isNavbarClick) {
+          navbar?.classList.remove('show-booking-quick-form');
+        }
+      },
+      { passive: true },
+    );
   }
 </script>

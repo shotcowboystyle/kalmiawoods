@@ -1,8 +1,8 @@
 export const MIN_RESERVATION_DAYS = 3;
 
 export const RESERVATION_DATES_OPTIONS = [
-  { placeholder: 'Select date', key: 'start', title: 'Check in' },
-  { placeholder: 'Select date', key: 'end', title: 'Check out' },
+  { placeholder: 'Select date', key: 'start', title: 'Check in', clearButtonName: 'Clear start date' },
+  { placeholder: 'Select date', key: 'end', title: 'Check out', clearButtonName: 'Clear end date' },
 ];
 
 export const RESERVATION_GUESTS_OPTIONS = [

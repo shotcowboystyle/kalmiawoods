@@ -1,7 +1,17 @@
-export { default as AvailabilityCalendar } from './common/AvailabilityCalendar.vue';
-export { default as ContactForm } from './common/ContactForm.vue';
-export { default as ToggleTheme } from './common/ToggleTheme.vue';
-export { default as PaymentForm } from './PaymentForm/PaymentForm.vue';
-export { default as DatesAndGuestsQuickForm } from './ReservationForm/DatesAndGuestsQuickForm.vue';
-export { default as ReservationForm } from './ReservationForm/ReservationForm.vue';
-export { default as ReservationFormFooter } from './ReservationForm/ReservationFormFooter.vue';
+import AvailabilityCalendar from './common/AvailabilityCalendar.vue';
+import ContactForm from './common/ContactForm.vue';
+import ToggleTheme from './common/ToggleTheme.vue';
+import PaymentForm from './PaymentForm/PaymentForm.vue';
+import DatesAndGuestsQuickForm from './ReservationForm/DatesAndGuestsQuickForm.vue';
+import ReservationForm from './ReservationForm/ReservationForm.vue';
+import ReservationFormFooter from './ReservationForm/ReservationFormFooter.vue';
+
+export {
+  AvailabilityCalendar,
+  ContactForm,
+  ToggleTheme,
+  PaymentForm,
+  DatesAndGuestsQuickForm,
+  ReservationForm,
+  ReservationFormFooter,
+};
