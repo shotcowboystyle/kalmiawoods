@@ -1,5 +1,16 @@
 # @kalmiawoods/web
 
+## 0.2.0
+
+### Minor Changes
+
+- eb9871f: Improved Lighthouse score
+
+### Patch Changes
+
+- Updated dependencies [eb9871f]
+  - @kalmiawoods/ui@0.2.0
+
 ## 0.1.0
 
 ### Minor Changes
