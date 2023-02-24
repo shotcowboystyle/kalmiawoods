@@ -4,7 +4,7 @@ export type PaymentFormData = {
   cardMonth: number | string;
   cardYear: number | string;
   cardCvv: number | string;
-}
+};
 
 export type CreditCardLabels = {
   cardName: string;
@@ -12,7 +12,7 @@ export type CreditCardLabels = {
   cardMonth: number | string;
   cardYear: number | string;
   cardCvv: number | string;
-}
+};
 
 export type CreditCardFormFields = {
   cardNumber: 'v-card-number';
@@ -20,4 +20,4 @@ export type CreditCardFormFields = {
   cardMonth: 'v-card-month';
   cardYear: 'v-card-year';
   cardCvv: 'v-card-cvv';
-}
+};

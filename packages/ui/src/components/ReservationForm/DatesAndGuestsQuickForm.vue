@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MIN_RESERVATION_DAYS } from '@kalmiawoods/constants';
+import { MIN_RESERVATION_DAYS, RESERVATION_DATES_OPTIONS } from '@kalmiawoods/constants';
 import { useStore } from '@nanostores/vue';
 import { breakpointsTailwind, onClickOutside, useBreakpoints } from '@vueuse/core';
 import { formatDistanceStrict } from 'date-fns';
@@ -19,11 +19,6 @@ import {
 import { formatDateCalendar, formatDateLongLocalized, formatGuests } from '../../utils/formatters';
 import ClearButton from '../common/ClearButton.vue';
 import GuestsCounters from './GuestsCounters.vue';
-
-const dateButtons = [
-  { placeholder: 'Select date', key: 'start', title: 'Check in' },
-  { placeholder: 'Select date', key: 'end', title: 'Check out' },
-];
 
 const activeButton = ref<string | null>(null);
 const buttonActiveClass = ref('is-active shadow-2xl hover:bg-white rounded-full border');
@@ -117,28 +112,26 @@ onMounted(() => {
   >
     <div class="grid flex-grow grid-cols-[2fr,1fr,auto]">
       <div class="grid flex-grow grid-cols-[1fr,1fr] items-center h-full">
-        <template v-for="button in dateButtons">
+        <template v-for="{ key, placeholder, title } in RESERVATION_DATES_OPTIONS" :key="key">
           <label
             role="button"
             tabindex="0"
             class="flex items-center h-full min-h-full rounded-full hover:bg-gray-200 hover:bg-opacity-40 focus:bg-white"
-            :class="[activeButton === button.key && buttonActiveClass]"
-            @click="handleOnButtonClick(button.key)"
+            :class="[activeButton === key && buttonActiveClass]"
+            @click="handleOnButtonClick(key)"
           >
             <div class="flex flex-col flex-grow pr-3 text-left pl-7 min-w-[120px]">
-              <span class="block text-xs font-extrabold text-gray-900">{{ button.title }}</span>
+              <span class="block text-xs font-extrabold text-gray-900">{{ title }}</span>
               <span class="block p-0 text-sm text-gray-700 truncate">
-                {{
-                  $reservationDates[button.key] ? formatDateCalendar($reservationDates[button.key]) : button.placeholder
-                }}
+                {{ $reservationDates[key] ? formatDateCalendar($reservationDates[key]) : placeholder }}
               </span>
             </div>
 
             <ClearButton
-              :isActive="activeButton === button.key"
-              :isDisabled="!$reservationDates[button.key]"
-              showSeparator
-              :onClear="() => handleOnClear(button.key)"
+              :is-active="activeButton === key"
+              :is-disabled="!$reservationDates[key]"
+              :on-clear="() => handleOnClear(key)"
+              show-separator
             />
           </label>
         </template>
@@ -160,14 +153,11 @@ onMounted(() => {
           </div>
         </label>
 
-        <!-- <div class="h-full"> -->
-        <!-- :isDisabled="!formatGuests($reservationGuests).length" -->
         <ClearButton
-          :isActive="activeButton === 'guests'"
-          :isDisabled="false"
-          :onClear="() => handleOnClear('guests')"
+          :is-active="activeButton === 'guests'"
+          :is-disabled="!formatGuests($reservationGuests).length"
+          :on-clear="() => handleOnClear('guests')"
         />
-        <!-- </div> -->
       </div>
 
       <a href="/book-now" class="m-1 ml-0 btn btn-circle btn-primary" rel="prefetch">
@@ -177,23 +167,26 @@ onMounted(() => {
     </div>
 
     <div
+      ref="calendarPopover"
       class="absolute flex w-full px-4 pt-6 bg-white border top-16 drop-shadow-2xl rounded-xl"
       :class="{ hidden: !showCalendarPopover }"
-      ref="calendarPopover"
     >
       <div class="w-1/5">
         <div class="mb-1 text-lg font-bold text-gray-900">
           {{
             $reservationDates.start && $reservationDates.end
-              ? formatDistanceStrict($reservationDates.start, $reservationDates.end).replace('days', 'nights')
+              ? formatDistanceStrict(new Date($reservationDates.start), new Date($reservationDates.end)).replace(
+                  'days',
+                  'nights',
+                )
               : 'Select dates'
           }}
         </div>
         <div class="text-xs text-gray-400">
           {{
             $reservationDates.start && $reservationDates.end
-              ? `${formatDateLongLocalized($reservationDates.start)} - ${
-                  $reservationDates.end && formatDateLongLocalized($reservationDates.end)
+              ? `${formatDateLongLocalized(new Date($reservationDates.start))} - ${
+                  $reservationDates.end && formatDateLongLocalized(new Date($reservationDates.end))
                 }`
               : `Minimum stay: ${MIN_RESERVATION_DAYS} nights`
           }}
@@ -217,9 +210,9 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="absolute right-0 top-16" ref="guestsDropdown" :class="{ hidden: !showGuestsDropdown }">
-      <div class="bg-white shadow-xl card w-96">
-        <div class="text-gray-900 card-body">
+    <div ref="guestsDropdown" class="absolute right-0 top-16" :class="{ hidden: !showGuestsDropdown }">
+      <div class="bg-white shadow-xl dropdown-content card card-compact w-96">
+        <div class="card-body">
           <GuestsCounters />
         </div>
       </div>

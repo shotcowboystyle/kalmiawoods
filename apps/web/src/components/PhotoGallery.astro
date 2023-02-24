@@ -53,6 +53,7 @@ export const photoGallery = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const imageFiles: Record<string, any> = await fetchLocalImages();
 let images = await Promise.all(
   Object.entries(imageFiles).map(
@@ -63,17 +64,24 @@ let images = await Promise.all(
 images = images.filter((image) => !!image);
 ---
 
-<section class="container pt-12" data-images={JSON.stringify(images)} id="gallery-root">
-  <h2 class="mb-6 text-2xl font-semibold">Explore Inside</h2>
-  <div class="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4 lg:gap-x-8">
-    {
-      photoGallery.map(({ image, text }) => (
-        <div role="button" class="gallery-thumbnail">
-          <div class="image-container min-h-min">
-            <figure>
+<section class="my-10" data-images={JSON.stringify(images)} id="gallery-root">
+  <div class="container max-sm:w-screen max-sm:overflow-hidden">
+    <h2 class="mb-4 text-2xl font-bold text-base-content md:mb-4 md:text-3xl lg:mb-8 lg:text-4xl">
+      Explore Inside
+    </h2>
+    <div
+      class="max-sm:carousel-center max-sm:carousel max-sm:space-x-4 max-sm:px-4 sm:grid sm:grid-cols-2 sm:gap-x-1 sm:gap-y-2 lg:grid-cols-4 lg:gap-x-4"
+    >
+      {
+        photoGallery.map(({ image, text }) => (
+          <div role="button" class="gallery-thumbnail max-sm:carousel-item max-sm:w-52">
+            <figure
+              role="button"
+              class="gap-y-4 rounded-xl p-2 duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40 max-sm:w-full lg:p-3"
+            >
               <Picture
                 alt={text}
-                class="object-cover w-full h-24 shadow-xl rounded-xl md:h-72"
+                class="relative mb-2 h-40 w-full rounded-xl object-cover shadow-xl md:h-60 lg:h-72"
                 widths={[175, 314, 378]}
                 sizes="(max-width: 440px) 175px, (max-width: 1023px) 378px, 314px"
                 aspectRatio="2:3"
@@ -81,12 +89,14 @@ images = images.filter((image) => !!image);
                 decoding="async"
                 src={image}
               />
-              <figcaption class="py-2 text-sm font-medium md:text-md">{text}</figcaption>
+              <figcaption class="text-md text-base-content font-medium leading-5 md:text-xl">
+                {text}
+              </figcaption>
             </figure>
           </div>
-        </div>
-      ))
-    }
+        ))
+      }
+    </div>
   </div>
 </section>
 

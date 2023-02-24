@@ -1,6 +1,7 @@
 /dist
 /node_modules
-/@types
+/types
 .eslintrc.js
+tsconfig.*
 vite.config.js
 vitest.config.js

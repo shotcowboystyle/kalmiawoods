@@ -1,14 +1,27 @@
-import { MIN_RESERVATION_DAYS } from '@kalmiawoods/constants';
-import { addDays } from 'date-fns';
+// import { MIN_RESERVATION_DAYS } from '@kalmiawoods/constants';
+// import { addDays } from 'date-fns';
 import { action, atom, map } from 'nanostores';
-import type { Guests, ReservationDates, ReservationDetails } from '../types/Reservation';
+import type { Guests, ReservationDates, ReservationDetails } from '../../types/Reservation';
 
 type ReservationFormStep = number | 'complete';
 export const reservationFormStep = atom<ReservationFormStep>(1);
+type ReservationFormStepDirection = 'fade-right' | 'fade-left';
+export const reservationFormStepDirection = atom<ReservationFormStepDirection>('fade-right');
+type ActiveReservationFormStep = 'datesAndGuests' | 'payment' | 'confirmation';
+export const activeReservationFormStep = atom<ActiveReservationFormStep>('datesAndGuests');
 
 // const unbindReservationFormStepListener = reservationFormStep.subscribe((value) => {
 //   return value;
 // });
+
+export const setReservationFormActiveStep = action(
+  activeReservationFormStep,
+  'setReservationFormActiveStep',
+  (store, value) => {
+    store.set(value);
+    return store.get();
+  },
+);
 
 export const nextStep = action(reservationFormStep, 'nextStep', (store) => {
   const currentStep = store.get();
@@ -19,6 +32,7 @@ export const nextStep = action(reservationFormStep, 'nextStep', (store) => {
     store.set(currentStep + 1);
   }
 
+  reservationFormStepDirection.set('fade-right');
   return store.get();
 });
 
@@ -27,19 +41,13 @@ export const prevStep = action(reservationFormStep, 'prevStep', (store) => {
 
   if (typeof currentStep === 'number') {
     store.set(currentStep - 1);
+  } else {
+    store.set(3);
   }
 
+  reservationFormStepDirection.set('fade-left');
   return store.get();
 });
-
-export const percentComplete = () => {
-  const step = reservationFormStep.get();
-  if (typeof step !== 'number') {
-    return 100;
-  }
-
-  return Number((step / 3) * 100);
-};
 
 // export const reservationDates = map({
 export const reservationDates = map<ReservationDates>({
@@ -56,11 +64,11 @@ export const reservationGuests = map<Guests>({
   pets: 0,
 });
 
-const initReservationFormValues = {
+export const initReservationFormValues = {
   name: '',
   dates: {
-    start: new Date(),
-    end: addDays(new Date(), MIN_RESERVATION_DAYS),
+    start: undefined,
+    end: undefined,
   },
   guests: {
     adults: 1,
@@ -73,12 +81,20 @@ const initReservationFormValues = {
 export const reservationFormValues = map<ReservationDetails>(initReservationFormValues);
 // export const reservationFormValues = map(initReservationFormValues);
 
+export const updateReservationDates = action(reservationDates, 'updateReservationDates', (store, value) => {
+  return store.set(value);
+});
+
 export const updateReservationStartDate = action(reservationDates, 'updateReservationStartDate', (store, value) => {
   return store.setKey('start', value);
 });
 
 export const updateReservationEndDate = action(reservationDates, 'updateReservationEndDate', (store, value) => {
   return store.setKey('end', value);
+});
+
+export const updateReservationGuests = action(reservationGuests, 'updateReservationGuests', (store, value) => {
+  return store.set(value);
 });
 
 export const updateReservationGuestsAdults = action(

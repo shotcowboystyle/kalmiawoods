@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import { useStore } from '@nanostores/vue';
+import { ref } from 'vue';
+import { nextStep, prevStep, reservationFormStep } from '../../stores/reservationFormWithTransition';
+
+const step = useStore(reservationFormStep);
+const isSubmitting = ref(false);
+
+const handleSubmit = () => {
+  isSubmitting.value = true;
+  setTimeout(() => nextStep(), 3000);
+};
+</script>
+
+<template>
+  <div
+    class="fixed bottom-0 left-0 right-0 z-50 py-5 bg-white shadow-md dark:bg-gray-800"
+    :class="{ hidden: step === 'complete' }"
+  >
+    <div class="max-w-3xl px-4 mx-auto">
+      <div class="flex justify-between">
+        <div class="w-1/2">
+          <button v-if="step > 1" class="btn btn-outline" @click="prevStep">Previous</button>
+        </div>
+
+        <div class="w-1/2 text-right">
+          <button v-if="step < 3" class="btn btn-primary" @click="nextStep">Next</button>
+          <button v-if="step === 3" class="btn btn-primary" :class="{ loading: isSubmitting }" @click="handleSubmit">
+            Complete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

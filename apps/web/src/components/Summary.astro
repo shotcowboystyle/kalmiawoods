@@ -1,6 +1,37 @@
 ---
 import { Icon } from 'astro-icon';
 
+const highlights = [
+  {
+    title: 'Mountain Bike Trails',
+    description: 'Explore the over 5 miles of private mountain biking trails.',
+    icon: 'ri:bike-line',
+    containerClass:
+      'flex items-center md:block p-4 md:p-8 md:text-center rounded-lg shadow-lg bg-info',
+  },
+  {
+    title: 'Game Room',
+    description: 'A dedicated game room for kids and adults to go wild.',
+    icon: 'icon-park-outline:game-ps',
+    containerClass:
+      'flex items-center md:block p-4 md:p-8 mt-8 md:text-center rounded-lg shadow-lg bg-success',
+  },
+  {
+    title: 'Barbecue',
+    description: 'A covered outdoor kitchen for all your culinary needs.',
+    icon: 'ic:outline-outdoor-grill',
+    containerClass:
+      'flex items-center md:block p-4 md:p-8 md:text-center rounded-lg shadow-lg bg-warning',
+  },
+  {
+    title: 'Star Gazing',
+    description: 'With little to no light pollution, watch the night sky light up.',
+    icon: 'bi:stars',
+    containerClass:
+      'flex items-center md:block p-4 md:p-8 mt-8 md:text-center rounded-lg shadow-lg bg-error',
+  },
+];
+
 const features = [
   { text: 'Private Trails' },
   { text: 'Camping' },
@@ -13,79 +44,72 @@ const features = [
 ];
 ---
 
-<section class="relative flex flex-wrap items-center pt-0 pb-40 container">
-  <div class="mt-32 ml-auto mr-auto w-full px-4 md:w-6/12">
-    <div class="relative flex flex-wrap justify-center">
-      <div class="my-4 w-full px-4 lg:w-6/12">
-        <div class="rounded-lg bg-primary p-8 text-center shadow-lg">
-          <div class="mx-auto w-12 max-w-full rounded-full bg-white p-2 shadow-md">
-            <Icon name="ri:bike-line" title="bike trails" class="w-8 h-8 mx-auto" />
-          </div>
-          <p class="mt-4 font-semibold text-white text-base">Mountain Bike Trails</p>
-          <p class="mt-2 text-white opacity-75 text-sm">
-            Explore the over 5 miles of private mountain biking trails.
-          </p>
+<section class="mt-16 bg-gradient-to-r from-primary to-secondary-content py-6 md:py-20">
+  <div class="container flex flex-wrap items-center">
+    <div class="my-10 ml-auto mr-auto w-full px-0 md:w-1/2 md:px-4">
+      <div class="relative flex flex-wrap justify-center">
+        <div class="my-4 w-full px-1 md:px-4 lg:w-1/2">
+          {
+            highlights.slice(0, 2).map(({ title, description, icon, containerClass }) => (
+              <div class:list={[containerClass]}>
+                <div class="mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md">
+                  <Icon name={icon} title={title} class="mx-auto h-8 w-8" />
+                </div>
+                <div class="ml-4 md:ml-0 md:mt-4">
+                  <p class="text-base font-semibold text-white">{title}</p>
+                  <p class="mt-1 text-sm text-white opacity-75 md:mt-2">{description}</p>
+                </div>
+              </div>
+            ))
+          }
         </div>
-        <div class="mt-8 rounded-lg bg-warning p-8 text-center shadow-lg">
-          <div class="mx-auto w-12 max-w-full rounded-full bg-white p-2 shadow-md">
-            <Icon name="icon-park-outline:game-ps" title="game room" class="w-8 h-8 mx-auto" />
-          </div>
-          <p class="mt-4 font-semibold text-white text-base">Game Room</p>
-          <p class="mt-2 text-white opacity-75 text-sm">
-            A dedicated game room for kids and adults to go wild.
-          </p>
-        </div>
-      </div>
-      <div class="my-4 w-full px-4 lg:mt-16 lg:w-6/12">
-        <div class="rounded-lg bg-info p-8 text-center shadow-lg">
-          <div class="mx-auto w-12 max-w-full rounded-full bg-white p-2 shadow-md">
-            <Icon name="ic:outline-outdoor-grill" title="grill" class="w-8 h-8 mx-auto" />
-          </div>
-          <p class="mt-4 font-semibold text-white text-base">Barbecue</p>
-          <p class="mt-2 text-white opacity-75 text-sm">
-            A covered outdoor kitchen for all your culinary needs.
-          </p>
-        </div>
-        <div class="mt-8 rounded-lg bg-error p-8 text-center shadow-lg">
-          <div class="mx-auto w-12 max-w-full rounded-full bg-white p-2 shadow-md">
-            <Icon name="bi:stars" title="star gazing" class="w-8 h-8 mx-auto" />
-          </div>
-          <p class="mt-4 font-semibold text-white text-base">Star Gazing</p>
-          <p class="mt-2 text-white opacity-75 text-sm">
-            With little to no light pollution, watch the night sky light up.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="mt-40 ml-auto mr-auto w-full px-12 md:w-4/12 md:px-4">
-    <div
-      class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center text-slate-500 shadow-lg"
-    >
-      <Icon name="icon-park-outline:camp" class="text-xl fas fa-drafting-compass" />
+        <div class="my-4 w-full px-1 md:px-4 lg:mt-6 lg:w-6/12">
+          {
+            highlights.slice(-2).map(({ title, description, icon, containerClass }) => (
+              <div class:list={[containerClass]}>
+                <div class="mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md">
+                  <Icon name={icon} title={title} class="mx-auto h-8 w-8" />
+                </div>
+                <div class="ml-4 md:ml-0 md:mt-4">
+                  <p class="text-base font-semibold text-white">{title}</p>
+                  <p class="mt-1 text-sm text-white opacity-75 md:mt-2">{description}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </div>
-    <h3 class="mb-2 font-semibold leading-normal text-2xl">Rustic Meets Modern</h3>
-    <p class="mt-4 mb-4 font-light leading-relaxed text-base-content text-base">
-      We have something for everyone. Fun and excitement for all ages.
-    </p>
-    <p class="mt-4 mb-4 font-light leading-relaxed text-base-content text-base">
-      Boasts ceiling beams, stone walls, and a wood-burning stove. Set over 2 floors, sleeps 4
-      people and includes a dog bed in the living room. The garden is made up of a vegetable patch,
-      patio furniture and a barbeque.
-    </p>
-    <p class="mt-4 mb-4 font-light leading-relaxed text-base-content text-base">
-      The local area offers lovely walking routes, historical castle, horse riding and mushroom
-      picking.
-    </p>
-    <div class="block pb-6">
-      {
-        features.map(({ text }) => (
-          <span class="last:mr-xs mt-2 mr-2 inline-block rounded-full bg-white px-2 py-1 text-xs font-semibold uppercase text-slate-500">
-            {text}
-          </span>
-        ))
-      }
+
+    <div
+      class="mt-6 ml-auto mr-auto w-full px-3 text-base font-light leading-relaxed text-white md:w-4/12 md:px-4"
+    >
+      <div
+        class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center text-slate-500 shadow-lg"
+      >
+        <Icon name="icon-park-outline:camp" class="text-xl fas fa-drafting-compass" />
+      </div>
+      <h3 class="mb-2 text-2xl font-semibold leading-normal">Rustic Meets Modern</h3>
+      <p class="mt-4 mb-4">We have something for everyone. Fun and excitement for all ages.</p>
+      <p class="mt-4 mb-4">
+        Boasts ceiling beams, stone walls, and a wood-burning stove. Set over 2 floors, sleeps 4
+        people and includes a dog bed in the living room. The garden is made up of a vegetable
+        patch, patio furniture and a barbeque.
+      </p>
+      <p class="mt-4 mb-4">
+        The local area offers lovely walking routes, historical castle, horse riding and mushroom
+        picking.
+      </p>
+      <div class="block pb-6">
+        {
+          features.map(({ text }) => (
+            <span class="last:mr-xs mt-2 mr-2 inline-block rounded-full bg-white px-2 py-1 text-xs font-semibold uppercase text-slate-500">
+              {text}
+            </span>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>
