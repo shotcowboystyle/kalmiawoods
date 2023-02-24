@@ -164,23 +164,31 @@ const finishPayment = () => {
 
 const vNumberOnly = {
   mounted: (el: HTMLInputElement) => {
-    el.addEventListener('keyup', () => {
-      const regex = /^[0-9]*$/;
-      if (!regex.test(el.value)) {
-        el.value = el.value.slice(0, -1);
-      }
-    });
+    el.addEventListener(
+      'keyup',
+      () => {
+        const regex = /^[0-9]*$/;
+        if (!regex.test(el.value)) {
+          el.value = el.value.slice(0, -1);
+        }
+      },
+      { passive: true },
+    );
   },
 };
 
 const vLetterOnly = {
   mounted: (el: HTMLInputElement) => {
-    el.addEventListener('keyup', () => {
-      const regex = /^[a-zA-Z ]*$/;
-      if (!regex.test(el.value)) {
-        el.value = el.value.slice(0, -1);
-      }
-    });
+    el.addEventListener(
+      'keyup',
+      () => {
+        const regex = /^[a-zA-Z ]*$/;
+        if (!regex.test(el.value)) {
+          el.value = el.value.slice(0, -1);
+        }
+      },
+      { passive: true },
+    );
   },
 };
 

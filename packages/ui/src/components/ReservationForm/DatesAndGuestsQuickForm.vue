@@ -112,7 +112,7 @@ onMounted(() => {
   >
     <div class="grid flex-grow grid-cols-[2fr,1fr,auto]">
       <div class="grid flex-grow grid-cols-[1fr,1fr] items-center h-full">
-        <template v-for="{ key, placeholder, title } in RESERVATION_DATES_OPTIONS" :key="key">
+        <template v-for="{ key, placeholder, title, clearButtonName } in RESERVATION_DATES_OPTIONS" :key="key">
           <label
             role="button"
             tabindex="0"
@@ -131,6 +131,7 @@ onMounted(() => {
               :is-active="activeButton === key"
               :is-disabled="!$reservationDates[key]"
               :on-clear="() => handleOnClear(key)"
+              :name="clearButtonName"
               show-separator
             />
           </label>
@@ -157,6 +158,7 @@ onMounted(() => {
           :is-active="activeButton === 'guests'"
           :is-disabled="!formatGuests($reservationGuests).length"
           :on-clear="() => handleOnClear('guests')"
+          name="Clear guests"
         />
       </div>
 

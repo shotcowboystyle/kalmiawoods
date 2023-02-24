@@ -108,14 +108,18 @@ images = images.filter((image) => !!image);
 
   const thumbnails = document.querySelectorAll('div.gallery-thumbnail');
   thumbnails.forEach((item) => {
-    item.addEventListener('click', () => {
-      if (images?.length) {
-        Spotlight.show(images && JSON.parse(images), {
-          infinite: true,
-          autofit: true,
-          fit: 'cover',
-        });
-      }
-    });
+    item.addEventListener(
+      'click',
+      () => {
+        if (images?.length) {
+          Spotlight.show(images && JSON.parse(images), {
+            infinite: true,
+            autofit: true,
+            fit: 'cover',
+          });
+        }
+      },
+      { passive: true },
+    );
   });
 </script>

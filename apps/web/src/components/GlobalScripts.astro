@@ -14,7 +14,7 @@
     const matches = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
     if (matches?.length) {
       matches.forEach((elem) => {
-        elem.addEventListener(event, (e) => fn(e, elem), false);
+        elem.addEventListener(event, (e) => fn(e, elem), { passive: true });
       });
     }
   }
@@ -45,12 +45,12 @@
     }
     appyNavbarStylesOnScroll();
 
-    attachEvent('[data-kw-toggle-menu]', 'click', function (_, elem) {
-      elem.classList.toggle('expanded');
-      document.body.classList.toggle('overflow-hidden');
-      document.getElementById('navbar')?.classList.toggle('h-screen');
-      document.querySelector('#navbar nav')?.classList.toggle('hidden');
-    });
+    // attachEvent('[data-kw-toggle-menu]', 'click', function (_, elem) {
+    //   elem.classList.toggle('expanded');
+    //   document.body.classList.toggle('overflow-hidden');
+    //   document.getElementById('navbar')?.classList.toggle('h-screen');
+    //   document.querySelector('#navbar nav')?.classList.toggle('hidden');
+    // });
 
     attachEvent([document], 'scroll', function () {
       lastKnownScrollPosition = window.scrollY;
