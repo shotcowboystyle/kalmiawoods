@@ -1,5 +1,4 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const plugin = require('tailwindcss/plugin');
 const lightTheme = require('daisyui/src/colors/themes')['[data-theme=garden]'];
 const darkTheme = require('daisyui/src/colors/themes')['[data-theme=forest]'];
 
@@ -39,31 +38,17 @@ module.exports = {
         },
         dark: {
           ...darkTheme,
+          accent: '#b45309',
+          neutral: '#191D24',
+          'base-100': '#2A303C',
+          '--rounded-btn': '0.5rem',
           '.bg-dark': {
             'background-color': darkTheme['base-100'],
           },
         },
       },
     ],
-    // darkTheme: 'forest',
     darkTheme: 'dark',
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-    require('daisyui'),
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        '.container': {
-          margin: 'auto',
-          maxWidth: '1760px',
-          paddingLeft: '24px',
-          paddingRight: '24px',
-        },
-      });
-    }),
-  ],
-  variants: {
-    fluidType: ['responsive'],
-  },
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms'), require('daisyui')],
 };

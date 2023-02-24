@@ -1,19 +1,29 @@
 export const MIN_RESERVATION_DAYS = 3;
 
+export const RESERVATION_DATES_OPTIONS = [
+  { placeholder: 'Select date', key: 'start', title: 'Check in' },
+  { placeholder: 'Select date', key: 'end', title: 'Check out' },
+];
+
 export const RESERVATION_GUESTS_OPTIONS = [
   {
-    type: 'adults',
-    subtitle: 'Ages 13 or above',
+    key: 'adults',
+    description: 'Ages 13 or above',
     maxValue: 16,
   },
   {
-    type: 'children',
-    subtitle: 'Ages 2-12',
+    key: 'children',
+    description: 'Ages 2-12',
     maxValue: 5,
   },
   {
-    type: 'infants',
-    subtitle: 'Under 2',
+    key: 'infants',
+    description: 'Under 2',
+    maxValue: 5,
+  },
+  {
+    key: 'pets',
+    description: 'Fury friends welcome',
     maxValue: 5,
   },
 ];

@@ -41,91 +41,79 @@ body {
   grid-row-end: 3;
 }
 
-#navbar.scroll {
-  @apply shadow-md md:drop-shadow-xl bg-light text-base-content;
+.container {
+  @apply max-w-full mx-auto px-4;
 }
 
-#navbar .kw-logo {
-  @apply fill-primary;
+@media screen(sm) {
+  .container {
+    padding: 0 24px;
+  }
 }
 
-#navbar.home-navbar .kw-logo {
-  @apply !fill-white;
+@media screen(sm) {
+  .container {
+      padding: 0 40px;
+  }
 }
 
-#navbar.scroll .kw-logo,
-#navbar.home-navbar.scroll .kw-logo {
-  @apply !fill-primary;
-}
+/* @media screen(md) { */
+  #navbar.scroll {
+    @apply shadow-md md:drop-shadow-xl bg-light text-base-content;
+  }
 
-#navbar .btn {
-  @apply text-gray-800;
-}
+  #navbar.home-navbar .kw-logo {
+    @apply !fill-white;
+  }
 
-#navbar.home-navbar .btn {
-  @apply text-white;
-}
+  #navbar.scroll .kw-logo {
+    @apply !fill-primary;
+  }
 
-#navbar.scroll .btn {
-  @apply !text-gray-800;
-}
+  #navbar .btn {
+    @apply text-white;
+  }
 
-#navbar.scroll nav .btn {
-  @apply text-gray-800 fill-gray-800;
-}
+  #navbar.scroll .btn {
+    @apply !text-gray-800;
+  }
 
-#navbar.home-navbar.scroll .btn {
-  @apply !text-gray-800;
-}
+  .dark #navbar.scroll {
+    @apply bg-light text-white;
+  }
 
-#navbar #color-mode-toggle-button svg {
-  @apply fill-gray-800;
-}
+  .dark #navbar.scroll .kw-logo {
+    @apply bg-light;
+  }
 
-#navbar.home-navbar #color-mode-toggle-button svg {
-  @apply fill-white;
-}
+  #navbar.scroll:not(.show-booking-quick-form) #navbar-book-now-button {
+    @apply z-50 translate-y-0 scale-100 opacity-100;
+  }
 
-#navbar.scroll #color-mode-toggle-button svg,
-#navbar.home-navbar.scroll #color-mode-toggle-button svg {
-  @apply !fill-gray-800;
-}
+  #navbar.scroll:not(.show-booking-quick-form) #navbar-booking-options {
+    @apply invisible h-0;
+  }
 
-.dark #navbar.scroll {
-  @apply bg-light text-white;
-}
+  #navbar.scroll:not(.show-booking-quick-form) #booking-quick-form-wrapper {
+    @apply invisible h-0;
+  }
 
-.dark #navbar.scroll .kw-logo {
-  @apply bg-light;
-}
+  #navbar.scroll:not(.show-booking-quick-form) #booking-quick-form {
+    @apply translate-y-[-75px] transform scale-50 opacity-0 z-[100];
+  }
 
-#navbar.scroll:not(.show-booking-form) #navbar-book-now-button {
-  @apply scale-100 translate-y-0 opacity-100 z-0;
-}
+  #navbar.scroll.show-booking-quick-form #navbar-booking-options {
+    @apply text-gray-800;
+  }
 
-#navbar.scroll:not(.show-booking-form) #navbar-booking-options {
-  @apply invisible h-0;
-}
+  #navbar.scroll.show-booking-quick-form #navbar-booking-options span {
+    @apply after:bg-gray-800;
+  }
 
-#navbar.scroll:not(.show-booking-form) #booking-quick-form-wrapper {
-  @apply invisible h-0;
-}
-
-#navbar.scroll:not(.show-booking-form) #booking-quick-form {
-  @apply translate-y-[-75px] transform scale-50 opacity-0 z-[100];
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-[astro-icon].icon-light > * {
-  stroke-width: 1.2;
-}
-
-[astro-icon].icon-bold > * {
-  stroke-width: 2.4;
-}
+  #navbar.scroll.show-booking-quick-form #booking-quick-form {
+    @apply border-gray-400 shadow-xl;
+  }
+/* } */
 
 [data-kw-toggle-menu] path {
   @apply transition;
@@ -139,89 +127,110 @@ body {
   @apply rotate-45 translate-y-[-8px] translate-x-[14px];
 }
 
+@media screen(xl) {
+  .container {
+    padding: 0 72.5px;
+  }
+}
+
+@media screen('2xl') {
+  .container {
+    max-width: 1760px;
+  }
+}
+
+[astro-icon].icon-light > * {
+  stroke-width: 1.2;
+}
+
+[astro-icon].icon-bold > * {
+  stroke-width: 2.4;
+}
+
+/* [data-kw-toggle-menu] path {
+  @apply transition;
+}
+
+[data-kw-toggle-menu].expanded g > path:first-child {
+  @apply -rotate-45 translate-y-[15px] translate-x-[-3px];
+}
+
+[data-kw-toggle-menu].expanded g > path:last-child {
+  @apply rotate-45 translate-y-[-8px] translate-x-[14px];
+} */
+
 .modal.is-visible {
   pointer-events: auto;
   visibility: visible;
   opacity: 1;
 }
 
-.custom-calendar .vc-header {
-  @apply pb-2;
+.fade-right-enter-active {
+  animation: fade-in-right 0.5s;
 }
 
-.custom-calendar .vc-arrows-container {
-  @apply btn-group;
+.fade-right-leave-active {
+  animation: fade-out-left 0.5s;
 }
 
-.custom-calendar .vc-arrows-container .vc-arrow {
-  @apply btn btn-sm btn-outline btn-secondary rounded-none;
+.fade-left-enter-active {
+  animation: fade-in-left 0.5s;
 }
 
-.custom-calendar .vc-arrows-container .vc-arrow:first-child {
-  @apply rounded-l-md border-r-0;
+.fade-left-leave-active {
+  animation: fade-out-right 0.5s;
 }
 
-.custom-calendar .vc-arrows-container .vc-arrow:last-child {
-  @apply rounded-r-md;
+.fade-right-enter-from,
+.fade-right-leave-to,
+.fade-left-enter-from,
+.fade-left-enter-to {
+  position: absolute;
 }
 
-.custom-calendar .vc-weeks {
-  @apply p-0;
+@keyframes fade-in-left {
+  0% {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
-.custom-calendar .vc-weeks .vc-weekday {
-  @apply border-y;
-  /* background-color: var(--weekday-bg); */
-    /* border-bottom: var(--weekday-border);
-    border-top: var(--weekday-border);
-    padding: 5px 0; */
+@keyframes fade-in-right {
+  0% {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
-.custom-calendar .vc-weeks .vc-day {
-  @apply min-w-[90px] relative flex flex-col w-full h-40 justify-start items-start;
+@keyframes fade-out-left {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
-/* .custom-calendar .vc-weeks .vc-day.weekday-7 {
-  @apply border-r-0;
-} */
+@keyframes fade-out-right {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 
-.custom-calendar .vc-weeks .vc-day .vc-day-content {
-  @apply
-    text-sm
-    leading-none
-    text-black
-    dark:text-base-content
-    justify-start
-    items-start
-    h-full
-    w-full
-    hover:rounded-none
-    focus:rounded-none;
-
-  padding-block-start: 0.75rem;
-  padding-inline-start: 0.75rem;
-}
-
-.custom-calendar .vc-weeks .vc-day .vc-day-content.is-disabled {
-  @apply opacity-40 bg-gray-500 dark:bg-gray-800 rounded-none cursor-not-allowed;
-}
-
-.custom-calendar .vc-weeks .vc-day .vc-highlights .vc-day-layer {
-  @apply left-2 mt-2 justify-start items-start;
-}
-
-.custom-calendar .vc-weeks .vc-weekday:not(:first-child) {
-  @apply border-l;
-}
-
-.custom-calendar .vc-weeks .vc-day:not(.on-bottom) {
-  @apply border-b;
-}
-
-.custom-calendar .vc-weeks .vc-day:not(.on-right) {
-  @apply border-r;
-}
-
-.custom-calendar .vc-day.is-not-in-month * {
-  @apply opacity-40;
+  100% {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
 }

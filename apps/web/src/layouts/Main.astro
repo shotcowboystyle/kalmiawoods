@@ -1,8 +1,8 @@
 ---
 import Footer from '@components/Footer.astro';
 import Navbar from '@components/Navbar.astro';
+import SkipLink from '@components/SkipLink.astro';
 import { SITE } from '@config';
-import '@kalmiawoods/ui/style.css';
 import Layout from '@layouts/Layout.astro';
 
 export interface Props {
@@ -14,6 +14,7 @@ const { title = SITE.title, description = SITE.desc } = Astro.props;
 ---
 
 <Layout title={title} description={description}>
+  <SkipLink />
   <slot name="navbar">
     <Navbar />
   </slot>

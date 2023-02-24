@@ -2,8 +2,10 @@
 import BookingOptions from '@components/BookingOptions.astro';
 import BookingQuickForm from '@components/BookingQuickForm.astro';
 import BookNowButton from '@components/BookNowButton.astro';
-import ColorModeToggle from '@components/ColorModeToggle.astro';
+import BookNowButtonLink from '@components/BookNowButtonLink.astro';
 import Logo from '@components/Logo.astro';
+import { ToggleTheme } from '@kalmiawoods/ui';
+import { Icon } from 'astro-icon';
 
 export interface Props {
   activeNav?: 'posts' | 'tags' | 'about' | 'search';
@@ -11,44 +13,35 @@ export interface Props {
 
 const navLinks = [
   {
-    text: 'Availability',
     href: '/availability',
+    text: 'Availability',
+    icon: 'ri:calendar-line',
   },
 ];
-
-const isHomePage = Astro.url.pathname === '/';
 ---
 
 <Fragment>
-  <!-- <a id="skip-to-content" href="#main-content">Skip to content</a> -->
-  <div
-    class:list={[
-      'fixed top-0 z-50 w-full py-5 text-white duration-300 md:transition-none',
-      { 'home-navbar': isHomePage },
-    ]}
-    id="navbar"
-  >
-    <div class="hidden items-start container md:grid md:grid-cols-[1fr,5fr,auto,auto]">
-      <div class="flex items-center self-center">
-        <a href="/" rel="prefetch">
-          <Logo />
-        </a>
-      </div>
+  <div class="fixed top-0 z-50 w-full py-5 text-white duration-300 md:transition-none" id="navbar">
+    <div class="container flex items-start md:grid md:grid-cols-[1fr,5fr,auto,auto]">
+      <a href="/" rel="prefetch" class="hidden items-center self-center md:flex">
+        <Logo />
+      </a>
 
       <BookNowButton />
+      <BookingOptions />
 
-      {isHomePage && <BookingOptions />}
+      <div class="flex-grow md:hidden">
+        <BookNowButtonLink />
+      </div>
 
-      <nav
-        class="hidden h-[calc(100vh-72px)] w-full items-center overflow-y-auto md:flex md:h-auto md:w-auto md:justify-end md:overflow-visible"
-        aria-label="Main navigation"
-      >
-        <ul class="flex flex-col justify-end w-full md:w-auto md:flex-row md:self-center">
+      <nav class="ml-2 justify-end md:ml-0" aria-label="Main navigation">
+        <ul class="flex justify-end md:w-auto md:flex-row">
           {
-            navLinks.map(({ text, href }) => (
+            navLinks.map(({ href, text, icon }) => (
               <li>
-                <a class="font-semibold btn-ghost btn" href={href} rel="prefetch">
-                  {text}
+                <a class="btn-ghost btn font-semibold" href={href} rel="prefetch">
+                  <Icon name={icon} class="h-6 w-6 md:hidden" />
+                  <span class="sr-only md:not-sr-only">{text}</span>
                 </a>
               </li>
             ))
@@ -56,21 +49,13 @@ const isHomePage = Astro.url.pathname === '/';
         </ul>
       </nav>
 
-      <div
-        class="flex h-[calc(100vh-72px)] w-full items-center overflow-y-auto md:mx-2 md:mb-0 md:flex md:h-auto md:w-auto md:overflow-visible"
-      >
-        <div class="items-center hidden md:flex">
-          <ColorModeToggle />
-        </div>
+      <div class="ml-1 flex items-center">
+        <ToggleTheme client:load />
       </div>
     </div>
 
-    {
-      isHomePage && (
-        <div id="booking-quick-form-wrapper" class="visible duration-500">
-          <BookingQuickForm />
-        </div>
-      )
-    }
+    <div id="booking-quick-form-wrapper" class="visible hidden duration-500 md:block">
+      <BookingQuickForm />
+    </div>
   </div>
 </Fragment>

@@ -1,3 +1,0 @@
-{
-  "*.(js|ts|tsx|md|vue|astro|cjs|mjs)": "pnpx eslint --fix"
-}

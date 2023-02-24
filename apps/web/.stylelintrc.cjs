@@ -30,6 +30,12 @@ module.exports = {
     'hue-degree-notation': null,
     'length-zero-no-unit': null,
     'alpha-value-notation': null,
+    'unit-no-unknown': [
+      true,
+      {
+        ignoreUnits: ['2xl', 'xl'],
+      },
+    ],
     'selector-pseudo-class-no-unknown': [
       true,
       {

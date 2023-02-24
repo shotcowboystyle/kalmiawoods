@@ -1,20 +1,23 @@
 ---
 import { Icon } from 'astro-icon';
 
-const isHomePage = Astro.url.pathname === '/';
+// const isHomePage = Astro.url.pathname === '/';
 ---
 
-<button
+<!-- <button
   id="navbar-book-now-button"
   class:list={[
     'z-[-50] transform pl-6 relative flex items-center h-auto pr-0 mx-auto text-left bg-white border border-gray-200 rounded-full shadow-md cursor-pointer min-w-[220px] lg:min-w-[320px] hover:shadow-lg md:absolute left-24 md:left-auto right-2/3 lg:right-1/2 right text-sm translate-x-2/3 lg:translate-x-1/2',
     { 'scale-[1.33] translate-y-[75px] md:opacity-0 duration-200': isHomePage },
   ]}
-  class="right relative left-24 right-2/3 z-[-50] mx-auto flex h-auto min-w-[220px] translate-y-[75px] translate-x-2/3 scale-[1.33] transform cursor-pointer items-center rounded-full border border-gray-200 bg-white pl-6 pr-0 text-left text-sm shadow-md duration-200 hover:shadow-lg md:absolute md:left-auto md:opacity-0 lg:right-1/2 lg:min-w-[320px] lg:translate-x-1/2"
+> -->
+<button
+  id="navbar-book-now-button"
+  class='hidden z-[-50] transform pl-6 relative md:flex items-center h-auto pr-0 mx-auto text-left bg-white border border-gray-200 rounded-full shadow-md cursor-pointer min-w-[220px] lg:min-w-[320px] hover:shadow-lg md:absolute left-24 md:left-auto right-2/3 lg:right-1/2 right text-sm translate-x-2/3 lg:translate-x-1/2 scale-[1.33] translate-y-[75px] md:opacity-0 duration-200'
 >
   <span class="flex-grow text-sm font-medium tracking-wide text-gray-500">Book Now</span>
   <span
-    class="m-2 ml-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary hover:saturate-200"
+    class="flex items-center justify-center w-8 h-8 m-2 ml-0 rounded-full bg-primary hover:saturate-200"
   >
     <Icon name="ri:arrow-right-line" class="h-4 text-white" />
   </span>
@@ -22,19 +25,19 @@ const isHomePage = Astro.url.pathname === '/';
 
 <script>
   const navbarBookingButton = document.getElementById('navbar-book-now-button');
-  const navbarEl = document.getElementById('navbar');
+  const navbar = document.getElementById('navbar');
   // Each time the button is clicked, update the count.
   if (navbarBookingButton) {
     navbarBookingButton.addEventListener('click', () => {
-      if (navbarEl) {
-        navbarEl.classList.add('show-booking-quick-form');
+      if (navbar) {
+        navbar.classList.add('show-booking-quick-form');
       }
     });
 
     document.addEventListener('click', (event) => {
-      const isNavbarClick = navbarEl?.contains(event.target as HTMLElement);
+      const isNavbarClick = navbar?.contains(event.target as HTMLElement);
       if (!isNavbarClick) {
-        navbarEl?.classList.remove('show-booking-quick-form');
+        navbar?.classList.remove('show-booking-quick-form');
       }
     });
   }

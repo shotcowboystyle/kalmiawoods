@@ -1,6 +1,5 @@
 ---
 import Image from '@components/Img.astro';
-// import { Image } from '@astrojs/image/components';
 
 const nearbyAttractions = [
   {
@@ -54,33 +53,39 @@ const nearbyAttractions = [
 ];
 ---
 
-<section class="pt-12 container">
-  <h2 class="mb-4 font-semibold text-2xl">Explore Nearby</h2>
-  <div class="grid grid-cols-2 gap-x-1 gap-y-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-4">
-    {
-      nearbyAttractions.map((attraction) => (
-        <a href={attraction.href} target="_blank">
-          <div class="flex flex-col items-start gap-x-4 rounded-xl p-2 drop-shadow-lg duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40 md:flex-row md:items-center md:p-3">
-            <div class="image-container min-h-min">
-              <Image
-                alt={attraction.name}
-                class="h-16 w-16 rounded-xl object-cover"
-                src={attraction.image}
-                height={64}
-                width={64}
-                aspectRatio="1:1"
-              />
-            </div>
+<section class="my-10">
+  <div class="container max-sm:w-screen max-sm:overflow-hidden">
+    <h2 class="mb-4 text-2xl font-bold text-base-content md:mb-4 md:text-3xl lg:mb-8 lg:text-4xl">
+      Explore Nearby
+    </h2>
+    <div
+      class="max-sm:carousel-center max-sm:carousel max-sm:space-x-4 max-sm:px-4 sm:grid sm:grid-cols-3 sm:gap-x-1 sm:gap-y-2 lg:grid-cols-4 lg:gap-x-4"
+    >
+      {
+        nearbyAttractions.map((attraction) => (
+          <a href={attraction.href} target="_blank" class="max-sm:carousel-item">
+            <div class="flex items-center p-2 duration-300 gap-x-4 rounded-xl drop-shadow-lg active:scale-105 active:bg-gray-200 active:bg-opacity-40 sm:p-3">
+              <div class="image-container min-h-min">
+                <Image
+                  alt={attraction.name}
+                  class="object-cover w-16 h-16 rounded-xl"
+                  src={attraction.image}
+                  height={64}
+                  width={64}
+                  aspectRatio="1:1"
+                />
+              </div>
 
-            <div class="mt-2 md:mt-0">
-              <span class="block text-sm font-medium text-gray-900 dark:text-gray-800">
-                {attraction.name}
-              </span>
-              <span class="text-sm text-gray-500">{attraction.distance}</span>
+              <div class="mt-0">
+                <span class="block text-sm font-medium text-base-content lg:text-base">
+                  {attraction.name}
+                </span>
+                <span class="text-sm text-base-content lg:text-base">{attraction.distance}</span>
+              </div>
             </div>
-          </div>
-        </a>
-      ))
-    }
+          </a>
+        ))
+      }
+    </div>
   </div>
 </section>

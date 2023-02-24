@@ -3,6 +3,7 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true,
     "source.organizeImports": true,
     "source.sortMembers": true
   },
@@ -13,7 +14,10 @@
     "ignoredFilesPattern": ["commitlint.config.js"]
   },
   "eslint.packageManager": "yarn",
-  "eslint.validate": ["javascript", "javascriptreact", "astro", "typescript", "typescriptreact", "mdx"],
+  "eslint.validate": ["html", "javascript", "javascriptreact", "astro", "typescript", "typescriptreact", "mdx", "vue"],
+  "files.associations": {
+    "*.mdx": "markdown"
+  },
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { CREDIT_CARD_FORM_FIELDS } from '@kalmiawoods/constants';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import type { PaymentFormData } from '../../types/CreditCard';
+import type { PaymentFormData } from '../../../types/CreditCard';
+import { nextStep } from '../../stores/reservationForm';
 import { formatMonthValue } from '../../utils/formatters';
 import CreditCard from './CreditCard.vue';
 
@@ -16,7 +17,7 @@ const emit = defineEmits([
 ]);
 
 defineProps<{
-  total: String;
+  total: string;
 }>();
 
 const formData: PaymentFormData = reactive({
@@ -32,6 +33,8 @@ const minCardYear = new Date().getFullYear();
 const isCardNumberMasked = ref(true);
 const mainCardNumber = ref(formData.cardNumber);
 const cardNumberMaxLength = ref(19);
+
+const isSubmitting = ref(false);
 
 const minCardMonth = computed(() => {
   if (formData.cardYear === minCardYear) {
@@ -116,33 +119,33 @@ const changeCvv = (event: Event) => {
   emit('input-card-cvv', formData.cardCvv);
 };
 
-const invalidCard = () => {
-  const number = formData.cardNumber;
-  let sum = 0;
-  let isOdd = true;
+// const invalidCard = () => {
+//   const number = formData.cardNumber;
+//   let sum = 0;
+//   let isOdd = true;
 
-  for (let i = number.toString().length - 1; i >= 0; i--) {
-    let num: string | number = number.toString().charAt(i);
+//   for (let i = number.toString().length - 1; i >= 0; i--) {
+//     let num: string | number = number.toString().charAt(i);
 
-    if (isOdd) {
-      sum += Number(num);
-    } else {
-      num = Number(num) * 2;
-      if (num > 9) {
-        num = num.toString().split('').join('+');
-      }
-      sum += Number(num);
-    }
-    isOdd = !isOdd;
-  }
+//     if (isOdd) {
+//       sum += Number(num);
+//     } else {
+//       num = Number(num) * 2;
+//       if (num > 9) {
+//         num = num.toString().split('').join('+');
+//       }
+//       sum += Number(num);
+//     }
+//     isOdd = !isOdd;
+//   }
 
-  if (sum % 10 !== 0) {
-    alert('invalid card number');
-    return false;
-  }
+//   if (sum % 10 !== 0) {
+//     alert('invalid card number');
+//     return false;
+//   }
 
-  return true;
-};
+//   return true;
+// };
 
 const blurCardNumber = () => {
   if (isCardNumberMasked.value) {
@@ -151,9 +154,12 @@ const blurCardNumber = () => {
 };
 
 const finishPayment = () => {
-  if (!invalidCard()) {
-    emit('change-parent');
-  }
+  // if (!invalidCard()) {
+  //   emit('change-parent');
+  // }
+
+  isSubmitting.value = true;
+  setTimeout(() => nextStep(), 3000);
 };
 
 const vNumberOnly = {
@@ -193,9 +199,9 @@ onMounted(() => {
 
 <template>
   <div class="col-span-1 lg:col-span-6">
-    <div class="px-0 pt-4 pb-12">
+    <div class="px-0 pt-4 pb-0">
       <div class="mb-6">
-        <CreditCard :fields="fields" :labels="formData" :isCardNumberMasked="isCardNumberMasked" />
+        <CreditCard :fields="fields" :labels="formData" :is-card-number-masked="isCardNumberMasked" />
       </div>
 
       <div class="w-full mb-4 form-control">
@@ -203,16 +209,16 @@ onMounted(() => {
           <span class="label-text">Card number</span>
         </label>
         <input
-          type="tel"
           :id="fields.cardNumber"
-          @input="changeNumber"
-          @focus="focusCardNumber"
-          @blur="blurCardNumber"
           :value="formData.cardNumber"
           :maxlength="cardNumberMaxLength"
           data-card-field
+          type="tel"
           autocomplete="off"
           class="w-full input input-bordered input-md"
+          @input="changeNumber"
+          @focus="focusCardNumber"
+          @blur="blurCardNumber"
         />
       </div>
 
@@ -221,14 +227,14 @@ onMounted(() => {
           <span class="label-text">Name on card</span>
         </label>
         <input
-          type="text"
           :id="fields.cardName"
           v-letter-only
-          @input="changeName"
           :value="formData.cardName"
           data-card-field
+          type="text"
           autocomplete="off"
           class="w-full input input-bordered input-md"
+          @input="changeName"
         />
       </div>
 
@@ -240,27 +246,27 @@ onMounted(() => {
 
           <div class="flex flex-row gap-4">
             <select
-              class="flex-grow select select-bordered"
               :id="fields.cardMonth"
               v-model.number="formData.cardMonth"
-              @change="changeMonth"
               data-card-field
+              class="flex-grow select select-bordered"
+              @change="changeMonth"
             >
               <option value disabled selected>Month</option>
-              <option v-bind:value="n" v-for="n in 12" v-bind:disabled="n < minCardMonth" v-bind:key="n">
+              <option v-for="n in 12" :key="n" :value="n" :disabled="n < minCardMonth">
                 {{ formatMonthValue(n) }}
               </option>
             </select>
 
             <select
-              class="flex-grow select select-bordered"
               :id="fields.cardYear"
               v-model.number="formData.cardYear"
-              @change="changeYear"
               data-card-field
+              class="flex-grow select select-bordered"
+              @change="changeYear"
             >
               <option value disabled selected>Year</option>
-              <option v-bind:value="$index + minCardYear" v-for="(n, $index) in 12" v-bind:key="n">
+              <option v-for="(n, $index) in 12" :key="n" :value="$index + minCardYear">
                 {{ $index + minCardYear }}
               </option>
             </select>
@@ -272,15 +278,15 @@ onMounted(() => {
             <span class="label-text">CVC</span>
           </label>
           <input
-            type="tel"
-            v-number-only
             :id="fields.cardCvv"
-            maxlength="4"
+            v-number-only
             :value="formData.cardCvv"
-            @input="changeCvv"
             data-card-field
+            type="tel"
+            maxlength="4"
             autocomplete="off"
             class="flex-grow input input-bordered input-md"
+            @input="changeCvv"
           />
         </div>
       </div>
@@ -290,7 +296,9 @@ onMounted(() => {
       </div>
 
       <div>
-        <button @click="finishPayment" class="w-full btn btn-primary">Confirm payment</button>
+        <button class="w-full btn btn-primary" :class="{ loading: isSubmitting }" @click="finishPayment">
+          Confirm payment
+        </button>
       </div>
     </div>
   </div>

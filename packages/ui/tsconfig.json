@@ -6,6 +6,6 @@
       "@*": ["src/*"]
     }
   },
-  "include": ["vite.config.*", "env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": ["vite.config.*", "env.d.ts", "src/**/*"],
   "exclude": ["node_modules", "dist", "build"]
 }

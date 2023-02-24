@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import type { Guests } from '../types/Reservation';
+import type { Guests } from '../../types/Reservation';
 
 export const formatGuests = (guests: Guests): string => {
   if (!guests) {

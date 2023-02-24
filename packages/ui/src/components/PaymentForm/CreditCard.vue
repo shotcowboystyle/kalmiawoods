@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
-import type { CreditCardFormFields, CreditCardLabels } from '../../types/CreditCard';
+import type { CreditCardFormFields, CreditCardLabels } from '../../../types/CreditCard';
 import { formatMonthValue } from '../../utils/formatters';
 
 const props = defineProps<{
@@ -165,10 +165,10 @@ onMounted(() => {
   <div class="card-item" :class="{ '-active': isCardFlipped }">
     <div class="card-item__side -front">
       <div
+        ref="focusElement"
         class="card-item__focus"
         :class="{ '-active': focusElementStyle }"
         :style="focusElementStyle"
-        ref="focusElement"
       ></div>
 
       <div class="card-item__cover">
@@ -183,67 +183,67 @@ onMounted(() => {
           />
 
           <div class="card-item__type">
-            <transition name="slide-fade-up">
+            <Transition name="slide-fade-up">
               <img
+                v-if="cardType"
+                :key="cardType"
                 :src="
                   'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' +
                   cardType +
                   '.png'
                 "
-                v-if="cardType"
-                :key="cardType"
                 :alt="cardType"
                 class="card-item__typeImg"
               />
-            </transition>
+            </Transition>
           </div>
         </div>
 
-        <label :for="fields.cardNumber" class="card-item__number" ref="cardNumber">
+        <label ref="cardNumber" :for="fields.cardNumber" class="card-item__number">
           <template v-for="(n, $index) in currentPlaceholder" :key="$index">
-            <transition name="slide-fade-up">
-              <span class="card-item__numberItem" v-if="getIsNumberMasked($index, n)">*</span>
+            <Transition name="slide-fade-up">
+              <span v-if="getIsNumberMasked($index, n)" class="card-item__numberItem">*</span>
               <span
+                v-else-if="labels.cardNumber.toString().length > $index"
+                :key="currentPlaceholder"
                 class="card-item__numberItem"
                 :class="{ '-active': n.trim() === '' }"
-                :key="currentPlaceholder"
-                v-else-if="labels.cardNumber.toString().length > $index"
               >
                 {{ labels.cardNumber[$index] }}
               </span>
 
               <span
-                class="card-item__numberItem"
-                :class="{ '-active': n.trim() === '' }"
                 v-else
                 :key="currentPlaceholder + 1"
+                class="card-item__numberItem"
+                :class="{ '-active': n.trim() === '' }"
               >
                 {{ n }}
               </span>
-            </transition>
+            </Transition>
           </template>
         </label>
 
         <div class="card-item__content">
-          <label :for="fields.cardName" class="card-item__info" ref="cardName">
+          <label ref="cardName" :for="fields.cardName" class="card-item__info">
             <span class="card-item__holder">Card Holder</span>
-            <transition name="slide-fade-up">
-              <span class="card-item__name" v-if="labels.cardName.length" key="1">
-                <transition-group name="slide-fade-right">
+            <Transition name="slide-fade-up">
+              <span v-if="labels.cardName.length" key="1" class="card-item__name">
+                <TransitionGroup name="slide-fade-right">
                   <span
-                    class="card-item__nameItem"
                     v-for="(n, $index) in labels.cardName.replace(/\s\s+/g, ' ')"
                     :key="$index + 1"
+                    class="card-item__nameItem"
                   >
                     {{ n }}
                   </span>
-                </transition-group>
+                </TransitionGroup>
               </span>
-              <span class="card-item__name" v-else key="2">Full Name</span>
-            </transition>
+              <span v-else key="2" class="card-item__name">Full Name</span>
+            </Transition>
           </label>
 
-          <div class="card-item__date" ref="cardDate">
+          <div ref="cardDate" class="card-item__date">
             <label :for="fields.cardMonth" class="card-item__dateTitle">Expires</label>
             <label :for="fields.cardMonth" class="card-item__dateItem">
               <transition name="slide-fade-up">
@@ -270,19 +270,19 @@ onMounted(() => {
         <img v-if="currentCardBackground" :src="currentCardBackground" class="card-item__bg" />
       </div>
       <div class="card-item__band"></div>
-      <label class="card-item__cvv" ref="cardCvv">
+      <label ref="cardCvv" class="card-item__cvv">
         <span class="card-item__cvvTitle">CVV</span>
         <span class="card-item__cvvBand">
           <span v-for="(n, $index) in labels.cardCvv" :key="$index">{{ n }}</span>
         </span>
         <span class="card-item__type">
           <img
+            v-if="cardType"
             :src="
               'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' +
               cardType +
               '.png'
             "
-            v-if="cardType"
             class="card-item__typeImg"
           />
         </span>
@@ -305,7 +305,7 @@ onMounted(() => {
   .card-item {
     max-width: 310px;
     height: 220px;
-    width: 90%;
+    width: 100%;
   }
 }
 @media screen and (max-width: 360px) {
