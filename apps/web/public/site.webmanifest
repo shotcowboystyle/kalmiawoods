@@ -1,0 +1,22 @@
+{
+  "short_name": "Kalmia Woods",
+  "name": "Kalmia Woods",
+  "description": "Oconee County Mountain House",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?utm_source=homescreen",
+  "display": "standalone",
+  "background_color": "#5b7f67",
+  "theme_color": "#5b7f67",
+  "lang": "en"
+}
