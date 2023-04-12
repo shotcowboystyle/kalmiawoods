@@ -5,19 +5,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["DOM", "ESNext", "DOM.Iterable", "ScriptHost"],
-    "incremental": false,
+    "lib": ["DOM", "ESNext", "DOM.Iterable", "ScriptHost", "WebWorker"],
     "jsx": "preserve",
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "strictNullChecks": true,
-    "useDefineForClassFields": true,
-    "baseUrl": ".",
-    "sourceMap": true,
-    "noImplicitAny": false,
-    "declarationDir": "dist/types",
-    "importHelpers": true,
-    "experimentalDecorators": true,
-    "types": ["vue", "node", "vite/client", "unplugin-icons/types/vue"]
+    "useDefineForClassFields": true
   }
 }

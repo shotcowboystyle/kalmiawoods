@@ -39,3 +39,5 @@ yarn-error.log*
 
 dist
 dev-dist
+
+packages/database/prisma/client

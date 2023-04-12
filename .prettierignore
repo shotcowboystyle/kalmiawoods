@@ -8,3 +8,5 @@ public/
 storybook-static/
 .coverage/
 .turbo/
+packages/database/docs/
+packages/database/prisma/client
