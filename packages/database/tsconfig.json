@@ -1,0 +1,9 @@
+{
+  "extends": "@kalmiawoods/tsconfig/nest.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "rootDir": "./"
+  },
+  "exclude": ["./prisma", "./dist"]
+}
