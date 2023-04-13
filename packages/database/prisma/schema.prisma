@@ -1,0 +1,93 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../ERD.svg"
+  theme    = "default"
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+  output   = "../docs"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp")]
+}
+
+/// Complete data structure of the User entity for the database and GraphQL.
+/// A User represents an account holder.
+model User {
+  /// User's unique identifier
+  id        Int       @id @default(autoincrement())
+  /// Date of User's creation in the database
+  createdAt DateTime     @default(now()) @map("created_at")
+  /// Date of last update to User's record
+  updatedAt DateTime     @updatedAt @default(now()) @map("updated_at")
+  /// Date of User's deletion from the database
+  deletedAt DateTime?    @map("deleted_at")
+  /// User's email address
+  email     String       @unique
+  /// User's email address
+  emailVerification     DateTime? @map("email_verification")
+  /// User's password
+  password  String
+  /// User's access role
+  role      Role         @default(User)
+  sessions  Session[]
+  profile   UserProfile?
+
+  @@map("users")
+}
+
+/// Complete data structure of the Profile entity for the database and GraphQL.
+/// A Profile represents a User's details.
+model UserProfile {
+  /// Profile's unique identifier
+  id          Int   @id @default(autoincrement())
+  /// Profile's mailing address
+  address     String?
+  /// Profile's first name
+  firstName   String?  @map("first_name")
+  /// Profile's last name
+  lastName    String?  @map("last_name")
+  /// Profile's mobilel phone number
+  mobilePhone String?  @map("mobile_phone")
+  /// Date of Profile's creation in the database
+  createdAt   DateTime @default(now()) @map("created_at")
+  /// Date of last update to Profile's record
+  updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+  /// The database identifier of the User associated with this Profile
+  userId  Int   @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("user_profile")
+}
+
+/// Complete data structure of the Session entity for the database and GraphQL.
+/// A session represents a User's interaction with the API.
+model Session {
+  /// Session's unique identifier
+  id        Int   @id @default(autoincrement())
+  /// Date of Session's creation in the database
+  refreshToken String @map("refresh_token")
+  /// Date of Session's creation in the database
+  expiresAt DateTime @map("expires_at")
+  /// Date of Session's creation in the database
+  createdAt DateTime @default(now()) @map("created_at")
+  /// The database identifier of the User associated with this Session
+  userId  Int   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("sessions")
+}
+
+enum Role {
+  User
+  Admin
+}
