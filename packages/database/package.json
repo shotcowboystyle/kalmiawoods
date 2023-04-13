@@ -1,0 +1,38 @@
+{
+  "name": "@kalmiawoods/database",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:migrate:deploy": "prisma migrate deploy --preview-feature",
+    "db:migrate:dev": "prisma migrate dev --preview-feature",
+    "db:migrate:dev:create": "prisma migrate dev --create-only --preview-feature",
+    "db:migrate:reset": "prisma migrate reset --preview-feature",
+    "db:migrate:resolve": "prisma migrate resolve --preview-feature",
+    "db:migrate:status": "prisma migrate status --preview-feature",
+    "db:push": "prisma db push --skip-generate",
+    "db:pull": "npx prisma db pull",
+    "db:seed": "prisma db seed",
+    "db:docs:serve": "npx prisma-docs-generator serve",
+    "dev": "pnpm run build:watch",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.11.0"
+  },
+  "devDependencies": {
+    "prisma": "4.12.0",
+    "prisma-docs-generator": "^0.7.0",
+    "prisma-erd-generator": "^1.5.4"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.3.12",
+    "nestjs-pino": "^3.1.2"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma",
+    "seed": "ts-node ./prisma/seed.ts"
+  }
+}

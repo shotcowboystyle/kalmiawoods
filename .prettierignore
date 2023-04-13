@@ -8,3 +8,4 @@ public/
 storybook-static/
 .coverage/
 .turbo/
+@generated/
