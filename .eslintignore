@@ -10,5 +10,4 @@ storybook-static
 .vscode
 public
 .github
-packages/database/docs
-packages/database/prisma/client
+public

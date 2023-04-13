@@ -3,24 +3,12 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-      "dependsOn": ["^db:generate", "^build"],
+      "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-    "clean": {
-      "cache": false
-    },
-    "db:generate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
-    },
-    "dev": {
-      "cache": false,
-      "dependsOn": ["^db:generate"]
-    },
-    "format": {
-      "outputs": []
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
     },
     "lint": {
       "outputs": []
@@ -34,9 +22,14 @@
     "stylelint": {
       "outputs": []
     },
-    "test": {
-      "dependsOn": [],
-      "outputs": ["coverage/**"]
+    "format": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
     }
   }
 }

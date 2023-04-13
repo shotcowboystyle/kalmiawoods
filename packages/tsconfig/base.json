@@ -4,7 +4,6 @@
   "compilerOptions": {
     "composite": false,
     "declaration": true,
-    "removeComments": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,15 +15,7 @@
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": true,
-    "strictNullChecks": false,
-    "strictBindCallApply": false
+    "resolveJsonModule": true
   },
   "exclude": ["dist", "build", "node_modules", ".turbo"]
 }
