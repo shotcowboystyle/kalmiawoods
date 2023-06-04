@@ -83,11 +83,11 @@ module.exports = {
         description: 'Anything related to the helper projects in the tools/ directory',
         emoji: ':hammer_and_wrench:',
       },
-      // {
-      //   name: 'apps/api',
-      //   description: 'Anything related to any of the API services',
-      //   emoji: ':memo:',
-      // },
+      {
+        name: 'apps/api',
+        description: 'Anything related to any of the API services',
+        emoji: ':memo:',
+      },
       // {
       //   name: 'apps/docs',
       //   description: 'Anything related to a services docs site',
