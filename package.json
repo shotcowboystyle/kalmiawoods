@@ -39,6 +39,7 @@
     "@tsconfig/node18": "^1.0.1",
     "commitizen": "^4.3.0",
     "commitlint": "^17.5.1",
+    "cross-env": "^7.0.3",
     "cspell": "^6.31.1",
     "cz-git": "^1.6.1",
     "husky": "^8.0.3",
