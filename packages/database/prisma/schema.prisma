@@ -23,24 +23,34 @@ datasource db {
 /// Complete data structure of the User entity for the database and GraphQL.
 /// A User represents an account holder.
 model User {
+  /// User's internal (non-public) identifier for the database
+  id        BigInt      @id @default(autoincrement()) @db.BigInt
   /// User's unique identifier
-  id        Int       @id @default(autoincrement())
-  /// Date of User's creation in the database
-  createdAt DateTime     @default(now()) @map("created_at")
-  /// Date of last update to User's record
-  updatedAt DateTime     @updatedAt @default(now()) @map("updated_at")
-  /// Date of User's deletion from the database
-  deletedAt DateTime?    @map("deleted_at")
+  uid       String      @unique(map: "user_id_key") @default(cuid())
+
+  // If User is enabled or not
+  // isActive                Boolean           @map("is_active") @default(true)
+  // True if User is soft deleted
+  // isDeleted Boolean     @map("is_deleted") @default(false)
+
   /// User's email address
-  email     String       @unique
+  email     String      @unique(map: "user_email_key")
   /// User's email address
   emailVerification     DateTime? @map("email_verification")
   /// User's password
-  password  String
+  password  String?
   /// User's access role
-  role      Role         @default(User)
+  role      Role        @default(USER)
+
   sessions  Session[]
   profile   UserProfile?
+
+  /// Date of User's creation in the database
+  createdAt DateTime    @default(now()) @map("created_at")
+  /// Date of last update to User's record
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  /// Date of User's deletion from the database
+  deletedAt DateTime?   @map("deleted_at")
 
   @@map("users")
 }
@@ -49,7 +59,7 @@ model User {
 /// A Profile represents a User's details.
 model UserProfile {
   /// Profile's unique identifier
-  id          Int   @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   /// Profile's mailing address
   address     String?
   /// Profile's first name
@@ -57,14 +67,17 @@ model UserProfile {
   /// Profile's last name
   lastName    String?  @map("last_name")
   /// Profile's mobilel phone number
-  mobilePhone String?  @map("mobile_phone")
+  mobilePhone String?  @unique(map: "user_mobile_number_key") @map("mobile_phone")
+  /// Profile's picture
+  avatar                  String?
   /// Date of Profile's creation in the database
   createdAt   DateTime @default(now()) @map("created_at")
   /// Date of last update to Profile's record
   updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+
   /// The database identifier of the User associated with this Profile
-  userId  Int   @unique @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  userId      BigInt   @unique @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("user_profile")
 }
@@ -75,19 +88,22 @@ model Session {
   /// Session's unique identifier
   id        Int   @id @default(autoincrement())
   /// Date of Session's creation in the database
-  refreshToken String @map("refresh_token")
+  sessionToken String @unique @map("session_token")
   /// Date of Session's creation in the database
   expiresAt DateTime @map("expires_at")
-  /// Date of Session's creation in the database
-  createdAt DateTime @default(now()) @map("created_at")
+  userAgent    String?  @map("user_agent")
+  ipAddress    String?  @map("ip_address")
+  // Date of Session's creation in the database
+  // createdAt DateTime @default(now()) @map("created_at")
+
   /// The database identifier of the User associated with this Session
-  userId  Int   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  userId    BigInt   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
 
 enum Role {
-  User
-  Admin
+  USER
+  ADMIN
 }

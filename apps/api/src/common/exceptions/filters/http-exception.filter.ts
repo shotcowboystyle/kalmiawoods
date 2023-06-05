@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-import ApiError, { IApiError } from '../exceptions/api-error.exception';
+import ApiError, { IApiError } from '../api-error.exception';
 
 @Catch(ApiError, HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -23,7 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: status,
       code,
       message,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
       stack: process.env.NODE_ENV === 'development' ? stack : undefined,
     });
   }

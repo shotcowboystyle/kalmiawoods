@@ -1,12 +1,15 @@
+import { PrismaModule } from '@kalmiawoods/database';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TerminusModule } from '@nestjs/terminus';
 
-import { HealthCheckController } from './health-check.controller';
-import { HealthCheckService } from './health-check.service';
+import { HealthCheckController } from './http/health-check.controller';
+import { HealthCheckService } from './services/health-check.service';
+import { PrismaHealthIndicator } from './services/prisma.health-check.service';
 
 @Module({
-  imports: [],
+  imports: [TerminusModule, PrismaModule],
   controllers: [HealthCheckController],
-  providers: [HealthCheckService, ConfigService],
+  providers: [HealthCheckService, PrismaHealthIndicator, ConfigService],
 })
 export class HealthCheckModule {}

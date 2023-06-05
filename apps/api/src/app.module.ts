@@ -1,12 +1,11 @@
 import { HttpException, Module } from '@nestjs/common';
-// import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 
-// import { ThrottlerBehindProxyGuard } from './common/guards/throttler-behind-proxy.guard';
 import {
   AppConfigModule,
   LoggerConfigModule,
+  PrismaConfigModule,
   SentryConfigModule,
   ThrottlerConfigModule,
 } from './lib';
@@ -16,6 +15,7 @@ import { HealthCheckModule } from './modules/health-check/health-check.module';
   imports: [
     AppConfigModule,
     LoggerConfigModule,
+    PrismaConfigModule,
     ThrottlerConfigModule,
     SentryConfigModule,
     HealthCheckModule,
@@ -34,10 +34,6 @@ import { HealthCheckModule } from './modules/health-check/health-check.module';
         ],
       }),
     },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ThrottlerBehindProxyGuard,
-    // },
   ],
 })
 export class AppModule {}
