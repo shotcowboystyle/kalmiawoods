@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import appConfig from './configs/app.config';
 import prismaConfig from './configs/prisma.config';
+import redisConfig from './configs/redis.config';
 import sentryConfig from './configs/sentry.config';
 import throttleConfig from './configs/throttle.config';
 
@@ -10,7 +11,13 @@ import throttleConfig from './configs/throttle.config';
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`],
-      load: [appConfig, prismaConfig, sentryConfig, throttleConfig],
+      load: [
+        appConfig,
+        prismaConfig,
+        redisConfig,
+        sentryConfig,
+        throttleConfig,
+      ],
     }),
   ],
   exports: [ConfigModule],

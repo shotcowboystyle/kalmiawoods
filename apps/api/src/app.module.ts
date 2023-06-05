@@ -4,6 +4,7 @@ import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 
 import {
   AppConfigModule,
+  CacheModule,
   LoggerConfigModule,
   PrismaConfigModule,
   SentryConfigModule,
@@ -16,8 +17,9 @@ import { HealthCheckModule } from './modules/health-check/health-check.module';
     AppConfigModule,
     LoggerConfigModule,
     PrismaConfigModule,
-    ThrottlerConfigModule,
+    CacheModule,
     SentryConfigModule,
+    ThrottlerConfigModule,
     HealthCheckModule,
   ],
   controllers: [],

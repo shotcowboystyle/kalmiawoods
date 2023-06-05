@@ -1,3 +1,4 @@
+export * from './cache/cache.module';
 export * from './config/config.module';
 export * from './logger/logger.module';
 export * from './prisma/prisma.module';
