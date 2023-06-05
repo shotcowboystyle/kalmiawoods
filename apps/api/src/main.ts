@@ -2,24 +2,29 @@ import FastifyCompression from '@fastify/compress';
 import FastifyCors from '@fastify/cors';
 import FastifyHelmet from '@fastify/helmet';
 import fastifyStatic from '@fastify/static';
+import { PrismaService } from '@kalmiawoods/database';
 import {
   Logger as AppLogger,
   ClassSerializerInterceptor,
   VersioningType,
 } from '@nestjs/common';
+import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { readFileSync } from 'fs';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { join } from 'path';
+import * as qs from 'qs';
 
 import { AppModule } from '@/app.module';
+import { EnvEnum } from '@/common/@types/enums/env.enum';
 
 import { ConfigName } from './common/constants/config-name.constant';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { HttpExceptionFilter } from './common/exceptions/filters/http-exception.filter';
 import { setupSwagger } from './common/helpers/swagger.utils';
 import RequestValidationPipe from './common/pipes/request-validation.pipe';
 import { IAppEnvConfig } from './lib/config/configs/app.config';
@@ -27,25 +32,45 @@ import { IAppEnvConfig } from './lib/config/configs/app.config';
 declare const module: any;
 
 async function bootstrap() {
+  const httpsOptions: HttpsOptions = {
+    cert: readFileSync(join(__dirname, '../../../ssl/certificate.pem')),
+    key: readFileSync(join(__dirname, '../../../ssl/key.pem')),
+  };
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({
+      querystringParser: (str: string) => qs.parse(str),
+      // Set Fastify options: https://www.fastify.io/docs/latest/Server/
+      http2: true,
+      https: {
+        allowHTTP1: true,
+        ...httpsOptions,
+      },
+      ignoreTrailingSlash: true,
+      bodyLimit: 1048576,
+      logger: {
+        level: process.env.LOG_LEVEL,
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            singleLine: true,
+          },
+        },
+      },
+    }),
+    { bufferLogs: true },
   );
 
   const configService = app.get(ConfigService);
   const appConfig = configService.get<IAppEnvConfig>(ConfigName.APP);
-
-  // Configure static assets
-  app.register(fastifyStatic, {
-    root: join(__dirname, '..', 'public'),
-    decorateReply: true,
-  });
 
   // use pino logger
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   // Use custom api error response
+  // Filters - NOTE: Filters should be ordered from the most generic to the most specific
   app.useGlobalFilters(new HttpExceptionFilter());
 
   // Configure ClassSerializerInterceptor
@@ -59,7 +84,13 @@ async function bootstrap() {
     }),
   );
 
-  // Configure Middlewares
+  // Configure static assets
+  app.register(fastifyStatic, {
+    root: join(__dirname, '..', 'public'),
+    decorateReply: true,
+  });
+
+  // Configure Middleware
   app.register(FastifyHelmet, {
     contentSecurityPolicy: {
       useDefaults: true,
@@ -84,9 +115,15 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  // Configure Swagger and Redocly
+  // Configure Swagger
   if (appConfig?.swaggerEnabled) {
-    await setupSwagger(app, '/docs');
+    await setupSwagger(app, 'docs');
+  }
+
+  if (appConfig?.environment === EnvEnum.Prod) {
+    app.enableShutdownHooks();
+    const prismaService = app.get(PrismaService);
+    await prismaService.enableShutdownHooks(app);
   }
 
   // Start server

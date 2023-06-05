@@ -26,29 +26,32 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=docs^... && changeset publish"
+    "release": "turbo run build --filter=docs^... && changeset publish",
+    "update:deps": "pnpm -r update -Li"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "@commitlint/cli": "^17.5.1",
-    "@commitlint/config-conventional": "^17.4.4",
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
     "@kalmiawoods/eslint-config": "workspace:*",
     "@kalmiawoods/prettier-config": "workspace:*",
     "@kalmiawoods/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^5.16.5",
-    "@tsconfig/node18": "^1.0.1",
+    "@tsconfig/node18": "^2.0.1",
     "commitizen": "^4.3.0",
-    "commitlint": "^17.5.1",
+    "commitlint": "^17.6.5",
     "cross-env": "^7.0.3",
     "cspell": "^6.31.1",
     "cz-git": "^1.6.1",
+    "dotenv": "^16.1.4",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
-    "prettier": "^2.8.7",
+    "lint-staged": "^13.2.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.8",
     "ts-node-dev": "^2.0.0",
     "tsup": "^6.7.0",
-    "turbo": "^1.8.8",
-    "vitest": "^0.29.8"
+    "turbo": "^1.10.1",
+    "vitest": "^0.31.4"
   },
   "engines": {
     "node": ">=16.2.0"

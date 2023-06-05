@@ -11,7 +11,7 @@ async function main() {
     data: {
       email: 'lisa@simpson.com',
       password: '$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm', // secret42
-      role: 'User',
+      role: 'USER',
       profile: {
         create: {
           firstName: 'Lisa',
@@ -24,7 +24,7 @@ async function main() {
   const user2 = await prisma.user.create({
     data: {
       email: 'bart@simpson.com',
-      role: 'Admin',
+      role: 'ADMIN',
       password: '$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm', // secret42
       profile: {
         create: {

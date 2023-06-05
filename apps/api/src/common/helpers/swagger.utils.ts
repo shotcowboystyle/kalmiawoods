@@ -15,5 +15,5 @@ export async function setupSwagger(app: INestApplication, path: string) {
     .addBearerAuth(undefined, 'Access Token')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup(path, app, document);
 }
