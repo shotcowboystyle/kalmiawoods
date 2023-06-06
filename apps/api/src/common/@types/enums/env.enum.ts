@@ -1,10 +1,9 @@
-export type EnvType = 'local' | 'development' | 'staging' | 'testing' | 'production';
+export type EnvType = 'development' | 'testing' | 'staging' | 'production';
 
 // Valid Environment values
 export enum EnvEnum {
-  Local = 'local',
   Dev = 'development',
-  Staging = 'staging',
   Testing = 'testing',
+  Staging = 'staging',
   Prod = 'production',
 }

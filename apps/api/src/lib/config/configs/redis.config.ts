@@ -22,11 +22,17 @@ export const redisUrlToOptions = (url: string): RedisOptions => {
     };
   }
 
-  const connectionString = url.split('://')[1];
-  const arr = connectionString.split(':');
+  const paramsString = url.split('://')[1];
+  const [credentialsString, connectionString] = paramsString.split('@');
+
+  const credentialsArr = credentialsString.split(':');
+  const connectionArr = connectionString.split(':');
+
   return {
-    host: arr[0],
-    port: parseInt(arr[1], 10),
+    username: credentialsArr[0],
+    password: credentialsArr[1],
+    host: connectionArr[0],
+    port: parseInt(connectionArr[1], 10),
   };
 };
 
