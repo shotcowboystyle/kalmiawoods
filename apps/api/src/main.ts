@@ -1,7 +1,6 @@
 import FastifyCompression from '@fastify/compress';
 import FastifyCors from '@fastify/cors';
 import FastifyHelmet from '@fastify/helmet';
-import fastifyStatic from '@fastify/static';
 import { PrismaService } from '@kalmiawoods/database';
 import {
   Logger as AppLogger,
@@ -15,19 +14,21 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import AltairPlugin from 'altair-fastify-plugin';
 import { readFileSync } from 'fs';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { join } from 'path';
 import * as qs from 'qs';
 
-import { AppModule } from '@/app.module';
 import { EnvEnum } from '@/common/@types/enums/env.enum';
-
-import { ConfigName } from './common/constants/config-name.constant';
-import { HttpExceptionFilter } from './common/exceptions/filters/http-exception.filter';
-import { setupSwagger } from './common/helpers/swagger.utils';
-import RequestValidationPipe from './common/pipes/request-validation.pipe';
-import { IAppEnvConfig } from './lib/config/configs/app.config';
+import { KALMIA_WOODS_BANNER } from '@/common/constants/banner.constants';
+import { ConfigName } from '@/common/constants/config-name.constant';
+import { GlobalGraphQLFilter } from '@/common/exceptions/filters/gql.exception.filter';
+import { HttpExceptionFilter } from '@/common/exceptions/filters/http.exception.filter';
+import { setupSwagger } from '@/common/helpers/swagger.utils';
+import RequestValidationPipe from '@/common/pipes/request-validation.pipe';
+import { IAppEnvConfig } from '@/lib/config/configs/app.config';
+import { AppModule } from '@/modules/app/app.module';
 
 declare const module: any;
 
@@ -63,7 +64,7 @@ async function bootstrap() {
   );
 
   const configService = app.get(ConfigService);
-  const appConfig = configService.get<IAppEnvConfig>(ConfigName.APP);
+  const appConfig = configService.get<IAppEnvConfig>(ConfigName.APP)!;
 
   // use pino logger
   app.useLogger(app.get(Logger));
@@ -71,6 +72,7 @@ async function bootstrap() {
 
   // Use custom api error response
   // Filters - NOTE: Filters should be ordered from the most generic to the most specific
+  app.useGlobalFilters(new GlobalGraphQLFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
 
   // Configure ClassSerializerInterceptor
@@ -83,12 +85,6 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
-
-  // Configure static assets
-  app.register(fastifyStatic, {
-    root: join(__dirname, '..', 'public'),
-    decorateReply: true,
-  });
 
   // Configure Middleware
   app.register(FastifyHelmet, {
@@ -107,7 +103,7 @@ async function bootstrap() {
   app.register(FastifyCors, {
     preflightContinue: true,
     credentials: true,
-    // origin: `https://${configService.get<string>('DOMAIN')}`,
+    origin: `https://${appConfig?.domain || 'localhost'}`,
   });
 
   // Enable api versioning with URI prefix (e.g. /v1/*)
@@ -120,21 +116,56 @@ async function bootstrap() {
     await setupSwagger(app, 'docs');
   }
 
-  if (appConfig?.environment === EnvEnum.Prod) {
-    app.enableShutdownHooks();
-    const prismaService = app.get(PrismaService);
-    await prismaService.enableShutdownHooks(app);
+  // Configure GraphQL IDE
+  if (
+    appConfig?.environment !== EnvEnum.Prod &&
+    appConfig?.environment !== EnvEnum.Testing
+  ) {
+    app.getHttpAdapter().getInstance().register(AltairPlugin, {
+      path: '/altair',
+      baseURL: '/altair/',
+      endpointURL: '/graphql',
+    });
   }
 
-  // Start server
-  app.listen(appConfig?.port || 3000).then(() => {
-    const port = app.getHttpServer().address().port;
+  // if (appConfig?.environment === EnvEnum.Prod) {
+  // app.enableShutdownHooks();
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
+  // }
 
-    AppLogger.log(`🚀 Server started on http://localhost:${port}`);
+  // Start server
+  try {
+    await app.listen(appConfig.port);
+
+    const appUrl = await app.getUrl();
+    AppLogger.log(KALMIA_WOODS_BANNER);
+    AppLogger.log(`==========================================================`);
+    AppLogger.log(
+      `🚀 ${appConfig.environment.toUpperCase()} Server is running on : ${appUrl}/v1/health`,
+    );
     if (appConfig?.swaggerEnabled) {
-      AppLogger.log(`📖 Swagger started on http://localhost:${port}/docs`);
+      AppLogger.log(`📑 Swagger is running on : ${appUrl}/docs`);
     }
-  });
+    if (
+      appConfig?.environment !== EnvEnum.Prod &&
+      appConfig?.environment !== EnvEnum.Testing
+    ) {
+      AppLogger.log(`📑 GraphQL debugger is running on : ${appUrl}/altair`);
+    }
+    AppLogger.log(`==========================================================`);
+
+    // await app.listen(appConfig?.port || 3000).then(() => {
+    //   const port = app.getHttpServer().address().port;
+
+    //   AppLogger.log(`🚀 Server started on http://localhost:${port}`);
+    //   if (appConfig?.swaggerEnabled) {
+    //     AppLogger.log(`📖 Swagger started on http://localhost:${port}/docs`);
+    //   }
+    // });
+  } finally {
+    await prismaService.$disconnect();
+  }
 
   if (module.hot) {
     module.hot.accept();

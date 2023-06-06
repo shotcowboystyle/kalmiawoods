@@ -1,13 +1,15 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
+import { EnvType } from '@/common/@types';
 import { ConfigName } from '@/common/constants/config-name.constant';
 import JoiEnvValidator, { JoiConfig } from '@/common/helpers/joi-env.utils';
 
 export interface IAppEnvConfig {
-  environment: 'development' | 'testing' | 'production';
+  environment: EnvType;
   isTesting: boolean;
   isProduction: boolean;
+  domain: string;
   port: number;
   swaggerEnabled: boolean;
   version: string;
@@ -18,7 +20,7 @@ export default registerAs(ConfigName.APP, (): IAppEnvConfig => {
     environment: {
       value: process.env.NODE_ENV,
       joi: Joi.string()
-        .valid('development', 'testing', 'production')
+        .valid('development', 'testing', 'staging', 'production')
         .required(),
     },
     isTesting: {
@@ -29,8 +31,12 @@ export default registerAs(ConfigName.APP, (): IAppEnvConfig => {
       value: process.env.NODE_ENV === 'production',
       joi: Joi.boolean().required(),
     },
+    domain: {
+      value: process.env.DOMAIN,
+      joi: Joi.string().required(),
+    },
     port: {
-      value: parseInt(process.env.PORT || '3000', 10),
+      value: parseInt(process.env.PORT || '4000', 10),
       joi: Joi.number().required(),
     },
     swaggerEnabled: {

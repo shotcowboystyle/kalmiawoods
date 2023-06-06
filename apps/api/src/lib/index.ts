@@ -1,5 +1,6 @@
 export * from './cache/cache.module';
 export * from './config/config.module';
+export * from './graphql/graphql.module';
 export * from './logger/logger.module';
 export * from './prisma/prisma.module';
 export * from './sentry/sentry.module';
