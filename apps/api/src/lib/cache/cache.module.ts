@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { CacheConfig } from './cache.config';
+import { CacheService } from './cache.service';
 
 @Module({
   imports: [
@@ -13,6 +14,8 @@ import { CacheConfig } from './cache.config';
       useClass: CacheConfig,
     }),
   ],
-  exports: [CacheManagerModule],
+  providers: [CacheService],
+  // exports: [CacheManagerModule, CacheService],
+  exports: [CacheService],
 })
 export class CacheModule {}

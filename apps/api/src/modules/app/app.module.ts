@@ -11,11 +11,13 @@ import {
   SentryConfigModule,
   ThrottlerConfigModule,
 } from '@/lib';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { HealthCheckModule } from '@/modules/health-check/health-check.module';
+import { UserModule } from '@/modules/user/user.module';
 
+import { AppService } from './app.service';
 import { AppController } from './http/app.controller';
 import { AppResolver } from './providers/app.resolver';
-import { AppService } from './providers/app.service';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { AppService } from './providers/app.service';
     SentryConfigModule,
     ThrottlerConfigModule,
     HealthCheckModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

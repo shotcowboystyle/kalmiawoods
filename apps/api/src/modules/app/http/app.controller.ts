@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
-import { AppService } from '../providers/app.service';
+import { AppService } from '../app.service';
 
 /** Base app-related routing, prefixed with `/{BACKEND_BASE_PATH}/` */
 @Controller()

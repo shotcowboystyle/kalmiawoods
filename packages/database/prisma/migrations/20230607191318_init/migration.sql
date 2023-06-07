@@ -4,6 +4,9 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('CREATED', 'REGISTERED');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" BIGSERIAL NOT NULL,
@@ -12,6 +15,7 @@ CREATE TABLE "users" (
     "email_verification" TIMESTAMP(3),
     "password" TEXT,
     "role" "Role" NOT NULL DEFAULT 'USER',
+    "status" "Status" NOT NULL DEFAULT 'CREATED',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -21,7 +25,7 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "user_profile" (
-    "id" SERIAL NOT NULL,
+    "id" BIGSERIAL NOT NULL,
     "address" TEXT,
     "first_name" TEXT,
     "last_name" TEXT,
@@ -36,7 +40,7 @@ CREATE TABLE "user_profile" (
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "id" SERIAL NOT NULL,
+    "id" BIGSERIAL NOT NULL,
     "session_token" TEXT NOT NULL,
     "expires_at" TIMESTAMP(3) NOT NULL,
     "user_agent" TEXT,

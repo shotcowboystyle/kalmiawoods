@@ -2,6 +2,71 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccessTokenDTO {
+  accessToken: String
+  userId: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  """The login mutation for the login process."""
+  login(email: String!, password: String!): AccessTokenDTO
+
+  """The logout mutation for the logout process."""
+  logout: AccessTokenDTO
+
+  """This is the mutation for registering a new user."""
+  register(data: RegisterInputDTO!): User!
+}
+
 type Query {
+  findByIdCustom(id: Float!): User!
   getVersion: String!
+  me: User!
+}
+
+input RegisterInputDTO {
+  email: String!
+}
+
+type User {
+  """Date of User's creation in the database"""
+  createdAt: DateTime!
+
+  """The user's email address"""
+  email: String!
+
+  """The user's first name"""
+  firstName: String!
+
+  """The user's last name"""
+  lastName: String!
+
+  """The state of the user's registration process"""
+  status: String!
+
+  """The user's UUID"""
+  uid: String!
+
+  """Date of last update to User's record"""
+  updatedAt: DateTime!
+}
+
+type UserProfile {
+  address: String
+  avatar: String
+
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  firstName: String
+  id: ID!
+  lastName: String
+  mobilePhone: String
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
 }

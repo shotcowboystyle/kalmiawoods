@@ -41,6 +41,8 @@ model User {
   password  String?
   /// User's access role
   role      Role        @default(USER)
+  /// User's registration status
+  status    Status      @default(CREATED)
 
   sessions  Session[]
   profile   UserProfile?
@@ -59,7 +61,7 @@ model User {
 /// A Profile represents a User's details.
 model UserProfile {
   /// Profile's unique identifier
-  id          Int     @id @default(autoincrement())
+  id          BigInt     @id @default(autoincrement()) @db.BigInt
   /// Profile's mailing address
   address     String?
   /// Profile's first name
@@ -86,7 +88,7 @@ model UserProfile {
 /// A session represents a User's interaction with the API.
 model Session {
   /// Session's unique identifier
-  id        Int   @id @default(autoincrement())
+  id        BigInt   @id @default(autoincrement()) @db.BigInt
   /// Date of Session's creation in the database
   sessionToken String @unique @map("session_token")
   /// Date of Session's creation in the database
@@ -106,4 +108,9 @@ model Session {
 enum Role {
   USER
   ADMIN
+}
+
+enum Status {
+  CREATED
+  REGISTERED
 }

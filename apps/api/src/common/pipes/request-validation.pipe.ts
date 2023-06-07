@@ -4,7 +4,7 @@ import {
   ValidationPipeOptions,
 } from '@nestjs/common';
 
-import APIError from '../exceptions/api-error.exception';
+import ApiError from '@/common/exceptions/api-error.exception';
 
 export default class RequestValidationPipe extends ValidationPipe {
   constructor(validationOptions?: ValidationPipeOptions) {
@@ -18,7 +18,7 @@ export default class RequestValidationPipe extends ValidationPipe {
         }
       });
 
-      return new APIError(
+      return new ApiError(
         { message: messages, code: 'VALIDATION_ERROR' },
         HttpStatus.BAD_REQUEST,
       );

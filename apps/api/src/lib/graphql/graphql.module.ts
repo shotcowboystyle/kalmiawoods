@@ -1,7 +1,7 @@
 import { HttpException, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
-import type { FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 /**
  * Import and provide GraphQL related configuration.
@@ -28,9 +28,16 @@ import type { FastifyRequest } from 'fastify';
       path: '/graphql',
       // autoSchemaFile: "./../frontend/schema.graphql",
       autoSchemaFile: './src/generated/schema.graphql',
-      context: (request: FastifyRequest) => ({
-        raw: request.raw,
+      // context: (request: FastifyRequest) => ({
+      //   raw: request.raw,
+      // }),
+      context: (request: FastifyRequest, reply: FastifyReply) => ({
+        req: request,
+        res: reply,
       }),
+      subscription: {
+        context: (request, reply) => ({ req: request, res: reply }),
+      },
     }),
   ],
   // exports: [GraphQLModule],
