@@ -13,6 +13,13 @@ export interface IAppEnvConfig {
   port: number;
   swaggerEnabled: boolean;
   version: string;
+  sessionKey: string;
+  sessionSecret: string;
+  cookieSecret: string;
+  accessSecret: string;
+  accessTtl: string;
+  refreshSecret: string;
+  refreshTtl: string;
 }
 
 export default registerAs(ConfigName.APP, (): IAppEnvConfig => {
@@ -45,6 +52,34 @@ export default registerAs(ConfigName.APP, (): IAppEnvConfig => {
     },
     version: {
       value: process.env.npm_package_version,
+      joi: Joi.string().required(),
+    },
+    sessionKey: {
+      value: process.env.SECURE_SESSION_KEY,
+      joi: Joi.string().required(),
+    },
+    sessionSecret: {
+      value: process.env.SECURE_SESSION_SECRET,
+      joi: Joi.string().required(),
+    },
+    cookieSecret: {
+      value: process.env.COOKIE_SECRET,
+      joi: Joi.string().required(),
+    },
+    accessSecret: {
+      value: process.env.ACCESS_SECRET,
+      joi: Joi.string().required(),
+    },
+    accessTtl: {
+      value: process.env.ACCESS_TTL,
+      joi: Joi.string().required(),
+    },
+    refreshSecret: {
+      value: process.env.REFRESH_SECRET,
+      joi: Joi.string().required(),
+    },
+    refreshTtl: {
+      value: process.env.REFRESH_TTL,
       joi: Joi.string().required(),
     },
   };

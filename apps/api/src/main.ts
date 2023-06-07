@@ -1,15 +1,17 @@
 import FastifyCompression from '@fastify/compress';
 import FastifyCors from '@fastify/cors';
 import FastifyHelmet from '@fastify/helmet';
+import FastifySecureSession from '@fastify/secure-session';
 import { PrismaService } from '@kalmiawoods/database';
 import {
   Logger as AppLogger,
   ClassSerializerInterceptor,
+  // VERSION_NEUTRAL,
   VersioningType,
 } from '@nestjs/common';
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -24,7 +26,8 @@ import { EnvEnum } from '@/common/@types/enums/env.enum';
 import { KALMIA_WOODS_BANNER } from '@/common/constants/banner.constants';
 import { ConfigName } from '@/common/constants/config-name.constant';
 import { GlobalGraphQLFilter } from '@/common/exceptions/filters/gql.exception.filter';
-import { HttpExceptionFilter } from '@/common/exceptions/filters/http.exception.filter';
+// import { HttpExceptionFilter } from '@/common/exceptions/filters/http.exception.filter';
+import { PrismaClientExceptionFilter } from '@/common/exceptions/filters/prisma-client-exception.filter';
 import { setupSwagger } from '@/common/helpers/swagger.utils';
 import RequestValidationPipe from '@/common/pipes/request-validation.pipe';
 import { IAppEnvConfig } from '@/lib/config/configs/app.config';
@@ -60,7 +63,11 @@ async function bootstrap() {
         },
       },
     }),
-    { bufferLogs: true },
+    {
+      logger: ['error', 'warn', 'debug'],
+      bufferLogs: true,
+      abortOnError: true,
+    },
   );
 
   const configService = app.get(ConfigService);
@@ -70,23 +77,21 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
-  // Use custom api error response
-  // Filters - NOTE: Filters should be ordered from the most generic to the most specific
-  app.useGlobalFilters(new GlobalGraphQLFilter());
-  app.useGlobalFilters(new HttpExceptionFilter());
-
-  // Configure ClassSerializerInterceptor
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
-  // Configure ValidationPipe
-  app.useGlobalPipes(
-    new RequestValidationPipe({
-      whitelist: true,
-      stopAtFirstError: true,
-    }),
-  );
+  await app.register(FastifySecureSession, {
+    key: Buffer.from(appConfig.sessionKey, 'hex'),
+    cookieName: appConfig.sessionSecret,
+    cookie: {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24, // expiration in seconds (24 hours)
+      sameSite: true,
+      secure: true,
+    },
+  });
 
   // Configure Middleware
+  // app.register(FastifyHelmet, {
+  //   contentSecurityPolicy: appConfig.isProduction,
+  // });
   app.register(FastifyHelmet, {
     contentSecurityPolicy: {
       useDefaults: true,
@@ -101,14 +106,39 @@ async function bootstrap() {
 
   app.register(FastifyCompression);
   app.register(FastifyCors, {
-    preflightContinue: true,
+    // preflightContinue: true,
     credentials: true,
-    origin: `https://${appConfig?.domain || 'localhost'}`,
+    origin: !appConfig.isProduction
+      ? '*'
+      : `https://${appConfig?.domain || 'localhost'}`,
   });
+
+  // Use custom api error response
+  // Filters - NOTE: Filters should be ordered from the most generic to the most specific
+  app.useGlobalFilters(new GlobalGraphQLFilter());
+  // app.useGlobalFilters(new HttpExceptionFilter());
+
+  // prisma exception filter
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+
+  // Configure ClassSerializerInterceptor
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  // Configure ValidationPipe
+  app.useGlobalPipes(
+    new RequestValidationPipe({
+      whitelist: true,
+      stopAtFirstError: true,
+    }),
+  );
 
   // Enable api versioning with URI prefix (e.g. /v1/*)
   app.enableVersioning({
     type: VersioningType.URI,
+    // type: VersioningType.HEADER,
+    // defaultVersion: VERSION_NEUTRAL,
+    // header: 'API-Version',
   });
 
   // Configure Swagger
@@ -128,15 +158,13 @@ async function bootstrap() {
     });
   }
 
-  // if (appConfig?.environment === EnvEnum.Prod) {
-  // app.enableShutdownHooks();
+  app.enableShutdownHooks();
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
-  // }
 
   // Start server
   try {
-    await app.listen(appConfig.port);
+    await app.listen(appConfig.port, appConfig.domain || '0.0.0.0');
 
     const appUrl = await app.getUrl();
     AppLogger.log(KALMIA_WOODS_BANNER);
@@ -154,15 +182,6 @@ async function bootstrap() {
       AppLogger.log(`📑 GraphQL debugger is running on : ${appUrl}/altair`);
     }
     AppLogger.log(`==========================================================`);
-
-    // await app.listen(appConfig?.port || 3000).then(() => {
-    //   const port = app.getHttpServer().address().port;
-
-    //   AppLogger.log(`🚀 Server started on http://localhost:${port}`);
-    //   if (appConfig?.swaggerEnabled) {
-    //     AppLogger.log(`📖 Swagger started on http://localhost:${port}/docs`);
-    //   }
-    // });
   } finally {
     await prismaService.$disconnect();
   }
