@@ -4,11 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Result, err, ok } from 'neverthrow';
 // import { GraphQLError } from 'graphql';
 import { User } from '@kalmiawoods/database';
-import ms, { StringValue } from 'ms';
 
 import { IContext } from '@/common/@types';
 import { ConfigName } from '@/common/constants/config-name.constant';
 import { ServiceException } from '@/common/exceptions/service.exception';
+import { CookieUtils } from '@/common/helpers/cookie.utils';
 // import { User } from '@/common/entities/user.entity';
 import { CacheService } from '@/lib/cache/cache.service';
 import { IAppEnvConfig } from '@/lib/config/configs/app.config';
@@ -131,10 +131,10 @@ export class AuthService {
       refreshToken,
     );
 
-    const ttlInMillis = ms(this.appConfig.refreshTtl as StringValue);
-
     ctx.res.setCookie('refreshToken', refreshToken, {
-      expires: new Date(Date.now() + ttlInMillis),
+      expires: CookieUtils.getRefreshExpirationDateTime(
+        this.appConfig.refreshTtl,
+      ),
       httpOnly: true,
       path: '/',
       sameSite: 'none',

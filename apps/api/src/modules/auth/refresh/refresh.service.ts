@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger, Req, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import ms, { StringValue } from 'ms';
 
 import { IFastifyReply, IFastifyRequest } from '@/common/@types';
 import { ConfigName } from '@/common/constants/config-name.constant';
+import { CookieUtils } from '@/common/helpers/cookie.utils';
 import { CacheService } from '@/lib/cache/cache.service';
 import { IAppEnvConfig } from '@/lib/config/configs/app.config';
 
@@ -49,7 +49,7 @@ export class RefreshService {
     )) as string;
 
     this.logger.log(
-      'checking stored token against cookiefied token',
+      'checking stored token against cookie token',
       storedToken ? storedToken.slice(-8) : '',
       refreshToken ? refreshToken.slice(-8) : '',
     );
@@ -76,10 +76,10 @@ export class RefreshService {
       newRefreshToken,
     );
 
-    const timeInMillis = ms(this.appConfig.refreshTtl as StringValue);
-
     reply.setCookie('refreshToken', newRefreshToken, {
-      expires: new Date(Date.now() + timeInMillis),
+      expires: CookieUtils.getRefreshExpirationDateTime(
+        this.appConfig.refreshTtl,
+      ),
       httpOnly: true,
       path: '/',
       sameSite: 'none',
