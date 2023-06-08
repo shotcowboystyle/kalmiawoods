@@ -79,40 +79,25 @@ module.exports = {
 
     scopes: [
       {
-        name: 'tools',
-        description: 'Anything related to the helper projects in the tools/ directory',
-        emoji: ':hammer_and_wrench:',
-      },
-      {
-        name: 'apps/api',
+        name: 'api',
         description: 'Anything related to any of the API services',
         emoji: ':memo:',
       },
-      // {
-      //   name: 'apps/docs',
-      //   description: 'Anything related to a services docs site',
-      //   emoji: ':memo:',
-      // },
       {
-        name: 'apps/web',
+        name: 'web',
         description: 'Anything related to a web app',
         emoji: ':shell:',
       },
       {
-        name: 'packages/ui/astro`',
-        description: 'Anything related to Astro components',
+        name: 'database`',
+        description: 'Anything related to the database',
         emoji: ':shell:',
       },
       {
-        name: 'packages/ui/vue`',
-        description: 'Anything related to Vue components',
+        name: 'ui`',
+        description: 'Anything related to UI components',
         emoji: ':shell:',
       },
-      // {
-      //   name: 'apps/web-e2e',
-      //   description: 'Anything related to the web app`s e2e Cypress project',
-      //   emoji: ':envelope:',
-      // },
       {
         name: 'repo',
         description: 'anything related to managing the repo itself (ex: bundling, maintenance, etc.)',
@@ -142,12 +127,12 @@ module.exports = {
     subjectLimit: 150,
     breaklineNumber: 100,
     breaklineChar: '|',
-    issuePrefixs: [{ value: 'closed', name: 'closed:   ISSUES has been processed' }],
-    customIssuePrefixsAlign: 'top',
-    emptyIssuePrefixsAlias: 'skip',
-    customIssuePrefixsAlias: 'custom',
-    allowCustomIssuePrefixs: true,
-    allowEmptyIssuePrefixs: true,
+    issuePrefixes: [{ value: 'closed', name: 'closed:   ISSUES has been processed' }],
+    customIssuePrefixesAlign: 'top',
+    emptyIssuePrefixesAlias: 'skip',
+    customIssuePrefixesAlias: 'custom',
+    allowCustomIssuePrefixes: true,
+    allowEmptyIssuePrefixes: true,
     confirmColorize: true,
     maxHeaderLength: Infinity,
     maxSubjectLength: Infinity,
@@ -157,5 +142,6 @@ module.exports = {
     defaultIssues: '',
     defaultScope: '',
     defaultSubject: '',
+    skipQuestions: ['body', 'footer'],
   },
 };
