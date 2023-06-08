@@ -24,9 +24,9 @@ datasource db {
 /// A User represents an account holder.
 model User {
   /// User's internal (non-public) identifier for the database
-  id        BigInt      @id @default(autoincrement()) @db.BigInt
+  id                    BigInt        @id @default(autoincrement()) @db.BigInt
   /// User's unique identifier
-  uid       String      @unique(map: "user_id_key") @default(cuid())
+  uid                   String        @unique(map: "user_id_key") @default(cuid())
 
   // If User is enabled or not
   // isActive                Boolean           @map("is_active") @default(true)
@@ -34,25 +34,25 @@ model User {
   // isDeleted Boolean     @map("is_deleted") @default(false)
 
   /// User's email address
-  email     String      @unique(map: "user_email_key")
+  email                 String        @unique(map: "user_email_key")
   /// User's email address
-  emailVerification     DateTime? @map("email_verification")
+  emailVerification     DateTime?     @map("email_verification")
   /// User's password
-  password  String?
+  password              String?
   /// User's access role
-  role      Role        @default(USER)
+  role                  Role          @default(USER)
   /// User's registration status
-  status    Status      @default(CREATED)
+  status                Status        @default(CREATED)
 
-  sessions  Session[]
-  profile   UserProfile?
+  // sessions  Session[]
+  profile               UserProfile?
 
   /// Date of User's creation in the database
-  createdAt DateTime    @default(now()) @map("created_at")
+  createdAt             DateTime      @default(now()) @map("created_at")
   /// Date of last update to User's record
-  updatedAt DateTime    @updatedAt @map("updated_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
   /// Date of User's deletion from the database
-  deletedAt DateTime?   @map("deleted_at")
+  deletedAt             DateTime?     @map("deleted_at")
 
   @@map("users")
 }
@@ -61,7 +61,7 @@ model User {
 /// A Profile represents a User's details.
 model UserProfile {
   /// Profile's unique identifier
-  id          BigInt     @id @default(autoincrement()) @db.BigInt
+  id          BigInt   @id @default(autoincrement()) @db.BigInt
   /// Profile's mailing address
   address     String?
   /// Profile's first name
@@ -71,7 +71,7 @@ model UserProfile {
   /// Profile's mobilel phone number
   mobilePhone String?  @unique(map: "user_mobile_number_key") @map("mobile_phone")
   /// Profile's picture
-  avatar                  String?
+  avatar      String?
   /// Date of Profile's creation in the database
   createdAt   DateTime @default(now()) @map("created_at")
   /// Date of last update to Profile's record
@@ -86,24 +86,24 @@ model UserProfile {
 
 /// Complete data structure of the Session entity for the database and GraphQL.
 /// A session represents a User's interaction with the API.
-model Session {
-  /// Session's unique identifier
-  id        BigInt   @id @default(autoincrement()) @db.BigInt
-  /// Date of Session's creation in the database
-  sessionToken String @unique @map("session_token")
-  /// Date of Session's creation in the database
-  expiresAt DateTime @map("expires_at")
-  userAgent    String?  @map("user_agent")
-  ipAddress    String?  @map("ip_address")
-  // Date of Session's creation in the database
-  // createdAt DateTime @default(now()) @map("created_at")
+// model Session {
+//   /// Session's unique identifier
+//   id        BigInt   @id @default(autoincrement()) @db.BigInt
+//   /// Date of Session's creation in the database
+//   sessionToken String @unique @map("session_token")
+//   /// Date of Session's creation in the database
+//   expiresAt DateTime @map("expires_at")
+//   userAgent    String?  @map("user_agent")
+//   ipAddress    String?  @map("ip_address")
+//   // Date of Session's creation in the database
+//   // createdAt DateTime @default(now()) @map("created_at")
 
-  /// The database identifier of the User associated with this Session
-  userId    BigInt   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   /// The database identifier of the User associated with this Session
+//   userId    BigInt   @map("user_id")
+//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
-}
+//   @@map("sessions")
+// }
 
 enum Role {
   USER
@@ -112,5 +112,6 @@ enum Role {
 
 enum Status {
   CREATED
+  DELETED
   REGISTERED
 }
