@@ -99,6 +99,11 @@ module.exports = {
         emoji: ':shell:',
       },
       {
+        name: 'deps',
+        description: 'For updating package dependencies',
+        emoji: ':package:',
+      },
+      {
         name: 'repo',
         description: 'anything related to managing the repo itself (ex: bundling, maintenance, etc.)',
         emoji: ':package:',
