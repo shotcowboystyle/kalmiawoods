@@ -9,7 +9,6 @@ import {
   // VERSION_NEUTRAL,
   VersioningType,
 } from '@nestjs/common';
-import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import {
@@ -17,18 +16,14 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import AltairPlugin from 'altair-fastify-plugin';
-import { readFileSync } from 'fs';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
-import { join } from 'path';
 import * as qs from 'qs';
 
 import { EnvEnum } from '@/common/@types/enums/env.enum';
 import { KALMIA_WOODS_BANNER } from '@/common/constants/banner.constants';
 import { ConfigName } from '@/common/constants/config-name.constant';
 import { GlobalGraphQLFilter } from '@/common/exceptions/filters/gql.exception.filter';
-// import { HttpExceptionFilter } from '@/common/exceptions/filters/http.exception.filter';
 import { PrismaClientExceptionFilter } from '@/common/exceptions/filters/prisma-client-exception.filter';
-import { setupSwagger } from '@/common/helpers/swagger.utils';
 import RequestValidationPipe from '@/common/pipes/request-validation.pipe';
 import { IAppEnvConfig } from '@/lib/config/configs/app.config';
 import { AppModule } from '@/modules/app/app.module';
@@ -36,37 +31,16 @@ import { AppModule } from '@/modules/app/app.module';
 declare const module: any;
 
 async function bootstrap() {
-  const httpsOptions: HttpsOptions = {
-    cert: readFileSync(join(__dirname, '../../../ssl/certificate.pem')),
-    key: readFileSync(join(__dirname, '../../../ssl/key.pem')),
-  };
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
       querystringParser: (str: string) => qs.parse(str),
-      // Set Fastify options: https://www.fastify.io/docs/latest/Server/
-      http2: true,
-      https: {
-        allowHTTP1: true,
-        ...httpsOptions,
-      },
       ignoreTrailingSlash: true,
-      bodyLimit: 1048576,
-      logger: {
-        level: process.env.LOG_LEVEL,
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-            singleLine: true,
-          },
-        },
-      },
     }),
     {
-      logger: ['error', 'warn', 'debug'],
+      // logger: ['error', 'warn', 'debug'],
       bufferLogs: true,
-      abortOnError: true,
+      // abortOnError: true,
     },
   );
 
@@ -141,11 +115,6 @@ async function bootstrap() {
     // header: 'API-Version',
   });
 
-  // Configure Swagger
-  if (appConfig?.swaggerEnabled) {
-    await setupSwagger(app, 'docs');
-  }
-
   // Configure GraphQL IDE
   if (
     appConfig?.environment !== EnvEnum.Prod &&
@@ -158,33 +127,24 @@ async function bootstrap() {
     });
   }
 
-  app.enableShutdownHooks();
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
 
-  // Start server
-  try {
-    await app.listen(appConfig.port, appConfig.domain || '0.0.0.0');
+  await app.listen(appConfig.port, appConfig.domain || '0.0.0.0');
 
-    const appUrl = await app.getUrl();
-    AppLogger.log(KALMIA_WOODS_BANNER);
-    AppLogger.log(`==========================================================`);
-    AppLogger.log(
-      `🚀 ${appConfig.environment.toUpperCase()} Server is running on : ${appUrl}/v1/health`,
-    );
-    if (appConfig?.swaggerEnabled) {
-      AppLogger.log(`📑 Swagger is running on : ${appUrl}/docs`);
-    }
-    if (
-      appConfig?.environment !== EnvEnum.Prod &&
-      appConfig?.environment !== EnvEnum.Testing
-    ) {
-      AppLogger.log(`📑 GraphQL debugger is running on : ${appUrl}/altair`);
-    }
-    AppLogger.log(`==========================================================`);
-  } finally {
-    await prismaService.$disconnect();
+  const appUrl = await app.getUrl();
+  AppLogger.log(KALMIA_WOODS_BANNER);
+  AppLogger.log(`==========================================================`);
+  AppLogger.log(
+    `🚀 ${appConfig.environment.toUpperCase()} Server is running on : ${appUrl}/v1/health`,
+  );
+  if (
+    appConfig?.environment !== EnvEnum.Prod &&
+    appConfig?.environment !== EnvEnum.Testing
+  ) {
+    AppLogger.log(`📑 GraphQL debugger is running on : ${appUrl}/altair`);
   }
+  AppLogger.log(`==========================================================`);
 
   if (module.hot) {
     module.hot.accept();
