@@ -1,17 +1,23 @@
 ---
+import { getUser } from '@api/auth';
 import { Picture } from '@astrojs/image/components';
 import { AvailabilityCalendar } from '@kalmiawoods/ui';
 import '@kalmiawoods/ui/style.css';
 import Layout from '@layouts/Main.astro';
+
+const user = await getUser(Astro.cookies);
+if (!user) {
+  return Astro.redirect('/login');
+}
 ---
 
 <Layout title="Availability">
   <section class="relative h-screen">
     <div class="absolute z-10 h-4/6 w-full bg-gradient-to-b from-black"></div>
-    <div class="absolute top-0 bottom-0 left-0 right-0 m-0 block overflow-hidden">
+    <div class="absolute bottom-0 left-0 right-0 top-0 m-0 block overflow-hidden">
       <Picture
         alt="Kalmia Woods main house front view"
-        class="object-cover w-full h-screen md:h-full"
+        class="h-screen w-full object-cover md:h-full"
         widths={[640, 750, 828, 1080, 1200, 1920, 2048, 3840]}
         sizes="100vw"
         loading="eager"
