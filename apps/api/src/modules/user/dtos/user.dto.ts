@@ -2,9 +2,12 @@ import { User } from '@kalmiawoods/database';
 import { Field, HideField, ObjectType } from '@nestjs/graphql';
 import { Expose } from 'class-transformer';
 
-@ObjectType('User')
+import { ReservationDTO } from '@/modules/reservation/dtos/reservation.dto';
+
+@ObjectType('UserDTO')
 export class UserDTO {
-  @HideField()
+  @Expose()
+  @Field({ description: "The user's UUID" })
   public id!: number;
 
   @Expose()
@@ -14,6 +17,10 @@ export class UserDTO {
   @Expose()
   @Field({ description: "The user's email address" })
   public email!: string;
+
+  @Expose()
+  @Field({ description: "The user's role" })
+  public role!: string;
 
   @Expose()
   @Field({ description: "The user's first name" })
@@ -30,6 +37,9 @@ export class UserDTO {
   @HideField()
   public password: string;
 
+  /** User's reservations. */
+  @Expose() @Field(() => [ReservationDTO]) reservations?: ReservationDTO[];
+
   @Expose()
   @Field({ description: "Date of User's creation in the database" })
   public createdAt!: Date;
@@ -38,7 +48,7 @@ export class UserDTO {
   @Field({ description: "Date of last update to User's record" })
   public updatedAt!: Date;
 
-  constructor(partial?: Partial<User>) {
+  constructor(partial?: User) {
     Object.assign(this, partial);
   }
 }

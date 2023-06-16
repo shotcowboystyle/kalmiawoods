@@ -10,9 +10,14 @@
     "skipLibCheck": true,
     "composite": true,
     "incremental": true,
-    "outDir": "./dist",
-    "baseUrl": "./src",
-    "rootDir": "./src"
+    "outDir": "./dist"
   },
-  "exclude": ["./prisma", "./dist", "./@generated"]
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

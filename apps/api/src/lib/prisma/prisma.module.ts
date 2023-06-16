@@ -1,28 +1,20 @@
-import {
-  Prisma,
-  PrismaModule,
-  PrismaServiceOptions,
-} from '@kalmiawoods/database';
+import { PrismaModule, PrismaServiceOptions } from '@kalmiawoods/database';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
-import { ConfigName } from '@/common/constants/config-name.constant';
 
 @Module({
   imports: [
-    PrismaModule.forRootAsync({
+    PrismaModule.forRoot({
       isGlobal: true,
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const prismaConfigOptions =
-          configService.get<Prisma.PrismaClientOptions>(ConfigName.PRISMA);
-        return <PrismaServiceOptions>{
-          prismaOptions: prismaConfigOptions,
-        };
+      prismaServiceOptions: <PrismaServiceOptions>{
+        log: ['query', 'info', 'warn', 'error'],
+        // middlewares: [
+        //   loggingMiddleware(),
+        //   softDeleteMiddleware(),
+        //   filterSoftDeleteMiddleware(),
+        // ],
       },
     }),
   ],
-  exports: [PrismaModule],
+  // exports: [PrismaModule],
 })
 export class PrismaConfigModule {}

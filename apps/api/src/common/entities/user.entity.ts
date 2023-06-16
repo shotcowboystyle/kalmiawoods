@@ -5,9 +5,10 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
+import { Exclude } from 'class-transformer';
 
 import { BaseEntity } from './base.entity';
-// import { Session } from './session.entity';
+import { Reservation } from './reservation.entity';
 import { UserProfile } from './user-profile.entity';
 
 export enum Role {
@@ -22,10 +23,11 @@ registerEnumType(Role, {
 
 @ObjectType('User')
 export class User extends BaseEntity {
-  @Field(() => ID)
+  @Exclude()
+  @Field()
   id: number;
 
-  @Field(() => String)
+  @Field(() => ID)
   uid: string;
 
   @Field(() => String)
@@ -43,8 +45,8 @@ export class User extends BaseEntity {
   @Field(() => UserProfile)
   profile?: UserProfile;
 
-  // @Field(() => [Session])
-  // sessions: Session[];
+  @Field(() => [Reservation])
+  reservations: Reservation[];
 
   @HideField()
   password: string;
@@ -53,8 +55,8 @@ export class User extends BaseEntity {
     return this.role === 'ADMIN';
   }
 
-  constructor(partial?: Partial<User>) {
-    super();
-    Object.assign(this, partial);
-  }
+  // constructor(partial?: Partial<User>) {
+  //   super();
+  //   Object.assign(this, partial);
+  // }
 }

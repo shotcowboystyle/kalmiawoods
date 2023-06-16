@@ -83,4 +83,9 @@ export const ApiErrorMessage = {
       'User registered with another method, please login with that method. Set password in your profile, if you want to login with password',
     httpCode: HttpStatus.UNAUTHORIZED,
   },
+  RESERVATION_NOT_FOUND: {
+    code: 'RESERVATION_NOT_FOUND',
+    message: 'Reservation not found',
+    httpCode: HttpStatus.NOT_FOUND,
+  },
 } as const satisfies Record<string, IApiErrorMessage>;
