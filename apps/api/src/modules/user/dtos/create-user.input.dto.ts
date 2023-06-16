@@ -59,7 +59,6 @@ export class CreateUserInputDTO {
   // @IsStringField()
   @IsNotEmpty()
   @IsMobilePhone('fa-IR', { strictMode: false })
-  @Field()
   @Field({ nullable: true })
   readonly mobilePhone!: string;
 }

@@ -46,6 +46,7 @@ model User {
 
   // sessions  Session[]
   profile               UserProfile?
+  reservations          Reservation[]
 
   /// Date of User's creation in the database
   createdAt             DateTime      @default(now()) @map("created_at")
@@ -104,6 +105,26 @@ model UserProfile {
 
 //   @@map("sessions")
 // }
+
+model Reservation {
+  /// Reservation's unique identifier
+  id        BigInt   @id @default(autoincrement()) @db.BigInt
+
+  /// Start date of Reservation
+  checkInDate   DateTime @map("check_in_date")
+  /// End date of Reservation
+  checkOutDate  DateTime @map("check_out_date")
+
+  /// Date of Reservation's creation in the database
+  createdAt   DateTime @default(now()) @map("created_at")
+  /// Date of last update to Reservation's record
+  updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+
+  userId    BigInt   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reservations")
+}
 
 enum Role {
   USER

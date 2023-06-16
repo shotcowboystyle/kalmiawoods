@@ -13,6 +13,7 @@ import {
 } from '@/lib';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { HealthCheckModule } from '@/modules/health-check/health-check.module';
+import { ReservationModule } from '@/modules/reservation/reservation.module';
 import { UserModule } from '@/modules/user/user.module';
 
 import { AppService } from './app.service';
@@ -30,6 +31,7 @@ import { AppResolver } from './providers/app.resolver';
     ThrottlerConfigModule,
     HealthCheckModule,
     AuthModule,
+    ReservationModule,
     UserModule,
   ],
   controllers: [AppController],
