@@ -16,7 +16,8 @@
     "postinstall": "husky install",
     "build": "turbo run build",
     "commit": "git cz",
-    "dev": "turbo run dev --no-cache --continue",
+    "dev": "turbo run dev",
+    "dev:nocache": "turbo run dev --no-cache --continue",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx,vue,astro,cjs,mjs,js}\"",
     "format:check": "prettier --check  \"**/*.{ts,tsx,md,mdx,vue,astro,cjs,mjs,js}\"",
     "format:markdown": "eslint . --quiet --fix --ext md",
@@ -50,8 +51,8 @@
     "prettier": "^2.8.8",
     "ts-node-dev": "^2.0.0",
     "tsup": "^6.7.0",
-    "turbo": "^1.10.1",
-    "vitest": "^0.31.4"
+    "turbo": "^1.10.3",
+    "vitest": "^0.32.0"
   },
   "engines": {
     "node": ">=16.2.0"

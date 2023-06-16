@@ -1,6 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const lightTheme = require('daisyui/src/colors/themes')['[data-theme=garden]'];
-const darkTheme = require('daisyui/src/colors/themes')['[data-theme=forest]'];
+const lightTheme = require('daisyui/src/theming/themes')['[data-theme=garden]'];
+const darkTheme = require('daisyui/src/theming/themes')['[data-theme=forest]'];
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
