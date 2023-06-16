@@ -11,6 +11,7 @@ module.exports = {
   ],
 
   plugins: ['stylelint-order'],
+  // ignore: ['*.vue'],
 
   overrides: [
     // NOTE: Too unstable for now

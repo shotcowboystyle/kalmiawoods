@@ -1,5 +1,6 @@
 import image from '@astrojs/image';
 import mdx from '@astrojs/mdx';
+import node from '@astrojs/node';
 import partytown from '@astrojs/partytown';
 import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
@@ -11,7 +12,15 @@ import { defineConfig } from 'astro/config';
 import path from 'path';
 import Icons from 'unplugin-icons/vite';
 import { fileURLToPath } from 'url';
+import { loadEnv } from 'vite';
+
 import { SITE } from './src/config';
+
+// const { APP_HOST, APP_PORT, APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '')
+const { APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
+
+const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}/`;
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) =>
   SITE.googleAnalyticsId ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
@@ -22,12 +31,13 @@ const whenExternalScripts = (items = []) =>
 export default defineConfig({
   // site: SITE.origin,
   site: process.env.SITE_URL ?? 'https://www.kalmiawoods.com',
-  base: '/',
+  base: basePath,
   trailingSlash: 'never',
-  output: 'static',
-  experimental: {
-    integrations: true,
-  },
+  // output: 'static',
+  output: 'server',
+  adapter: node({
+    mode: 'standalone',
+  }),
   integrations: [
     AstroPWA(),
     //   {

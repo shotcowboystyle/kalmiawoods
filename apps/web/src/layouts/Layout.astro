@@ -1,12 +1,13 @@
 ---
 import '@assets/styles/base.css';
 import { SITE } from '@config';
-import '@fontsource/inter/variable.css';
+import '@fontsource/inter';
 import { useTheme } from '@kalmiawoods/ui';
 import { Spa } from 'astro-spa';
 import { pwaInfo } from 'virtual:pwa-info';
 import GlobalScripts from '../components/GlobalScripts.astro';
 import ReloadPrompt from '../components/ReloadPrompt.astro';
+// import VercelWebVitals from '../components/VercelWebVitals.astro';
 
 // const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -91,10 +92,25 @@ const { theme } = useTheme();
     } -->
 
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+
+    <!-- <script>
+      import { webVitals } from '../lib/vitals';
+
+      const analyticsId = import.meta.env.PUBLIC_VERCEL_ANALYTICS_ID;
+      if (analyticsId) {
+        webVitals({
+          path: location.pathname,
+          params: location.search,
+          analyticsId,
+        });
+      }
+    </script> -->
   </head>
 
   <body class="tracking-tight antialiased">
     <slot />
+    <!-- report analytics; available in the Vercel analytics tab -->
+    <!-- <VercelWebVitals /> -->
     <GlobalScripts />
     <style is:global>
       img {

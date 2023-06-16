@@ -1,0 +1,152 @@
+---
+import LoginLayout from '@/layouts/LoginLayout.astro';
+import Logo from '@components/Logo.astro';
+// import { LoginForm } from '@kalmiawoods/ui';
+
+const status = Astro.response.status;
+let redirectMessage;
+if (status === 301) {
+  redirectMessage = 'Your session is finished, please login again';
+}
+---
+
+<LoginLayout title="Login">
+  <section class="flex min-h-screen pb-[12vh] align-middle">
+    <div
+      class="login pt:mt-0 mx-auto flex w-full flex-col items-center justify-center px-6 pt-8 dark:bg-gray-900"
+    >
+      <div class="login__inner reveal h-screen">
+        <div class="inner__brand">
+          <div class="radius-large space-8 bg-neutral-900">
+            <Logo />
+          </div>
+          <div class="brand__text">
+            <span>Astro Dashboard</span>
+            <span>An Accessible Astro Theme</span>
+          </div>
+        </div>
+        <div class="inner__form space-content">
+          <div class="space-content">
+            {redirectMessage}
+            <h1>Login</h1>
+            <!-- <LoginForm client:load /> -->
+            <input id="ei" type="email" />
+            <input id="pi" type="password" />
+            <button onclick="loginHandler()">Login</button>
+          </div>
+        </div>
+        <div class="login__footer text-neutral-700">
+          <p><em>Build fast dashboards, faster.</em></p>
+        </div>
+      </div>
+      <div class="login__background h-screen"></div>
+    </div>
+  </section>
+</LoginLayout>
+
+<script is:inline>
+  const emailInput = document.querySelector('#ei');
+  const passwordInput = document.querySelector('#pi');
+
+  const loginHandler = async () => {
+    const response = await fetch('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: emailInput.value,
+        password: passwordInput.value,
+      }),
+    });
+    if (response.status == 200) {
+      document.location.href = '/';
+    }
+  };
+</script>
+<!-- <style lang="scss">
+  @use '../assets/scss/base/breakpoint' as *;
+  @use '../assets/scss/base/size' as *;
+  @use '../assets/scss/base/space' as *;
+
+  .login {
+    display: grid;
+
+    @include breakpoint(medium) {
+      grid-template-columns: 550px 2fr;
+    }
+
+    .login__inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: $space-48;
+      padding: $space-24;
+      z-index: 1;
+
+      @include breakpoint(medium) {
+        padding: $space-48 $space-96;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .inner__brand {
+      display: flex;
+      align-items: center;
+      gap: $space-16;
+    }
+
+    .brand__logo {
+      max-width: 50px;
+    }
+
+    .brand__text {
+      display: flex;
+      flex-direction: column;
+      gap: $space-2;
+
+      > :first-child {
+        font-weight: bold;
+        @include size-20;
+      }
+
+      > :last-child {
+        @include size-14;
+      }
+    }
+
+    .login__background {
+      display: none;
+      background-color: #000;
+      background-image: url("/login-background.webp");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      @include breakpoint(medium) {
+        display: block;
+      }
+    }
+
+    .reveal {
+      animation: reveal 0.3s ease-in;
+    }
+
+    .login__footer {
+      padding-bottom: $space-24;
+
+      @include breakpoint(medium) {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  @keyframes reveal {
+    0% {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style> -->

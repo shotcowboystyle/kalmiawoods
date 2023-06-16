@@ -194,7 +194,7 @@ const vLetterOnly = {
 
 const cardYear = ref(formData.cardYear);
 watch(cardYear, () => {
-  if (formData.cardMonth < minCardMonth.value) {
+  if (Number(formData.cardMonth) < minCardMonth.value) {
     formData.cardMonth = '';
   }
 });

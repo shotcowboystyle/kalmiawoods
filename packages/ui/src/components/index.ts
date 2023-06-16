@@ -5,6 +5,7 @@ import PaymentForm from './PaymentForm/PaymentForm.vue';
 import DatesAndGuestsQuickForm from './ReservationForm/DatesAndGuestsQuickForm.vue';
 import ReservationForm from './ReservationForm/ReservationForm.vue';
 import ReservationFormFooter from './ReservationForm/ReservationFormFooter.vue';
+import LoginForm from './Auth/LoginForm.vue';
 
 export {
   AvailabilityCalendar,
@@ -12,6 +13,7 @@ export {
   ToggleTheme,
   PaymentForm,
   DatesAndGuestsQuickForm,
+  LoginForm,
   ReservationForm,
   ReservationFormFooter,
 };
