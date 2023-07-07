@@ -1,0 +1,54 @@
+---
+import { getEmails } from "@/auth/email";
+import EmailLayout from "@/layouts/EmailLayout.astro";
+
+const emailAddressQuery = Astro.url.searchParams.get("q") ?? "";
+const emails = await getEmails(emailAddressQuery);
+---
+
+<EmailLayout>
+  <div>
+    <form>
+      <label for="query" class="text-sm text-medium">Search by mailbox</label>
+      <div class="flex gap-x-2">
+        <input
+          id="query"
+          name="q"
+          class="w-full px-2 border rounded placeholder:text-zinc-400"
+          placeholder="user@example.com"
+          value={emailAddressQuery}
+        />
+        <input
+          type="submit"
+          value="Search"
+          class="px-4 py-1 font-medium text-white bg-black rounded hover:cursor-pointer"
+        />
+      </div>
+    </form>
+  </div>
+  <div class="grid grid-cols-1 my-4 divide-y">
+    {
+      emails.length < 1 && (
+        <p class="my-2 text-center text-zinc-500">No emails were found</p>
+      )
+    }
+    {
+      emails.map((email: any) => {
+        return (
+          <div class="py-4">
+            <div class="flex text-sm place-content-between">
+              <p>To: {email.toAddress}</p>
+              <p class="text-zinc-400">{email.dateSent.toLocaleString()}</p>
+            </div>
+            <a
+              class="mt-2 font-medium hover:underline"
+              href={`/email/${email.emailId}`}
+            >
+              {email.subject}
+            </a>
+          </div>
+        );
+      })
+    }
+  </div>
+</EmailLayout>

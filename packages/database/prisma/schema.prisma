@@ -1,138 +1,137 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
-}
-
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "../ERD.svg"
-  theme    = "default"
-}
-
-generator docs {
-  provider = "node node_modules/prisma-docs-generator"
-  output   = "../docs"
+  provider = "prisma-client-js"
+  // previewFeatures = ["postgresqlExtensions"]
+  // output = "../generated/prisma-client"
 }
 
 datasource db {
-  provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  extensions = [uuid_ossp(map: "uuid-ossp")]
+  provider = "sqlite"
+  url      = "file:./dev.db"
+  // provider   = "postgresql"
+  // url        = env("DATABASE_URL")
+  // extensions = [uuid_ossp(map: "uuid-ossp")]
 }
 
 /// Complete data structure of the User entity for the database and GraphQL.
 /// A User represents an account holder.
-model User {
-  /// User's internal (non-public) identifier for the database
-  id                    BigInt        @id @default(autoincrement()) @db.BigInt
+model AuthUser {
   /// User's unique identifier
-  uid                   String        @unique(map: "user_id_key") @default(cuid())
+  id String @id @unique
 
-  // If User is enabled or not
-  // isActive                Boolean           @map("is_active") @default(true)
-  // True if User is soft deleted
-  // isDeleted Boolean     @map("is_deleted") @default(false)
+  // username       String?
 
   /// User's email address
-  email                 String        @unique(map: "user_email_key")
+  email          String  @unique
   /// User's email address
-  emailVerification     DateTime?     @map("email_verification")
-  /// User's password
-  password              String?
+  email_verified Boolean
+  // /// User's password
+  // password              String?
   /// User's access role
-  role                  Role          @default(USER)
+  role           String  @default("USER")
   /// User's registration status
-  status                Status        @default(CREATED)
+  status         String  @default("CREATED")
 
-  // sessions  Session[]
-  profile               UserProfile?
-  reservations          Reservation[]
+  auth_session AuthSession[]
+  auth_key     AuthKey[]
+  profile      UserProfile?
+  reservation  Reservation[]
 
-  /// Date of User's creation in the database
-  createdAt             DateTime      @default(now()) @map("created_at")
-  /// Date of last update to User's record
-  updatedAt             DateTime      @updatedAt @map("updated_at")
-  /// Date of User's deletion from the database
-  deletedAt             DateTime?     @map("deleted_at")
+  // /// Date of User's creation in the database
+  // createdAt             DateTime      @default(now()) @map("created_at")
+  // /// Date of last update to User's record
+  // updatedAt             DateTime      @updatedAt @map("updated_at")
 
-  @@map("users")
+  @@map("auth_users")
 }
 
 /// Complete data structure of the Profile entity for the database and GraphQL.
 /// A Profile represents a User's details.
 model UserProfile {
   /// Profile's unique identifier
-  id          BigInt   @id @default(autoincrement()) @db.BigInt
+  id           String  @id @unique
   /// Profile's mailing address
-  address     String?
+  address      String?
   /// Profile's first name
-  firstName   String?  @map("first_name")
+  first_name   String
   /// Profile's last name
-  lastName    String?  @map("last_name")
+  last_name    String
   /// Profile's mobilel phone number
-  mobilePhone String?  @unique(map: "user_mobile_number_key") @map("mobile_phone")
+  mobile_phone String  @unique
   /// Profile's picture
-  avatar      String?
-  /// Date of Profile's creation in the database
-  createdAt   DateTime @default(now()) @map("created_at")
-  /// Date of last update to Profile's record
-  updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+  avatar       String?
+  // /// Date of Profile's creation in the database
+  // createdAt   DateTime @default(now()) @map("created_at")
+  // /// Date of last update to Profile's record
+  // updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
 
   /// The database identifier of the User associated with this Profile
-  userId      BigInt   @unique @map("user_id")
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_id   String   @unique
+  auth_user AuthUser @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("user_profile")
 }
 
-/// Complete data structure of the Session entity for the database and GraphQL.
-/// A session represents a User's interaction with the API.
-// model Session {
-//   /// Session's unique identifier
-//   id        BigInt   @id @default(autoincrement()) @db.BigInt
-//   /// Date of Session's creation in the database
-//   sessionToken String @unique @map("session_token")
-//   /// Date of Session's creation in the database
-//   expiresAt DateTime @map("expires_at")
-//   userAgent    String?  @map("user_agent")
-//   ipAddress    String?  @map("ip_address")
-//   // Date of Session's creation in the database
-//   // createdAt DateTime @default(now()) @map("created_at")
+model AuthSession {
+  id             String   @id @unique
+  active_expires BigInt
+  idle_expires   BigInt
+  user_id        String
+  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-//   /// The database identifier of the User associated with this Session
-//   userId    BigInt   @map("user_id")
-//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([user_id])
+  @@map("auth_sessions")
+}
 
-//   @@map("sessions")
-// }
+model AuthKey {
+  id              String   @id @unique
+  hashed_password String?
+  primary_key     Boolean
+  expires         BigInt?
+  user_id         String
+  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("auth_keys")
+}
+
+model Email {
+  id            String   @id @unique
+  subject       String
+  email_address String
+  date_sent     DateTime
+  content       String
+
+  @@map("emails")
+}
 
 model Reservation {
   /// Reservation's unique identifier
-  id        BigInt   @id @default(autoincrement()) @db.BigInt
+  id String @id @unique
 
   /// Start date of Reservation
-  checkInDate   DateTime @map("check_in_date")
+  check_in_date  DateTime
   /// End date of Reservation
-  checkOutDate  DateTime @map("check_out_date")
+  check_out_date DateTime
 
-  /// Date of Reservation's creation in the database
-  createdAt   DateTime @default(now()) @map("created_at")
-  /// Date of last update to Reservation's record
-  updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+  // /// Date of Reservation's creation in the database
+  // createdAt   DateTime @default(now()) @map("created_at")
+  // /// Date of last update to Reservation's record
+  // updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
 
-  userId    BigInt   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user_id   String
+  auth_user AuthUser @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@index([user_id])
   @@map("reservations")
 }
 
-enum Role {
-  USER
-  ADMIN
-}
+// enum Role {
+//   USER
+//   ADMIN
+// }
 
-enum Status {
-  CREATED
-  DELETED
-  REGISTERED
-}
+// enum Status {
+//   CREATED
+//   DELETED
+//   REGISTERED
+// }

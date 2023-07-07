@@ -1,30 +1,30 @@
 ---
+import GradientText from '@/components/GradientText.astro';
 import { Picture } from '@astrojs/image/components';
-import GradientText from '@components/GradientText.astro';
 ---
 
 <header class="relative h-[65vh] md:h-[85vh]">
-  <div class="absolute z-10 w-full h-4/6 bg-gradient-to-b from-black"></div>
-  <div class="absolute top-0 bottom-0 left-0 right-0 block m-0 overflow-hidden">
+  <div class="absolute z-10 h-4/6 w-full bg-gradient-to-b from-black"></div>
+  <div class="absolute bottom-0 left-0 right-0 top-0 m-0 block overflow-hidden">
     <Picture
       alt="Kalmia Woods main house front view"
-      class="object-cover w-full h-screen md:h-full"
+      class="h-screen w-full object-cover md:h-full"
       widths={[640, 750, 828, 1080, 1200, 1920, 2048, 3840]}
       sizes="100vw"
       loading="eager"
       decoding="async"
       aspectRatio={16 / 9}
-      src={import('@assets/images/house-cottage-three.jpeg')}
+      src={import('@/assets/images/house-cottage-three.jpeg')}
     />
   </div>
   <div class="container">
     <div class="absolute left-0 right-0 top-[35%] z-10 md:top-[50%] xl:top-[40%]">
-      <div class="flex flex-col items-center content-center text-center text-white">
+      <div class="flex flex-col content-center items-center text-center text-white">
         <h1
           class="mx-auto flex max-w-[250px] flex-col content-center items-center px-4 text-2xl font-bold md:px-0 md:text-3xl xl:max-w-[350px] xl:text-4xl"
         >
           <div>Welcome to</div>
-          <span class="text-6xl font-extrabold text-center md:text-8xl">
+          <span class="text-center text-6xl font-extrabold md:text-8xl">
             <GradientText>{import.meta.env.APP_NAME}</GradientText>
           </span>
         </h1>

@@ -1,0 +1,11 @@
+---
+import LayoutStacked from '@/app/LayoutStacked.astro';
+
+import UserItemList from '@/components/UserItemList.vue';
+
+const { id } = Astro.params
+---
+
+<LayoutStacked>
+  <UserItemList mode={id} class="p-2 md:p-4" client:load />
+</LayoutStacked>

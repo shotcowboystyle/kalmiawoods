@@ -4,9 +4,10 @@
   "private": true,
   "files": [
     "base.json",
+    "node16.json",
     "vue.json"
   ],
   "dependencies": {
-    "typescript": "5.1.3"
+    "typescript": "5.1.6"
   }
 }

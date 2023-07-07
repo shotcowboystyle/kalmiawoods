@@ -2,14 +2,20 @@
   "name": "@kalmiawoods/database",
   "version": "0.0.0",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc -p tsconfig.lib.json",
-    "build:watch": "tsc -p tsconfig.lib.json -w --preserveWatchOutput",
-    "dev": "pnpm run build:watch",
+    "prebuild": "pnpm db:generate",
+    "predev": "pnpm db:generate",
+    "build": "tsup",
+    "clean": "rimraf .turbo node_modules dist",
+    "dev": "tsup --watch",
     "db:generate": "prisma generate",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev --preview-feature",
     "db:migrate:dev:create": "prisma migrate dev --create-only --preview-feature",
     "db:migrate:resolve": "prisma migrate resolve --preview-feature",
@@ -19,27 +25,20 @@
     "db:push": "prisma db push --skip-generate",
     "db:pull": "pnpm dlx prisma db pull",
     "db:seed": "prisma db seed",
+    "db:seed:alt": "tsx src/seed.ts",
     "db:docs:serve": "pnpm dlx prisma-docs-generator serve",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "format": "prisma format"
   },
   "dependencies": {
-    "@prisma/client": "^4.15.0"
+    "@prisma/client": "^4.16.2"
   },
   "devDependencies": {
     "@kalmiawoods/tsconfig": "workspace:^",
-    "@nestjs/testing": "^9.4.3",
-    "dotenv": "^16.1.4",
-    "prisma": "4.15.0",
-    "prisma-docs-generator": "^0.8.0",
-    "prisma-erd-generator": "^1.6.2"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^9.3.12",
-    "dotenv": "^16.1.4",
-    "nestjs-pino": "^3.1.2"
+    "prisma": "4.16.2",
+    "tsup": "^7.1.0"
   },
   "prisma": {
-    "schema": "./prisma/schema.prisma",
-    "seed": "ts-node ./prisma/seed.ts"
+    "schema": "./prisma/schema.prisma"
   }
 }

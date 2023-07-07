@@ -1,3 +1,5 @@
+// Extracted from https://github.com/JulianCataldo/web-garden/blob/develop/.vscode/settings.json
+
 {
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.formatOnSave": true,
@@ -10,24 +12,23 @@
   "eslint.enable": true,
   "eslint.alwaysShowStatus": true,
   "eslint.options": {
-    "extensions": [".html", ".js", ".ts", ".vue"],
+    // "extensions": [".html", ".js", ".ts", ".vue"],
+    "extensions": [".js", ".ts", ".vue"],
     "ignoredFilesPattern": ["commitlint.config.js"]
   },
-  "eslint.packageManager": "yarn",
-  "eslint.validate": ["html", "javascript", "javascriptreact", "astro", "typescript", "typescriptreact", "mdx", "vue"],
+  // "eslint.packageManager": "yarn",
   "files.associations": {
     "*.mdx": "markdown"
   },
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "prettier.documentSelectors": ["**/*.astro"],
+  // "[scss]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
   "[astro]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  // "[jsonc]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -37,24 +38,63 @@
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  // "[json]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[markdown]": {
-    "editor.wordWrap": "off",
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   },
-  "[mdx]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  // "[markdown]": {
+  //   "editor.wordWrap": "off",
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
+  // "[mdx]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
   // "stylelint.validate": ["css", "postcss", "scss", "vue", "astro"],
   // "stylelint.snippet": ["css", "postcss", "scss", "vue", "astro"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  /* —————————————————————————————— Typescript —————————————————————————————— */
   "typescript.inlayHints.parameterNames.enabled": "all",
-  "typescript.tsdk": "node_modules/typescript/lib"
+
+  /* —————————————————————————————— Tailwind ———————————————————————————————— */
+  "tailwindCSS.includeLanguages": {
+    /*
+      Astro Language Server can handle Tailwind extension communication,
+      see https://docs.astro.build/en/guides/integrations-guide/tailwind/#configuring-the-integration
+      But if you had troubles like me, you can force the association here.
+		*/
+    /* Adds class inlay hints inside `.astro` templates (acts as HTML) */
+    "astro": "html",
+    /* Useful for adding IntelliSense to Markdown, too */
+    "md": "html"
+  },
+
+  "tailwindCSS.classAttributes": ["class", "class:list"],
+
+  /* —————————————————————————————— ESLint —————————————————————————————————— */
+  "eslint.validate": [
+    "astro" /* Using `astro-eslint-parser` + `eslint-plugin-astro` */,
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "mdx",
+    "vue"
+  ],
+
+  /* —————————————————————————————— Prettier ———————————————————————————————— */
+  /* Add support for `prettier-plugin-astro` */
+  "prettier.documentSelectors": ["**/*.astro"],
+
+  /* —————————————————————————————— Misc. ———————————————————————————————— */
+
+  "markdown.extension.toc.levels": "2..6"
 }

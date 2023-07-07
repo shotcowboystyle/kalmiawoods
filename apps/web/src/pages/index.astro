@@ -1,17 +1,16 @@
 ---
-import Layout from '@layouts/Main.astro';
-
-import Contact from '@components/Contact.astro';
-import Hero from '@components/Hero.astro';
-import NearbyAttractions from '@components/NearbyAttractions.astro';
-import PhotoGallery from '@components/PhotoGallery.astro';
-import Summary from '@components/Summary.astro';
+import LayoutSidebar from '@/app/LayoutSidebar.astro';
+import Contact from '@/components/Contact.astro';
+import Hero from '@/components/Hero.astro';
+import NearbyAttractions from '@/components/NearbyAttractions.astro';
+import PhotoGallery from '@/components/PhotoGallery.astro';
+import Summary from '@/components/Summary.astro';
 ---
 
-<Layout>
+<LayoutSidebar>
   <Hero />
   <NearbyAttractions />
   <PhotoGallery />
   <Summary />
   <Contact />
-</Layout>
+</LayoutSidebar>

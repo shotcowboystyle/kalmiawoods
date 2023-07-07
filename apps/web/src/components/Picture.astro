@@ -1,7 +1,7 @@
 ---
+import { findImage } from '@/utils/images';
 import { Picture } from '@astrojs/image/components';
 import type { ColorDefinition } from '@astrojs/image/dist/loaders';
-import { findImage } from '@utils/images';
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   alt: string;
@@ -46,8 +46,8 @@ const {
   loading,
   aspectRatio,
   decoding,
-  width,
-  height,
+  // width,
+  // height,
   format,
   background,
   fit,
@@ -63,8 +63,45 @@ const {
 
 const image = await findImage(src);
 ---
+<fragment>
+  {
+    image && (
+      <div class="relative max-w-5xl m-auto">
+        {typeof image === 'string' ? (
+          <Fragment set:html={image} />
+        ) : (
+          <Picture
+            alt={alt}
+            class={attrs.class}
+            src={image.src}
+            widths={widths}
+            sizes={sizes}
+            loading={loading}
+            aspectRatio={aspectRatio}
+            decoding={decoding}
+            format={format}
+            background={background}
+            fit={fit}
+            position={position}
+          />
 
-<Picture
+        // <Picture
+        //     class="w-full mx-auto rounded-md"
+        //     widths={[400, 768, 1024, 2040]}
+        //     sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
+        //     aspectRatio={1024 / 576}
+        //     loading="eager"
+        //     width={1024}
+        //     height={576}
+        //     {...image}
+        //   />
+        )}
+      </div>
+    )
+  }
+</fragment>
+
+<!-- <Picture
   alt={alt}
   class={attrs.class}
   src={image.src}
@@ -73,10 +110,11 @@ const image = await findImage(src);
   loading={loading}
   aspectRatio={aspectRatio}
   decoding={decoding}
-  width={width}
-  height={height}
   format={format}
   background={background}
   fit={fit}
   position={position}
-/>
+/> -->
+
+<!-- height={height} -->
+<!-- width={width} -->
