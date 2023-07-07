@@ -4,9 +4,11 @@
 .astro
 .turbo
 .husky
-dist
-dev-dist
+.vercel
+dist/
+.output/
 node_modules
+generated
 
 # dependencies
 .pnp
@@ -25,7 +27,7 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
-coverage
+coverage/
 .nyc_output
 
 # IDEs and editors

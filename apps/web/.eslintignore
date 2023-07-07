@@ -1,0 +1,15 @@
+**/node_modules/*
+**/dist/*
+**/dev-dist/*
+**/.turbo/*
+**/!.storybook/*
+**/storybook-static/*
+**/public/*
+**/@generated/*
+.husky
+.vscode
+.github
+.devcontainer
+.changeset
+./commitlint.config.js
+**/@generated

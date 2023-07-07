@@ -1,10 +1,16 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
+    "jsx": "preserve",
     "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      }
+    ],
     "paths": {
-      "@*": ["./src/*"]
+      "@/*": ["src/*"]
     },
-    "types": ["vite/client", "vite-plugin-pwa/info"]
+    "types": ["unplugin-icons/types/astro", "vitest/globals"]
   }
 }

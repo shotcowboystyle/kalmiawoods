@@ -1,14 +1,29 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    "packages/**",
+    "apps/**/public/**",
+    "apps/**/astro.config.ts",
+    "apps/**/package.json",
+    "apps/**/tsconfig.json",
+    "**/.env.*local",
+    "public/**"
+  ],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".vercel/output/**", ".astro/**"],
+      "inputs": ["src/**", "vercel.json"]
+    },
+    "playwright": {
+      "dependsOn": ["^playwright"]
     },
     "test": {
       "outputs": ["coverage/**"],
-      "dependsOn": []
+      "dependsOn": ["^test"]
+    },
+    "coverage": {
+      "dependsOn": ["^coverage"]
     },
     "lint": {
       "outputs": []
@@ -19,14 +34,25 @@
     "lint:report": {
       "outputs": []
     },
-    "stylelint": {
-      "outputs": []
-    },
     "format": {
       "outputs": []
     },
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "dependsOn": ["^db:generate"]
+    },
+    "db:migrate:deploy": {
+      "outputs": []
+    },
+    "db:push": {
+      "outputs": [],
       "cache": false
+    },
+    "db:seed": {
+      "outputs": []
     },
     "clean": {
       "cache": false

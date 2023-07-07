@@ -1,0 +1,22 @@
+---
+import FooterStacked from './FooterStacked.astro';
+import LayoutCommon from './LayoutCommon.astro';
+import NavBarStacked from './NavBarStacked.astro';
+---
+
+<LayoutCommon>
+	<NavBarStacked />
+
+	<div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+		<div
+			id="main-content"
+			class="relative w-full h-full min-h-screen mx-auto overflow-y-auto max-w-screen-2xl bg-gray-50 dark:bg-gray-900"
+		>
+			<div class="px-4 pt-6 2xl:px-0">
+				<slot />
+			</div>
+
+			<FooterStacked />
+		</div>
+	</div>
+</LayoutCommon>

@@ -1,12 +1,12 @@
 ---
-import LinkButton from "@components/LinkButton.astro";
-import { SITE } from "@config";
-import Layout from '@layouts/Main.astro';
+import LinkButton from '@/components/LinkButton.astro';
+import { SITE } from '@/config';
+import Layout from '@/layouts/Main.astro';
 ---
 
 <Layout title={`404 Not Found | ${SITE.title}`}>
-  <section class="flex items-center h-full p-16">
-    <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
+  <section class="flex h-full items-center p-16">
+    <div class="container mx-auto my-8 flex flex-col items-center justify-center px-5">
       <div class="max-w-md text-center">
         <h1 aria-label="404 Not Found">404</h1>
         <span aria-hidden="true">¯\_(ツ)_/¯</span>

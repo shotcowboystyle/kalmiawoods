@@ -1,0 +1,25 @@
+---
+import LayoutStacked from '@/app/LayoutStacked.astro';
+import { auth } from '@/auth/lucia';
+import { DASHBOARD_HOME } from '@/constants';
+import FormSignUp from '@/modules/FormSignUp.astro';
+
+const authRequest = auth.handleRequest(Astro);
+
+const { session, user } = await authRequest.validateUser();
+if (user) {
+  if (!user.emailVerified) {
+    return Astro.redirect('/auth/email-verification', 302);
+  }
+
+  if (session) {
+    return Astro.redirect(DASHBOARD_HOME, 302);
+  }
+}
+---
+
+<LayoutStacked>
+  <div class="flex min-h-screen pb-[12vh] align-middle">
+    <FormSignUp />
+  </div>
+</LayoutStacked>

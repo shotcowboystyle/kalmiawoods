@@ -1,0 +1,20 @@
+---
+import LayoutSidebar from '@/app/LayoutSidebar.astro';
+import { auth } from '@/auth/lucia';
+import UserList from '@/components/UserList.vue';
+// import CrudUsers from '@/modules/CrudUsers.astro';
+
+const authRequest = auth.handleRequest(Astro);
+const { user } = await authRequest.validateUser();
+if (!user) {
+  return Astro.redirect('/login', 302);
+}
+if (!user.emailVerified) {
+  return Astro.redirect('/auth/email-verification', 302);
+}
+---
+
+<LayoutSidebar>
+  <UserList client:load />
+  <!-- <CrudUsers /> -->
+</LayoutSidebar>

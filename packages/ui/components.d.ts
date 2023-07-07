@@ -26,7 +26,6 @@ declare module 'vue' {
     ReservationPayment: typeof import('./src/components/ReservationForm/ReservationPayment.vue')['default']
     ReservationSuccess: typeof import('./src/components/ReservationForm/ReservationSuccess.vue')['default']
     RiAddLine: typeof import('~icons/ri/add-line')['default']
-    RiArrowDownSFill: typeof import('~icons/ri/arrow-down-s-fill')['default']
     RiArrowRightLine: typeof import('~icons/ri/arrow-right-line')['default']
     RiCloseLine: typeof import('~icons/ri/close-line')['default']
     RiMoonClearFill: typeof import('~icons/ri/moon-clear-fill')['default']

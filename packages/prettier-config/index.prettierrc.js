@@ -6,5 +6,26 @@ module.exports = {
   printWidth: 120,
   semi: true,
   singleQuote: true,
-  jsxBracketSameLine: false,
+  jsxBracketSameLine: true,
+  bracketSameLine: true,
+
+  plugins: [
+    'prettier-plugin-astro',
+    'prettier-plugin-tailwindcss', // MUST come last
+  ],
+
+  overrides: [
+    {
+      files: '*.astro',
+      semi: true,
+      options: {
+        parser: 'astro',
+        printWidth: 100,
+      },
+    },
+    {
+      files: '*.vue',
+      vueIndentScriptAndStyle: true,
+    },
+  ],
 };

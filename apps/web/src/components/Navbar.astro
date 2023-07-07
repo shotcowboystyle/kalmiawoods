@@ -1,11 +1,12 @@
 ---
-import BookingOptions from '@components/BookingOptions.astro';
-import BookingQuickForm from '@components/BookingQuickForm.astro';
-import BookNowButton from '@components/BookNowButton.astro';
-import BookNowButtonLink from '@components/BookNowButtonLink.astro';
-import Logo from '@components/Logo.astro';
 import { ToggleTheme } from '@kalmiawoods/ui';
-import { Icon } from 'astro-icon';
+import { Icon } from 'astro-icon/components';
+
+import BookingOptions from '@/components/BookingOptions.astro';
+import BookingQuickForm from '@/components/BookingQuickForm.astro';
+import BookNowButton from '@/components/BookNowButton.astro';
+import BookNowButtonLink from '@/components/BookNowButtonLink.astro';
+import Logo from '@/components/Logo.astro';
 
 export interface Props {
   activeNav?: 'posts' | 'tags' | 'about' | 'search';
@@ -46,6 +47,16 @@ const navLinks = [
               </li>
             ))
           }
+          <li>
+            <a href="/login" class="text-indigo-500 hover:underline">Login</a>
+          </li>
+          <li>
+            <a href="/signup" class="text-indigo-500 hover:underline">Register</a>
+          </li>
+          <li>
+            <a href="/email" class="text-indigo-500 hover:underline" target="_blank">Open mailbox</a
+            >
+          </li>
         </ul>
       </nav>
 

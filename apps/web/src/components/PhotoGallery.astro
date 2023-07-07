@@ -1,55 +1,55 @@
 ---
-import Picture from '@components/Picture.astro';
-import { fetchLocalImages } from '@utils/images';
+import Picture from '@/components/Picture.astro';
+import { fetchLocalImages } from '@/utils/images';
 import 'spotlight.js/dist/css/spotlight.min.css';
 
 export const photoGallery = [
   {
     text: 'Cottage',
     href: 'https://google.com',
-    image: '@assets/images/house-cottage-two.jpeg',
+    image: '@/assets/images/house-cottage-two.jpeg',
   },
 
   {
     text: 'Master Bedroom',
     href: 'https://google.com',
-    image: '@assets/images/house-master-bedroom-one.jpeg',
+    image: '@/assets/images/house-master-bedroom-one.jpeg',
   },
 
   {
     text: 'Garage Bedroom',
     href: 'https://google.com',
-    image: '@assets/images/house-garage-bedroom-one.jpeg',
+    image: '@/assets/images/house-garage-bedroom-one.jpeg',
   },
 
   {
     text: 'Living Area',
     href: 'https://google.com',
-    image: '@assets/images/house-living-area-one.jpeg',
+    image: '@/assets/images/house-living-area-one.jpeg',
   },
 
   {
     text: 'Kitchen',
     href: 'https://google.com',
-    image: '@assets/images/house-kitchen-one.jpeg',
+    image: '@/assets/images/house-kitchen-one.jpeg',
   },
 
   {
     text: 'Bathrooms',
     href: 'https://google.com',
-    image: '@assets/images/house-bathroom-one.jpeg',
+    image: '@/assets/images/house-bathroom-one.jpeg',
   },
 
   {
     text: 'Game Room',
     href: 'https://google.com',
-    image: '@assets/images/house-game-room-one.jpeg',
+    image: '@/assets/images/house-game-room-one.jpeg',
   },
 
   {
     text: 'Porches',
     href: 'https://google.com',
-    image: '@assets/images/house-porch-one.jpeg',
+    image: '@/assets/images/house-porch-one.jpeg',
   },
 ];
 
@@ -89,7 +89,7 @@ images = images.filter((image) => !!image);
                 decoding="async"
                 src={image}
               />
-              <figcaption class="text-md text-base-content font-medium leading-5 md:text-xl">
+              <figcaption class="text-md font-medium leading-5 text-base-content md:text-xl">
                 {text}
               </figcaption>
             </figure>

@@ -22,7 +22,8 @@ export default defineConfig(({ command }) => {
     },
 
     plugins: [
-      Vue({ style: { filename: `style.css` } }), // to process SFC
+      // Vue({ style: { filename: `style.css` } }), // to process SFC
+      Vue(), // to process SFC
 
       Components({
         dirs: [r('src/components')],

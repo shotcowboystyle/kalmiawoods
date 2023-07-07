@@ -1,7 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "declaration": true
-  },
-  "exclude": ["prisma", "dist", "@generated", "**/*spec.ts", "jest.config.ts"]
-}

@@ -1,0 +1,19 @@
+---
+import LayoutSidebar from '@/app/LayoutSidebar.astro';
+import { auth } from '@/auth/lucia';
+// import UserSettings from '@/modules/UserSettings.astro';
+import UserSettings from '@/components/UserSettings.vue';
+
+const authRequest = auth.handleRequest(Astro);
+const { user } = await authRequest.validateUser();
+if (!user) {
+  return Astro.redirect('/login', 302);
+}
+if (!user.emailVerified) {
+  return Astro.redirect('/auth/email-verification', 302);
+}
+---
+
+<LayoutSidebar>
+  <UserSettings mode={user.userId} client:only="vue" />
+</LayoutSidebar>
