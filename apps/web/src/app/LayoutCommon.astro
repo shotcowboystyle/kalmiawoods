@@ -1,6 +1,6 @@
 ---
+import { url } from '@/lib/data';
 import pkg from '../../package.json' assert { type: 'json' };
-import { url } from '@/lib/data.ts';
 
 import { SITE_TITLE } from './constants.js';
 
@@ -37,8 +37,10 @@ const { class: clazz } = Astro.props;
 					window.matchMedia('(prefers-color-scheme: dark)').matches)
 			) {
 				document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', 'dark')
 			} else {
-				document.documentElement.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('data-theme', 'light')
 			}
 		</script>
 	</head>

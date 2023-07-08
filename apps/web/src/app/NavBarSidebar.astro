@@ -1,7 +1,6 @@
 ---
-/* eslint max-lines: 'off' */
-
 import ColorModeSwitcher from '@/components/ColorModeSwitcher.astro';
+import ProfileDropdown from '@/components/ProfileDropdown.vue';
 import Svg from '@jasikpark/astro-svg-loader';
 ---
 
@@ -62,9 +61,9 @@ import Svg from '@jasikpark/astro-svg-loader';
             aria-labelledby="dropdownNavbarButton">
             <li>
               <a
-                href="#"
+                href="/"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Dashboard</a
+                >Home</a
               >
             </li>
             <li>
@@ -92,65 +91,7 @@ import Svg from '@jasikpark/astro-svg-loader';
         </div>
 
         <ColorModeSwitcher />
-
-        <!-- Profile -->
-        <div class="ml-3 flex items-center">
-          <div>
-            <button
-              type="button"
-              class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              id="user-menu-button-2"
-              aria-expanded="false"
-              data-dropdown-toggle="dropdown-2">
-              <span class="sr-only">Open user menu</span>
-              <img
-                class="h-8 w-8 rounded-full"
-                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                alt="user photo"
-              />
-            </button>
-          </div>
-          <!-- Dropdown menu -->
-          <div
-            class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded bg-white text-base shadow dark:divide-gray-600 dark:bg-gray-700"
-            id="dropdown-2">
-            <div class="px-4 py-3" role="none">
-              <p class="text-sm text-gray-900 dark:text-white" role="none">Neil Sims</p>
-              <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">
-                neil.sims@flowbite.com
-              </p>
-            </div>
-            <ul class="py-1" role="none">
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Dashboard</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Settings</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Earnings</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                  role="menuitem">Sign out</a
-                >
-              </li>
-            </ul>
-          </div>
+        <ProfileDropdown client:only="vue" />
         </div>
       </div>
     </div>

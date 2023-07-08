@@ -1,11 +1,11 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
-import FormCompleteRegistration from '@/components/FormCompleteRegistration.vue';
+import FormCompleteRegistration from '@/modules/FormCompleteRegistration.vue';
 
 const { token } = Astro.params;
 ---
 
 <LayoutStacked>
   <h1>Complete you're registration</h1>
-  <FormCompleteRegistration client:only="vue" token={token} />
+  <FormCompleteRegistration client:only="vue" token={token!} />
 </LayoutStacked>

@@ -1,7 +1,7 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
 import { auth } from '@/auth/lucia';
-import CalendarMonth from '@/components/Reservations/CalendarMonth.vue';
+import FullCalendar from '@/modules/FullCalendar.vue';
 
 const authRequest = auth.handleRequest(Astro);
 const { user } = await authRequest.validateUser();
@@ -15,6 +15,6 @@ if (!user.emailVerified) {
 
 <LayoutSidebar>
   <div class="md:mx-4 md:my-6 md:flex md:items-center md:justify-between md:p-6 xl:p-8">
-    <CalendarMonth client:only="vue" isAdmin={user?.role === 'ADMIN'} />
+    <FullCalendar client:only="vue" isAdmin={user?.role === 'ADMIN'} />
   </div>
 </LayoutSidebar>

@@ -81,49 +81,43 @@ export const initReservationFormValues = {
 // export const reservationFormValues = map<ReservationDetails>(initReservationFormValues);
 // export const reservationFormValues = map(initReservationFormValues);
 
-export const updateReservationDates = action(reservationDates, 'updateReservationDates', (store, value) => {
-  return store.set(value);
-});
+export const updateReservationDates = action(reservationDates, 'updateReservationDates', (store, value) =>
+  store.set(value),
+);
 
-export const updateReservationStartDate = action(reservationDates, 'updateReservationStartDate', (store, value) => {
-  return store.setKey('start', value);
-});
+export const updateReservationStartDate = action(reservationDates, 'updateReservationStartDate', (store, value) =>
+  store.setKey('start', value),
+);
 
-export const updateReservationEndDate = action(reservationDates, 'updateReservationEndDate', (store, value) => {
-  return store.setKey('end', value);
-});
+export const updateReservationEndDate = action(reservationDates, 'updateReservationEndDate', (store, value) =>
+  store.setKey('end', value),
+);
 
-export const updateReservationGuests = action(reservationGuests, 'updateReservationGuests', (store, value) => {
-  return store.set(value);
-});
+export const updateReservationGuests = action(reservationGuests, 'updateReservationGuests', (store, value) =>
+  store.set(value),
+);
 
 export const updateReservationGuestsAdults = action(
   reservationGuests,
   'updateReservationGuestsAdults',
-  (store, value) => {
-    return store.setKey('adults', value);
-  },
+  (store, value) => store.setKey('adults', value),
 );
 
 export const updateReservationGuestsChildren = action(
   reservationGuests,
   'updateReservationGuestsChildren',
-  (store, value) => {
-    return store.setKey('children', value);
-  },
+  (store, value) => store.setKey('children', value),
 );
 
 export const updateReservationGuestsInfants = action(
   reservationGuests,
   'updateReservationGuestsInfants',
-  (store, value) => {
-    return store.setKey('infants', value);
-  },
+  (store, value) => store.setKey('infants', value),
 );
 
-export const updateReservationGuestsPets = action(reservationGuests, 'updateReservationGuestsPets', (store, value) => {
-  return store.setKey('pets', value);
-});
+export const updateReservationGuestsPets = action(reservationGuests, 'updateReservationGuestsPets', (store, value) =>
+  store.setKey('pets', value),
+);
 
 export const incrementGuestsCounter = action(reservationGuests, 'incrementGuestsCounter', (store, key) => {
   // if (validateMax(store.get() + add)) {

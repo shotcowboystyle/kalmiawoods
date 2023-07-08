@@ -11,15 +11,13 @@ export const auth = lucia({
   experimental: {
     debugMode: false,
   },
-  transformDatabaseUser: (userData) => {
-    return {
-      userId: userData.id,
-      email: userData.email,
-      emailVerified: userData.email_verified,
-      role: userData.role,
-      status: userData.status,
-    };
-  },
+  transformDatabaseUser: (userData) => ({
+    userId: userData.id,
+    email: userData.email,
+    emailVerified: userData.email_verified,
+    role: userData.role,
+    status: userData.status,
+  }),
 });
 
 export type Auth = typeof auth;

@@ -22,10 +22,10 @@ export interface ReservationUser {
 //   user: ReservationUser;
 // }
 
-export type DisabledReservationDates = {
+export interface DisabledReservationDates {
   start: Date | string | number | null | undefined;
   end: Date | string | number | null | undefined;
-};
+}
 
 // export type Guest = {
 //   [key: string]: number;
@@ -38,12 +38,12 @@ export type DisabledReservationDates = {
 //   pets: Guest;
 // };
 
-export type Guests = {
+export interface Guests {
   adults: number;
   children: number;
   infants: number;
   pets: number;
-};
+}
 
 // export type ReservationDetails = {
 //   name: string;
@@ -66,7 +66,7 @@ export type ReservationValues = ReservationDetails & {
   reservation_id?: string;
 };
 
-export type ReservationForm = {
+export interface ReservationForm {
   checkInDate: string;
   checkOutDate: string;
-};
+}

@@ -40,15 +40,13 @@ export const sendPasswordResetEmail = async (emailAddress: string, resetToken: s
 };
 
 // const transformDatabaseEmail = (databaseEmail: Email) => {
-const transformDatabaseEmail = (databaseEmail: any) => {
-  return {
-    emailId: databaseEmail.id,
-    toAddress: databaseEmail.email_address,
-    dateSent: databaseEmail.date_sent,
-    subject: databaseEmail.subject,
-    content: databaseEmail.content,
-  };
-};
+const transformDatabaseEmail = (databaseEmail: any) => ({
+  emailId: databaseEmail.id,
+  toAddress: databaseEmail.email_address,
+  dateSent: databaseEmail.date_sent,
+  subject: databaseEmail.subject,
+  content: databaseEmail.content,
+});
 
 export const getEmails = async (emailAddressQuery?: string) => {
   const databaseEmails = await prismaClient.email.findMany({
@@ -63,9 +61,7 @@ export const getEmails = async (emailAddressQuery?: string) => {
   });
 
   // return databaseEmails.map((databaseEmail: Email) => {
-  return databaseEmails.map((databaseEmail: any) => {
-    return transformDatabaseEmail(databaseEmail);
-  });
+  return databaseEmails.map((databaseEmail: any) => transformDatabaseEmail(databaseEmail));
 };
 
 export const getEmail = async (emailId: string) => {

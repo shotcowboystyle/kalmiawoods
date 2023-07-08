@@ -9,7 +9,10 @@ import type {
   ButtonVariant,
 } from '../types';
 
-export type ButtonClassMap<T extends string> = { hover: Record<T, string>; default: Record<T, string> };
+export interface ButtonClassMap<T extends string> {
+  hover: Record<T, string>;
+  default: Record<T, string>;
+}
 
 const buttonColorClasses: ButtonClassMap<ButtonVariant> = {
   default: {
@@ -172,7 +175,7 @@ const buttonShadowClasses: Record<ButtonMonochromeGradient, string> = {
   teal: 'shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80',
 };
 
-export type UseButtonClassesProps = {
+export interface UseButtonClassesProps {
   pill: Ref<boolean>;
   disabled: Ref<boolean>;
   loading: Ref<boolean>;
@@ -182,7 +185,7 @@ export type UseButtonClassesProps = {
   color: Ref<ButtonVariant>;
   gradient: Ref<ButtonGradient | null>;
   shadow: Ref<ButtonMonochromeGradient | '' | null>;
-};
+}
 
 const simpleGradients = ['blue', 'green', 'cyan', 'teal', 'lime', 'red', 'pink', 'purple'];
 const alternativeColors = ['alternative', 'light'];
@@ -254,7 +257,7 @@ export function useButtonClasses(props: UseButtonClassesProps): {
     let shadowClass = '';
     if (props.shadow.value === '') {
       // if shadow prop passed without value - try to find color for shadow by gradient
-      if (props.gradient.value && simpleGradients.includes(props.gradient.value!)) {
+      if (props.gradient.value && simpleGradients.includes(props.gradient.value)) {
         shadowClass = buttonShadowClasses[props.gradient.value as unknown as keyof typeof buttonShadowClasses];
       }
     } else if (typeof props.shadow.value === 'string') {

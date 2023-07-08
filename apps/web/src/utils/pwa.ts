@@ -15,7 +15,9 @@ window.addEventListener('load', () => {
       requestAnimationFrame(() => hidePwaToast(false));
       return;
     }
-    if (pwaToast.classList.contains('refresh')) pwaRefreshBtn.removeEventListener('click', refreshCallback);
+    if (pwaToast.classList.contains('refresh')) {
+      pwaRefreshBtn.removeEventListener('click', refreshCallback);
+    }
 
     pwaToast.classList.remove('show', 'refresh');
   };

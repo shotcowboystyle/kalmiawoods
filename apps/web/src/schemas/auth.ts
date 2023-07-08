@@ -2,24 +2,29 @@ import { z } from 'zod';
 
 export const AuthUser = z.object({
   id: z.string(),
-  password: z.string().optional(),
-  email: z.string(),
+  email: z.string().nonempty(),
   emailVerified: z.boolean().default(false),
-  role: z.enum(['USER', 'ADMIN']).optional(),
-  status: z.enum(['CREATED', 'DELETED', 'REGISTERED']).optional(),
+  role: z.enum(['USER', 'ADMIN']),
+  status: z.enum(['CREATED', 'DELETED', 'REGISTERED']),
 });
 
 const AuthFields = z.object({
-  valid: z.boolean(),
-  isLoggedIn: z.boolean().optional(),
-  err: z
-    .object({
-      type: z.enum(['login', 'logout']),
-    })
-    .optional(),
+  name: z.string().nonempty(),
+  avatar: z.string().optional(),
+  // err: z
+  //   .object({
+  //     type: z.enum(['login', 'logout']),
+  //   })
+  //   .optional(),
 });
 
-export const Auth = AuthFields.merge(AuthUser);
+export const Auth = AuthFields.merge(AuthUser).required();
 
 export const AuthUserID = AuthUser.pick({ id: true });
 export type AuthUserID = z.infer<typeof AuthUserID>;
+
+export const AuthUserNoID = Auth.omit({
+  id: true,
+  emailVerified: true,
+}).required();
+export type AuthUserNoID = z.infer<typeof AuthUserNoID>;

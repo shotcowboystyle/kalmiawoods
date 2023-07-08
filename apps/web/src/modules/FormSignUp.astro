@@ -1,77 +1,8 @@
 ---
-import { sendEmailVerificationEmail } from '@/auth/email';
-import { auth, emailVerificationToken } from '@/auth/lucia';
-import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
-import Logo from '@/components/Logo.astro';
-// import { Prisma } from '@kalmiawoods/database';
-import { LuciaError } from 'lucia-auth';
+// import Logo from '@/components/Logo.astro';
+import Svg from '@jasikpark/astro-svg-loader';
 
-const authRequest = auth.handleRequest(Astro);
-
-let errorMessage: string | null = null;
-let email = '';
-let role = 'USER';
-let status = 'CREATED';
-
-const handleFormSubmission = async (): Promise<Response | null> => {
-  const validSubmission = isValidFormSubmission(Astro.request);
-  if (!validSubmission) {
-    return null;
-  }
-  const formData = await Astro.request.formData();
-  email = formData.get('email')?.toString() ?? '';
-  role = formData.get('role')?.toString() ?? 'USER';
-  status = formData.get('status')?.toString() ?? 'CREATED';
-  if (email === null || !emailRegex.test(email)) {
-    errorMessage = 'Invalid email';
-    return null;
-  }
-  const password = formData.get('password');
-  if (password instanceof File || password === null || password.length < 8) {
-    errorMessage = 'Invalid password';
-    return null;
-  }
-  try {
-    const user = await auth.createUser({
-      primaryKey: {
-        providerId: 'email',
-        providerUserId: email,
-        password,
-      },
-      attributes: {
-        email,
-        email_verified: false,
-        role,
-        status,
-      },
-    });
-    const session = await auth.createSession(user.userId);
-    authRequest.setSession(session);
-    const token = await emailVerificationToken.issue(user.userId);
-    await sendEmailVerificationEmail(email, token.toString());
-    return Astro.redirect('/auth/email-verification', 302);
-  } catch (e: any) {
-    if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
-      errorMessage = 'Email is already taken';
-      return null;
-    }
-
-    // duplication error
-    // if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-    if (e.code === 'P2002') {
-      errorMessage = 'Email is already taken';
-      return null;
-    }
-
-    errorMessage = 'An unknown error occurred';
-    return null;
-  }
-};
-
-const formSubmissionResponse = await handleFormSubmission();
-if (formSubmissionResponse) {
-  return formSubmissionResponse;
-}
+const { email = '', errorMessage = '' } = Astro.props;
 ---
 
 <div
@@ -79,7 +10,11 @@ if (formSubmissionResponse) {
   <a
     href="#"
     class="mb-8 flex items-center justify-center text-2xl font-semibold dark:text-white lg:mb-10">
-    <Logo alt="Kalmia Woods Logo" class="mr-4 h-11" />
+    <Svg
+      src={import('@/assets/svg/logo-3.svg?raw')}
+      aria-label={import.meta.env.APP_NAME}
+      class="kw-logo mr-3 h-8 fill-white"
+      />
     <span>Kalmia Woods</span>
   </a>
   <!-- Card -->

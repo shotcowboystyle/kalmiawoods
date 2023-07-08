@@ -52,7 +52,7 @@ const avatarPlaceholderSizes = {
   xl: '-bottom-4',
 };
 
-export type UseAvatarClassesProps = {
+export interface UseAvatarClassesProps {
   status: Ref<AvatarStatus>;
   bordered: Ref<boolean>;
   img: Ref<string>;
@@ -61,7 +61,7 @@ export type UseAvatarClassesProps = {
   size: Ref<AvatarSize>;
   stacked: Ref<boolean>;
   statusPosition: Ref<AvatarStatusPosition>;
-};
+}
 
 export function useAvatarClasses(props: UseAvatarClassesProps): {
   avatarClasses: Ref<string>;
@@ -70,14 +70,14 @@ export function useAvatarClasses(props: UseAvatarClassesProps): {
   avatarPlaceholderWrapperClasses: Ref<string>;
   avatarPlaceholderInitialsClasses: Ref<string>;
 } {
-  const avatarClasses = computed<string>(() => {
-    return classNames(
+  const avatarClasses = computed<string>(() =>
+    classNames(
       avatarSizeClasses[props.size.value],
       avatarTypeClasses[props.rounded.value ? 'rounded' : 'default'],
       props.bordered.value ? avatarBorderedClasses : '',
       props.stacked.value ? 'border-2 border-white dark:border-gray-800' : '',
-    );
-  });
+    ),
+  );
   const avatarDotClasses = computed<string>(() => {
     const avatarType = `${props.statusPosition.value}-${props.rounded.value ? 'rounded' : 'default'}`;
     return classNames(
@@ -86,19 +86,17 @@ export function useAvatarClasses(props: UseAvatarClassesProps): {
       avatarStatusDotPositionClasses[avatarType as avatarDotIndicatorPositionClasses],
     );
   });
-  const avatarPlaceholderClasses = computed<string>(() => {
-    return classNames(avatarPlaceholderDefaultClasses, avatarPlaceholderSizes[props.size.value]);
-  });
-  const avatarPlaceholderWrapperClasses = computed<string>(() => {
-    return classNames(
+  const avatarPlaceholderClasses = computed<string>(() =>
+    classNames(avatarPlaceholderDefaultClasses, avatarPlaceholderSizes[props.size.value]),
+  );
+  const avatarPlaceholderWrapperClasses = computed<string>(() =>
+    classNames(
       avatarPlaceholderWrapperDefaultClasses,
       avatarSizeClasses[props.size.value],
       avatarTypeClasses[props.rounded.value ? 'rounded' : 'default'],
-    );
-  });
-  const avatarPlaceholderInitialsClasses = computed<string>(() => {
-    return classNames(avatarPlaceholderInitialsDefaultClasses);
-  });
+    ),
+  );
+  const avatarPlaceholderInitialsClasses = computed<string>(() => classNames(avatarPlaceholderInitialsDefaultClasses));
   // TODO: Avatar Initials
 
   return {

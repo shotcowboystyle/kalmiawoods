@@ -13,9 +13,7 @@ const props = defineProps({
   },
 });
 
-const breadcrumbElementType = computed(() => {
-  return props.href ? 'a' : 'span';
-});
+const breadcrumbElementType = computed(() => props.href ? 'a' : 'span');
 const { breadcrumbItemClasses } = useBreadcrumbItemClasses(toRefs(props));
 </script>
 

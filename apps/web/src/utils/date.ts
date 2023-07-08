@@ -1,32 +1,18 @@
-const padTo2Digits = (num: number) => {
-  return num.toString().padStart(2, '0');
-};
+const padTo2Digits = (num: number) => num.toString().padStart(2, '0');
 
-export const formatQueryDateRange = (date:Date) => {
-  return (
-    [
-      date.getFullYear(),
-      padTo2Digits(date.getMonth() + 1),
-      padTo2Digits(date.getDate()),
-    ].join('-') +
-    ' ' +
-    [
-      padTo2Digits(date.getHours()),
-      padTo2Digits(date.getMinutes()),
-      padTo2Digits(date.getSeconds()),
-    ].join(':')
-  );
-};
+export const formatQueryDateRange = (date: Date) =>
+  `${[date.getFullYear(), padTo2Digits(date.getMonth() + 1), padTo2Digits(date.getDate())].join('-')} ${[
+    padTo2Digits(date.getHours()),
+    padTo2Digits(date.getMinutes()),
+    padTo2Digits(date.getSeconds()),
+  ].join(':')}`;
 
 export const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1);
 
 // ✅ Get the first day of the current month
 export const firstDayOfCurrentMonth = () => {
   const date = new Date();
-  return getFirstDayOfMonth(
-    date.getFullYear(),
-    date.getMonth(),
-  );
+  return getFirstDayOfMonth(date.getFullYear(), date.getMonth());
 };
 
 export const getLastDayOfMonth = (year: number, month: number) => new Date(year, month + 1, 0);
@@ -34,8 +20,5 @@ export const getLastDayOfMonth = (year: number, month: number) => new Date(year,
 // ✅ Get the last day of current month
 export const lastDayOfCurrentMonth = () => {
   const date = new Date();
-  return getLastDayOfMonth(
-    date.getFullYear(),
-    date.getMonth(),
-  );
+  return getLastDayOfMonth(date.getFullYear(), date.getMonth());
 };

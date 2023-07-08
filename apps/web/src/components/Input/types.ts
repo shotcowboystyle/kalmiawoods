@@ -1,1 +1,1 @@
-export type InputSize = 'sm' | 'md' | 'lg'
+export type InputSize = 'sm' | 'md' | 'lg';

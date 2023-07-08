@@ -77,14 +77,14 @@ export const reservationDates = map({
   checkOutDate: undefined,
 });
 
-export const updateReservationDates = action(reservationDates, 'updateReservationDates', (store, value) => {
-  return store.set(value);
-});
+export const updateReservationDates = action(reservationDates, 'updateReservationDates', (store, value) =>
+  store.set(value),
+);
 
-export const updateReservationStartDate = action(reservationDates, 'updateReservationStartDate', (store, value) => {
-  return store.setKey('checkInDate', value);
-});
+export const updateReservationStartDate = action(reservationDates, 'updateReservationStartDate', (store, value) =>
+  store.setKey('checkInDate', value),
+);
 
-export const updateReservationEndDate = action(reservationDates, 'updateReservationEndDate', (store, value) => {
-  return store.setKey('checkOutDate', value);
-});
+export const updateReservationEndDate = action(reservationDates, 'updateReservationEndDate', (store, value) =>
+  store.setKey('checkOutDate', value),
+);

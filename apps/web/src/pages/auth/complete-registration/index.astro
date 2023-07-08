@@ -25,7 +25,7 @@ const handleFormSubmission = async (): Promise<Response | null> => {
   try {
     const databaseUser = await prismaClient.authUser.findFirst({
       where: {
-        email: email,
+        email,
       },
     });
 

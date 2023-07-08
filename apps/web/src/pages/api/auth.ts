@@ -3,19 +3,21 @@ import { LuciaError } from 'lucia-auth';
 
 import { auth } from '@/auth/lucia';
 import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
-import { DASHBOARD_HOME } from '@/constants';
 
 export const post: APIRoute = async (context) => {
   const validSubmission = isValidFormSubmission(context.request);
   if (!validSubmission) {
-    return null;
+		return new Response(null, {
+			status: 403
+		});
   }
 
   const authRequest = auth.handleRequest(context);
 
   const genericErrorMessage = 'Incorrect email or password';
-  const formData = await context.request.formData();
-  const email = formData.get('email')?.toString() ?? '';
+  const data = await context.request.json();
+  const { email, password } = data;
+
   if (email === null || !emailRegex.test(email)) {
     return new Response(
       JSON.stringify({
@@ -28,7 +30,6 @@ export const post: APIRoute = async (context) => {
     );
   }
 
-  const password = formData.get('password');
   if (password instanceof File || password === null) {
     return new Response(
       JSON.stringify({
@@ -45,7 +46,10 @@ export const post: APIRoute = async (context) => {
     const key = await auth.useKey('email', email, password);
     const session = await auth.createSession(key.userId);
     authRequest.setSession(session);
-    return context.redirect(DASHBOARD_HOME, 302);
+    return new Response(JSON.stringify({ userId: key.userId }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
   } catch (e) {
     let message = '';
     if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {

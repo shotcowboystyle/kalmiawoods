@@ -1,1 +1,1 @@
-export type BreadcrumbType = 'default' | 'solid'
+export type BreadcrumbType = 'default' | 'solid';

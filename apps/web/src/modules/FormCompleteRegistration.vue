@@ -1,10 +1,9 @@
 <script setup lang="ts">
-export interface Props {
-  token: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  token: '',
+const props = defineProps({
+  token: {
+    type: String,
+    default: '',
+  },
 });
 
 const errorMessage = ref('');
@@ -78,6 +77,8 @@ async function submit(e: Event) {
   if (response.status !== 200) {
     const data = await response.json();
     errorMessage.value = data.message;
+  } else {
+    document.location = '/';
   }
 }
 

@@ -1,10 +1,79 @@
 ---
+import { LuciaError } from 'lucia-auth';
+
 import LayoutStacked from '@/app/LayoutStacked.astro';
-import { auth } from '@/auth/lucia';
-import { DASHBOARD_HOME } from '@/constants';
+import { sendEmailVerificationEmail } from '@/auth/email';
+import { auth, emailVerificationToken } from '@/auth/lucia';
+import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
+import { HOME } from '@/constants';
 import FormSignUp from '@/modules/FormSignUp.astro';
 
 const authRequest = auth.handleRequest(Astro);
+
+let errorMessage: string | null = null;
+let email = '';
+let role = 'USER';
+let status = 'CREATED';
+
+const handleFormSubmission = async (): Promise<Response | null> => {
+  const validSubmission = isValidFormSubmission(Astro.request);
+  if (!validSubmission) {
+    return null;
+  }
+  const formData = await Astro.request.formData();
+  email = formData.get('email')?.toString() ?? '';
+  role = formData.get('role')?.toString() ?? 'USER';
+  status = formData.get('status')?.toString() ?? 'CREATED';
+  if (email === null || !emailRegex.test(email)) {
+    errorMessage = 'Invalid email';
+    return null;
+  }
+  const password = formData.get('password');
+  if (password instanceof File || password === null || password.length < 8) {
+    errorMessage = 'Invalid password';
+    return null;
+  }
+  try {
+    const user = await auth.createUser({
+      primaryKey: {
+        providerId: 'email',
+        providerUserId: email,
+        password,
+      },
+      attributes: {
+        email,
+        email_verified: false,
+        role,
+        status,
+      },
+    });
+    const session = await auth.createSession(user.userId);
+    authRequest.setSession(session);
+    const token = await emailVerificationToken.issue(user.userId);
+    await sendEmailVerificationEmail(email, token.toString());
+    return Astro.redirect('/auth/email-verification', 302);
+  } catch (e: any) {
+    if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
+      errorMessage = 'Email is already taken';
+      return null;
+    }
+
+    // duplication error
+    // if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+    if (e.code === 'P2002') {
+      errorMessage = 'Email is already taken';
+      return null;
+    }
+
+    errorMessage = 'An unknown error occurred';
+    return null;
+  }
+};
+
+const formSubmissionResponse = await handleFormSubmission();
+if (formSubmissionResponse) {
+  return formSubmissionResponse;
+}
 
 const { session, user } = await authRequest.validateUser();
 if (user) {
@@ -13,13 +82,13 @@ if (user) {
   }
 
   if (session) {
-    return Astro.redirect(DASHBOARD_HOME, 302);
+    return Astro.redirect(HOME, 302);
   }
 }
 ---
 
 <LayoutStacked>
   <div class="flex min-h-screen pb-[12vh] align-middle">
-    <FormSignUp />
+    <FormSignUp email={email} errorMessage={errorMessage} />
   </div>
 </LayoutStacked>

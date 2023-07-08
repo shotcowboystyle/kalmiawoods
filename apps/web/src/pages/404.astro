@@ -1,23 +1,8 @@
 ---
-import LinkButton from '@/components/LinkButton.astro';
-import { SITE } from '@/config';
-import Layout from '@/layouts/Main.astro';
+import LayoutStacked from '@/app/LayoutStacked.astro';
+import ErrorNotFound from '@/modules/ErrorNotFound.astro';
 ---
 
-<Layout title={`404 Not Found | ${SITE.title}`}>
-  <section class="flex h-full items-center p-16">
-    <div class="container mx-auto my-8 flex flex-col items-center justify-center px-5">
-      <div class="max-w-md text-center">
-        <h1 aria-label="404 Not Found">404</h1>
-        <span aria-hidden="true">¯\_(ツ)_/¯</span>
-        <p>Page Not Found</p>
-        <LinkButton
-          href="/"
-          className="my-6 underline decoration-dashed underline-offset-8 text-lg"
-        >
-          Go back home
-        </LinkButton>
-      </div>
-    </div>
-  </section>
-</Layout>
+<LayoutStacked>
+	<ErrorNotFound />
+</LayoutStacked>
