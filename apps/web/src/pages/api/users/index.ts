@@ -35,7 +35,9 @@ export const get: APIRoute = async (context) => {
 export const post: APIRoute = async (context) => {
   const validSubmission = isValidFormSubmission(context.request);
   if (!validSubmission) {
-    return null;
+		return new Response(null, {
+			status: 403
+		});
   }
 
   const authRequest = auth.handleRequest(context);
@@ -71,17 +73,24 @@ export const post: APIRoute = async (context) => {
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ message: 'There was an error creating this user. Please try again later.' }), {
-      status: 500,
-      headers: { 'content-type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({
+        message: 'There was an error creating this user. Please try again later.',
+      }),
+      {
+        status: 500,
+        headers: { 'content-type': 'application/json' },
+      },
+    );
   }
 };
 
 export const put: APIRoute = async (context) => {
   const validSubmission = isValidFormSubmission(context.request);
   if (!validSubmission) {
-    return null;
+		return new Response(null, {
+			status: 403
+		});
   }
 
   const authRequest = auth.handleRequest(context);
@@ -106,8 +115,11 @@ export const put: APIRoute = async (context) => {
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
+    console.error('ERROR', error);
     return new Response(
-      JSON.stringify({ message: 'There was an error updating this profile. Please try again later.' }),
+      JSON.stringify({
+        message: 'There was an error updating this profile. Please try again later.',
+      }),
       {
         status: 500,
         headers: { 'content-type': 'application/json' },
@@ -150,9 +162,14 @@ export const del: APIRoute = async (context) => {
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ message: 'There was an error deleting this user. Please try again later.' }), {
-      status: 500,
-      headers: { 'content-type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({
+        message: 'There was an error deleting this user. Please try again later.',
+      }),
+      {
+        status: 500,
+        headers: { 'content-type': 'application/json' },
+      },
+    );
   }
 };

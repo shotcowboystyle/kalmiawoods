@@ -34,6 +34,6 @@ export interface CalendarDay {
   onBottom: boolean;
   onLeft: boolean;
   onRight: boolean;
-  classes: Array<string | Object>;
+  classes: (string | Object)[];
   locale: Locale;
 }

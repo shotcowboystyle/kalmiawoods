@@ -5,9 +5,7 @@
 export type TailwindClassMatcherMap = Record<string, (c: string) => string>;
 
 const classTypeMatchers: TailwindClassMatcherMap = {
-  border: (_class: string): string => {
-    return _class.substring(0, _class.lastIndexOf('-')); // for splitting border-b-2 and border-red
-  },
+  border: (_class: string): string => _class.substring(0, _class.lastIndexOf('-')), // for splitting border-b-2 and border-red
 };
 
 const getTypeFromClass = (_class: string, matchers: TailwindClassMatcherMap = classTypeMatchers) => {
@@ -15,7 +13,7 @@ const getTypeFromClass = (_class: string, matchers: TailwindClassMatcherMap = cl
   const matchClass = classesToMatch.find((_matchClass) => _class.includes(_matchClass)); // TODO: maybe need to filter instead of find
   if (!matchClass) return _class.substring(0, _class.indexOf('-'));
 
-  return matchers[matchClass as keyof typeof matchers](_class);
+  return matchers[matchClass](_class);
 };
 
 export function simplifyTailwindClasses(...classes: (string | string[])[]): string {

@@ -1,9 +1,9 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { auth } from '@/auth/lucia';
-// import LoginForm from '@/components/LoginForm.vue';
-import { DASHBOARD_HOME } from '@/constants';
-import FormLogin from '@/modules/FormLogin.astro';
+import { HOME } from '@/constants';
+import FormLogin from '@/modules/FormLogin.vue';
+import Svg from '@jasikpark/astro-svg-loader';
 
 const authRequest = auth.handleRequest(Astro);
 
@@ -14,51 +14,31 @@ if (user) {
   }
 
   if (session) {
-    return Astro.redirect(DASHBOARD_HOME, 302);
+    return Astro.redirect(HOME, 302);
   }
 }
 ---
 
 <LayoutStacked title="Login">
   <div class="flex min-h-screen pb-[12vh] align-middle">
-    <!-- <LoginForm client:only="vue" /> -->
-    <FormLogin />
-  </div>
-
-  <!-- <section class="flex min-h-screen pb-[12vh] align-middle">
     <div
-      class="flex flex-col items-center justify-center w-full px-6 pt-8 mx-auto login pt:mt-0 dark:bg-gray-900"
-    >
-      <div class="h-screen login__inner reveal">
-        <div class="inner__brand">
-          <div class="radius-large space-8 bg-neutral-900">
-            <Logo />
-          </div>
-          <div class="brand__text">
-            <span>Astro Dashboard</span>
-            <span>An Accessible Astro Theme</span>
-          </div>
-        </div>
-        <div class="inner__form space-content">
-          <div class="space-content">
-            <h1>Login</h1>
-            <form method="post">
-              <label for="email">Email</label><br />
-              <input id="email" name="email" value={email} /><br />
-              <label for="password">Password</label>
-              <input id="password" name="password" type="password" /><br />
-              <input type="submit" value="Continue" />
-            </form>
-            {errorMessage && <p class="error">{errorMessage}</p>}
-            <a href="/auth/password-reset">Forgot password?</a>
-            <a href="/signup">Create an account</a>
-          </div>
-        </div>
-        <div class="login__footer text-neutral-700">
-          <p><em>Build fast dashboards, faster.</em></p>
-        </div>
+      class="pt:mt-0 mx-auto flex w-full flex-col items-center justify-center px-6 pt-8 dark:bg-gray-900">
+      <a
+        href="#"
+        class="mb-8 flex items-center justify-center text-2xl font-semibold dark:text-white lg:mb-10">
+        <Svg
+          src={import('@/assets/svg/logo-3.svg?raw')}
+          aria-label={import.meta.env.APP_NAME}
+          class="kw-logo mr-3 h-8 fill-white"
+          />
+        <span>Kalmia Woods</span>
+      </a>
+      <div class="w-full max-w-xl space-y-8 rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+          Sign in to access private pages
+        </h2>
+        <FormLogin client:only="vue" />
       </div>
-      <div class="h-screen login__background"></div>
     </div>
-  </section> -->
+  </div>
 </LayoutStacked>

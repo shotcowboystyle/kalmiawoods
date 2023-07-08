@@ -1,28 +1,35 @@
-import { apiRoute } from '@/stores/routes';
 import { persistentMap } from '@nanostores/persistent';
-import { action } from 'nanostores';
-import { z } from 'zod';
+import { onMount, task } from 'nanostores';
 
-import { Auth as AuthSchema } from '@/schemas/auth';
-
-interface UserData {
-  email: string;
-  password: string;
+enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
 }
 
-type Auth = z.infer<typeof AuthSchema>;
+enum Status {
+  CREATED = 'CREATED',
+  REGISTERED = 'REGISTERED',
+  DELETED = 'DELETED',
+}
 
-const API_URL = apiRoute('auth');
+interface AuthUser {
+  isLoading: boolean;
+  email: string;
+  role: Role;
+  status: Status;
+  name: string;
+  avatar: string;
+}
 
-export const user = persistentMap<Auth>(
-  'user:',
+export const authUser = persistentMap<AuthUser>(
+  'authUser:',
   {
-    valid: false,
+    isLoading: false,
     email: '',
-    emailVerified: false,
-    role: null,
-    status: null,
-    isLoggedIn: false,
+    role: Role.USER,
+    status: Status.CREATED,
+    name: '',
+    avatar: '',
   },
   {
     encode(value) {
@@ -37,26 +44,30 @@ export const user = persistentMap<Auth>(
   },
 );
 
-export const login = action(user, 'login', async (user, userData: UserData) => {
-  const formData = new FormData();
+onMount(authUser, () => {
+  authUser.setKey('isLoading', true);
 
-  formData.append('login', 'true');
-  Object.keys(userData).forEach((k) => {
-    formData.append(k, `${userData[k]}`);
+  task(async () => {
+    try {
+      const response = await fetch('/api/auth-user', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      const authUserData = {
+        email: data.email,
+        role: data.role,
+        status: data.status,
+        name: `${data.firstName} ${data.lastName}`,
+        avatar: data.avatar,
+      };
+
+      authUser.set({ isLoading: false, ...authUserData });
+    } catch (e) {
+      console.log(e);
+    }
   });
-
-  const res = await fetch(API_URL, { method: 'POST', body: formData });
-  const data = AuthSchema.parse(await res.json());
-
-  user.set({ ...data, isLoggedIn: data.email.length > 0 });
-});
-
-export const logout = action(user, 'logout', async (user) => {
-  const formData = new FormData();
-  formData.append('logout', '1');
-
-  const res = await fetch(API_URL, { method: 'POST', body: formData });
-  const data = AuthSchema.parse(await res.json());
-
-  user.set({ ...data, isLoggedIn: false });
 });

@@ -3,60 +3,57 @@ import { auth, completeRegistrationToken } from '@/auth/lucia';
 import { prismaClient } from '@/db.js';
 import type { User } from '@/types/user';
 import { generateId } from '@/utils/generate-id';
+import { generatePassword } from '@/utils/generate-password';
 
-const transformDatabaseUserWithProfile = (databaseUserWithProfile: any): User => {
-  return {
-    id: databaseUserWithProfile.id,
-    email: databaseUserWithProfile.email,
-    emailVerified: databaseUserWithProfile.email_verified,
-    role: databaseUserWithProfile.role,
-    status: databaseUserWithProfile.status,
-    address: databaseUserWithProfile.profile.address,
-    firstName: databaseUserWithProfile.profile.first_name,
-    lastName: databaseUserWithProfile.profile.last_name,
-    mobilePhone: databaseUserWithProfile.profile.mobile_phone,
-    avatar: databaseUserWithProfile.profile.avatar,
-  };
-};
+const transformDatabaseUserWithProfile = (databaseUserWithProfile: any): User => ({
+  id: databaseUserWithProfile.id,
+  email: databaseUserWithProfile.email,
+  emailVerified: databaseUserWithProfile.email_verified,
+  role: databaseUserWithProfile.role,
+  status: databaseUserWithProfile.status,
+  address: databaseUserWithProfile.profile?.address ?? null,
+  firstName: databaseUserWithProfile.profile?.first_name ?? null,
+  lastName: databaseUserWithProfile.profile?.last_name ?? null,
+  mobilePhone: databaseUserWithProfile.profile?.mobile_phone ?? null,
+  avatar: databaseUserWithProfile.profile?.avatar ?? null,
+});
 
-export const createUser = async ({
-  email,
-  password,
-  role = 'USER',
-  status = 'CREATED',
-  firstName,
-  lastName,
-  address,
-  mobilePhone,
-  avatar,
-}: User) => {
+export const createUser = async (data: User) => {
+  const password = generatePassword();
   const authUser = await auth.createUser({
     primaryKey: {
       providerId: 'email',
-      providerUserId: email,
+      providerUserId: data.email,
       password,
     },
     attributes: {
-      email,
+      email: data.email,
       email_verified: false,
-      role,
-      status,
+      role: 'USER',
+      status: 'CREATED',
     },
   });
 
   const token = await completeRegistrationToken.issue(authUser.userId);
-  await sendCompleteRegistrationEmail(email, token.toString());
-  // return Astro.redirect('/auth/email-verification', 302);
+  await sendCompleteRegistrationEmail(data.email, token.toString());
 
-  const createdUser = await prismaClient.userProfile.create({
+  const createdUser = await prismaClient.authUser.update({
+    where: {
+      id: authUser.userId,
+    },
     data: {
-      id: generateId(8),
-      user_id: authUser.userId,
-      first_name: firstName,
-      last_name: lastName,
-      address: address,
-      mobile_phone: mobilePhone,
-      avatar: avatar,
+      profile: {
+        update: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          address: data.address ?? null,
+          mobile_phone: data.mobilePhone?.replace(/\D/g,'') ?? null,
+          avatar: data.avatar ?? null,
+        },
+      },
+    },
+    include: {
+      profile: true,
     },
   });
 
@@ -71,11 +68,12 @@ export const updateUser = async (data: Partial<User>) => {
       email_verified: data.emailVerified,
       status: data.status,
       profile: {
-        update: {
+        upsert: {
+          id: generateId(8),
           first_name: data.firstName,
           last_name: data.lastName,
           address: data.address,
-          mobile_phone: data.mobilePhone,
+          mobile_phone: data.mobilePhone?.replace(/\D/g,''),
           avatar: data.avatar,
         },
       },
@@ -128,31 +126,7 @@ export const deleteUser = async (userId: string) => {
     },
   });
 
-  // const deleteUserAuthSessions = prismaClient.authSession.deleteMany({
-  //   where: {
-  //     user_id: userId,
-  //   },
-  // });
+  await prismaClient.$transaction([deleteUserProfile, deleteUserReservations]);
 
-  // const deleteUserAuthKeys = prismaClient.authKey.deleteMany({
-  //   where: {
-  //     user_id: userId,
-  //   },
-  // });
-
-  // const deleteUser = prismaClient.authUser.delete({
-  //   where: {
-  //     id: userId,
-  //   },
-  // });
-
-  await prismaClient.$transaction([
-    deleteUserProfile,
-    deleteUserReservations,
-    // deleteUserAuthSessions,
-    // deleteUserAuthKeys,
-    // deleteUser,
-  ]);
-
-  return await auth.deleteUser(userId);
+  return auth.deleteUser(userId);
 };

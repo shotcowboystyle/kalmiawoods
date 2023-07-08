@@ -4,10 +4,10 @@ import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { Calendar } from 'v-calendar';
 import 'v-calendar/dist/style.css';
 // import { useTheme } from '@kalmiawoods/ui';
-import Modal from '@/components/modal/Modal.vue';
+import Modal from '@/components/Modal/Modal.vue';
 import { reservations, setActiveReservationId } from '@/stores/reservation';
+import type { CalendarDay } from '@/types/FullCalendar';
 import FormReservation from './FormReservation.vue';
-import type { CalendarDay } from './types';
 
 defineProps<{
   isAdmin?: boolean;
@@ -56,7 +56,7 @@ const masks = ref({
 });
 
 const modalTitlePrefix = ref<string>('Add');
-const selectedReservationDate = ref<string | null>(null);
+const selectedReservationDate = ref<string | undefined>();
 const onDayClick = (day: CalendarDay, reservationId = null) => {
   if (reservationId) {
     setActiveReservationId(reservationId);
@@ -94,7 +94,8 @@ const closeModal = () => {
       <!-- :is-dark="isDark" -->
       <template #header-title="{ monthLabel, yearLabel }">
         <div class="self-center text-lg font-thin">
-          <span class="font-extrabold">{{ monthLabel }}</span> <span class="text-slate-900">{{ yearLabel }}</span>
+          <span class="font-extrabold">{{ monthLabel }}</span>
+          <span class="text-slate-900">{{ yearLabel }}</span>
         </div>
       </template>
       <template #day-content="{ day, attributes }">
@@ -115,7 +116,8 @@ const closeModal = () => {
               v-if="attributes?.[0]"
               :key="attributes?.[0]?.key"
               class="bg-primary text-primary-content rounded-sm p-1 text-xs md:mb-1 md:mt-0 md:leading-tight">
-              {{ attributes?.[0]?.customData?.user?.firstName }} {{ attributes?.[0]?.customData?.user?.lastName }}
+              {{ attributes?.[0]?.customData?.user?.firstName }}
+              {{ attributes?.[0]?.customData?.user?.lastName }}
             </p>
           </div>
         </div>
@@ -125,10 +127,11 @@ const closeModal = () => {
 
   <Modal size="5xl" v-if="isModalOpen" @close="closeModal">
     <template #header>
-      <div class="flex items-center text-lg">{{ modalTitlePrefix }} reservation</div>
+      <div class="font-bold text-lg">{{ modalTitlePrefix }} reservation</div>
     </template>
     <template #body>
       <FormReservation
+        class="mt-4"
         :selected-date="selectedReservationDate"
         :handle-close-modal="closeModal"
         :is-admin="isAdmin"

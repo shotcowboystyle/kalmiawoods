@@ -34,8 +34,6 @@
     "@changesets/cli": "^2.26.2",
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
-    "@kalmiawoods/eslint-config": "workspace:*",
-    "@kalmiawoods/prettier-config": "workspace:*",
     "commitizen": "^4.3.0",
     "commitlint": "^17.6.6",
     "cross-env": "^7.0.3",

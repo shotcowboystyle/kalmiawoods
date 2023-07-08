@@ -33,8 +33,7 @@ const emails = await getEmails(emailAddressQuery);
       )
     }
     {
-      emails.map((email: any) => {
-        return (
+      emails.map((email: any) => (
           <div class="py-4">
             <div class="flex text-sm place-content-between">
               <p>To: {email.toAddress}</p>
@@ -47,8 +46,7 @@ const emails = await getEmails(emailAddressQuery);
               {email.subject}
             </a>
           </div>
-        );
-      })
+        ))
     }
   </div>
 </EmailLayout>

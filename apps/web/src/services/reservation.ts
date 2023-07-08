@@ -3,22 +3,20 @@ import { prismaClient } from '@/db.js';
 import { Reservation } from '@/types/reservation';
 import { generateId } from '@/utils/generate-id';
 
-const transformDatabaseReservation = (databaseReservation: any): Reservation => {
-  return {
-    reservationId: databaseReservation.id,
-    checkInDate: databaseReservation.check_in_date,
-    checkOutDate: databaseReservation.check_out_date,
-    userId: databaseReservation.user_id,
-    user: {
-      email: databaseReservation.auth_user.email,
-      address: databaseReservation.auth_user.profile.address,
-      firstName: databaseReservation.auth_user.profile.first_name,
-      lastName: databaseReservation.auth_user.profile.last_name,
-      mobilePhone: databaseReservation.auth_user.profile.mobile_phone,
-      avatar: databaseReservation.auth_user.profile.avatar,
-    },
-  };
-};
+const transformDatabaseReservation = (databaseReservation: any): Reservation => ({
+  reservationId: databaseReservation.id,
+  checkInDate: databaseReservation.check_in_date,
+  checkOutDate: databaseReservation.check_out_date,
+  userId: databaseReservation.user_id,
+  user: {
+    email: databaseReservation.auth_user.email,
+    address: databaseReservation.auth_user.profile.address,
+    firstName: databaseReservation.auth_user.profile.first_name,
+    lastName: databaseReservation.auth_user.profile.last_name,
+    mobilePhone: databaseReservation.auth_user.profile.mobile_phone,
+    avatar: databaseReservation.auth_user.profile.avatar,
+  },
+});
 
 export const createReservation = async ({
   checkInDate,
@@ -84,7 +82,7 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
   // const { startDate, endDate } = reservationQuery;
   const { startDate, endDate } = reservationQuery;
 
-  const startDateCheck = new Date(startDate + ' 00:00:00');
+  const startDateCheck = new Date(`${startDate} 00:00:00`);
   // const endDateCheck = new Date(endDate + ' 23:59:00');
 
   // const startDateCheckString = `"${formatQueryDateRange(startDateCheck)}"`;
@@ -112,9 +110,7 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
   });
 
   // return databaseReservations.map((databaseReservation: Reservation) => {
-  return databaseReservations.map((databaseReservation: any) => {
-    return transformDatabaseReservation(databaseReservation);
-  });
+  return databaseReservations.map((databaseReservation: any) => transformDatabaseReservation(databaseReservation));
 };
 
 export const getReservation = async (reservationId: string) => {
@@ -138,8 +134,7 @@ export const getReservation = async (reservationId: string) => {
   return transformDatabaseReservation(databaseReservation);
 };
 
-export const deleteReservation = async (reservationId: string) => {
-  return await prismaClient.reservation.delete({
+export const deleteReservation = async (reservationId: string) =>
+  prismaClient.reservation.delete({
     where: { id: reservationId },
   });
-};

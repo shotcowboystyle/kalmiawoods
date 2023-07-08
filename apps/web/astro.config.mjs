@@ -20,6 +20,7 @@ import Components from 'unplugin-vue-components/vite';
 import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
+
 const { APP_HOST, APP_PORT, APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}/`;
 const __dirname = dirname(fileURLToPath(import.meta.url));

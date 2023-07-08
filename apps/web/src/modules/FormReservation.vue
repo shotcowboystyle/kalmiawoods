@@ -17,7 +17,7 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   isAdmin: false,
   isEditingReservation: false,
-  selectedDate: null,
+  selectedDate: undefined,
   handleCloseModal: () => {},
 });
 
@@ -37,7 +37,7 @@ const selectUserOptions = computed(() => [
 ]);
 const formValues = ref({
   reservationId: props.isEditingReservation ? $reservation.value.reservationId : null,
-  userId: props.isEditingReservation ? $reservation.value.userId : null,
+  userId: props.isEditingReservation && $reservation.value.userId ? $reservation.value.userId : undefined,
   range: {
     start: props.isEditingReservation ? $reservation.value.checkInDate : props.selectedDate,
     end: props.isEditingReservation ? $reservation.value.checkOutDate : props.selectedDate,
@@ -64,6 +64,7 @@ const disabledDates = computed(() => {
 
 const popover = ref({
   visibility: 'click',
+  // placement: 'auto',
 });
 
 // const bodyEl = ref();
@@ -114,90 +115,88 @@ watch(arrivedState, ({ bottom }) => {
 
 <template>
   <form @submit="submit">
-    <!-- <div ref="bodyEl" class="w-full"> -->
-    <div class="w-full">
-      <div v-if="isAdmin" class="form-control w-full">
-        <label for="userId" class="label">
-          <span class="label-text">Main guest</span>
-        </label>
-        <Select
-          v-model="formValues.userId"
-          :options="selectUserOptions"
-          id="userId"
-          name="userId"
-          class="input input-bordered w-full"
-          required />
-      </div>
+    <DatePicker
+      v-model.range="formValues.range"
+      :class="{ 'border-0': smAndLarger }"
+      color="green"
+      :columns="smAndLarger ? 2 : 1"
+      :min-date="new Date()"
+      is-range
+      is-required
+      :popover="popover"
+      :is-expanded="smAndLarger"
+      :trim-weeks="!smAndLarger"
+      :disabled-dates="disabledDates">
+      <template #default="{ inputValue, inputEvents }">
+        <div class="flex items-center justify-center">
+          <div class="mb-4 grid h-full flex-grow grid-cols-[1fr,1fr] items-center gap-8 px-0">
+            <div class="form-control w-full">
+              <label for="checkInDate" class="label">
+                <span class="label-text">Check in</span>
+              </label>
+              <input
+                id="checkInDate"
+                type="text"
+                name="checkInDate"
+                placeholder="Select date"
+                :value="inputValue.start"
+                v-on="inputEvents.start"
+                class="input input-bordered w-full" />
+            </div>
 
-      <DatePicker
-        v-model.range="formValues.range"
-        class="w-full"
-        :class="{ 'border-0': smAndLarger }"
-        color="green"
-        :columns="smAndLarger ? 2 : 1"
-        :min-date="new Date()"
-        is-range
-        is-required
-        :popover="popover"
-        :is-expanded="smAndLarger"
-        :trim-weeks="!smAndLarger"
-        :disabled-dates="disabledDates">
-        <template #default="{ inputValue, inputEvents }">
-          <div class="flex items-center justify-center">
-            <div class="mb-4 grid h-full flex-grow grid-cols-[1fr,1fr] items-center gap-x-8 px-0 sm:px-4">
-              <div class="form-control w-full">
-                <label for="checkInDate" class="label">
-                  <span class="label-text">Check in</span>
-                </label>
-                <input
-                  id="checkInDate"
-                  type="text"
-                  name="checkInDate"
-                  placeholder="Select date"
-                  :value="inputValue.start"
-                  v-on="inputEvents.start"
-                  class="input input-bordered w-full" />
-              </div>
-
-              <div class="form-control w-full">
-                <label for="checkOutDate" class="label">
-                  <span class="label-text">Check out</span>
-                </label>
-                <input
-                  id="checkOutDate"
-                  type="text"
-                  name="checkOutDate"
-                  placeholder="Select date"
-                  :value="inputValue.end"
-                  v-on="inputEvents.end"
-                  class="input input-bordered w-full" />
-              </div>
+            <div class="form-control w-full">
+              <label for="checkOutDate" class="label">
+                <span class="label-text">Check out</span>
+              </label>
+              <input
+                id="checkOutDate"
+                type="text"
+                name="checkOutDate"
+                placeholder="Select date"
+                :value="inputValue.end"
+                v-on="inputEvents.end"
+                class="input input-bordered w-full" />
             </div>
           </div>
-        </template>
-      </DatePicker>
+        </div>
+      </template>
+    </DatePicker>
+
+    <div v-if="isAdmin" class="form-control w-full mb-6">
+      <label for="userId" class="label">
+        <span class="label-text">Main guest</span>
+      </label>
+      <Select v-model="formValues.userId" :options="selectUserOptions" id="userId" name="userId" required />
     </div>
 
-    <div class="items-center rounded-b border-t border-gray-200 p-6 dark:border-gray-700">
-      <div class="mt-8 text-right">
-        <button
-          type="button"
-          class="mr-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-semibold text-gray-700 shadow-sm hover:bg-gray-100"
-          @click="props.handleCloseModal()">
-          Cancel
-        </button>
-        <button
-          v-if="$reservation.reservationId"
-          type="button"
-          class="btn-error mr-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-semibold text-gray-700 shadow-sm hover:bg-gray-100"
-          @click="deleteReservation($reservation.reservationId)">
-          Delete
-        </button>
-        <button
-          type="submit"
-          class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 font-semibold text-white shadow-sm hover:bg-gray-700">
-          Save Reservation
-        </button>
+    <div class="mb-4 w-auto block max-w-fit">
+      <p class="label-text mb-1">Locations</p>
+      <div class="form-control">
+        <label class="label cursor-pointer justify-normal">
+          <input type="checkbox" class="checkbox mr-2" />
+          <span class="label-text">Main house</span>
+        </label>
+      </div>
+      <div class="form-control">
+        <label class="label cursor-pointer justify-normal">
+          <input type="checkbox" class="checkbox mr-2" />
+          <span class="label-text">Workshop</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-16 flex justify-evenly">
+      <button
+        v-if="$reservation.reservationId"
+        type="button"
+        class="btn btn-error"
+        @click="deleteReservation($reservation.reservationId)">
+        Delete
+      </button>
+
+      <div class="flex justify-end grow gap-4">
+        <button type="button" class="btn btn-link" @click="props.handleCloseModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Reservation</button>
       </div>
     </div>
   </form>

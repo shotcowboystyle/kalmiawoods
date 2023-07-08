@@ -1,4 +1,4 @@
-export type OptionsType = {
-  value: string,
-  name: string,
+export interface OptionsType {
+  value: string;
+  name: string;
 }

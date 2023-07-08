@@ -70,7 +70,9 @@ export const post: APIRoute = async (context) => {
     });
   } catch (error) {
     return new Response(
-      JSON.stringify({ message: 'There was an error creating this reservation. Please try again later.' }),
+      JSON.stringify({
+        message: 'There was an error creating this reservation. Please try again later.',
+      }),
       {
         status: 500,
         headers: { 'content-type': 'application/json' },
@@ -113,7 +115,9 @@ export const put: APIRoute = async (context) => {
     });
   } catch (error) {
     return new Response(
-      JSON.stringify({ message: 'There was an error updating this reservation. Please try again later.' }),
+      JSON.stringify({
+        message: 'There was an error updating this reservation. Please try again later.',
+      }),
       {
         status: 500,
         headers: { 'content-type': 'application/json' },
@@ -146,7 +150,9 @@ export const del: APIRoute = async (context) => {
     });
   } catch (error) {
     return new Response(
-      JSON.stringify({ message: 'There was an error deleting this reservation. Please try again later.' }),
+      JSON.stringify({
+        message: 'There was an error deleting this reservation. Please try again later.',
+      }),
       {
         status: 500,
         headers: { 'content-type': 'application/json' },

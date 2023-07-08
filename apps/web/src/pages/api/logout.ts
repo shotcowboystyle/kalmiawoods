@@ -1,5 +1,5 @@
-import { auth } from "@/auth/lucia";
-import type { APIRoute } from "astro";
+import { auth } from '@/auth/lucia';
+import type { APIRoute } from 'astro';
 
 export const post: APIRoute = async (Astro) => {
   const authRequest = auth.handleRequest(Astro);
@@ -13,7 +13,7 @@ export const post: APIRoute = async (Astro) => {
   return new Response(null, {
     status: 302,
     headers: {
-      location: "/login",
+      location: '/login',
     },
   });
 };
