@@ -65,7 +65,7 @@ const handleFormSubmission = async (): Promise<Response | null> => {
       return null;
     }
 
-    errorMessage = 'An unknown error occurred';
+    errorMessage = e.message;
     return null;
   }
 };
