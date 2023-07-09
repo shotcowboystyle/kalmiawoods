@@ -28,14 +28,17 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  server: {
-    host: APP_HOST,
-    port: +APP_PORT,
-  },
+  // server: {
+  //   host: APP_HOST,
+  //   port: +APP_PORT,
+  // },
   site: APP_SITE,
   base: basePath,
   trailingSlash: 'never',
   adapter: vercel(),
+  build: {
+    split: true,
+  },
   integrations: [
     vue({}),
     tailwind({
