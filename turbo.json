@@ -11,7 +11,7 @@
   ],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^db:generate", "^build"],
       "outputs": ["dist/**", ".vercel/output/**", ".astro/**"],
       "inputs": ["src/**", "vercel.json"]
     },
