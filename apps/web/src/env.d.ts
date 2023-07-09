@@ -2,7 +2,7 @@
 /// <reference types="@astrojs/image/client" />
 
 declare module 'spotlight.js/src/js/spotlight.js';
-declare module '@kalmiawoods/ui';
+// declare module '@kalmiawoods/ui';
 // declare module '@kalmiawoods/database';
 
 // this is a temporary fix for the alpha.6 v-calendar version

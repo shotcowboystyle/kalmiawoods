@@ -1,12 +1,12 @@
 ---
+import LayoutEmail from "@/app/LayoutEmail.astro";
 import { getEmails } from "@/auth/email";
-import EmailLayout from "@/layouts/EmailLayout.astro";
 
 const emailAddressQuery = Astro.url.searchParams.get("q") ?? "";
 const emails = await getEmails(emailAddressQuery);
 ---
 
-<EmailLayout>
+<LayoutEmail>
   <div>
     <form>
       <label for="query" class="text-sm text-medium">Search by mailbox</label>
@@ -49,4 +49,4 @@ const emails = await getEmails(emailAddressQuery);
         ))
     }
   </div>
-</EmailLayout>
+</LayoutEmail>

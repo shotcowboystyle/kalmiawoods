@@ -3,20 +3,13 @@ import Svg from '@jasikpark/astro-svg-loader';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { auth } from '@/auth/lucia';
-import { HOME } from '@/constants';
-import FormLogin from '@/modules/FormLogin.vue';
+import FormPasswordRecovery from '@/modules/FormPasswordRecovery.vue';
 
 const authRequest = auth.handleRequest(Astro);
 
-const { session, user } = await authRequest.validateUser();
-if (user) {
-  if (!user.emailVerified || user.status !== 'REGISTERED') {
-    return Astro.redirect('/complete-registration', 302);
-  }
-
-  if (session) {
-    return Astro.redirect(HOME, 302);
-  }
+const session = await authRequest.validate();
+if (session) {
+  return Astro.redirect('/', 302);
 }
 ---
 
@@ -36,9 +29,9 @@ if (user) {
       </a>
       <div class="w-full max-w-xl space-y-8 rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-          Sign in to access private pages
+          Password recovery
         </h2>
-        <FormLogin client:only="vue" />
+        <FormPasswordRecovery />
       </div>
     </div>
   </div>

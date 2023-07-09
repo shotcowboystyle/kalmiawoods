@@ -165,6 +165,12 @@ body {
   opacity: 1;
 }
 
+form.errors {
+  :invalid {
+    @apply input-error;
+  }
+}
+
 .fade-right-enter-active {
   animation: fade-in-right 0.5s;
 }

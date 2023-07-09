@@ -5,7 +5,7 @@ import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 import vue from '@astrojs/vue';
-import AstroPWA from '@vite-pwa/astro';
+// import AstroPWA from '@vite-pwa/astro';
 import compress from 'astro-compress';
 import critters from 'astro-critters';
 import devOnlyRoutes from 'astro-dev-only-routes';
@@ -15,7 +15,7 @@ import { dirname, resolve } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
-import { HeadlessUiResolver } from 'unplugin-vue-components/resolvers';
+// import { HeadlessUiResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
@@ -52,36 +52,36 @@ export default defineConfig({
         'icon-park-outline': ['game-ps', 'camp'],
       },
     }),
-    AstroPWA({
-      registerType: 'autoUpdate',
-      base: basePath,
-      includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
-      manifest: {
-        name: 'Manila Observatory - Panahon',
-        short_name: 'MO - Panahon',
-        background_color: '#ffffff',
-        description: 'Manila Observatory - Panahon website',
-        theme_color: '#ffffff',
-        icons: [
-          {
-            src: `${basePath}resources/static/img/logo/android-chrome-192x192.png`,
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: `${basePath}resources/static/img/logo/android-chrome-512x512.png`,
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: `${basePath}resources/static/img/logo/android-chrome-512x512.png`,
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
-      },
-    }),
+    // AstroPWA({
+    //   registerType: 'autoUpdate',
+    //   base: basePath,
+    //   includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+    //   manifest: {
+    //     name: 'Manila Observatory - Panahon',
+    //     short_name: 'MO - Panahon',
+    //     background_color: '#ffffff',
+    //     description: 'Manila Observatory - Panahon website',
+    //     theme_color: '#ffffff',
+    //     icons: [
+    //       {
+    //         src: `${basePath}resources/static/img/logo/android-chrome-192x192.png`,
+    //         sizes: '192x192',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: `${basePath}resources/static/img/logo/android-chrome-512x512.png`,
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: `${basePath}resources/static/img/logo/android-chrome-512x512.png`,
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //         purpose: 'any maskable',
+    //       },
+    //     ],
+    //   },
+    // }),
     image({
       serviceEntryPoint: '@astrojs/image/sharp',
     }),
@@ -95,7 +95,7 @@ export default defineConfig({
       imports: [
         'vue',
         {
-          '@vueuse/core': ['useSwipe', 'useScroll', 'useIntersectionObserver', 'useGeolocation', 'useWindowSize'],
+          '@vueuse/core': ['useScroll'],
         },
       ],
       dts: 'src/auto-imports.d.ts',
@@ -124,9 +124,9 @@ export default defineConfig({
     ssr: {
       external: ['svgo'],
     },
-    define: {
-      __DATE__: `'${new Date().toISOString()}'`,
-    },
+    // define: {
+    //   __DATE__: `'${new Date().toISOString()}'`,
+    // },
     server: {
       open: true,
       https: true,
@@ -134,7 +134,7 @@ export default defineConfig({
     plugins: [
       Components({
         resolvers: [
-          HeadlessUiResolver(),
+          // HeadlessUiResolver(),
           IconsResolver(),
           // (componentName) => {
           //   // where `componentName` is always CapitalCase

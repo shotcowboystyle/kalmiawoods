@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { HOME } from '@/constants';
-
 const hasErrors = ref(false);
+const errorMessage = ref(null);
+const showSuccessMessage = ref(false);
 const isSubmitting = ref(false);
 const formData = reactive({
   email: '',
-  password: '',
 });
 
 function invalidateForm() {
@@ -14,8 +13,9 @@ function invalidateForm() {
 
 async function submit() {
   isSubmitting.value = true;
+  errorMessage.value = null;
 
-  const authResponse = await fetch('/api/auth', {
+  const authResponse = await fetch('/api/password-reset', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -24,9 +24,16 @@ async function submit() {
     body: JSON.stringify(formData),
   });
 
-  if (authResponse.status === 200) {
-    location.href = HOME;
+  if (authResponse.status !== 200) {
+    const data = await authResponse.json();
+    errorMessage.value = data.message;
   }
+
+  if (authResponse.status === 200) {
+    return (showSuccessMessage.value = true);
+  }
+
+  isSubmitting.value = false;
 }
 </script>
 
@@ -45,27 +52,17 @@ async function submit() {
         placeholder="name@company.com"
         required />
     </div>
-    <div class="form-control w-full max-w-xs">
-      <label class="label" for="password">
-        <span class="label-text">Password</span>
-      </label>
-      <input
-        v-model="formData.password"
-        class="input input-bordered w-full max-w-xs"
-        type="password"
-        name="password"
-        id="password"
-        placeholder="name@company.com"
-        required />
-    </div>
 
     <div class="flex flex-wrap items-start">
-      <a href="/password-reset" class="link text-primary"> Lost Password? </a>
+      Already have an account? &nbsp;
+      <a href="login" class="link text-primary">Login</a>.
     </div>
 
     <button type="submit" class="btn btn-primary btn-block" :disabled="isSubmitting">
       <span v-if="isSubmitting" class="loading loading-spinner"></span>
-      <span v-else>Login</span>
+      <span v-else>Send email</span>
     </button>
   </form>
+  <p v-if="errorMessage" class="text-error">{{ errorMessage }}</p>
+  <p v-if="showSuccessMessage" class="text-success">A verification email was sent to your inbox</p>
 </template>

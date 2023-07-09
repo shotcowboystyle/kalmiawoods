@@ -17,7 +17,7 @@ const sendEmail = async (emailAddress: string, subject: string, content: string)
 };
 
 export const sendCompleteRegistrationEmail = async (emailAddress: string, registrationToken: string) => {
-  const resetLink = `${APP_URL}/auth/complete-registration/${registrationToken}`;
+  const resetLink = `${APP_URL}/complete-registration/${registrationToken}`;
   const emailContent = `Please complete your registration for Kalmia Woods via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;
@@ -25,14 +25,14 @@ export const sendCompleteRegistrationEmail = async (emailAddress: string, regist
 };
 
 export const sendEmailVerificationEmail = async (emailAddress: string, verificationToken: string) => {
-  const verificationLink = `${APP_URL}/auth/email-verification/${verificationToken}`;
+  const verificationLink = `${APP_URL}/email-verification/${verificationToken}`;
   const emailContent = `Please verify your email by clicking the link below:<br/><br/>
 <a href="${verificationLink}">${verificationLink}</a>`;
   await sendEmail(emailAddress, 'Email verification', emailContent);
 };
 
 export const sendPasswordResetEmail = async (emailAddress: string, resetToken: string) => {
-  const resetLink = `${APP_URL}/auth/password-reset/${resetToken}`;
+  const resetLink = `${APP_URL}/password-reset/${resetToken}`;
   const emailContent = `Please reset your password via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;

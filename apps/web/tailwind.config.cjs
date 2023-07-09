@@ -8,7 +8,7 @@ module.exports = {
     //
     './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
     './node_modules/flowbite/**/*.js',
-    './node_modules/@kalmiawoods/ui/dist/**/*.{js,ts,vue}',
+    // './node_modules/@kalmiawoods/ui/dist/**/*.{js,ts,vue}',
   ],
 
   darkMode: 'class',
