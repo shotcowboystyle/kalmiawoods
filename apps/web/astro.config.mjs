@@ -36,9 +36,9 @@ export default defineConfig({
   base: basePath,
   trailingSlash: 'never',
   adapter: vercel(),
-  build: {
-    split: true,
-  },
+  // build: {
+  //   split: true,
+  // },
   integrations: [
     vue({}),
     tailwind({
