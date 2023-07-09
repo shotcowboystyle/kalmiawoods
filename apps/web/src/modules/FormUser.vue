@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Input from '@/components/Input/Input.vue';
 import { addUser, user } from '@/stores/user';
 import { formatPhoneInputUSA } from '@/utils/phone';
 import { useStore } from '@nanostores/vue';
@@ -14,12 +13,11 @@ const props = withDefaults(defineProps<Props>(), {
   handleCloseModal: () => {},
 });
 
-const emit = defineEmits([
-  'input-mobile-phone',
-]);
+const emit = defineEmits(['input-mobile-phone']);
 
 const $user = useStore(user);
 
+const isSubmitting = ref(false);
 const hasErrors = ref(false);
 const formValues = reactive({
   id: props.isEditingUser ? $user.value.id : undefined,
@@ -49,8 +47,8 @@ function invalidateForm() {
   hasErrors.value = true;
 }
 
-async function submit(e: Event) {
-  e.preventDefault();
+async function submit() {
+  isSubmitting.value = true;
 
   const response = await fetch('/api/users', {
     method: props.isEditingUser ? 'PUT' : 'POST',
@@ -70,7 +68,7 @@ async function submit(e: Event) {
 </script>
 
 <template>
-  <form @submit="submit" :class="[{ 'errors': hasErrors }]">
+  <form @submit.prevent="submit" :class="[{ errors: hasErrors }]">
     <div class="flex gap-x-6 mb-4">
       <div class="form-control w-full max-w-xs">
         <label class="label" for="firstName">
@@ -84,8 +82,7 @@ async function submit(e: Event) {
           id="firstName"
           placeholder="enter user's first name"
           @invalid="invalidateForm"
-          required
-        />
+          required />
       </div>
       <div class="form-control w-full max-w-xs">
         <label class="label" for="lastName">
@@ -99,8 +96,7 @@ async function submit(e: Event) {
           id="lastName"
           placeholder="enter user's last name"
           @invalid="invalidateForm"
-          required
-        />
+          required />
       </div>
     </div>
 
@@ -118,8 +114,7 @@ async function submit(e: Event) {
           placeholder="enter user's email"
           autocomplete="off"
           @invalid="invalidateForm"
-          required
-        />
+          required />
       </div>
 
       <div class="form-control w-full max-w-xs">
@@ -136,46 +131,30 @@ async function submit(e: Event) {
           autocomplete="off"
           @invalid="invalidateForm"
           @input="maskPhone"
-          required
-        />
+          required />
       </div>
     </div>
 
     <div class="form-control w-full mb-4">
       <label class="label" for="address">
-          <span class="label-text">Address <span class="text-muted">(optional)</span></span>
-        </label>
-        <input
-          v-model="formValues.address"
-          class="input input-bordered w-full max-w-xs"
-          type="text"
-          name="address"
-          id="address"
-          placeholder="enter user's address"
-          autocomplete="off"
-        />
+        <span class="label-text">Address <span class="text-muted">(optional)</span></span>
+      </label>
+      <input
+        v-model="formValues.address"
+        class="input input-bordered w-full max-w-xs"
+        type="text"
+        name="address"
+        id="address"
+        placeholder="enter user's address"
+        autocomplete="off" />
     </div>
 
     <div class="flex gap-6 justify-end mt-8">
-      <button
-        type="button"
-        class="btn btn-link"
-        @click="props.handleCloseModal()">
-        Cancel
-      </button>
-      <button
-        type="submit"
-        class="btn btn-primary">
-        {{ isEditingUser ? 'Update' : 'Create' }} User
+      <button type="button" class="btn btn-link" @click="props.handleCloseModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+        <span v-if="isSubmitting" class="loading loading-spinner"></span>
+        <span v-else>{{ isEditingUser ? 'Update' : 'Create' }} User</span>
       </button>
     </div>
   </form>
 </template>
-
-<style lang="postcss">
-form.errors {
-  :invalid {
-    @apply input-error;
-  }
-}
-</style>

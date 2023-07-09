@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Select from '@/components/Select/Select.vue';
 import { addReservation, removeReservation, reservation, reservations } from '@/stores/reservation';
 import { fetchNewUsers, users } from '@/stores/user';
 import { useStore } from '@nanostores/vue';
@@ -35,7 +34,10 @@ const selectUserOptions = computed(() => [
     };
   }),
 ]);
-const formValues = ref({
+
+const isSubmitting = ref(false);
+const hasErrors = ref(false);
+const formValues = reactive({
   reservationId: props.isEditingReservation ? $reservation.value.reservationId : null,
   userId: props.isEditingReservation && $reservation.value.userId ? $reservation.value.userId : undefined,
   range: {
@@ -43,6 +45,10 @@ const formValues = ref({
     end: props.isEditingReservation ? $reservation.value.checkOutDate : props.selectedDate,
   },
 });
+
+function invalidateForm() {
+  hasErrors.value = true;
+}
 
 const $fetchedReservations = useStore(reservations);
 const disabledDates = computed(() => {
@@ -71,8 +77,8 @@ const popover = ref({
 const usersList = ref();
 const { arrivedState } = useScroll(usersList);
 
-async function submit(e: Event) {
-  e.preventDefault();
+async function submit() {
+  isSubmitting.value = true;
 
   const response = await fetch('/api/reservations', {
     method: props.isEditingReservation ? 'PUT' : 'POST',
@@ -80,7 +86,7 @@ async function submit(e: Event) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formValues.value),
+    body: JSON.stringify(formValues),
   });
 
   if (response.status === 200) {
@@ -90,7 +96,10 @@ async function submit(e: Event) {
   }
 }
 
+const isDeleting = ref(false);
 async function deleteReservation(reservationId) {
+  isDeleting.value = true;
+
   const response = await fetch('/api/reservations', {
     method: 'DELETE',
     headers: {
@@ -114,7 +123,7 @@ watch(arrivedState, ({ bottom }) => {
 </script>
 
 <template>
-  <form @submit="submit">
+  <form @submit.prevent="submit" :class="[{ errors: hasErrors }]">
     <DatePicker
       v-model.range="formValues.range"
       :class="{ 'border-0': smAndLarger }"
@@ -166,7 +175,15 @@ watch(arrivedState, ({ bottom }) => {
       <label for="userId" class="label">
         <span class="label-text">Main guest</span>
       </label>
-      <Select v-model="formValues.userId" :options="selectUserOptions" id="userId" name="userId" required />
+      <select
+        v-model="formValues.userId"
+        id="userId"
+        name="userId"
+        class="select select-bordered w-full max-w-xs"
+        required>
+        <option disabled selected>Who shot first?</option>
+        <option v-for="(option, idx) in selectUserOptions" :key="idx" :value="option.value">{{ option.name }}</option>
+      </select>
     </div>
 
     <div class="mb-4 w-auto block max-w-fit">
@@ -190,13 +207,18 @@ watch(arrivedState, ({ bottom }) => {
         v-if="$reservation.reservationId"
         type="button"
         class="btn btn-error"
-        @click="deleteReservation($reservation.reservationId)">
-        Delete
+        @click="deleteReservation($reservation.reservationId)"
+        :disabled="isDeleting">
+        <span v-if="isDeleting" class="loading loading-spinner"></span>
+        <span v-else>Delete</span>
       </button>
 
       <div class="flex justify-end grow gap-4">
         <button type="button" class="btn btn-link" @click="props.handleCloseModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save Reservation</button>
+        <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+          <span v-if="isSubmitting" class="loading loading-spinner"></span>
+          <span v-else>Save Reservation</span>
+        </button>
       </div>
     </div>
   </form>

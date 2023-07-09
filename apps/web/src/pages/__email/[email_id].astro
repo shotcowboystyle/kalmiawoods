@@ -1,8 +1,8 @@
 ---
+import LayoutEmail from "@/app/LayoutEmail.astro";
 import { getEmail } from "@/auth/email";
 import { isValidFormSubmission } from "@/auth/utils/forms/submission";
 import { prismaClient } from "@/db.js";
-import EmailLayout from "@/layouts/EmailLayout.astro";
 
 const emailId = Astro.params.email_id ?? "";
 
@@ -33,7 +33,7 @@ if (!email) {
 }
 ---
 
-<EmailLayout>
+<LayoutEmail>
   <div class="flex text-sm place-content-between">
     <p class="">To: {email.toAddress}</p>
     <p class="text-zinc-400">{email.dateSent.toLocaleString()}</p>
@@ -49,7 +49,7 @@ if (!email) {
       class="text-sm text-red-400 cursor-pointer hover:underline"
     />
   </form>
-</EmailLayout>
+</LayoutEmail>
 
 <style>
   :global(#email-content a) {

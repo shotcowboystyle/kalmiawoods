@@ -23,6 +23,7 @@ declare module 'vue' {
     LoginForm: typeof import('./components/LoginForm.vue')['default']
     ModalisModal: typeof import('./components/Modalis/Modal.vue')['default']
     ModalModal: typeof import('./components/Modal/Modal.vue')['default']
+    PasswordStrength: typeof import('./components/PasswordStrength.vue')['default']
     ProfileDropdown: typeof import('./components/ProfileDropdown.vue')['default']
     ReservationsCalendarMonth: typeof import('./components/Reservations/CalendarMonth.vue')['default']
     ReservationsCalendarMonthCopy: typeof import('./components/Reservations/CalendarMonth-copy.vue')['default']
