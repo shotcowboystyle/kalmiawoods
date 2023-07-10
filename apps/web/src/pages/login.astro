@@ -2,8 +2,8 @@
 import Svg from '@jasikpark/astro-svg-loader';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
+import { HOME } from '@/app/constants';
 import { auth } from '@/auth/lucia';
-import { HOME } from '@/constants';
 import FormLogin from '@/modules/FormLogin.vue';
 
 const authRequest = auth.handleRequest(Astro);

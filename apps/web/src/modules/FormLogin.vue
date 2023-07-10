@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { HOME } from '@/constants';
+import { HOME } from '@/app/constants';
 
 const hasErrors = ref(false);
 const isSubmitting = ref(false);

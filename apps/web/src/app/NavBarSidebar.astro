@@ -1,7 +1,9 @@
 ---
+import Svg from '@jasikpark/astro-svg-loader';
+
+import { HOME } from '@/app/constants';
 import ColorModeSwitcher from '@/components/ColorModeSwitcher.astro';
 import ProfileDropdown from '@/components/ProfileDropdown.vue';
-import Svg from '@jasikpark/astro-svg-loader';
 ---
 
 <nav
@@ -61,7 +63,7 @@ import Svg from '@jasikpark/astro-svg-loader';
             aria-labelledby="dropdownNavbarButton">
             <li>
               <a
-                href="/"
+                href={HOME}
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >Home</a
               >

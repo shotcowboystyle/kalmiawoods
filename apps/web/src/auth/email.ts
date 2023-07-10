@@ -1,6 +1,6 @@
 // import { Email } from '@kalmiawoods/database';
 
-import { APP_URL } from '@/constants';
+import { APP_URL } from '@/app/constants';
 import { prismaClient } from '@/db.js';
 import { generateId } from '@/utils/generate-id';
 

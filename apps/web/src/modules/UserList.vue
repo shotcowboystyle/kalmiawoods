@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
 
+import { HOME } from '@/app/constants';
 import Modal from '@/components/Modal/Modal.vue';
 import { fetchNewUsers, setActiveUserId, users } from '@/stores/user';
 import { phoneFormatUSA } from '@/utils/phone';
@@ -61,9 +62,7 @@ watch(arrivedState, ({ bottom }) => {
         <nav class="text-sm breadcrumbs" aria-label="Breadcrumb">
           <ul>
             <li>
-              <a href="/">
-                Home
-              </a>
+              <a :href="HOME"> Home </a>
             </li>
             <li>Users</li>
           </ul>
@@ -85,10 +84,7 @@ watch(arrivedState, ({ bottom }) => {
             </form>
           </div>
           <div class="ml-auto flex items-center space-x-2 sm:space-x-3">
-            <button
-              type="button"
-              class="btn btn-primary inline-flex"
-              @click="onCreateUser">
+            <button type="button" class="btn btn-primary inline-flex" @click="onCreateUser">
               <svg
                 class="-ml-1 mr-2 h-5 w-5"
                 fill="currentColor"
@@ -144,11 +140,7 @@ watch(arrivedState, ({ bottom }) => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                <tr
-                  v-for="(user) in $users"
-                  :key="user.id"
-                  :data="user"
-                  class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                <tr v-for="user in $users" :key="user.id" :data="user" class="hover:bg-gray-100 dark:hover:bg-gray-700">
                   <td class="w-4 p-4">
                     <div class="flex items-center">
                       <input
@@ -194,10 +186,7 @@ watch(arrivedState, ({ bottom }) => {
                     </div>
                   </td>
                   <td class="space-x-2 whitespace-nowrap p-4">
-                    <button
-                      type="button"
-                      class="btn btn-primary inline-flex"
-                      @click="onEditUser(user.id)">
+                    <button type="button" class="btn btn-primary inline-flex" @click="onEditUser(user.id)">
                       <svg
                         class="mr-2 h-4 w-4"
                         fill="currentColor"
@@ -211,10 +200,7 @@ watch(arrivedState, ({ bottom }) => {
                       </svg>
                       Edit user
                     </button>
-                    <button
-                      type="button"
-                      class="btn btn-error"
-                      @click="onDeleteUser(user.id)">
+                    <button type="button" class="btn btn-error" @click="onDeleteUser(user.id)">
                       <svg
                         class="mr-2 h-4 w-4"
                         fill="currentColor"

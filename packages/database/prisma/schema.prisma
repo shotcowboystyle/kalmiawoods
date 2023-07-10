@@ -6,9 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_URL")
-  // extensions = [uuid_ossp(map: "uuid-ossp")]
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 /// Complete data structure of the User entity for the database and GraphQL.

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { HOME } from '@/app/constants';
 import PasswordStrength from '@/components/PasswordStrength.vue';
-import { HOME } from '@/constants';
 
 const props = defineProps({
   token: {

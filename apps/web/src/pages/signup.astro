@@ -2,10 +2,10 @@
 import { LuciaError } from 'lucia-auth';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
+import { HOME } from '@/app/constants';
 import { sendEmailVerificationEmail } from '@/auth/email';
 import { auth, emailVerificationToken } from '@/auth/lucia';
 import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
-import { HOME } from '@/constants';
 import FormSignUp from '@/modules/FormSignUp.astro';
 
 const authRequest = auth.handleRequest(Astro);
