@@ -1,15 +1,13 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
-import { auth } from '@/auth/lucia';
 import FullCalendar from '@/modules/FullCalendar.vue';
 
-const authRequest = auth.handleRequest(Astro);
-const { user } = await authRequest.validateUser();
+const { user } = await Astro.locals.auth.validateUser();
 if (!user) {
   return Astro.redirect('/login', 302);
 }
-if (!user.emailVerified || user.status !== 'REGISTERED') {
-  return Astro.redirect('/complete-registration', 302);
+if (!user.emailVerified) {
+  return Astro.redirect('/email-verification', 302);
 }
 ---
 

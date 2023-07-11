@@ -1,16 +1,9 @@
 import type { APIRoute } from 'astro';
 
-import { auth, completeRegistrationToken } from '@/auth/lucia';
-import { isValidFormSubmission } from '@/auth/utils/forms/submission';
+import { auth } from '@/lib/lucia';
+import { emailVerificationToken } from '@/services/verification-token';
 
 export const post: APIRoute = async (context) => {
-  const validSubmission = isValidFormSubmission(context.request);
-  if (!validSubmission) {
-    return new Response(null, {
-      status: 403,
-    });
-  }
-
   const data = await context.request.json();
   const { password } = data;
 
@@ -22,19 +15,17 @@ export const post: APIRoute = async (context) => {
   }
 
   try {
-    const token = await completeRegistrationToken.validate(context.params.token ?? '');
+    const token = await emailVerificationToken.validate(context.params.token ?? '');
     let user = await auth.getUser(token.userId);
     if (!user.emailVerified) {
       user = await auth.updateUserAttributes(user.userId, {
         email_verified: true,
-        status: 'REGISTERED',
       });
     }
     await auth.invalidateAllUserSessions(user.userId);
     await auth.updateKeyPassword('email', user.email, password);
     const session = await auth.createSession(user.userId);
-    const authRequest = auth.handleRequest(context);
-    authRequest.setSession(session);
+    context.locals.auth.setSession(session);
     return new Response(JSON.stringify({ message: 'Success' }), {
       status: 200,
       headers: { 'content-type': 'application/json' },
@@ -42,7 +33,7 @@ export const post: APIRoute = async (context) => {
   } catch (error) {
     return new Response(
       JSON.stringify({
-        message: 'There was an error creating this user. Please try again later.',
+        message: 'There was an error completing registration for this user. Please try again later.',
       }),
       {
         status: 500,

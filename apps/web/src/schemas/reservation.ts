@@ -1,18 +1,18 @@
 import { z } from 'zod';
 
-import { NoIDUser } from './user';
+import { AuthUserSchema } from './auth';
+import { UserProfileWithoutIdSchema } from './user';
 
-export const ReservationDetailsSchema = z.object({
-  reservationId: z.string(),
+// const BUILDING_VALUES = ['HOUSE', 'WORKSHOP'] as const;
+export const BuildingEnum = z.enum(['HOUSE', 'WORKSHOP']);
+
+export const ReservationSchema = z.object({
+  id: z.string(),
   checkInDate: z.date(),
   checkOutDate: z.date(),
-});
-
-const ReservationUser = z.object({
+  buildings: z.array(BuildingEnum).max(2),
   userId: z.string(),
-  user: NoIDUser,
+  user: UserProfileWithoutIdSchema.merge(AuthUserSchema.pick({ email: true })),
 });
-
-export const ReservationSchema = ReservationDetailsSchema.merge(ReservationUser);
 
 export const Reservations = ReservationSchema.array();

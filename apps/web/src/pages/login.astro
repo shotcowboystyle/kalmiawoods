@@ -3,20 +3,15 @@ import Svg from '@jasikpark/astro-svg-loader';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { HOME } from '@/app/constants';
-import { auth } from '@/auth/lucia';
 import FormLogin from '@/modules/FormLogin.vue';
 
-const authRequest = auth.handleRequest(Astro);
-
-const { session, user } = await authRequest.validateUser();
-if (user) {
-  if (!user.emailVerified || user.status !== 'REGISTERED') {
-    return Astro.redirect('/complete-registration', 302);
+const { session, user } = await Astro.locals.auth.validateUser();
+if (session) {
+  if (!user.emailVerified) {
+    return Astro.redirect('/email-verification', 302);
   }
 
-  if (session) {
-    return Astro.redirect(HOME, 302);
-  }
+  return Astro.redirect(HOME, 302);
 }
 ---
 

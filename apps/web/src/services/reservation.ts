@@ -1,13 +1,14 @@
 import { prismaClient } from '@/db.js';
 // import typo { Reservation } from '@kalmiawoods/database';
-import { Reservation } from '@/types/reservation';
+import type { BuildingEnum, Reservation } from '@/types/Reservation';
 import { generateId } from '@/utils/generate-id';
 
 const transformDatabaseReservation = (databaseReservation: any): Reservation => ({
-  reservationId: databaseReservation.id,
+  id: databaseReservation.id,
   checkInDate: databaseReservation.check_in_date,
   checkOutDate: databaseReservation.check_out_date,
-  userId: databaseReservation.user_id,
+  buildings: databaseReservation.buildings,
+  userId: databaseReservation.auth_user.id,
   user: {
     email: databaseReservation.auth_user.email,
     address: databaseReservation.auth_user.profile.address,
@@ -21,10 +22,12 @@ const transformDatabaseReservation = (databaseReservation: any): Reservation => 
 export const createReservation = async ({
   checkInDate,
   checkOutDate,
+  buildings,
   userId,
 }: {
   checkInDate: Date;
   checkOutDate: Date;
+  buildings: BuildingEnum[];
   userId: string;
 }) => {
   const createdReservation = await prismaClient.reservation.create({
@@ -37,8 +40,9 @@ export const createReservation = async ({
     },
     data: {
       id: generateId(8),
-      check_in_date: new Date(checkInDate),
-      check_out_date: new Date(checkOutDate),
+      check_in_date: checkInDate,
+      check_out_date: checkOutDate,
+      buildings,
       user_id: userId,
     },
   });
@@ -50,32 +54,39 @@ export const updateReservation = async ({
   reservationId,
   checkInDate,
   checkOutDate,
+  buildings,
 }: {
   reservationId: string;
   checkInDate: Date;
   checkOutDate: Date;
+  buildings: BuildingEnum[];
 }) => {
-  const updatedReservation = await prismaClient.reservation.update({
-    where: { id: reservationId },
-    data: {
-      check_in_date: new Date(checkInDate),
-      check_out_date: new Date(checkOutDate),
-    },
-    include: {
-      auth_user: {
-        include: {
-          profile: true,
+  try {
+    const updatedReservation = await prismaClient.reservation.update({
+      where: { id: reservationId },
+      data: {
+        check_in_date: new Date(checkInDate),
+        check_out_date: new Date(checkOutDate),
+        buildings,
+      },
+      include: {
+        auth_user: {
+          include: {
+            profile: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return transformDatabaseReservation(updatedReservation);
+    return transformDatabaseReservation(updatedReservation);
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 interface ReservationQuery {
-  startDate: string;
-  endDate: string;
+  startDate?: string | null;
+  endDate?: string | null;
 }
 
 export const getReservations = async (reservationQuery: ReservationQuery) => {
@@ -88,53 +99,66 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
   // const startDateCheckString = `"${formatQueryDateRange(startDateCheck)}"`;
   // const startEndDateCheck = `"${formatQueryDateRange(endDateCheck)}"`;
 
-  const databaseReservations = await prismaClient.reservation.findMany({
-    where: {
-      check_in_date: {
-        gte: startDateCheck,
+  try {
+    const databaseReservations = await prismaClient.reservation.findMany({
+      where: {
+        check_in_date: {
+          gte: startDateCheck,
+        },
+        // check_out_date: {
+        //   lte: endDateCheck,
+        // },
       },
-      // check_out_date: {
-      //   lte: endDateCheck,
-      // },
-    },
-    include: {
-      auth_user: {
-        include: {
-          profile: true,
+      include: {
+        auth_user: {
+          include: {
+            profile: true,
+          },
         },
       },
-    },
-    // orderBy: {
-    //   date_sent: "desc",
-    // },
-  });
+      // orderBy: {
+      //   date_sent: "desc",
+      // },
+    });
 
-  // return databaseReservations.map((databaseReservation: Reservation) => {
-  return databaseReservations.map((databaseReservation: any) => transformDatabaseReservation(databaseReservation));
+    // return databaseReservations.map((databaseReservation: Reservation) => {
+    return databaseReservations.map((databaseReservation: any) => transformDatabaseReservation(databaseReservation));
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 export const getReservation = async (reservationId: string) => {
-  const databaseReservation = await prismaClient.reservation.findFirst({
-    where: {
-      id: reservationId,
-    },
-    include: {
-      auth_user: {
-        include: {
-          profile: true,
+  try {
+    const databaseReservation = await prismaClient.reservation.findFirst({
+      where: {
+        id: reservationId,
+      },
+      include: {
+        auth_user: {
+          include: {
+            profile: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!databaseReservation) {
-    return null;
+    if (!databaseReservation) {
+      return null;
+    }
+
+    return transformDatabaseReservation(databaseReservation);
+  } catch (error) {
+    throw new Error(error);
   }
-
-  return transformDatabaseReservation(databaseReservation);
 };
 
-export const deleteReservation = async (reservationId: string) =>
-  prismaClient.reservation.delete({
-    where: { id: reservationId },
-  });
+export const deleteReservation = async (reservationId: string) => {
+  try {
+    return await prismaClient.reservation.delete({
+      where: { id: reservationId },
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -1,12 +1,9 @@
 import type { APIRoute } from 'astro';
 
-import { auth } from '@/auth/lucia';
-import { isValidFormSubmission } from '@/auth/utils/forms/submission';
 import { createReservation, deleteReservation, getReservations, updateReservation } from '@/services/reservation';
 
 export const get: APIRoute = async (context) => {
-  const authRequest = auth.handleRequest(context);
-  const { session } = await authRequest.validateUser();
+  const session = await context.locals.auth.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -37,13 +34,7 @@ export const get: APIRoute = async (context) => {
 };
 
 export const post: APIRoute = async (context) => {
-  const validSubmission = isValidFormSubmission(context.request);
-  if (!validSubmission) {
-    return null;
-  }
-
-  const authRequest = auth.handleRequest(context);
-  const { user, session } = await authRequest.validateUser();
+  const { user, session } = await context.locals.auth.validateUser();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -82,13 +73,7 @@ export const post: APIRoute = async (context) => {
 };
 
 export const put: APIRoute = async (context) => {
-  const validSubmission = isValidFormSubmission(context.request);
-  if (!validSubmission) {
-    return null;
-  }
-
-  const authRequest = auth.handleRequest(context);
-  const { user, session } = await authRequest.validateUser();
+  const session = await context.locals.auth.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -127,8 +112,7 @@ export const put: APIRoute = async (context) => {
 };
 
 export const del: APIRoute = async (context) => {
-  const authRequest = auth.handleRequest(context);
-  const { user, session } = await authRequest.validateUser();
+  const session = await context.locals.auth.validate();
   if (!session) {
     return new Response(
       JSON.stringify({

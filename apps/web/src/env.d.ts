@@ -1,8 +1,23 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="@astrojs/image/client" />
+declare namespace App {
+  interface Locals {
+    auth: import('lucia-auth').AuthRequest;
+  }
+}
+
+/// <reference types="lucia-auth" />
+declare namespace Lucia {
+  type Auth = import('@/lib/lucia').Auth;
+  type DatabaseUserAttributes = Omit<import('@kalmiawoods/database').AuthUser, 'id'> & {
+    email: string;
+    email_verified: boolean;
+    role: 'USER' | 'ADMIN';
+  };
+  type DatabaseSessionAttributes = {};
+}
 
 declare module 'spotlight.js/src/js/spotlight.js';
-// declare module '@kalmiawoods/ui';
 // declare module '@kalmiawoods/database';
 
 // this is a temporary fix for the alpha.6 v-calendar version
@@ -26,12 +41,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
-
-// declare namespace App {
-//   interface Locals {
-//     user: {
-//       fullName: string;
-//       role: string;
-//     };
-//   }
-// }

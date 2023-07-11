@@ -1,13 +1,11 @@
-// import { Email } from '@kalmiawoods/database';
+import type { Email } from '@prisma/client';
 
 import { APP_URL } from '@/app/constants';
 import { prismaClient } from '@/db.js';
-import { generateId } from '@/utils/generate-id';
 
 const sendEmail = async (emailAddress: string, subject: string, content: string) => {
   await prismaClient.email.create({
     data: {
-      id: generateId(8),
       subject,
       email_address: emailAddress,
       content,
@@ -16,19 +14,12 @@ const sendEmail = async (emailAddress: string, subject: string, content: string)
   });
 };
 
-export const sendCompleteRegistrationEmail = async (emailAddress: string, registrationToken: string) => {
-  const resetLink = `${APP_URL}/complete-registration/${registrationToken}`;
+export const sendEmailVerificationEmail = async (emailAddress: string, verificationToken: string) => {
+  const resetLink = `${APP_URL}/email-verification/${verificationToken}`;
   const emailContent = `Please complete your registration for Kalmia Woods via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;
   await sendEmail(emailAddress, 'Complete registration for Kalmia Woods', emailContent);
-};
-
-export const sendEmailVerificationEmail = async (emailAddress: string, verificationToken: string) => {
-  const verificationLink = `${APP_URL}/email-verification/${verificationToken}`;
-  const emailContent = `Please verify your email by clicking the link below:<br/><br/>
-<a href="${verificationLink}">${verificationLink}</a>`;
-  await sendEmail(emailAddress, 'Email verification', emailContent);
 };
 
 export const sendPasswordResetEmail = async (emailAddress: string, resetToken: string) => {
@@ -39,8 +30,7 @@ export const sendPasswordResetEmail = async (emailAddress: string, resetToken: s
   await sendEmail(emailAddress, 'Password reset', emailContent);
 };
 
-// const transformDatabaseEmail = (databaseEmail: Email) => {
-const transformDatabaseEmail = (databaseEmail: any) => ({
+const transformDatabaseEmail = (databaseEmail: Email) => ({
   emailId: databaseEmail.id,
   toAddress: databaseEmail.email_address,
   dateSent: databaseEmail.date_sent,
@@ -60,8 +50,7 @@ export const getEmails = async (emailAddressQuery?: string) => {
     },
   });
 
-  // return databaseEmails.map((databaseEmail: Email) => {
-  return databaseEmails.map((databaseEmail: any) => transformDatabaseEmail(databaseEmail));
+  return databaseEmails.map((databaseEmail: Email) => transformDatabaseEmail(databaseEmail));
 };
 
 export const getEmail = async (emailId: string) => {
