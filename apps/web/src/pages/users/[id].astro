@@ -1,11 +1,23 @@
 ---
-import LayoutStacked from '@/app/LayoutStacked.astro';
+import LayoutSidebar from '@/app/LayoutSidebar.astro';
+import UserSettings from '@/components/UserSettings.vue';
 
-import UserItemList from '@/components/UserItemList.vue';
+const { session, user } = await Astro.locals.auth.validateUser();
+if (!session) {
+  return Astro.redirect('/login', 302);
+}
+if (!user.emailVerified) {
+  return Astro.redirect('/email-verification', 302);
+}
+if (user.role !== 'ADMIN') {
+  return Astro.redirect('/403', 302);
+}
 
 const { id } = Astro.params
 ---
 
-<LayoutStacked>
-  <UserItemList mode={id} class="p-2 md:p-4" client:load />
-</LayoutStacked>
+<LayoutSidebar>
+  <div class="p-2 md:p-4">
+    <UserSettings mode={id} client:only="vue" />
+  </div>
+</LayoutSidebar>

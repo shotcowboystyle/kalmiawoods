@@ -8,5 +8,3 @@ export const isValidFormSubmission = (request: Request) => {
   }
   return true;
 };
-
-export const emailRegex = /^.+@.+/;

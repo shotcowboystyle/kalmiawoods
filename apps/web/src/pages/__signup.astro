@@ -1,29 +1,23 @@
 ---
+import { Prisma } from '@prisma/client';
 import { LuciaError } from 'lucia-auth';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { HOME } from '@/app/constants';
-import { sendEmailVerificationEmail } from '@/auth/email';
-import { auth, emailVerificationToken } from '@/auth/lucia';
-import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
+import { auth } from '@/lib/lucia';
 import FormSignUp from '@/modules/FormSignUp.astro';
-
-const authRequest = auth.handleRequest(Astro);
+import { sendEmailVerificationEmail } from '@/services/email';
+import { emailVerificationToken } from '@/services/verification-token';
+import { emailRegex } from '@/utils/email';
 
 let errorMessage: string | null = null;
 let email = '';
 let role = 'USER';
-let status = 'CREATED';
 
-const handleFormSubmission = async (): Promise<Response | null> => {
-  const validSubmission = isValidFormSubmission(Astro.request);
-  if (!validSubmission) {
-    return null;
-  }
+if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
   email = formData.get('email')?.toString() ?? '';
   role = formData.get('role')?.toString() ?? 'USER';
-  status = formData.get('status')?.toString() ?? 'CREATED';
   if (email === null || !emailRegex.test(email)) {
     errorMessage = 'Invalid email';
     return null;
@@ -44,14 +38,13 @@ const handleFormSubmission = async (): Promise<Response | null> => {
         email,
         email_verified: false,
         role,
-        status,
       },
     });
     const session = await auth.createSession(user.userId);
-    authRequest.setSession(session);
+    Astro.locals.auth.setSession(session);
     const token = await emailVerificationToken.issue(user.userId);
     await sendEmailVerificationEmail(email, token.toString());
-    return Astro.redirect('/complete-registration', 302);
+    return Astro.redirect('/email-verification', 302);
   } catch (e: any) {
     if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
       errorMessage = 'Email is already taken';
@@ -59,32 +52,23 @@ const handleFormSubmission = async (): Promise<Response | null> => {
     }
 
     // duplication error
-    // if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-    if (e.code === 'P2002') {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
       errorMessage = 'Email is already taken';
       return null;
     }
 
-    console.log('ERROR', e);
     errorMessage = 'An unknown error occurred';
     return null;
   }
-};
-
-const formSubmissionResponse = await handleFormSubmission();
-if (formSubmissionResponse) {
-  return formSubmissionResponse;
 }
 
-const { session, user } = await authRequest.validateUser();
-if (user) {
+const { session, user } = await Astro.locals.auth.validateUser();
+if (session) {
   if (!user.emailVerified) {
-    return Astro.redirect('/complete-registration', 302);
+    return Astro.redirect('/email-verification', 302);
   }
 
-  if (session) {
-    return Astro.redirect(HOME, 302);
-  }
+  return Astro.redirect(HOME, 302);
 }
 ---
 

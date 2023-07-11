@@ -1,8 +1,12 @@
-import { sendCompleteRegistrationEmail } from '@/auth/email';
-import { auth, completeRegistrationToken } from '@/auth/lucia';
+import { Prisma } from '@prisma/client';
+import { LuciaError } from 'lucia-auth';
+
 import { prismaClient } from '@/db.js';
-import type { User } from '@/types/user';
-import { generateId } from '@/utils/generate-id';
+import { auth } from '@/lib/lucia';
+import { sendEmailVerificationEmail } from '@/services/email';
+import { emailVerificationToken } from '@/services/verification-token';
+// import type { User, UserProfile } from '@/types/User';
+import type { User, UserProfileWithoutId } from '@/types/User';
 import { generatePassword } from '@/utils/generate-password';
 
 const transformDatabaseUserWithProfile = (databaseUserWithProfile: any): User => ({
@@ -10,7 +14,6 @@ const transformDatabaseUserWithProfile = (databaseUserWithProfile: any): User =>
   email: databaseUserWithProfile.email,
   emailVerified: databaseUserWithProfile.email_verified,
   role: databaseUserWithProfile.role,
-  status: databaseUserWithProfile.status,
   address: databaseUserWithProfile.profile?.address ?? null,
   firstName: databaseUserWithProfile.profile?.first_name ?? null,
   lastName: databaseUserWithProfile.profile?.last_name ?? null,
@@ -20,70 +23,125 @@ const transformDatabaseUserWithProfile = (databaseUserWithProfile: any): User =>
 
 export const createUser = async (data: User) => {
   const password = generatePassword();
-  const authUser = await auth.createUser({
-    primaryKey: {
-      providerId: 'email',
-      providerUserId: data.email,
-      password,
-    },
-    attributes: {
-      email: data.email,
-      email_verified: false,
-      role: 'USER',
-      status: 'CREATED',
-    },
-  });
 
-  const token = await completeRegistrationToken.issue(authUser.userId);
-  await sendCompleteRegistrationEmail(data.email, token.toString());
+  let createdUser;
+  try {
+    createdUser = await auth.createUser({
+      primaryKey: {
+        providerId: 'email',
+        providerUserId: data.email,
+        password,
+      },
+      attributes: {
+        email: data.email,
+        email_verified: false,
+        role: 'USER',
+      },
+    });
+  } catch (error: any) {
+    if (error instanceof LuciaError && error.message === 'AUTH_DUPLICATE_KEY_ID') {
+      throw new Error('Email is already taken');
+    }
 
-  const createdUser = await prismaClient.authUser.update({
-    where: {
-      id: authUser.userId,
-    },
-    data: {
-      profile: {
-        update: {
-          first_name: data.firstName,
-          last_name: data.lastName,
-          address: data.address ?? null,
-          mobile_phone: data.mobilePhone?.replace(/\D/g,'') ?? null,
-          avatar: data.avatar ?? null,
+    // duplication error
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      throw new Error('Email is already taken');
+    }
+
+    throw new Error('An unknown error occurred');
+  }
+
+  const { userId } = createdUser;
+  const token = await emailVerificationToken.issue(userId);
+  await sendEmailVerificationEmail(data.email, token.toString());
+
+  try {
+    createdUser = await prismaClient.authUser.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profile: {
+          create: {
+            first_name: data.firstName,
+            last_name: data.lastName,
+            address: data.address,
+            mobile_phone: data.mobilePhone?.replace(/\D/g, ''),
+            avatar: data.avatar,
+          },
         },
       },
-    },
-    include: {
-      profile: true,
-    },
-  });
+      include: {
+        profile: true,
+      },
+    });
+  } catch (error: any) {
+    throw new Error('An unknown error occurred');
+  }
 
   return transformDatabaseUserWithProfile(createdUser);
 };
 
-export const updateUser = async (data: Partial<User>) => {
-  const updatedUser = await prismaClient.authUser.update({
-    where: { id: data.id },
-    data: {
-      email: data.email,
-      email_verified: data.emailVerified,
-      status: data.status,
-      profile: {
-        upsert: {
-          id: generateId(8),
-          first_name: data.firstName,
-          last_name: data.lastName,
-          address: data.address,
-          mobile_phone: data.mobilePhone?.replace(/\D/g,''),
-          avatar: data.avatar,
-        },
-      },
-    },
+export const updateUserEmail = async (userId: string, email: string) => {
+  try {
+    return await auth.updateUserAttributes(userId, {
+      email,
+    });
+  } catch (error: any) {
+    if (error instanceof LuciaError && error.message === 'AUTH_DUPLICATE_KEY_ID') {
+      throw new Error('Email is already taken');
+    }
+
+    // duplication error
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      throw new Error('Email is already taken');
+    }
+
+    throw new Error('An unknown error occurred');
+  }
+};
+
+export const updateUserPassword = async (email: string, password: string) => {
+  if ((password as any) instanceof File || password === null || password.length < 8) {
+    throw new Error('Invalid password');
+  }
+
+  try {
+    return await auth.updateKeyPassword('email', email, password);
+  } catch (error: any) {
+    throw new Error('An unknown error occurred');
+  }
+};
+
+export const updateUserProfile = async (userId: string, data: UserProfileWithoutId) => {
+  const updatedUserProfile = await prismaClient.authUser.update({
+    where: { id: userId },
     include: {
       profile: true,
     },
+    data: {
+      profile: {
+        upsert: {
+          update: {
+            ...(data.firstName && { first_name: data.firstName }),
+            ...(data.lastName && { last_name: data.lastName }),
+            ...(data.address && { address: data.address }),
+            ...(data.mobilePhone && { mobile_phone: data.mobilePhone?.replace(/\D/g, '') }),
+            // ...(data.avatar && { avatar: data.avatar }),
+          },
+          create: {
+            first_name: data.firstName,
+            last_name: data.lastName,
+            address: data.address,
+            mobile_phone: data.mobilePhone?.replace(/\D/g, ''),
+            // avatar: data.avatar,
+          },
+        },
+      },
+    },
   });
 
-  return transformDatabaseUserWithProfile(updatedUser);
+  return transformDatabaseUserWithProfile(updatedUserProfile);
 };
 
 export const getUsers = async () => {

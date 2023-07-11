@@ -1,19 +1,10 @@
 import type { APIRoute } from 'astro';
 import { LuciaError } from 'lucia-auth';
 
-import { auth } from '@/auth/lucia';
-import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
+import { auth } from '@/lib/lucia';
+import { emailRegex } from '@/utils/email';
 
 export const post: APIRoute = async (context) => {
-  const validSubmission = isValidFormSubmission(context.request);
-  if (!validSubmission) {
-		return new Response(null, {
-			status: 403
-		});
-  }
-
-  const authRequest = auth.handleRequest(context);
-
   const genericErrorMessage = 'Incorrect email or password';
   const data = await context.request.json();
   const { email, password } = data;
@@ -45,7 +36,7 @@ export const post: APIRoute = async (context) => {
   try {
     const key = await auth.useKey('email', email, password);
     const session = await auth.createSession(key.userId);
-    authRequest.setSession(session);
+    context.locals.auth.setSession(session);
     return new Response(JSON.stringify({ userId: key.userId }), {
       status: 200,
       headers: { 'content-type': 'application/json' },

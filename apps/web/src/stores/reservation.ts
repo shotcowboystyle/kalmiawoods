@@ -1,7 +1,7 @@
 import { action, atom, computed, map } from 'nanostores';
 
 import { apiRoute } from '@/stores/routes';
-import type { Reservation } from '@/types/reservation';
+import type { Reservation } from '@/types/Reservation';
 import { convertArrayToObjectsByKey } from '@/utils/collection';
 import { firstDayOfCurrentMonth, getFirstDayOfMonth, getLastDayOfMonth, lastDayOfCurrentMonth } from '@/utils/date';
 import { createFetcherStore, isReady } from './fetcher';
@@ -14,7 +14,7 @@ const setMonthStartDate = action(monthStartDate, 'setMonthStartDate', (date, pay
 const monthEndDate = atom<string>(lastDayOfCurrentMonth().toDateString());
 const setMonthEndDate = action(monthEndDate, 'setMonthEndDate', (date, payload: string) => date.set(payload));
 
-export const reservations = map<Record<string, Reservation>>({});
+export const reservations = map<Record<string, Reservation | undefined>>({});
 
 const reservationsPartial = createFetcherStore<Reservation[]>([
   API_URL,
@@ -61,7 +61,7 @@ const initReservationData = {
   checkOutDate: null,
 };
 
-export const activeReservationId = atom<string>(null);
+export const activeReservationId = atom<string | null>(null);
 export const setActiveReservationId = action(activeReservationId, 'setActiveReservationId', (id, newVal) =>
   id.set(newVal),
 );
@@ -69,7 +69,7 @@ export const setActiveReservationId = action(activeReservationId, 'setActiveRese
 export const reservation = computed(
   [reservations, activeReservationId],
   (_reservations, _reservationId) =>
-    Object.values(_reservations).find((r) => r.reservationId === _reservationId) ?? initReservationData,
+    Object.values(_reservations).find((r) => r?.id === _reservationId) ?? initReservationData,
 );
 
 export const reservationDates = map({

@@ -1,18 +1,12 @@
 import type { APIRoute } from 'astro';
 
-import { sendPasswordResetEmail } from '@/auth/email';
-import { auth, passwordResetToken } from '@/auth/lucia';
-import { emailRegex, isValidFormSubmission } from '@/auth/utils/forms/submission';
 import { prismaClient } from '@/db.js';
+import { auth } from '@/lib/lucia';
+import { sendPasswordResetEmail } from '@/services/email';
+import { passwordResetToken } from '@/services/verification-token';
+import { emailRegex } from '@/utils/email';
 
 export const post: APIRoute = async (context) => {
-  const validSubmission = isValidFormSubmission(context.request);
-  if (!validSubmission) {
-    return new Response(null, {
-      status: 403,
-    });
-  }
-
   const data = await context.request.json();
   const { email } = data;
 

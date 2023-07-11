@@ -1,15 +1,13 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
-import { auth } from '@/auth/lucia';
 import UserList from '@/modules/UserList.vue';
 
-const authRequest = auth.handleRequest(Astro);
-const { user } = await authRequest.validateUser();
-if (!user) {
+const { session, user } = await Astro.locals.auth.validateUser();
+if (!session) {
   return Astro.redirect('/login', 302);
 }
-if (!user.emailVerified || user.status !== 'REGISTERED') {
-  return Astro.redirect('/complete-registration', 302);
+if (!user.emailVerified) {
+  return Astro.redirect('/email-verification', 302);
 }
 if (user.role !== 'ADMIN') {
   return Astro.redirect('/403', 302);
@@ -17,5 +15,7 @@ if (user.role !== 'ADMIN') {
 ---
 
 <LayoutSidebar>
-  <UserList client:only="vue" />
+  <div class="p-2 md:p-4">
+    <UserList client:only="vue" />
+  </div>
 </LayoutSidebar>

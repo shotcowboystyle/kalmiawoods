@@ -1,53 +1,58 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
-import { sendEmailVerificationEmail } from '@/auth/email';
-import { auth, emailVerificationToken } from '@/auth/lucia';
-import { isValidFormSubmission } from '@/auth/utils/forms/submission';
+import { prismaClient } from '@/db.js';
+import { auth } from '@/lib/lucia';
+import { sendEmailVerificationEmail } from '@/services/email';
+import { emailVerificationToken } from '@/services/verification-token';
+import { isValidEmail } from '@/utils/email';
 
-const authRequest = auth.handleRequest(Astro);
+let email: string | null = null;
+let errorMessage: string | null = null;
+let success = false;
 
-let errorMessage = '';
-
-const handleFormSubmission = async (): Promise<Response | null> => {
-  const validSubmission = isValidFormSubmission(Astro.request);
-  if (!validSubmission) {
-    return null;
-  }
-  const { user } = await authRequest.validateUser();
-  if (!user || user.emailVerified) {
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  email = formData.get('email')?.toString() ?? '';
+  if (email === null || !isValidEmail(email)) {
+    errorMessage = 'Invalid email';
     return null;
   }
   try {
+    const databaseUser = await prismaClient.authUser.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!databaseUser) {
+      errorMessage = 'Email does not exist';
+      return null;
+    }
+
+    const user = auth.transformDatabaseUser(databaseUser);
     const token = await emailVerificationToken.issue(user.userId);
     await sendEmailVerificationEmail(user.email, token.toString());
+    success = true;
     return null;
   } catch (e) {
     errorMessage = 'An unknown error occurred';
     return null;
   }
-};
-
-const response = await handleFormSubmission();
-if (response) {
-  return response;
 }
 
-const { user } = await authRequest.validateUser();
-
-if (!user) {
-  return Astro.redirect('/login', 302);
-}
-if (user.emailVerified) {
+const { session, user } = await Astro.locals.auth.validateUser();
+if (session && user.emailVerified) {
   return Astro.redirect('/', 302);
 }
 ---
 
 <LayoutStacked>
-  <h1>Email verification</h1>
-  <p>Please check your inbox ({user.email}) for a verification email</p>
-  <h2>Resend verification email</h2>
+  <h1>Complete registration</h1>
   <form method="post">
-    <input type="submit" value="Resend email" />
+    <label for="email">Email</label>
+    <input id="email" name="email" value={email} />
+    <input type="submit" class="btn btn-primary" value="Send email" />
   </form>
   {errorMessage && <p class="error">{errorMessage}</p>}
+  {success && <p class="message">A verification email was sent to your inbox.</p>}
 </LayoutStacked>

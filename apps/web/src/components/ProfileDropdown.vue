@@ -51,10 +51,10 @@ const onToggle = () => (dropdownOpen.value = !dropdownOpen.value);
         </li>
         <li>
           <a
-            href="/settings"
+            href="/profile"
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
             role="menuitem"
-            >Settings</a
+            >Profile</a
           >
         </li>
         <li>

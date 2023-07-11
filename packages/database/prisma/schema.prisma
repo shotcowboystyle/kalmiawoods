@@ -27,9 +27,7 @@ model AuthUser {
   // /// User's password
   // password              String?
   /// User's access role
-  role           String  @default("USER")
-  /// User's registration status
-  status         String  @default("CREATED")
+  role           Role    @default(USER)
 
   auth_session AuthSession[]
   auth_key     AuthKey[]
@@ -48,7 +46,7 @@ model AuthUser {
 /// A Profile represents a User's details.
 model UserProfile {
   /// Profile's unique identifier
-  id           String  @id @unique
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   /// Profile's mailing address
   address      String?
   /// Profile's first name
@@ -66,7 +64,7 @@ model UserProfile {
 
   /// The database identifier of the User associated with this Profile
   user_id   String   @unique
-  auth_user AuthUser @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  auth_user AuthUser @relation(fields: [user_id], references: [id])
 
   @@map("user_profile")
 }
@@ -95,7 +93,7 @@ model AuthKey {
 }
 
 model Email {
-  id            String   @id @unique
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   subject       String
   email_address String
   date_sent     DateTime
@@ -106,12 +104,14 @@ model Email {
 
 model Reservation {
   /// Reservation's unique identifier
-  id String @id @unique
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
   /// Start date of Reservation
   check_in_date  DateTime
   /// End date of Reservation
   check_out_date DateTime
+
+  buildings Building[] @default([HOUSE])
 
   // /// Date of Reservation's creation in the database
   // createdAt   DateTime @default(now()) @map("created_at")
@@ -125,13 +125,12 @@ model Reservation {
   @@map("reservations")
 }
 
-// enum Role {
-//   USER
-//   ADMIN
-// }
+enum Role {
+  USER
+  ADMIN
+}
 
-// enum Status {
-//   CREATED
-//   DELETED
-//   REGISTERED
-// }
+enum Building {
+  HOUSE
+  WORKSHOP
+}

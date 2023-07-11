@@ -1,18 +1,22 @@
 import { z } from 'zod';
 
-import { AuthUser } from './auth';
+import { AuthUserSchema } from './auth';
 
-export const UserProfile = z.object({
+export const UserProfileSchema = z.object({
+  id: z.string(),
   address: z.string().optional(),
-  firstName: z.string().nonempty(),
-  lastName: z.string().nonempty(),
-  mobilePhone: z.string().nonempty(),
+  firstName: z.string(),
+  lastName: z.string(),
+  mobilePhone: z.string().length(10),
   avatar: z.string().optional(),
 });
 
-export const User = AuthUser.merge(UserProfile);
+export const UserProfileWithoutIdSchema = UserProfileSchema.omit({ id: true });
 
-export const NoIDUser = User.omit({ id: true, role: true, status: true });
-export type NoIDUser = z.infer<typeof NoIDUser>;
+export const AuthUserWithProfileSchema = AuthUserSchema.merge(z.object({ profile: UserProfileSchema }));
 
-export const Users = User.array();
+export const UserSchema = AuthUserSchema.merge(UserProfileWithoutIdSchema);
+
+export const UserWithoutIdSchema = UserSchema.omit({ id: true });
+
+export const UsersSchema = UserSchema.array();

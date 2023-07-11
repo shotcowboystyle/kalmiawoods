@@ -6,17 +6,10 @@ enum Role {
   ADMIN = 'ADMIN',
 }
 
-enum Status {
-  CREATED = 'CREATED',
-  REGISTERED = 'REGISTERED',
-  DELETED = 'DELETED',
-}
-
 interface AuthUser {
   isLoading: boolean;
   email: string;
   role: Role;
-  status: Status;
   name: string;
   avatar: string;
 }
@@ -27,7 +20,6 @@ export const authUser = persistentMap<AuthUser>(
     isLoading: false,
     email: '',
     role: Role.USER,
-    status: Status.CREATED,
     name: '',
     avatar: '',
   },
@@ -60,7 +52,6 @@ onMount(authUser, () => {
       const authUserData = {
         email: data.email,
         role: data.role,
-        status: data.status,
         name: `${data.firstName} ${data.lastName}`,
         avatar: data.avatar,
       };

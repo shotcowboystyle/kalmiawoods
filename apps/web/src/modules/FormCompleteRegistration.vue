@@ -32,7 +32,7 @@ const checkConfirmPassword = () => {
 async function submit(e: Event) {
   e.preventDefault();
 
-  const response = await fetch(`/api/complete-registration/${props.token}`, {
+  const response = await fetch(`/api/email-verification/${props.token}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

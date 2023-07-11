@@ -14,18 +14,16 @@
 // // export * from '@prisma/client';
 // export { prisma };
 
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as {
-  prisma: PrismaClient | undefined
+  prismaClient: PrismaClient | undefined;
+};
+
+const prismaClient = globalForPrisma.prismaClient ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prismaClient = prismaClient;
 }
 
-const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient();
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-}
-
-export { prisma };
+export { Prisma, prismaClient };
