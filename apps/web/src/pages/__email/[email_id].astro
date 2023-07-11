@@ -1,8 +1,8 @@
 ---
 import LayoutEmail from "@/app/LayoutEmail.astro";
 import { prismaClient } from "@/db.js";
-import { isValidFormSubmission } from "@/lib/utils/forms/submission";
 import { getEmail } from "@/services/email";
+import { isValidFormSubmission } from "@/utils/forms/submission";
 
 const emailId = Astro.params.email_id ?? "";
 

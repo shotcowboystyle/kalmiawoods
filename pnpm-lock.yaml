@@ -110,6 +110,9 @@ importers:
       '@nanostores/vue':
         specifier: ^0.9.1
         version: 0.9.1(@vue/devtools-api@6.5.0)(nanostores@0.9.3)(vue@3.3.4)
+      '@prisma/client':
+        specifier: ^4.16.2
+        version: 4.16.2(prisma@4.16.2)
       '@vite-pwa/astro':
         specifier: ^0.1.1
         version: 0.1.1(astro@2.8.0)(vite-plugin-pwa@0.16.4)

@@ -1,3 +1,3 @@
-import { prismaClient as PrismaClient } from '@kalmiawoods/database';
+import { prisma } from '@kalmiawoods/database';
 
-export const prismaClient = PrismaClient;
+export const prismaClient = prisma;
