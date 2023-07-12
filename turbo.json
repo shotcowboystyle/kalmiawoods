@@ -1,22 +1,17 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": [
-    "packages/**",
-    "apps/**/public/**",
-    "apps/**/astro.config.ts",
-    "apps/**/package.json",
-    "apps/**/tsconfig.json",
-    "**/.env.*local",
+    "astro.config.mjs",
+    "package.json",
+    "tsconfig.json",
+    ".env.*local",
     "public/**"
   ],
   "pipeline": {
     "build": {
-      "dependsOn": ["^db:generate", "^build"],
+      "dependsOn": ["^prisma:generate", "^build"],
       "outputs": ["dist/**", ".vercel/output/**", ".astro/**"],
       "inputs": ["src/**", "vercel.json"]
-    },
-    "playwright": {
-      "dependsOn": ["^playwright"]
     },
     "test": {
       "outputs": ["coverage/**"],
@@ -41,8 +36,8 @@
       "cache": false,
       "persistent": true
     },
-    "db:generate": {
-      "dependsOn": ["^db:generate"]
+    "prisma:generate": {
+      "dependsOn": ["^prisma:generate"]
     },
     "db:migrate:deploy": {
       "outputs": []

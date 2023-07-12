@@ -79,13 +79,8 @@ module.exports = {
 
     scopes: [
       {
-        name: 'api',
-        description: 'Anything related to any of the API services',
-        emoji: ':memo:',
-      },
-      {
-        name: 'web',
-        description: 'Anything related to a web app',
+        name: 'app',
+        description: 'Anything related to the app',
         emoji: ':shell:',
       },
       {

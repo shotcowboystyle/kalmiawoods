@@ -1,0 +1,24 @@
+---
+import LayoutSidebar from '@/app/LayoutSidebar.astro';
+// import Hero from '@/components/Hero.astro';
+// import NearbyAttractions from '@/components/NearbyAttractions.astro.disabled';
+// import PhotoGallery from '@/components/PhotoGallery.astro.disabled';
+import Summary from '@/components/Summary.astro';
+import Contact from '@/modules/Contact/Contact.astro';
+
+const { session, user } = await Astro.locals.auth.validateUser();
+if (!session) {
+  return Astro.redirect('/login', 302);
+}
+if (session && !user.emailVerified) {
+  return Astro.redirect('/email-verification', 302);
+}
+---
+
+<LayoutSidebar>
+  <!-- <Hero /> -->
+  <!-- <NearbyAttractions />
+  <PhotoGallery /> -->
+  <Summary />
+  <Contact />
+</LayoutSidebar>
