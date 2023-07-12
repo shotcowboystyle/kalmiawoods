@@ -1,5 +1,5 @@
 /// <reference path="../.astro/types.d.ts" />
-/// <reference types="astro/client" />
+/// <reference types="astro/client-image" />
 declare namespace App {
   interface Locals {
     auth: import('lucia-auth').AuthRequest;
