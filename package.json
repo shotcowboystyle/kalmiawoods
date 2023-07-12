@@ -141,7 +141,7 @@
     "zod": "^3.21.4"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   },
   "packageManager": "pnpm@8.6.1",
   "config": {
