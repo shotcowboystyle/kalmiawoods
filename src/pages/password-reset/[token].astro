@@ -1,6 +1,6 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
-import logo from '@/assets/svg/logo-3.svg';
+import Logo from '@/components/Logo.astro';
 import FormResetPassword from '@/modules/FormResetPassword.vue';
 
 const { token } = Astro.params;
@@ -13,18 +13,14 @@ const { token } = Astro.params;
       <a
         href="#"
         class="mb-8 flex items-center justify-center text-2xl font-semibold dark:text-white lg:mb-10">
-        <img
-          src={logo}
-          aria-label={import.meta.env.APP_NAME}
-          class="kw-logo mr-3 h-8 fill-white"
-        />
+        <Logo />
         <span>Kalmia Woods</span>
       </a>
       <div class="w-full max-w-xl space-y-8 rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
           Reset password
         </h2>
-        <FormResetPassword client:only="vue" token={token!} />
+        <FormResetPassword client:only="vue" token={token} />
       </div>
     </div>
   </div>

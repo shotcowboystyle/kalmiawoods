@@ -15,25 +15,29 @@ async function submit() {
   isSubmitting.value = true;
   errorMessage.value = null;
 
-  const authResponse = await fetch('/api/password-reset', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  });
+  try {
+    const authResponse = await fetch('/api/password-reset', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-  if (authResponse.status !== 200) {
-    const data = await authResponse.json();
-    errorMessage.value = data.message;
+    if (authResponse.status !== 200) {
+      const data = await authResponse.json();
+      errorMessage.value = data.message;
+    }
+
+    if (authResponse.status === 200) {
+      return (showSuccessMessage.value = true);
+    }
+  } catch (error) {
+    errorMessage.value = error.message;
+  } finally {
+    isSubmitting.value = false;
   }
-
-  if (authResponse.status === 200) {
-    return (showSuccessMessage.value = true);
-  }
-
-  isSubmitting.value = false;
 }
 </script>
 

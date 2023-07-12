@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { HOME } from '@/app/constants';
-import PasswordStrength from '@/components/PasswordStrength.vue';
+// import PasswordStrength from '@/components/PasswordStrength.vue';
 
 const props = defineProps({
-  token: {
-    type: String,
-    default: '',
-  },
+  token: String,
 });
 
 const hasErrors = ref(false);
@@ -30,7 +27,7 @@ function invalidateForm() {
 async function submit() {
   isSubmitting.value = true;
 
-  const response = await fetch(`/api/password-reset//${props.token}`, {
+  const response = await fetch(`/api/password-reset/${props.token}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

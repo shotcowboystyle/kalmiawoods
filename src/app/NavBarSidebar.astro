@@ -1,7 +1,7 @@
 ---
 import { HOME } from '@/app/constants';
-import logo from '@/assets/svg/logo-3.svg';
 import ColorModeSwitcher from '@/components/ColorModeSwitcher.astro';
+import Logo from '@/components/Logo.astro';
 import ProfileDropdown from '@/components/ProfileDropdown.vue';
 ---
 
@@ -39,11 +39,7 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
           >
         </button>
         <a href="/" class="ml-2 flex md:mr-24">
-          <img
-            src={logo}
-            aria-label={import.meta.env.APP_NAME}
-            class="kw-logo mr-3 h-8 fill-white"
-          />
+          <Logo />
           <span
             class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl"
             >Kalmia Woods</span

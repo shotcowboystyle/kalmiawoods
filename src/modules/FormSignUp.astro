@@ -1,6 +1,5 @@
 ---
-// import Logo from '@/components/Logo.astro';
-// import Svg from '@jasikpark/astro-svg-loader';
+import Logo from '@/components/Logo.astro';
 
 const { email = '', errorMessage = '' } = Astro.props;
 ---
@@ -10,11 +9,7 @@ const { email = '', errorMessage = '' } = Astro.props;
   <a
     href="#"
     class="mb-8 flex items-center justify-center text-2xl font-semibold dark:text-white lg:mb-10">
-    <!-- <Svg
-      src={import('@/assets/svg/logo-3.svg?raw')}
-      aria-label={import.meta.env.APP_NAME}
-      class="kw-logo mr-3 h-8 fill-white"
-      /> -->
+    <Logo />
     <span>Kalmia Woods</span>
   </a>
   <!-- Card -->
