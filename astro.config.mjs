@@ -14,6 +14,7 @@ import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
+import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
