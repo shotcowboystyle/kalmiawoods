@@ -1,8 +1,8 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
-// import Hero from '@/components/Hero.astro';
-// import NearbyAttractions from '@/components/NearbyAttractions.astro.disabled';
-// import PhotoGallery from '@/components/PhotoGallery.astro.disabled';
+import Hero from '@/components/Hero.astro';
+import NearbyAttractions from '@/components/NearbyAttractions.astro';
+import PhotoGallery from '@/components/PhotoGallery.astro';
 import Summary from '@/components/Summary.astro';
 import Contact from '@/modules/Contact/Contact.astro';
 
@@ -16,9 +16,9 @@ if (session && !user.emailVerified) {
 ---
 
 <LayoutSidebar>
-  <!-- <Hero /> -->
-  <!-- <NearbyAttractions />
-  <PhotoGallery /> -->
+  <Hero />
+  <NearbyAttractions />
+  <PhotoGallery />
   <Summary />
   <Contact />
 </LayoutSidebar>

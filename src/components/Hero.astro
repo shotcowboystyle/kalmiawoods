@@ -1,20 +1,15 @@
 ---
+import backgroundImg from '@/assets/images/house-cottage-three.jpeg';
 import GradientText from '@/components/GradientText.astro';
-import { Picture } from '@astrojs/image/components';
 ---
 
 <header class="relative h-[65vh] md:h-[85vh]">
   <div class="absolute z-10 h-4/6 w-full bg-gradient-to-b from-black"></div>
   <div class="absolute bottom-0 left-0 right-0 top-0 m-0 block overflow-hidden">
-    <Picture
+    <img
       alt="Kalmia Woods main house front view"
       class="h-screen w-full object-cover md:h-full"
-      widths={[640, 750, 828, 1080, 1200, 1920, 2048, 3840]}
-      sizes="100vw"
-      loading="eager"
-      decoding="async"
-      aspectRatio={16 / 9}
-      src={import('@/assets/images/house-cottage-three.jpeg')}
+      src={backgroundImg}
     />
   </div>
   <div class="container">

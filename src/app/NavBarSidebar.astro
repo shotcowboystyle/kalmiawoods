@@ -1,8 +1,6 @@
 ---
-// import Svg from '@jasikpark/astro-svg-loader';
-
-// import logo from '../assets/svg/logo-3.svg';
 import { HOME } from '@/app/constants';
+import logo from '@/assets/svg/logo-3.svg';
 import ColorModeSwitcher from '@/components/ColorModeSwitcher.astro';
 import ProfileDropdown from '@/components/ProfileDropdown.vue';
 ---
@@ -41,12 +39,11 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
           >
         </button>
         <a href="/" class="ml-2 flex md:mr-24">
-          <!-- <img src={asset('svg/logo.svg?raw')} class="h-8 mr-3" alt="FlowBite Logo" /> -->
-          <!-- <Svg
-            src={import('@/assets/svg/logo-3.svg?raw')}
+          <img
+            src={logo}
             aria-label={import.meta.env.APP_NAME}
             class="kw-logo mr-3 h-8 fill-white"
-          /> -->
+          />
           <span
             class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl"
             >Kalmia Woods</span

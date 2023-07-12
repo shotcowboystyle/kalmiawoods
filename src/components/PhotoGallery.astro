@@ -1,5 +1,4 @@
 ---
-import Picture from '@/components/Picture.astro';
 import { fetchLocalImages } from '@/utils/images';
 import 'spotlight.js/dist/css/spotlight.min.css';
 
@@ -79,12 +78,9 @@ images = images.filter((image) => !!image);
               role="button"
               class="gap-y-4 rounded-xl p-2 duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40 max-sm:w-full lg:p-3"
             >
-              <Picture
+              <img
                 alt={text}
                 class="relative mb-2 h-40 w-full rounded-xl object-cover shadow-xl md:h-60 lg:h-72"
-                widths={[175, 314, 378]}
-                sizes="(max-width: 440px) 175px, (max-width: 1023px) 378px, 314px"
-                aspectRatio="2:3"
                 loading="lazy"
                 decoding="async"
                 src={image}

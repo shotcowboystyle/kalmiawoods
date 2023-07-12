@@ -1,6 +1,6 @@
 ---
+import logo from '@/assets/svg/logo-3.svg';
 import { url } from '@/utils/site';
-// import Svg from '@jasikpark/astro-svg-loader';
 ---
 
 <nav
@@ -9,16 +9,11 @@ import { url } from '@/utils/site';
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
         <a href={url()} class="mr-4 flex">
-          <!-- <img
-						src={asset('images/logo.svg')}
-						class="h-8 mr-3"
-						alt="Flowbite Logo"
-					/> -->
-          <!-- <Svg
-            src={import('@/assets/svg/logo-3.svg?raw')}
+          <img
+            src={logo}
             aria-label={import.meta.env.APP_NAME}
             class="kw-logo mr-3 h-8 fill-white"
-          /> -->
+          />
           <span class="self-center whitespace-nowrap text-2xl font-semibold dark:text-white"
             >Kalmia Woods</span
           >
