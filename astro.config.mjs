@@ -9,6 +9,7 @@ import critters from 'astro-critters';
 import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig, sharpImageService } from 'astro/config';
+import { dirname, resolve } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
