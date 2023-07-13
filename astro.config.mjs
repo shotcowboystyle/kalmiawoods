@@ -9,18 +9,18 @@ import critters from 'astro-critters';
 import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
-import { dirname, resolve } from 'path';
+// import { dirname, resolve } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
 const { APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
@@ -94,12 +94,12 @@ export default defineConfig({
     build: {
       copyPublicDir: false,
     },
-    // ssr: {
-    //   external: ['svgo'],
-    // },
-    define: {
-      __DATE__: `'${new Date().toISOString()}'`,
+    ssr: {
+      external: ['svgo'],
     },
+    // define: {
+    //   __DATE__: `'${new Date().toISOString()}'`,
+    // },
     server: {
       https: true,
     },
@@ -119,10 +119,10 @@ export default defineConfig({
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
     },
-    resolve: {
-      alias: {
-        '@': resolve(__dirname, './src'),
-      },
-    },
+    // resolve: {
+    //   alias: {
+    //     '@': resolve(__dirname, './src'),
+    //   },
+    // },
   },
 });
