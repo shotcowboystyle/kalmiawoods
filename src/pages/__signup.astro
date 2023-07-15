@@ -5,7 +5,7 @@ import { LuciaError } from 'lucia-auth';
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { HOME } from '@/app/constants';
 import { auth } from '@/lib/lucia';
-import FormSignUp from '@/modules/FormSignUp.astro';
+import FormSignUp from '@/modules/Auth/FormSignUp.astro';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { emailVerificationToken } from '@/services/verification-token';
 import { emailRegex } from '@/utils/email';

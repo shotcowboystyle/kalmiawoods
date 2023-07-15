@@ -1,6 +1,6 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
-import UserList from '@/modules/UserList.vue';
+import UserList from '@/modules/Users/UserList.vue';
 
 const { session, user } = await Astro.locals.auth.validateUser();
 if (!session) {

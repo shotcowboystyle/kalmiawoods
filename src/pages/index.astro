@@ -1,10 +1,10 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
-import Hero from '@/components/Hero.astro';
-import NearbyAttractions from '@/components/NearbyAttractions.astro';
-import PhotoGallery from '@/components/PhotoGallery.astro';
-import Summary from '@/components/Summary.astro';
 import Contact from '@/modules/Contact/Contact.astro';
+import Hero from '@/modules/Dashboard/Hero.astro';
+import NearbyAttractions from '@/modules/Dashboard/NearbyAttractions.astro';
+import PhotoGallery from '@/modules/Dashboard/PhotoGallery.astro';
+import Summary from '@/modules/Dashboard/Summary.astro';
 
 const { session, user } = await Astro.locals.auth.validateUser();
 if (!session) {

@@ -2,7 +2,7 @@
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { HOME } from '@/app/constants';
 import Logo from '@/components/Logo.astro';
-import FormLogin from '@/modules/FormLogin.vue';
+import FormLogin from '@/modules/Auth/FormLogin.vue';
 
 const { session, user } = await Astro.locals.auth.validateUser();
 if (session) {
