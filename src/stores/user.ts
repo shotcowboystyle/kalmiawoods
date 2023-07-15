@@ -37,6 +37,22 @@ export const fetchNewUsers = () => {
   }
 };
 
+export const usersMobilePhones = computed([users], (_users) =>
+  Object.values(_users).reduce((acc, cur) => {
+    if (cur?.mobilePhone?.length) {
+      acc.push(cur.mobilePhone);
+    }
+    return acc;
+  }, []),
+);
+
+export const usersEmails = computed([users], (_users) =>
+  Object.values(_users).reduce((acc, cur) => {
+    acc.push(cur.email);
+    return acc;
+  }, []),
+);
+
 export const addUser = action(users, 'addUser', async (store, newUser) => {
   const { id } = newUser;
   const existingEntry = store.get()[id];

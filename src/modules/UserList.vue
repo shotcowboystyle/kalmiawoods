@@ -11,8 +11,10 @@ import FormUser from './FormUser.vue';
 const bodyEl = ref();
 const { arrivedState } = useScroll(bodyEl);
 
-const isDeleteModalOpen = ref(false);
 const isAddModalOpen = ref(false);
+
+const isDeleteModalOpen = ref(false);
+const deleteUserId = ref('-1');
 
 const $users = useStore(users);
 
@@ -22,7 +24,7 @@ const onCreateUser = () => {
 };
 
 const onDeleteUser = (userId) => {
-  setActiveUserId(userId);
+  deleteUserId.value = userId;
   isDeleteModalOpen.value = true;
 };
 
@@ -235,7 +237,9 @@ watch(arrivedState, ({ bottom }) => {
 
   <Modal v-if="isDeleteModalOpen" size="5xl" @close="closeDeleteModal">
     <template #body>
-      <FormDeleteUser :handle-close-modal="closeDeleteModal" />
+      <FormDeleteUser :user-id="deleteUserId" :handle-close-modal="closeDeleteModal" />
     </template>
   </Modal>
+
+  <KwToast v-model="$toastItems" class="z-50" />
 </template>

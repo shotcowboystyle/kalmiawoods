@@ -1,6 +1,6 @@
 // import type { Email } from '@prisma/client';
 
-import { APP_URL } from '@/app/constants';
+import { BASE_APP_URL } from '@/app/constants';
 import prismaClient from '@/lib/db.js';
 
 const sendEmail = async (emailAddress: string, subject: string, content: string) => {
@@ -15,7 +15,7 @@ const sendEmail = async (emailAddress: string, subject: string, content: string)
 };
 
 export const sendEmailVerificationEmail = async (emailAddress: string, verificationToken: string) => {
-  const resetLink = `${APP_URL}/email-verification/${verificationToken}`;
+  const resetLink = `${BASE_APP_URL}/email-verification/${verificationToken}`;
   const emailContent = `Please complete your registration for Kalmia Woods via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;
@@ -23,7 +23,7 @@ export const sendEmailVerificationEmail = async (emailAddress: string, verificat
 };
 
 export const sendPasswordResetEmail = async (emailAddress: string, resetToken: string) => {
-  const resetLink = `${APP_URL}/password-reset/${resetToken}`;
+  const resetLink = `${BASE_APP_URL}/password-reset/${resetToken}`;
   const emailContent = `Please reset your password via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;

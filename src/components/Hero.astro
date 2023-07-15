@@ -1,6 +1,6 @@
 ---
-import backgroundImg from '@/assets/images/house-cottage-three.jpeg';
 import GradientText from '@/components/GradientText.astro';
+import backgroundImg from '../assets/images/house-cottage-three.jpeg';
 ---
 
 <header class="relative h-[65vh] md:h-[85vh]">
@@ -9,7 +9,9 @@ import GradientText from '@/components/GradientText.astro';
     <img
       alt="Kalmia Woods main house front view"
       class="h-screen w-full object-cover md:h-full"
-      src={backgroundImg}
+      src={backgroundImg.src}
+      width={backgroundImg.width}
+      height={backgroundImg.height}
     />
   </div>
   <div class="container">

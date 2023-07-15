@@ -2,16 +2,29 @@
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "strictNullChecks": true,
+
+    "allowJs": true,
+
+    // Enable top-level await, and other modern ESM features.
+    "target": "ESNext",
+    "module": "ESNext",
+    // Enable node-style module resolution, for things like npm package imports.
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    // Enable stricter transpilation for better output.
+    "isolatedModules": true,
+    "types": ["unplugin-icons/types/astro"],
     "jsx": "preserve",
-    "baseUrl": ".",
+
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
       }
     ],
     "paths": {
-      "@/*": ["src/*"]
-    },
-    "types": ["unplugin-icons/types/astro", "vitest/globals"]
-  }
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", ".vercel"]
 }

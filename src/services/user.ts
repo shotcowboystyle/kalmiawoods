@@ -82,6 +82,10 @@ export const createUser = async (data: User) => {
       },
     });
   } catch (error: any) {
+    if (error.code === 'P2002') {
+      throw new Error('Mobile phone number is already registered to another user');
+    }
+
     throw new Error('An unknown error occurred');
   }
 
@@ -179,19 +183,29 @@ export const getUser = async (userId: string) => {
 };
 
 export const deleteUser = async (userId: string) => {
-  const deleteUserProfile = prismaClient.userProfile.delete({
-    where: {
-      user_id: userId,
-    },
-  });
-
   const deleteUserReservations = prismaClient.reservation.deleteMany({
     where: {
       user_id: userId,
     },
   });
 
-  await prismaClient.$transaction([deleteUserProfile, deleteUserReservations]);
+  const deleteTransactions = [deleteUserReservations];
+
+  const userProfile = await prismaClient.userProfile.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  if (userProfile) {
+    deleteTransactions.push(prismaClient.userProfile.delete({
+      where: {
+        user_id: userId,
+      },
+    }))
+  }
+
+  await prismaClient.$transaction(deleteTransactions);
 
   return auth.deleteUser(userId);
 };

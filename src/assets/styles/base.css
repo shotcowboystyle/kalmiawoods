@@ -57,76 +57,6 @@ body {
   }
 }
 
-/* @media screen(md) { */
-  #navbar.scroll {
-    @apply shadow-md md:drop-shadow-xl bg-light text-base-content;
-  }
-
-  #navbar.home-navbar .kw-logo {
-    @apply !fill-white;
-  }
-
-  #navbar.scroll .kw-logo {
-    @apply !fill-primary;
-  }
-
-  #navbar .btn {
-    @apply text-white;
-  }
-
-  #navbar.scroll .btn {
-    @apply !text-gray-800;
-  }
-
-  .dark #navbar.scroll {
-    @apply bg-light text-white;
-  }
-
-  .dark #navbar.scroll .kw-logo {
-    @apply bg-light;
-  }
-
-  #navbar.scroll:not(.show-booking-quick-form) #navbar-book-now-button {
-    @apply z-50 translate-y-0 scale-100 opacity-100;
-  }
-
-  #navbar.scroll:not(.show-booking-quick-form) #navbar-booking-options {
-    @apply invisible h-0;
-  }
-
-  #navbar.scroll:not(.show-booking-quick-form) #booking-quick-form-wrapper {
-    @apply invisible h-0;
-  }
-
-  #navbar.scroll:not(.show-booking-quick-form) #booking-quick-form {
-    @apply translate-y-[-75px] transform scale-50 opacity-0 z-[100];
-  }
-
-  #navbar.scroll.show-booking-quick-form #navbar-booking-options {
-    @apply text-gray-800;
-  }
-
-  #navbar.scroll.show-booking-quick-form #navbar-booking-options span {
-    @apply after:bg-gray-800;
-  }
-
-  #navbar.scroll.show-booking-quick-form #booking-quick-form {
-    @apply border-gray-400 shadow-xl;
-  }
-/* } */
-
-[data-kw-toggle-menu] path {
-  @apply transition;
-}
-
-[data-kw-toggle-menu].expanded g > path:first-child {
-  @apply -rotate-45 translate-y-[15px] translate-x-[-3px];
-}
-
-[data-kw-toggle-menu].expanded g > path:last-child {
-  @apply rotate-45 translate-y-[-8px] translate-x-[14px];
-}
-
 @media screen(xl) {
   .container {
     padding: 0 72.5px;
@@ -163,12 +93,6 @@ body {
   pointer-events: auto;
   visibility: visible;
   opacity: 1;
-}
-
-form.errors {
-  :invalid {
-    @apply input-error;
-  }
 }
 
 .fade-right-enter-active {

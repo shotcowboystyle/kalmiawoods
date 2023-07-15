@@ -16,3 +16,11 @@ export type UserWithProfile = z.infer<typeof AuthUserWithProfileSchema>;
 // export type DisplayableUserDetails = z.infer<typeof DisplayableUserDetailsSchema>;
 
 // export type UserWithProfileData = z.infer<typeof DisplayableUserDetailsSchema>;
+
+export type CreateUserInput = {
+  email: string | undefined;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  mobilePhone: string | undefined;
+  address: string | undefined;
+};

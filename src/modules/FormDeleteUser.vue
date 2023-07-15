@@ -1,29 +1,28 @@
 <script setup lang="ts">
-import { activeUserId, removeUser } from '@/stores/user';
-import { useStore } from '@nanostores/vue';
+import { removeUser } from '@/stores/user';
 
 export interface Props {
+  userId: string;
   handleCloseModal: () => void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  userId: '-1',
   handleCloseModal: () => {},
 });
 
-const $userId = useStore(activeUserId);
-
 async function deleteUser() {
-  const response = await fetch('/api/users', {
+  const response = await fetch(`/api/users/${props.userId}`, {
     method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userId: $userId.value }),
+    // headers: {
+    //   Accept: 'application/json',
+    //   'Content-Type': 'application/json',
+    // },
+    // body: JSON.stringify({ userId: props.userId }),
   });
 
   if (response.status === 200) {
-    removeUser($userId.value);
+    removeUser(props.userId);
     props.handleCloseModal();
   }
 }

@@ -19,6 +19,12 @@ declare namespace Lucia {
 
 declare module 'spotlight.js/src/js/spotlight.js';
 
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $toastItems: { push: Function };
+  }
+}
+
 // this is a temporary fix for the alpha.6 v-calendar version
 declare module 'v-calendar' {
   import { DefineComponent } from 'vue';
@@ -32,11 +38,44 @@ declare module 'v-calendar' {
 
 interface ImportMetaEnv {
   readonly APP_NAME: string;
-  readonly API_BASE_URL: string;
   readonly PUBLIC_VERCEL_ANALYTICS_ID: string;
   readonly SITE: string;
 }
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+// images
+declare module '*.jpg' {
+  const src: string;
+  export default src;
+}
+declare module '*.jpeg' {
+  const src: string;
+  export default src;
+}
+declare module '*.png' {
+  const src: string;
+  export default src;
+}
+declare module '*.gif' {
+  const src: string;
+  export default src;
+}
+declare module '*.svg' {
+  const src: string;
+  export default src;
+}
+declare module '*.ico' {
+  const src: string;
+  export default src;
+}
+declare module '*.webp' {
+  const src: string;
+  export default src;
+}
+declare module '*.avif' {
+  const src: string;
+  export default src;
 }

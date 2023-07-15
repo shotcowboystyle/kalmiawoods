@@ -1,63 +1,70 @@
 ---
+// import { Image } from 'astro:assets';
 import { fetchLocalImages } from '@/utils/images';
+import { getAssets } from '@/composables/getAssets';
 import 'spotlight.js/dist/css/spotlight.min.css';
 
 export const photoGallery = [
   {
     text: 'Cottage',
     href: 'https://google.com',
-    image: '@/assets/images/house-cottage-two.jpeg',
+    image: 'house-cottage-two',
   },
 
   {
     text: 'Master Bedroom',
     href: 'https://google.com',
-    image: '@/assets/images/house-master-bedroom-one.jpeg',
+    image: 'house-master-bedroom-one',
   },
 
   {
     text: 'Garage Bedroom',
     href: 'https://google.com',
-    image: '@/assets/images/house-garage-bedroom-one.jpeg',
+    image: 'house-garage-bedroom-one',
   },
 
   {
     text: 'Living Area',
     href: 'https://google.com',
-    image: '@/assets/images/house-living-area-one.jpeg',
+    image: 'house-living-area-one',
   },
 
   {
     text: 'Kitchen',
     href: 'https://google.com',
-    image: '@/assets/images/house-kitchen-one.jpeg',
+    image: 'house-kitchen-one',
   },
 
   {
     text: 'Bathrooms',
     href: 'https://google.com',
-    image: '@/assets/images/house-bathroom-one.jpeg',
+    image: 'house-bathroom-one',
   },
 
   {
     text: 'Game Room',
     href: 'https://google.com',
-    image: '@/assets/images/house-game-room-one.jpeg',
+    image: 'house-game-room-one',
   },
 
   {
     text: 'Porches',
     href: 'https://google.com',
-    image: '@/assets/images/house-porch-one.jpeg',
+    image: 'house-porch-one',
   },
 ];
+
+const thumbnails = getAssets(await Astro.glob("../assets/images/*.jpeg"));
+const getThumbnail = (name: string) => {
+    return thumbnails.find(thumbnail => thumbnail.name === name);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const imageFiles: Record<string, any> = await fetchLocalImages();
 let images = await Promise.all(
   Object.entries(imageFiles).map(
     async ([imageKey, imageValue]) =>
-      imageKey.includes('house-') && typeof imageValue === 'function' && (await imageValue()),
+      imageKey.includes('house-') && typeof imageValue === 'function' && (await imageValue()).default,
   ),
 );
 images = images.filter((image) => !!image);
@@ -72,25 +79,31 @@ images = images.filter((image) => !!image);
       class="max-sm:carousel-center max-sm:carousel max-sm:space-x-4 max-sm:px-4 sm:grid sm:grid-cols-2 sm:gap-x-1 sm:gap-y-2 lg:grid-cols-4 lg:gap-x-4"
     >
       {
-        photoGallery.map(({ image, text }) => (
-          <div role="button" class="gallery-thumbnail max-sm:carousel-item max-sm:w-52">
-            <figure
-              role="button"
-              class="gap-y-4 rounded-xl p-2 duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40 max-sm:w-full lg:p-3"
-            >
-              <img
-                alt={text}
-                class="relative mb-2 h-40 w-full rounded-xl object-cover shadow-xl md:h-60 lg:h-72"
-                loading="lazy"
-                decoding="async"
-                src={image}
-              />
-              <figcaption class="text-md font-medium leading-5 text-base-content md:text-xl">
-                {text}
-              </figcaption>
-            </figure>
-          </div>
-        ))
+        photoGallery.map(({ image, text }) => {
+          const imageData = getThumbnail(image);
+          if (!imageData?.src) {
+            return null;
+          }
+          return (
+            <div role="button" class="gallery-thumbnail max-sm:carousel-item max-sm:w-52">
+              <figure
+                role="button"
+                class="gap-y-4 rounded-xl p-2 duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40 max-sm:w-full lg:p-3"
+              >
+                <img
+                  alt={text}
+                  class="relative mb-2 h-40 w-full rounded-xl object-cover shadow-xl md:h-60 lg:h-72"
+                  height={imageData?.height}
+                  width={imageData?.width}
+                  src={imageData?.src}
+                />
+                <figcaption class="text-md font-medium leading-5 text-base-content md:text-xl">
+                  {text}
+                </figcaption>
+              </figure>
+            </div>
+          )
+        })
       }
     </div>
   </div>

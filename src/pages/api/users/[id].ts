@@ -186,6 +186,7 @@ export const del: APIRoute = async (context) => {
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
+    console.log('error', error)
     return new Response(
       JSON.stringify({
         message: 'There was an error deleting this user. Please try again later.',

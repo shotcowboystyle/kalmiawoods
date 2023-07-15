@@ -12,6 +12,7 @@ declare global {
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const effectScope: typeof import('vue')['effectScope']
+  const getAssets: typeof import('./composables/getAssets')['getAssets']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
@@ -52,6 +53,7 @@ declare global {
   const useAttrs: typeof import('vue')['useAttrs']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useFormValidator: typeof import('./composables/useFormValidator')['useFormValidator']
   const usePasswordChecker: typeof import('./composables/usePasswordChecker')['usePasswordChecker']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useSlots: typeof import('vue')['useSlots']
@@ -76,6 +78,7 @@ declare module 'vue' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly getAssets: UnwrapRef<typeof import('./composables/getAssets')['getAssets']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
@@ -116,6 +119,7 @@ declare module 'vue' {
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useFormValidator: UnwrapRef<typeof import('./composables/useFormValidator')['useFormValidator']>
     readonly usePasswordChecker: UnwrapRef<typeof import('./composables/usePasswordChecker')['usePasswordChecker']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
@@ -134,6 +138,7 @@ declare module '@vue/runtime-core' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly getAssets: UnwrapRef<typeof import('./composables/getAssets')['getAssets']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
@@ -174,6 +179,7 @@ declare module '@vue/runtime-core' {
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useFormValidator: UnwrapRef<typeof import('./composables/useFormValidator')['useFormValidator']>
     readonly usePasswordChecker: UnwrapRef<typeof import('./composables/usePasswordChecker')['usePasswordChecker']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

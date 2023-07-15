@@ -1,7 +1,7 @@
 const load = async function () {
   let images: Record<string, () => Promise<unknown>> | undefined;
   try {
-    images = import.meta.glob('@/assets/images/**');
+    images = import.meta.glob('@/assets/images/**/*.jpeg');
   } catch (e) {
     // continue regardless of error
   }
@@ -30,8 +30,8 @@ export const findImage = async (imagePath?: string) => {
     return null;
   } // For now only consume images using @/assets alias (or absolute)
 
-  const images = await fetchLocalImages();
   const key = imagePath.replace('@/', '/src/');
 
+  const images = await fetchLocalImages();
   return typeof images[key] === 'function' ? (await images[key]()).default : null;
 };
