@@ -60,7 +60,7 @@ export default defineConfig({
   adapter: vercel({
     analytics: true,
     // imageService: true,
-    excludeFiles: ['.prisma/client/index-browser'],
+    // excludeFiles: ['.prisma/client/index-browser'],
   }),
   build: {
     excludeMiddleware: true,
