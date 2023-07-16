@@ -19,6 +19,7 @@ import Components from 'unplugin-vue-components/vite';
 // import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
+// import { prismaClient } from './src/lib/db';
 
 const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTRY_ORG, DEBUGGING } = loadEnv(
   process.env.MODE,
@@ -59,7 +60,11 @@ export default defineConfig({
   adapter: vercel({
     analytics: true,
     // imageService: true,
+    excludeFiles: ['.prisma/client/index-browser'],
   }),
+  build: {
+    excludeMiddleware: true,
+  },
   experimental: {
     assets: true,
   },
@@ -128,16 +133,18 @@ export default defineConfig({
     }),
     // compressor({ gzip: true, brotli: true }),
     devOnlyRoutes(),
+    // prismaClient,
   ],
   markdown: {},
   vite: {
-    build: {
-      copyPublicDir: false,
-      sourcemap: true,
-    },
-    ssr: {
-      external: ['svgo'],
-    },
+    // build: {
+    //   copyPublicDir: false,
+    //   // sourcemap: true,
+    // },
+    // ssr: {
+    //   // external: ['svgo'],
+    //   external: ['.prisma/client/index-browser'],
+    // },
     // define: {
     //   __DATE__: `'${new Date().toISOString()}'`,
     // },
