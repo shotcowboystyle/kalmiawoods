@@ -6,5 +6,5 @@
  */
 export default function ({ request, context }) {
   // do something with request and context
-  return {};
+  return { request, context };
 }
