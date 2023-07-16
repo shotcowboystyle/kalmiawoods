@@ -146,51 +146,55 @@ watch(arrivedState, ({ bottom }) => {
             </thead>
 
             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              <tr v-for="user in $users" :key="user.id" :data="user" class="hover:bg-gray-100 dark:hover:bg-gray-700">
+              <tr
+                v-for="user in $users"
+                :key="user?.userId"
+                :data="user"
+                class="hover:bg-gray-100 dark:hover:bg-gray-700">
                 <td class="w-4 p-4">
                   <div class="flex items-center">
                     <input
-                      :id="`checkbox-${user.id}`"
+                      :id="`checkbox-${user?.userId}`"
                       aria-describedby="checkbox-1"
                       type="checkbox"
                       class="focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800" />
-                    <label :for="`checkbox-${user.id}`" class="sr-only"> checkbox </label>
+                    <label :for="`checkbox-${user?.userId}`" class="sr-only"> checkbox </label>
                   </div>
                 </td>
 
                 <td class="mr-12 flex items-center space-x-6 whitespace-nowrap p-4">
                   <!-- <img
                         class="w-10 h-10 rounded-full"
-                        src={asset(`/images/users/${user.avatar}`)}
-                        alt={`${user.name} avatar`}
+                        src={asset(`/images/users/${user?.avatar}`)}
+                        alt={`${user?.name} avatar`}
                       /> -->
                   <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                     <div class="text-base font-semibold text-gray-900 dark:text-white">
-                      {{ user.firstName }} {{ user.lastName }}
+                      {{ user?.firstName }} {{ user?.lastName }}
                     </div>
                     <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                      {{ user.email }}
+                      {{ user?.email }}
                     </div>
                   </div>
                 </td>
 
                 <td
                   class="max-w-sm overflow-hidden truncate p-4 text-base font-normal text-gray-500 dark:text-gray-400 xl:max-w-xs">
-                  {{ user.address }}
+                  {{ user?.address }}
                 </td>
 
                 <td class="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                  <a :href="`tel:+1${user.mobilePhone}`" class="link">
-                    {{ phoneFormatUSA(user.mobilePhone) }}
+                  <a :href="`tel:+1${user?.mobilePhone}`" class="link">
+                    {{ phoneFormatUSA(user?.mobilePhone) }}
                   </a>
                 </td>
 
                 <td class="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                  {{ user.role }}
+                  {{ user?.role }}
                 </td>
 
                 <td class="space-x-2 whitespace-nowrap p-4 w-1/6">
-                  <a :href="`/users/${user.id}`" class="btn btn-primary">
+                  <a :href="`/users/${user?.userId}`" class="btn btn-primary">
                     <svg
                       class="mr-2 h-4 w-4"
                       fill="currentColor"
@@ -204,7 +208,7 @@ watch(arrivedState, ({ bottom }) => {
                     </svg>
                     Edit user
                   </a>
-                  <button type="button" class="btn btn-error" @click="onDeleteUser(user.id)">
+                  <button type="button" class="btn btn-error" @click="onDeleteUser(user?.userId)">
                     <svg
                       class="mr-2 h-4 w-4"
                       fill="currentColor"

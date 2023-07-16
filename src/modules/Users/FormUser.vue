@@ -7,8 +7,6 @@ import { useStore } from '@nanostores/vue';
 
 const toast: { error: Function } | undefined = inject('toast');
 
-toast?.error('HELLO ERROR');
-
 export interface Props {
   handleCloseModal: () => void;
 }
@@ -20,12 +18,9 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['input-mobile-phone']);
 
 const $usersEmails = useStore(usersEmails);
-console.log('$usersEmails', $usersEmails);
 const $usersMobilePhones = useStore(usersMobilePhones);
-console.log('$usersMobilePhones', $usersMobilePhones);
 
 const isSubmitting = ref(false);
-const errorMessage = ref(null);
 const formData = reactive<CreateUserInput>({
   email: '',
   firstName: '',
@@ -42,7 +37,6 @@ const maskPhone = (event: Event) => {
 
 async function submit() {
   isSubmitting.value = true;
-  errorMessage.value = null;
 
   try {
     const response = await fetchPost('users', formData);
@@ -51,7 +45,7 @@ async function submit() {
     props.handleCloseModal();
   } catch (error) {
     console.log('error', error);
-    errorMessage.value = error;
+    toast?.error(error);
   } finally {
     isSubmitting.value = false;
   }

@@ -32,6 +32,12 @@ export default {
         'Your password must be at least 8 characters long, include 1 special character (!@#$%^&*_+=), 1 uppercase letter, and 1 lowercase letter.',
     };
   },
+  isMatch: (value: string, { match, errorMessagePrefix = 'Value' }: { match: string; errorMessagePrefix: string }) => {
+    return {
+      isValid: value === match,
+      errorMessage: `${errorMessagePrefix} don't match.`,
+    };
+  },
   required: (value: string | boolean) => {
     return {
       isValid: (value && String(value).length > 0) || value === true,
@@ -41,6 +47,13 @@ export default {
 } as
   | Record<'email' | 'password' | 'required', (value: string | boolean) => { isValid: boolean; errorMessage: string }>
   | Record<'phone', (value: string) => { isValid: boolean; errorMessage: string }>
+  | Record<
+      'isMatch',
+      (
+        value: string | boolean,
+        extraArgs?: { match: string; errorMessagePrefix: string },
+      ) => { isValid: boolean; errorMessage: string }
+    >
   | Record<
       'isUnique',
       (

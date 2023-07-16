@@ -12,6 +12,7 @@ const props = defineProps({
   rules: Array,
   disabled: Boolean,
   modelValue: String,
+  validationMatch: String,
   validationMatchers: Array,
   errorMessagePrefix: String,
 });
@@ -37,6 +38,7 @@ function checkError() {
   }
 
   const validated = formValidator.validate(model.value, formValidator.allRules(props.required, props.rules), {
+    match: props.validationMatch,
     matchers: props.validationMatchers,
     errorMessagePrefix: props.errorMessagePrefix,
   });

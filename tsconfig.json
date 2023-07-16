@@ -13,18 +13,20 @@
     "baseUrl": "src",
     // Enable stricter transpilation for better output.
     "isolatedModules": true,
-    "types": ["unplugin-icons/types/astro"],
-    "jsx": "preserve",
+    "types": ["unplugin-icons/types/astro", "node", "src/vue-custom.d.ts"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
 
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
       }
     ],
+
     "paths": {
       "@/*": ["./*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", ".vercel"]
+  "exclude": ["dist", ".vercel", ".astro"]
 }

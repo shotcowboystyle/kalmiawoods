@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
 
-import { HOME } from '@/app/constants';
-import FormUserEmail from '@/modules/FormUserEmail.vue';
-import FormUserPassword from '@/modules/FormUserPassword.vue';
-import FormUserProfile from '@/modules/FormUserProfile.vue';
-import { setViewMode, user } from '@/stores/user';
+import FormUserEmail from '@/modules/Profile/FormUserEmail.vue';
+import FormUserPassword from '@/modules/Profile/FormUserPassword.vue';
+import FormUserProfile from '@/modules/Profile/FormUserProfile.vue';
+import { activeUser, setActiveUserId } from '@/stores/user';
+// import { setViewMode, user } from '@/stores/user';
+// import type { UserWithProfile } from '@/types/User';
 
 interface Props {
-  mode?: string;
+  mode: string;
 }
 
 const props = withDefaults(defineProps<Props>(), { mode: 'latest' });
 
-setViewMode(props.mode);
+// setViewMode(props.mode);
 
-const $user = useStore(user);
+setActiveUserId(props.mode);
+const $user = useStore(activeUser);
 </script>
 
 <template>
@@ -25,7 +27,7 @@ const $user = useStore(user);
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
             <a
-              :href="HOME"
+              href="/"
               class="hover:text-primary-600 inline-flex items-center text-gray-700 dark:text-gray-300 dark:hover:text-white">
               <svg class="mr-2.5 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -87,23 +89,25 @@ const $user = useStore(user);
       <div
         class="mb-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 2xl:col-span-2">
         <h3 class="mb-4 text-xl font-semibold dark:text-white">General information</h3>
-        <span v-if="!$user.id" class="loading loading-spinner loading-lg"></span>
-        <FormUserProfile v-else :user-id="mode" />
+        <span v-if="!$user.userId" class="loading loading-spinner loading-lg"></span>
+        <FormUserProfile v-else />
       </div>
 
       <div
         class="mb-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 2xl:col-span-2">
         <h3 class="mb-4 text-xl font-semibold dark:text-white">Password information</h3>
-        <span v-if="!$user.id" class="loading loading-spinner loading-lg"></span>
-        <FormUserPassword v-else :user-id="mode" />
+        <span v-if="!$user.userId" class="loading loading-spinner loading-lg"></span>
+        <FormUserPassword v-else />
       </div>
 
       <div
         class="mb-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 2xl:col-span-2">
         <h3 class="mb-4 text-xl font-semibold dark:text-white">Change email</h3>
-        <span v-if="!$user.id" class="loading loading-spinner loading-lg"></span>
-        <FormUserEmail v-else :user-id="mode" />
+        <span v-if="!$user.userId" class="loading loading-spinner loading-lg"></span>
+        <FormUserEmail v-else />
       </div>
     </div>
   </div>
+
+  <KwToast v-model="$toastItems" class="z-50" />
 </template>

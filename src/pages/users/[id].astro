@@ -13,11 +13,11 @@ if (user.role !== 'ADMIN') {
   return Astro.redirect('/403', 302);
 }
 
-const { id } = Astro.params
+const { id } = Astro.params;
 ---
 
 <LayoutSidebar>
   <div class="p-2 md:p-4">
-    <UserSettings mode={id} client:only="vue" />
+    <UserSettings mode={id!} client:only="vue" />
   </div>
 </LayoutSidebar>

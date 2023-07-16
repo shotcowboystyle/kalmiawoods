@@ -6,19 +6,15 @@ import prismaClient from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { emailVerificationToken } from '@/services/verification-token';
-import type { User, UserProfileWithoutId } from '@/types/User';
+import type { User } from '@/types/User';
 import { generatePassword } from '@/utils/generate-password';
 
-// interface DatabaseUser extends AuthUser {
-//   profile: UserProfile;
-// }
-
-// const transformDatabaseUserWithProfile = (databaseUserWithProfile: any): User => ({
 const transformDatabaseUserWithProfile = (databaseUserWithProfile): User => ({
-  id: databaseUserWithProfile.id,
+  userId: databaseUserWithProfile.id,
   email: databaseUserWithProfile.email,
   emailVerified: databaseUserWithProfile.email_verified,
   role: databaseUserWithProfile.role,
+  profileId: databaseUserWithProfile.profile?.id ?? null,
   address: databaseUserWithProfile.profile?.address ?? null,
   firstName: databaseUserWithProfile.profile?.first_name ?? null,
   lastName: databaseUserWithProfile.profile?.last_name ?? null,
@@ -124,37 +120,6 @@ export const updateUserPassword = async (email: string, password: string) => {
   }
 };
 
-export const updateUserProfile = async (userId: string, data: UserProfileWithoutId) => {
-  const updatedUserProfile = await prismaClient.authUser.update({
-    where: { id: userId },
-    include: {
-      profile: true,
-    },
-    data: {
-      profile: {
-        upsert: {
-          update: {
-            ...(data.firstName && { first_name: data.firstName }),
-            ...(data.lastName && { last_name: data.lastName }),
-            ...(data.address && { address: data.address }),
-            ...(data.mobilePhone && { mobile_phone: data.mobilePhone?.replace(/\D/g, '') }),
-            // ...(data.avatar && { avatar: data.avatar }),
-          },
-          create: {
-            first_name: data.firstName,
-            last_name: data.lastName,
-            address: data.address,
-            mobile_phone: data.mobilePhone?.replace(/\D/g, ''),
-            // avatar: data.avatar,
-          },
-        },
-      },
-    },
-  });
-
-  return transformDatabaseUserWithProfile(updatedUserProfile);
-};
-
 export const getUsers = async () => {
   const databaseUsers = await prismaClient.authUser.findMany({
     include: {
@@ -198,11 +163,13 @@ export const deleteUser = async (userId: string) => {
   });
 
   if (userProfile) {
-    deleteTransactions.push(prismaClient.userProfile.delete({
-      where: {
-        user_id: userId,
-      },
-    }))
+    deleteTransactions.push(
+      prismaClient.userProfile.delete({
+        where: {
+          user_id: userId,
+        },
+      }),
+    );
   }
 
   await prismaClient.$transaction(deleteTransactions);

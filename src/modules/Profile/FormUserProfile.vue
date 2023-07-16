@@ -1,159 +1,114 @@
 <script setup lang="ts">
-import { updateUser, user } from '@/stores/user';
-import { formatPhoneInputUSA } from '@/utils/phone';
-import { useStore } from '@nanostores/vue';
-import { useTimeout } from '@vueuse/core';
+import { useStore, useVModel } from '@nanostores/vue';
 
-const props = defineProps({
-  userId: {
-    type: String,
-    default: 'latest',
-  },
-});
+import { activeUser, activeUserId, profileData, updateUser, usersMobilePhones } from '@/stores/user';
+import { diff } from '@/utils/diff';
+import { fetchPut } from '@/utils/fetchClient';
+import { formatPhoneInputUSA } from '@/utils/phone';
 
 const emit = defineEmits(['input-mobile-phone']);
 
-const showToast = ref(false);
-const { ready, start } = useTimeout(3500, { controls: true, callback: () => (showToast.value = false) });
+const toast: { error: Function; success: Function } | undefined = inject('toast');
 
-const $user = useStore(user);
+const $activeUserId = useStore(activeUserId);
+const $usersMobilePhones = useStore(usersMobilePhones);
 
 const isSubmitting = ref(false);
-const isSubmitSuccess = ref(false);
-const isSubmitFailure = ref(false);
-const hasErrors = ref(false);
-const formData = reactive({
-  firstName: $user.value.firstName ?? '',
-  lastName: $user.value.lastName ?? '',
-  mobilePhone: $user.value.mobilePhone ?? '',
-  address: $user.value.address ?? '',
-});
+const { firstNameModel, lastNameModel, mobilePhoneModel, addressModel } = useVModel(profileData, [
+  'firstName',
+  'lastName',
+  'mobilePhone',
+  'address',
+]);
+const $user = useStore(activeUser);
 
 const maskPhone = (event: Event) => {
   const { value } = event.target as HTMLInputElement;
-  formData.mobilePhone = formatPhoneInputUSA(value);
-  emit('input-mobile-phone', formData.mobilePhone);
+  mobilePhoneModel.value = formatPhoneInputUSA(value);
+  emit('input-mobile-phone', mobilePhoneModel);
 };
 
-// const vPhoneMask = {
-//   mounted: (el: HTMLInputElement) => {
-//     el.addEventListener(
-//       'keyup',
-//       () => formatPhoneInputUSA(el.value),
-//       { passive: true },
-//     );
-//   },
-// };
-function invalidateForm() {
-  hasErrors.value = true;
-}
-
 async function submit() {
-  isSubmitSuccess.value = false;
-  isSubmitFailure.value = false;
   isSubmitting.value = true;
 
-  try {
-    const response = await fetch(`/api/users/${props.userId}`, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ updateUserType: 'PROFILE', ...formData }),
-    });
+  const formData = profileData.get();
+  const changedData = diff($user.value, formData);
 
-    if (response.status === 200) {
-      isSubmitSuccess.value = true;
-      const data = await response.json();
-      updateUser(data);
-    }
-  } catch {
-    isSubmitFailure.value = true;
+  try {
+    const response = await fetchPut(`users/${$activeUserId.value}/profile`, {
+      profileId: $user.value.profileId,
+      profileData: changedData,
+    });
+    const data = await response.json();
+    updateUser(data);
+    toast?.success('Update successful.');
+  } catch (error) {
+    console.log('error', error);
+    toast?.error(error.message);
   } finally {
     isSubmitting.value = false;
-    showToast.value = true;
-    start();
   }
 }
 </script>
 
 <template>
-  <form @submit.prevent="submit" :class="[{ errors: hasErrors }]">
+  <KwForm @submit="submit">
     <div class="flex gap-x-6 mb-4">
-      <div class="form-control w-full max-w-xs">
-        <label class="label" for="firstName">
-          <span class="label-text">First name <span class="text-error">*</span></span>
-        </label>
-        <input
-          v-model="formData.firstName"
-          class="input input-bordered w-full max-w-xs"
-          type="text"
-          name="firstName"
-          id="firstName"
-          placeholder="enter user's first name"
-          @invalid="invalidateForm"
-          required />
-      </div>
-      <div class="form-control w-full max-w-xs">
-        <label class="label" for="lastName">
-          <span class="label-text">Last name <span class="text-error">*</span></span>
-        </label>
-        <input
-          v-model="formData.lastName"
-          class="input input-bordered w-full max-w-xs"
-          type="text"
-          name="lastName"
-          id="lastName"
-          placeholder="enter user's last name"
-          @invalid="invalidateForm"
-          required />
-      </div>
-    </div>
+      <KwTextField
+        type="text"
+        class="form-control w-full max-w-xs"
+        label="First name"
+        labelAlt="required"
+        name="firstName"
+        id="firstName"
+        placeholder="enter user's first name"
+        v-model="firstNameModel"
+        required />
 
-    <div class="form-control w-full max-w-xs mb-4">
-      <label class="label" for="mobilePhone">
-        <span class="label-text">Mobile phone <span class="text-error">*</span></span>
-      </label>
-      <input
-        v-model="formData.mobilePhone"
-        class="input input-bordered w-full max-w-xs"
-        type="tel"
-        name="mobilePhone"
-        id="mobilePhone"
-        placeholder="enter user's mobile phone"
-        autocomplete="off"
-        @invalid="invalidateForm"
-        @input="maskPhone"
+      <KwTextField
+        type="text"
+        class="form-control w-full max-w-xs"
+        label="Last name"
+        labelAlt="required"
+        name="lastName"
+        id="lastName"
+        placeholder="enter user's last name"
+        v-model="lastNameModel"
         required />
     </div>
 
-    <div class="form-control w-full mb-4">
-      <label class="label" for="address">
-        <span class="label-text">Address <span class="text-muted">(optional)</span></span>
-      </label>
-      <input
-        v-model="formData.address"
-        class="input input-bordered w-full max-w-xs"
-        type="text"
-        name="address"
-        id="address"
-        placeholder="enter user's address"
-        autocomplete="off" />
-    </div>
+    <KwTextField
+      class="form-control w-full max-w-xs"
+      label="Mobile phone"
+      labelAlt="required"
+      name="mobilePhone"
+      id="mobilePhone"
+      placeholder="enter user's mobile phone"
+      autocomplete="off"
+      v-model="mobilePhoneModel"
+      required
+      :rules="['phone', 'isUnique']"
+      :validation-matchers="$usersMobilePhones"
+      type="tel"
+      @input="maskPhone" />
 
-    <div class="mt-8">
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-        <span v-if="isSubmitting" class="loading loading-spinner"></span>
-        <span v-else>Save</span>
-      </button>
-    </div>
-  </form>
+    <KwTextField
+      type="text"
+      class="form-control w-full max-w-xs mb-4"
+      label="Address"
+      name="address"
+      id="address"
+      placeholder="enter user's address"
+      v-model="addressModel" />
 
-  <div v-if="showToast" class="toast toast-top toast-center z-50">
-    <div class="alert" :class="[{ 'alert-error': isSubmitFailure }, { 'alert-success': isSubmitSuccess }]">
-      <span v-if="isSubmitFailure">There was an error updating user.</span>
-      <span v-else>User successfully updated.</span>
+    <div class="flex gap-6 justify-start mt-8">
+      <KwButton
+        variant="primary"
+        text="Save"
+        icon-right="arrow-right"
+        type="submit"
+        :disabled="isSubmitting"
+        :loading="isSubmitting" />
     </div>
-  </div>
+  </KwForm>
 </template>

@@ -1,99 +1,76 @@
 <script setup lang="ts">
-import { useTimeout } from '@vueuse/core';
+import { useStore } from '@nanostores/vue';
 
-const props = defineProps({
-  userId: {
-    type: String,
-    default: 'latest',
-  },
-});
+import { authUser } from '@/stores/auth';
+import { activeUserId, updateUser } from '@/stores/user';
+import { fetchPut } from '@/utils/fetchClient';
 
-const showToast = ref(false);
-const { ready, start } = useTimeout(3500, { controls: true, callback: () => (showToast.value = false) });
+const toast: { error: Function; success: Function } | undefined = inject('toast');
 
 const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
 const togglePasswordVisibility = () => (hidePassword.value = !hidePassword.value);
 const passwordFieldType = computed(() => (hidePassword.value ? 'password' : 'text'));
 
+const $authUser = useStore(authUser);
+const $activeUserId = useStore(activeUserId);
+
 const isSubmitting = ref(false);
-const isSubmitSuccess = ref(false);
-const isSubmitFailure = ref(false);
-const hasErrors = ref(false);
-const passwordErrorMessage = ref('');
-const confirmPasswordErrorMessage = ref('');
 const formData = reactive({
   currentPassword: undefined,
   newPassword: undefined,
-  confirmPassword: undefined,
+  confirmNewPassword: undefined,
 });
 
-function invalidateForm() {
-  hasErrors.value = true;
-}
-
 async function submit() {
-  isSubmitSuccess.value = false;
-  isSubmitFailure.value = false;
   isSubmitting.value = true;
 
   try {
-    const response = await fetch(`/api/users/${props.userId}`, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ updateUserType: 'SECURITY_CREDENTIALS', newPassword: formData.newPassword }),
+    const response = await fetchPut(`users/${$activeUserId.value}/password`, {
+      newPassword: formData.newPassword,
     });
 
-    if (response.status === 200) {
-      isSubmitSuccess.value = true;
-    }
-  } catch {
-    isSubmitFailure.value = true;
+    const data = await response.json();
+    updateUser(data);
+    toast?.success('Update successful.');
+  } catch (error) {
+    console.log('error', error);
+    toast?.error(error.message);
   } finally {
     isSubmitting.value = false;
-    showToast.value = true;
-    start();
   }
 }
 </script>
 
 <template>
-  <form @submit.prevent="submit" :class="[{ errors: hasErrors }]">
+  <KwForm @submit="submit">
     <div class="form-control w-full max-w-xs mb-4">
-      <label class="label" for="currentPassword">
-        <span class="label-text">Current password <span class="text-error">*</span></span>
-      </label>
-      <input
-        v-model="formData.currentPassword"
-        class="input input-bordered w-full max-w-xs"
-        :type="passwordFieldType"
-        autocomplete="off"
+      <KwTextField
+        class="form-control w-full max-w-xs"
+        label="Current password"
         name="currentPassword"
         id="currentPassword"
-        @invalid="invalidateForm"
-        required />
+        v-model="formData.currentPassword"
+        required
+        :type="passwordFieldType"
+        autocomplete="off" />
     </div>
 
     <div class="flex gap-x-6 mb-4">
       <div class="form-control w-full max-w-xs">
-        <label class="label" for="newPassword">
-          <span class="label-text">New password</span>
-        </label>
-        <input
-          v-model="formData.newPassword"
-          class="input input-bordered w-full max-w-xs"
-          :type="passwordFieldType"
-          autocomplete="off"
+        <KwTextField
+          class="form-control w-full max-w-xs"
+          label="New password"
           name="newPassword"
           id="newPassword"
-          required />
+          v-model="formData.newPassword"
+          required
+          :rules="['password']"
+          :type="passwordFieldType"
+          autocomplete="off" />
         <div class="absolute bottom-2.5 right-2.5">
           <button type="button" class="btn btn-primary" @click="togglePasswordVisibility">Show</button>
         </div>
-        <p class="text-error text-sm" v-if="passwordErrorMessage.length">{{ passwordErrorMessage }}</p>
         <div
           data-popover
           id="popover-password"
@@ -105,33 +82,29 @@ async function submit() {
       </div>
 
       <div class="form-control w-full max-w-xs">
-        <label class="label" for="confirmPassword">
-          <span class="label-text">Confirm password</span>
-        </label>
-        <input
-          v-model="formData.confirmPassword"
-          class="input input-bordered w-full max-w-xs"
+        <KwTextField
+          class="form-control w-full max-w-xs"
+          label="Confirm new password"
+          name="confirmNewPassword"
+          id="confirmNewPassword"
+          v-model="formData.confirmNewPassword"
+          required
+          :rules="['isMatch']"
+          :validation-match="formData.newPassword"
+          errorMessagePrefix="Passwords"
           :type="passwordFieldType"
-          autocomplete="off"
-          name="confirmPassword"
-          id="confirmPassword"
-          required />
-        <p class="text-error text-sm" v-if="confirmPasswordErrorMessage.length">{{ confirmPasswordErrorMessage }}</p>
+          autocomplete="off" />
       </div>
     </div>
 
-    <div class="mt-8">
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-        <span v-if="isSubmitting" class="loading loading-spinner"></span>
-        <span v-else>Save</span>
-      </button>
+    <div class="flex gap-6 justify-start mt-8">
+      <KwButton
+        variant="primary"
+        text="Save"
+        icon-right="arrow-right"
+        type="submit"
+        :disabled="isSubmitting"
+        :loading="isSubmitting" />
     </div>
-  </form>
-
-  <div v-if="showToast" class="toast toast-top toast-center z-50">
-    <div class="alert" :class="[{ 'alert-error': isSubmitFailure }, { 'alert-success': isSubmitSuccess }]">
-      <span v-if="isSubmitFailure">There was an error updating this user's password.</span>
-      <span v-else>User password successfully updated.</span>
-    </div>
-  </div>
+  </KwForm>
 </template>

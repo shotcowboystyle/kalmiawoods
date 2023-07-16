@@ -17,10 +17,14 @@ export type UserWithProfile = z.infer<typeof AuthUserWithProfileSchema>;
 
 // export type UserWithProfileData = z.infer<typeof DisplayableUserDetailsSchema>;
 
-export type CreateUserInput = {
-  email: string | undefined;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  mobilePhone: string | undefined;
-  address: string | undefined;
+export type UpdateUserProfileInput = {
+  firstName: string;
+  lastName: string;
+  mobilePhone: string;
+  address?: string;
+  avatar?: string;
+};
+
+export type CreateUserInput = UpdateUserProfileInput & {
+  email: string;
 };

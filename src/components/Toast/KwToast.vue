@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import KwToastCard from './KwToastCard.vue';
 
 const props = defineProps(['modelValue']);

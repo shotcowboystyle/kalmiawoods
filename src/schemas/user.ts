@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { AuthUserSchema } from './auth';
 
 export const UserProfileSchema = z.object({
-  id: z.string(),
+  profileId: z.string(),
   address: z.string().optional(),
   firstName: z.string(),
   lastName: z.string(),
@@ -11,12 +11,12 @@ export const UserProfileSchema = z.object({
   avatar: z.string().optional(),
 });
 
-export const UserProfileWithoutIdSchema = UserProfileSchema.omit({ id: true });
+export const UserProfileWithoutIdSchema = UserProfileSchema.omit({ profileId: true });
 
 export const AuthUserWithProfileSchema = AuthUserSchema.merge(z.object({ profile: UserProfileSchema }));
 
-export const UserSchema = AuthUserSchema.merge(UserProfileWithoutIdSchema);
+export const UserSchema = AuthUserSchema.merge(UserProfileSchema);
 
-export const UserWithoutIdSchema = UserSchema.omit({ id: true });
+export const UserWithoutIdSchema = UserSchema.omit({ userId: true });
 
 export const UsersSchema = UserSchema.array();

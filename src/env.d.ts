@@ -19,12 +19,6 @@ declare namespace Lucia {
 
 declare module 'spotlight.js/src/js/spotlight.js';
 
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $toastItems: { push: Function };
-  }
-}
-
 // this is a temporary fix for the alpha.6 v-calendar version
 declare module 'v-calendar' {
   import { DefineComponent } from 'vue';

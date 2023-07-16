@@ -43,7 +43,7 @@ export default {
       app.config.globalProperties.$toastItems.push({
         title,
         variant: 'danger',
-        time: 500000,
+        time: 5000,
       });
     };
 
@@ -51,7 +51,7 @@ export default {
       app.config.globalProperties.$toastItems.push({
         title,
         variant: 'success',
-        time: 5000,
+        time: 500000,
       });
     };
 
@@ -64,7 +64,5 @@ export default {
     app.config.globalProperties.$toast = addToast;
     app.config.globalProperties.$toastError = addErrorToast;
     app.config.globalProperties.$toastSuccess = addSuccessToast;
-
-    // addErrorToast('Hello Error Toast');
   },
 };

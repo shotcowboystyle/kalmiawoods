@@ -111,7 +111,7 @@ export default defineConfig({
         },
       ],
       dts: 'src/auto-imports.d.ts',
-      dirs: ['src/composables'],
+      dirs: ['src/composables', 'src/plugins'],
       vueTemplate: true,
     }),
     prefetch(),
