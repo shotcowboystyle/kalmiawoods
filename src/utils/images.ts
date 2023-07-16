@@ -1,7 +1,7 @@
 const load = async function () {
   let images: Record<string, () => Promise<unknown>> | undefined;
   try {
-    images = import.meta.glob('@/assets/images/**/*.jpeg');
+    images = import.meta.glob('../assets/images/**/*.jpeg');
   } catch (e) {
     // continue regardless of error
   }
