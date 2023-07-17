@@ -4,8 +4,11 @@ import { auth } from '@/lib/lucia';
 import { getUser } from '@/services/user';
 
 export const get: APIRoute = async (context) => {
+  console.log('AUTH USER GET ONE');
   const authRequest = auth.handleRequest(context);
+  console.log('AUTH USER GET TWO');
   const { user } = await authRequest.validateUser();
+  console.log('AUTH USER GET Three', JSON.stringify(user));
 
   if (!user || !Object.keys(user).length) {
     return new Response(JSON.stringify(null), {
