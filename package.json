@@ -98,6 +98,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^0.19.7",
+		"@astrojs/node": "^5.1.4",
     "@astrojs/partytown": "^1.2.3",
     "@astrojs/prefetch": "^0.3.0",
     "@astrojs/tailwind": "^4.0.0",

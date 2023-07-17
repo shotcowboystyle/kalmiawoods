@@ -2,7 +2,8 @@ import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
 import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
-import vercel from '@astrojs/vercel/serverless';
+// import vercel from '@astrojs/vercel/serverless';
+import node from '@astrojs/node';
 import vue from '@astrojs/vue';
 // import { sentryVitePlugin } from '@sentry/vite-plugin';
 import compress from 'astro-compress';
@@ -57,10 +58,13 @@ const vitePlugins = [
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: vercel({
-    analytics: true,
-    // imageService: true,
-    // excludeFiles: ['.prisma/client/index-browser'],
+  // adapter: vercel({
+  //   analytics: true,
+  //   // imageService: true,
+  //   // excludeFiles: ['.prisma/client/index-browser'],
+  // }),
+  adapter: node({
+    mode: 'standalone',
   }),
   experimental: {
     assets: true,
