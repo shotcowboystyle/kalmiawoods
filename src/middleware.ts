@@ -95,10 +95,14 @@
 
 // export const onRequest = sequence(validationHandler);
 
-import { auth } from "@/lib/lucia";
 
 import type { MiddlewareResponseHandler } from "astro";
 
+export const config = {
+  runtime: 'serverless',
+};
+
+// export const onRequest = async (context, next) => {
 export const onRequest: MiddlewareResponseHandler = async (context, next) => {
   const PUBLIC_ROUTES = ['/maintenance', '/403', '/404', '/500', '/email', '/api'];
   const AUTH_ROUTES = ['/auth/login', '/signup', '/auth/password-reset'];
@@ -106,54 +110,59 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
 
   const pathname = new URL(context.request.url).pathname;
 
-  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
-    console.log('PUBLIC ROUTES');
-    return await next();
-  } else {
-    const authRequest = auth.handleRequest(context);
+  console.log('MIDDLEWARE ONE');
+  const response = await next();
+  console.log('MIDDLEWARE TWO');
 
-    const { session, user } = await authRequest.validateUser();
-    console.log('NON PUBLIC ROUTES', JSON.stringify(session), JSON.stringify(user));
+  // if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+  //   console.log('PUBLIC ROUTES');
+  //   return await next();
+  // } else {
+  //   const authRequest = auth.handleRequest(context);
 
-    if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
-      console.log('AUTH ROUTES ONE');
-      if (session) {
-        console.log('AUTH ROUTES TWO');
-        if (!user.emailVerified) {
-          console.log('AUTH ROUTES THREE');
-          return context.redirect('/auth/email-verification');
-        }
+  //   const { session, user } = await authRequest.validateUser();
+  //   console.log('NON PUBLIC ROUTES', JSON.stringify(session), JSON.stringify(user));
 
-        return context.redirect('/');
-      }
-    } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
-      console.log('ACCOUNT ROUTES ONE');
-      return context.redirect('/');
-    } else {
-      console.log('OTHER ROUTES ONE');
-      if (!session) {
-        console.log('OTHER ROUTES TWO');
-        return context.redirect('/auth/login');
-      }
+  //   if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
+  //     console.log('AUTH ROUTES ONE');
+  //     if (session) {
+  //       console.log('AUTH ROUTES TWO');
+  //       if (!user.emailVerified) {
+  //         console.log('AUTH ROUTES THREE');
+  //         return context.redirect('/auth/email-verification');
+  //       }
 
-      if (!user?.emailVerified) {
-        console.log('OTHER ROUTES THREE');
-        return context.redirect('/auth/email-verification');
-      }
+  //       return context.redirect('/');
+  //     }
+  //   } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
+  //     console.log('ACCOUNT ROUTES ONE');
+  //     return context.redirect('/');
+  //   } else {
+  //     console.log('OTHER ROUTES ONE');
+  //     if (!session) {
+  //       console.log('OTHER ROUTES TWO');
+  //       return context.redirect('/auth/login');
+  //     }
 
-      const isAdmin = user.role === 'ADMIN';
-      context.locals.user = {
-        userId: user.userId,
-        email: user.email,
-        isAdmin,
-      };
+  //     if (!user?.emailVerified) {
+  //       console.log('OTHER ROUTES THREE');
+  //       return context.redirect('/auth/email-verification');
+  //     }
 
-      if (pathname.startsWith('/admin') && !isAdmin) {
-        console.log('OTHER ROUTES FOUR');
-        return context.redirect('/403');
-      }
-    }
-  }
+  //     const isAdmin = user.role === 'ADMIN';
+  //     context.locals.user = {
+  //       userId: user.userId,
+  //       email: user.email,
+  //       isAdmin,
+  //     };
 
-  return await next();
+  //     if (pathname.startsWith('/admin') && !isAdmin) {
+  //       console.log('OTHER ROUTES FOUR');
+  //       return context.redirect('/403');
+  //     }
+  //   }
+  // }
+
+  // return await next();
+  return response;
 };

@@ -41,7 +41,8 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"]
+  // ,
   // "exclude": ["dist", ".vercel"]
-  "exclude": ["node_modules"]
+  // "exclude": ["node_modules"]
 }
