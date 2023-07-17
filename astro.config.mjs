@@ -1,22 +1,26 @@
 import mdx from '@astrojs/mdx';
-import partytown from '@astrojs/partytown';
+// import partytown from '@astrojs/partytown';
+// import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 // import node from '@astrojs/node';
 import vue from '@astrojs/vue';
 // import { sentryVitePlugin } from '@sentry/vite-plugin';
+// import compress from 'astro-compress';
 // import compressor from 'astro-compressor';
+// import critters from 'astro-critters';
+import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
-import { nodeExternalsPlugin } from 'esbuild-node-externals';
-import { dirname, resolve } from 'path';
+// import { nodeExternalsPlugin } from 'esbuild-node-externals';
+// import { dirname, resolve } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
-import mkcert from 'vite-plugin-mkcert';
+// import mkcert from 'vite-plugin-mkcert';
 // import { prismaClient } from './src/lib/db';
 
 const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTRY_ORG, DEBUGGING } = loadEnv(
@@ -25,7 +29,7 @@ const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTR
   '',
 );
 // const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const vitePlugins = [
   Components({
@@ -37,7 +41,7 @@ const vitePlugins = [
     autoInstall: true,
     compiler: 'vue3',
   }),
-  mkcert(),
+  // mkcert(),
 ];
 
 // if (SENTRY_DSN.length && DEBUGGING !== 'true') {
@@ -55,7 +59,9 @@ const vitePlugins = [
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    analytics: true,
+  }),
   experimental: {
     assets: true,
   },
@@ -63,17 +69,17 @@ export default defineConfig({
     excludeMiddleware: true,
     // split: true,
   },
-  server: {
-    host: true,
-    // port: 9000,
-  },
+  // server: {
+  //   host: true,
+  //   // port: 9000,
+  // },
   site: APP_SITE,
   // base: basePath,
   trailingSlash: 'never',
   integrations: [
     vue({
       appEntrypoint: '/src/pages/_app',
-      // reactivityTransform: true,
+      reactivityTransform: true,
     }),
     // vue(),
     tailwind({
@@ -94,11 +100,11 @@ export default defineConfig({
     //   service: sharpImageService(),
     // }),
     mdx(),
-    partytown({
-      config: {
-        forward: ['dataLayer.push'],
-      },
-    }),
+    // partytown({
+    //   config: {
+    //     forward: ['dataLayer.push'],
+    //   },
+    // }),
     AutoImport({
       imports: [
         'vue',
@@ -123,7 +129,7 @@ export default defineConfig({
     //   logger: 1,
     // }),
     // compressor({ gzip: true, brotli: true }),
-    // devOnlyRoutes(),
+    devOnlyRoutes(),
     // prismaClient,
   ],
   markdown: {},
@@ -132,33 +138,33 @@ export default defineConfig({
     //   copyPublicDir: false,
     //   // sourcemap: true,
     // },
-    ssr: {
-      // external: ['svgo'],
-      // external: ['.prisma/client/index-browser'],
-			noExternal: ["lucia-auth", "@lucia-auth/adapter-prisma"],
-			external: ["cookie"],
-    },
+    // ssr: {
+    //   // external: ['svgo'],
+    //   // external: ['.prisma/client/index-browser'],
+		// 	noExternal: ["lucia-auth", "@lucia-auth/adapter-prisma"],
+		// 	external: ["cookie"],
+    // },
     // define: {
     //   __DATE__: `'${new Date().toISOString()}'`,
     // },
-    server: {
-      https: true,
-      // strictPort: true,
-      // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
-    },
+    // server: {
+    //   https: true,
+    //   // strictPort: true,
+    //   // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
+    // },
     plugins: vitePlugins,
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
-      allowNodeBuiltins: true,
-      esbuildOptions: {
-        plugins: [nodeExternalsPlugin()],
-      },
+      // allowNodeBuiltins: true,
+      // esbuildOptions: {
+      //   plugins: [nodeExternalsPlugin()],
+      // },
     },
-    resolve: {
-      alias: {
-        '@': resolve(__dirname, './src'),
-        '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',
-      },
-    },
+    // resolve: {
+    //   alias: {
+    //     '@': resolve(__dirname, './src'),
+    //     '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',
+    //   },
+    // },
   },
 });
