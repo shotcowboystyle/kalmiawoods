@@ -27,7 +27,7 @@ const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTR
   process.cwd(),
   '',
 );
-const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
+// const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const vitePlugins = [
@@ -78,7 +78,7 @@ export default defineConfig({
   //   // port: 9000,
   // },
   site: APP_SITE,
-  base: basePath,
+  // base: basePath,
   trailingSlash: 'never',
   integrations: [
     vue({
