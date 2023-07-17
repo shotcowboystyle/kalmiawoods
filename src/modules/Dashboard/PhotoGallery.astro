@@ -54,7 +54,7 @@ export const photoGallery = [
   },
 ];
 
-const thumbnails = getAssets(await Astro.glob("../assets/images/*.jpeg"));
+const thumbnails = getAssets(await Astro.glob("../../assets/images/*.jpeg"));
 const getThumbnail = (name: string) => {
     return thumbnails.find(thumbnail => thumbnail.name === name);
 }
