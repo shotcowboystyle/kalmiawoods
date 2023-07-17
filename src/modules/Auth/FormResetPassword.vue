@@ -89,7 +89,7 @@ async function submit() {
     </div>
 
     <div class="flex flex-wrap items-start">
-      <a href="/password-reset" class="link text-primary"> Lost Password? </a>
+      <a href="/auth/password-reset" class="link text-primary"> Lost Password? </a>
     </div>
 
     <button type="submit" class="btn btn-primary btn-block" :disabled="isSubmitting">

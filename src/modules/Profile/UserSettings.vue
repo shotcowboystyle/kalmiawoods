@@ -49,7 +49,7 @@ const $user = useStore(activeUser);
                   clip-rule="evenodd"></path>
               </svg>
               <a
-                href="/users"
+                href="/admin/users"
                 class="hover:text-primary-600 ml-1 text-gray-700 dark:text-gray-300 dark:hover:text-white md:ml-2"
                 >Users</a
               >

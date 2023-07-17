@@ -194,7 +194,7 @@ watch(arrivedState, ({ bottom }) => {
                 </td>
 
                 <td class="space-x-2 whitespace-nowrap p-4 w-1/6">
-                  <a :href="`/users/${user?.userId}`" class="btn btn-primary">
+                  <a :href="`/admin/users/${user?.userId}`" class="btn btn-primary">
                     <svg
                       class="mr-2 h-4 w-4"
                       fill="currentColor"

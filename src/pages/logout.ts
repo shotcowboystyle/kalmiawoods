@@ -14,5 +14,5 @@ export const post: APIRoute = async (context) => {
   await auth.invalidateSession(session.sessionId);
   // delete session cookie
   authRequest.setSession(null);
-  return context.redirect('/login', 302);
+  return context.redirect('/auth/login', 302);
 };

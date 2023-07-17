@@ -45,7 +45,7 @@ if (Astro.request.method === "POST") {
     authRequest.setSession(session);
     const token = await emailVerificationToken.issue(user.userId);
     await sendEmailVerificationEmail(email, token.toString());
-    return Astro.redirect('/email-verification', 302);
+    return Astro.redirect('/auth/email-verification', 302);
   } catch (e: any) {
     if (e instanceof LuciaError && e.message === 'AUTH_DUPLICATE_KEY_ID') {
       errorMessage = 'Email is already taken';
