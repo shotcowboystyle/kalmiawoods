@@ -73,10 +73,10 @@ export default defineConfig({
   //   excludeMiddleware: true,
   //   split: true,
   // },
-  // server: {
-  //   host: true,
-  //   // port: 9000,
-  // },
+  server: {
+    host: true,
+    // port: 9000,
+  },
   site: APP_SITE,
   // base: basePath,
   trailingSlash: 'never',
@@ -149,11 +149,11 @@ export default defineConfig({
     // define: {
     //   __DATE__: `'${new Date().toISOString()}'`,
     // },
-    server: {
-      https: true,
-      // strictPort: true,
-      // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
-    },
+    // server: {
+    //   https: true,
+    //   // strictPort: true,
+    //   // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
+    // },
     plugins: vitePlugins,
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
