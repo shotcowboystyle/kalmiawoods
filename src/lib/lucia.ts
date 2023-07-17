@@ -2,11 +2,11 @@ import prisma from '@lucia-auth/adapter-prisma';
 import lucia from 'lucia-auth';
 import { astro } from 'lucia-auth/middleware';
 
-import prismaClient from '@/lib/db.js';
+import { prisma as dbPrisma } from '@/lib/db.js';
 
 export const auth = lucia({
   env: import.meta.env.DEV ? 'DEV' : 'PROD',
-  adapter: prisma(prismaClient),
+  adapter: prisma(dbPrisma),
   middleware: astro(),
   experimental: {
     debugMode: false,

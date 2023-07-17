@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 
-import prismaClient from '@/lib/db.js';
+import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendPasswordResetEmail } from '@/services/email';
 import { passwordResetToken } from '@/services/verification-token';
@@ -23,7 +23,7 @@ export const post: APIRoute = async (context) => {
   }
 
   try {
-    const databaseUser = await prismaClient.authUser.findFirst({
+    const databaseUser = await prisma.authUser.findFirst({
       where: {
         email,
       },

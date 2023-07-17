@@ -1,10 +1,10 @@
 // import type { Email } from '@prisma/client';
 
 import { BASE_APP_URL } from '@/app/constants';
-import prismaClient from '@/lib/db.js';
+import { prisma } from '@/lib/db.js';
 
 const sendEmail = async (emailAddress: string, subject: string, content: string) => {
-  await prismaClient.email.create({
+  await prisma.email.create({
     data: {
       subject,
       email_address: emailAddress,
@@ -41,7 +41,7 @@ const transformDatabaseEmail = (databaseEmail) => ({
 });
 
 export const getEmails = async (emailAddressQuery?: string) => {
-  const databaseEmails = await prismaClient.email.findMany({
+  const databaseEmails = await prisma.email.findMany({
     where: {
       email_address: {
         contains: emailAddressQuery ?? '',
@@ -57,7 +57,7 @@ export const getEmails = async (emailAddressQuery?: string) => {
 };
 
 export const getEmail = async (emailId: string) => {
-  const databaseEmail = await prismaClient.email.findFirst({
+  const databaseEmail = await prisma.email.findFirst({
     where: {
       id: emailId,
     },

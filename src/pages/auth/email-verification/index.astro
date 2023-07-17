@@ -1,6 +1,6 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
-import prismaClient from "@/lib/db.js";
+import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { emailVerificationToken } from '@/services/verification-token';
@@ -18,7 +18,7 @@ if (Astro.request.method === "POST") {
     return null;
   }
   try {
-    const databaseUser = await prismaClient.authUser.findFirst({
+    const databaseUser = await prisma.authUser.findFirst({
       where: {
         email,
       },

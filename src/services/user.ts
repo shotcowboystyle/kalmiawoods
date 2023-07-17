@@ -1,25 +1,29 @@
-// import type { AuthUser, UserProfile } from '@prisma/client';
-// import { Prisma } from '@prisma/client';
 import { LuciaError } from 'lucia-auth';
 
-import prismaClient from '@/lib/db.js';
+import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { emailVerificationToken } from '@/services/verification-token';
-import type { User } from '@/types/User';
 import { generatePassword } from '@/utils/generate-password';
 
-const transformDatabaseUserWithProfile = (databaseUserWithProfile): User => ({
+import type { User } from '@/types/User';
+import type { AuthUser, UserProfile } from '@prisma/client';
+
+interface DatabaseUserWithProfile extends AuthUser {
+  profile: UserProfile;
+}
+
+const transformDatabaseUserWithProfile = (databaseUserWithProfile: DatabaseUserWithProfile): User => ({
   userId: databaseUserWithProfile.id,
   email: databaseUserWithProfile.email,
   emailVerified: databaseUserWithProfile.email_verified,
   role: databaseUserWithProfile.role,
-  profileId: databaseUserWithProfile.profile?.id ?? null,
-  address: databaseUserWithProfile.profile?.address ?? null,
-  firstName: databaseUserWithProfile.profile?.first_name ?? null,
-  lastName: databaseUserWithProfile.profile?.last_name ?? null,
-  mobilePhone: databaseUserWithProfile.profile?.mobile_phone ?? null,
-  avatar: databaseUserWithProfile.profile?.avatar ?? null,
+  profileId: databaseUserWithProfile.profile?.id,
+  address: databaseUserWithProfile.profile?.address ?? undefined,
+  firstName: databaseUserWithProfile.profile?.first_name,
+  lastName: databaseUserWithProfile.profile?.last_name,
+  mobilePhone: databaseUserWithProfile.profile?.mobile_phone,
+  avatar: databaseUserWithProfile.profile?.avatar ?? undefined,
 });
 
 export const createUser = async (data: User) => {
@@ -58,7 +62,7 @@ export const createUser = async (data: User) => {
   await sendEmailVerificationEmail(data.email, token.toString());
 
   try {
-    createdUser = await prismaClient.authUser.update({
+    createdUser = await prisma.authUser.update({
       where: {
         id: userId,
       },
@@ -85,7 +89,7 @@ export const createUser = async (data: User) => {
     throw new Error('An unknown error occurred');
   }
 
-  return transformDatabaseUserWithProfile(createdUser);
+  return transformDatabaseUserWithProfile(createdUser as DatabaseUserWithProfile);
 };
 
 export const updateUserEmail = async (userId: string, email: string) => {
@@ -99,7 +103,7 @@ export const updateUserEmail = async (userId: string, email: string) => {
     }
 
     // duplication error
-    // if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+    // if (error instanceof Prisma.PrismaKnownRequestError && error.code === 'P2002') {
     if (error.code === 'P2002') {
       throw new Error('Email is already taken');
     }
@@ -121,7 +125,7 @@ export const updateUserPassword = async (email: string, password: string) => {
 };
 
 export const getUsers = async () => {
-  const databaseUsers = await prismaClient.authUser.findMany({
+  const databaseUsers = await prisma.authUser.findMany({
     include: {
       profile: true,
     },
@@ -131,7 +135,7 @@ export const getUsers = async () => {
 };
 
 export const getUser = async (userId: string) => {
-  const databaseUser = await prismaClient.authUser.findFirst({
+  const databaseUser = await prisma.authUser.findFirst({
     where: {
       id: userId,
     },
@@ -144,35 +148,36 @@ export const getUser = async (userId: string) => {
     throw new Error('User not found');
   }
 
-  return transformDatabaseUserWithProfile(databaseUser);
+  return transformDatabaseUserWithProfile(databaseUser as DatabaseUserWithProfile);
 };
 
 export const deleteUser = async (userId: string) => {
-  const deleteUserReservations = prismaClient.reservation.deleteMany({
+  // const deleteUserReservations = prisma.reservation.deleteMany({
+  await prisma.reservation.deleteMany({
     where: {
       user_id: userId,
     },
   });
 
-  const deleteTransactions = [deleteUserReservations];
+  // const deleteTransactions = [deleteUserReservations];
 
-  const userProfile = await prismaClient.userProfile.findUnique({
+  const userProfile = await prisma.userProfile.findUnique({
     where: {
       user_id: userId,
     },
   });
 
   if (userProfile) {
-    deleteTransactions.push(
-      prismaClient.userProfile.delete({
+    // deleteTransactions.push(
+      await prisma.userProfile.delete({
         where: {
           user_id: userId,
         },
-      }),
-    );
+      });
+    // );
   }
 
-  await prismaClient.$transaction(deleteTransactions);
+  // await prisma.$transaction(deleteTransactions);
 
-  return auth.deleteUser(userId);
+  return await auth.deleteUser(userId);
 };

@@ -55,14 +55,7 @@ const vitePlugins = [
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: vercel({
-    analytics: true,
-    // imageService: true,
-    // excludeFiles: ['.prisma/client/index-browser'],
-  }),
-  // adapter: node({
-  //   mode: 'standalone',
-  // }),
+  adapter: vercel(),
   experimental: {
     assets: true,
   },
@@ -139,10 +132,12 @@ export default defineConfig({
     //   copyPublicDir: false,
     //   // sourcemap: true,
     // },
-    // ssr: {
-    //   // external: ['svgo'],
-    //   external: ['.prisma/client/index-browser'],
-    // },
+    ssr: {
+      // external: ['svgo'],
+      // external: ['.prisma/client/index-browser'],
+			noExternal: ["lucia-auth", "@lucia-auth/adapter-prisma"],
+			external: ["cookie"],
+    },
     // define: {
     //   __DATE__: `'${new Date().toISOString()}'`,
     // },
@@ -154,6 +149,7 @@ export default defineConfig({
     plugins: vitePlugins,
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
+      allowNodeBuiltins: true,
       esbuildOptions: {
         plugins: [nodeExternalsPlugin()],
       },

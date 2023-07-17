@@ -1,17 +1,16 @@
-import prismaClient from '@/lib/db.js';
+import { prisma } from '@/lib/db.js';
 import type { BuildingEnum, Reservation } from '@/types/Reservation';
-// import type { AuthUser, Reservation as PrismaReservation, UserProfile } from '@prisma/client';
+import type { AuthUser, Reservation as PrismaReservation, UserProfile } from '@prisma/client';
 
-// interface AuthUserWithProfile extends AuthUser {
-//   profile: UserProfile;
-// }
+interface AuthUserWithProfile extends AuthUser {
+  profile: UserProfile;
+}
 
-// interface DatabaseReservation extends PrismaReservation {
-//   auth_user: AuthUserWithProfile;
-// }
+interface DatabaseReservation extends PrismaReservation {
+  auth_user: AuthUserWithProfile;
+}
 
-// const transformDatabaseReservation = (databaseReservation: DatabaseReservation): Reservation => ({
-const transformDatabaseReservation = (databaseReservation): Reservation => ({
+const transformDatabaseReservation = (databaseReservation: DatabaseReservation): Reservation => ({
   id: databaseReservation.id,
   checkInDate: databaseReservation.check_in_date,
   checkOutDate: databaseReservation.check_out_date,
@@ -38,7 +37,7 @@ export const createReservation = async ({
   buildings: BuildingEnum[];
   userId: string;
 }) => {
-  const createdReservation = await prismaClient.reservation.create({
+  const createdReservation = await prisma.reservation.create({
     include: {
       auth_user: {
         include: {
@@ -54,8 +53,7 @@ export const createReservation = async ({
     },
   });
 
-  // return transformDatabaseReservation(createdReservation as DatabaseReservation);
-  return transformDatabaseReservation(createdReservation);
+  return transformDatabaseReservation(createdReservation as DatabaseReservation);
 };
 
 export const updateReservation = async ({
@@ -70,7 +68,7 @@ export const updateReservation = async ({
   buildings: BuildingEnum[];
 }) => {
   try {
-    const updatedReservation = await prismaClient.reservation.update({
+    const updatedReservation = await prisma.reservation.update({
       where: { id: reservationId },
       data: {
         check_in_date: checkInDate,
@@ -86,10 +84,9 @@ export const updateReservation = async ({
       },
     });
 
-    // return transformDatabaseReservation(updatedReservation as DatabaseReservation);
-    return transformDatabaseReservation(updatedReservation);
-  } catch (error) {
-    throw new Error(error);
+    return transformDatabaseReservation(updatedReservation as DatabaseReservation);
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };
 
@@ -109,7 +106,7 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
   // const startEndDateCheck = `"${formatQueryDateRange(endDateCheck)}"`;
 
   try {
-    const databaseReservations = await prismaClient.reservation.findMany({
+    const databaseReservations = await prisma.reservation.findMany({
       where: {
         check_in_date: {
           gte: startDateCheck,
@@ -130,16 +127,15 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
       // },
     });
 
-    // return databaseReservations.map((databaseReservation: DatabaseReservation) =>
-    return databaseReservations.map((databaseReservation) => transformDatabaseReservation(databaseReservation));
-  } catch (error) {
-    throw new Error(error);
+    return (databaseReservations as DatabaseReservation[]).map((databaseReservation) => transformDatabaseReservation(databaseReservation));
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };
 
 export const getReservation = async (reservationId: string) => {
   try {
-    const databaseReservation = await prismaClient.reservation.findFirst({
+    const databaseReservation = await prisma.reservation.findFirst({
       where: {
         id: reservationId,
       },
@@ -156,19 +152,18 @@ export const getReservation = async (reservationId: string) => {
       return null;
     }
 
-    // return transformDatabaseReservation(databaseReservation as DatabaseReservation);
-    return transformDatabaseReservation(databaseReservation);
-  } catch (error) {
-    throw new Error(error);
+    return transformDatabaseReservation(databaseReservation as DatabaseReservation);
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };
 
 export const deleteReservation = async (reservationId: string) => {
   try {
-    return await prismaClient.reservation.delete({
+    return await prisma.reservation.delete({
       where: { id: reservationId },
     });
-  } catch (error) {
-    throw new Error(error);
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };

@@ -9,7 +9,7 @@ export const config = {
  * @param options.context {import("@vercel/edge").RequestContext}
  * @returns {object}
  */
-export default function ({ request, context }) {
+export default function middleware(request, context) {
   // do something with request and context
   // return next();
   return { request, context };

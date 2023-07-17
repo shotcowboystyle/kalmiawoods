@@ -95,7 +95,7 @@
 
 // export const onRequest = sequence(validationHandler);
 
-import { auth } from "../lib/lucia";
+import { auth } from "@/lib/lucia";
 
 import type { MiddlewareResponseHandler } from "astro";
 

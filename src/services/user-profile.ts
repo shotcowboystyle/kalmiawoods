@@ -1,31 +1,36 @@
-import prismaClient from '@/lib/db.js';
+import { prisma } from '@/lib/db.js';
 import type { User, UserProfile, UserProfileWithoutId } from '@/types/User';
+import type { AuthUser, UserProfile as PrismaUserProfile } from '@prisma/client';
 
-const transformDatabaseUserProfile = (databaseUserProfile): UserProfile => ({
+interface DatabaseUserProfileWithAuthUser extends PrismaUserProfile {
+  auth_user: AuthUser;
+}
+
+const transformDatabaseUserProfile = (databaseUserProfile: PrismaUserProfile): UserProfile => ({
   profileId: databaseUserProfile.id,
-  address: databaseUserProfile.address,
+  address: databaseUserProfile.address ?? undefined,
   firstName: databaseUserProfile.first_name,
   lastName: databaseUserProfile.last_name,
   mobilePhone: databaseUserProfile.mobile_phone,
-  avatar: databaseUserProfile.avatar,
+  avatar: databaseUserProfile.avatar ?? undefined,
 });
 
-const transformDatabaseUserProfileWithAuthUser = (databaseUserProfileWithAuthUser): User => ({
+const transformDatabaseUserProfileWithAuthUser = (databaseUserProfileWithAuthUser: DatabaseUserProfileWithAuthUser): User => ({
   userId: databaseUserProfileWithAuthUser.auth_user.id,
   email: databaseUserProfileWithAuthUser.auth_user.email,
   emailVerified: databaseUserProfileWithAuthUser.auth_user.email_verified,
   role: databaseUserProfileWithAuthUser.auth_user.role,
-  profileId: databaseUserProfileWithAuthUser?.id ?? null,
-  address: databaseUserProfileWithAuthUser?.address ?? null,
-  firstName: databaseUserProfileWithAuthUser?.first_name ?? null,
-  lastName: databaseUserProfileWithAuthUser?.last_name ?? null,
-  mobilePhone: databaseUserProfileWithAuthUser?.mobile_phone ?? null,
-  avatar: databaseUserProfileWithAuthUser?.avatar ?? null,
+  profileId: databaseUserProfileWithAuthUser?.id,
+  address: databaseUserProfileWithAuthUser?.address ?? undefined,
+  firstName: databaseUserProfileWithAuthUser?.first_name,
+  lastName: databaseUserProfileWithAuthUser?.last_name,
+  mobilePhone: databaseUserProfileWithAuthUser?.mobile_phone,
+  avatar: databaseUserProfileWithAuthUser?.avatar ?? undefined,
 });
 
 export const updateUserProfile = async (profileId: string, data: UserProfileWithoutId) => {
   try {
-    const updatedUserProfile = await prismaClient.userProfile.update({
+    const updatedUserProfile = await prisma.userProfile.update({
       where: { id: profileId },
       include: {
         auth_user: true,
@@ -51,7 +56,7 @@ export const updateUserProfile = async (profileId: string, data: UserProfileWith
 };
 
 export const getUserProfile = async (userId: string) => {
-  const databaseUserProfile = await prismaClient.userProfile.findFirst({
+  const databaseUserProfile = await prisma.userProfile.findFirst({
     where: {
       user_id: userId,
     },

@@ -1,6 +1,6 @@
 ---
 import LayoutEmail from "@/app/LayoutEmail.astro";
-import prismaClient from "@/lib/db.js";
+import { prisma } from '@/lib/db.js';
 import { getEmail } from "@/services/email";
 import { isValidFormSubmission } from "@/utils/forms/submission";
 
@@ -11,7 +11,7 @@ if (Astro.request.method === "POST") {
   if (!validSubmission) {
     return null;
   }
-  await prismaClient.email.delete({
+  await prisma.email.delete({
     where: {
       id: emailId,
     },
