@@ -1,6 +1,8 @@
 import { persistentMap } from '@nanostores/persistent';
 import { onMount, task } from 'nanostores';
 
+import { fetchGet } from '@/utils/fetchClient';
+
 enum Role {
   USER = 'USER',
   ADMIN = 'ADMIN',
@@ -41,13 +43,7 @@ onMount(authUser, () => {
 
   task(async () => {
     try {
-      const response = await fetch('/api/auth-user', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetchGet('auth-user');
       const data = await response.json();
       const authUserData = {
         email: data.email,

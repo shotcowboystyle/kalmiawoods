@@ -1,7 +1,5 @@
 const { PUBLIC_API_URL } = import.meta.env;
 
-console.log('PUBLIC_API_URL', PUBLIC_API_URL);
-
 export async function fetchGet(route: String) {
   const res = await fetch(`${PUBLIC_API_URL}/api/${route}`);
 

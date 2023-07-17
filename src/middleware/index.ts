@@ -107,28 +107,37 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
   const pathname = new URL(context.request.url).pathname;
 
   if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+    console.log('PUBLIC ROUTES');
     return await next();
   } else {
     const authRequest = auth.handleRequest(context);
 
     const { session, user } = await authRequest.validateUser();
+    console.log('NON PUBLIC ROUTES', JSON.stringify(session), JSON.stringify(user));
 
     if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
+      console.log('AUTH ROUTES ONE');
       if (session) {
+        console.log('AUTH ROUTES TWO');
         if (!user.emailVerified) {
+          console.log('AUTH ROUTES THREE');
           return context.redirect('/auth/email-verification');
         }
 
         return context.redirect('/');
       }
     } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
+      console.log('ACCOUNT ROUTES ONE');
       return context.redirect('/');
     } else {
+      console.log('OTHER ROUTES ONE');
       if (!session) {
+        console.log('OTHER ROUTES TWO');
         return context.redirect('/auth/login');
       }
 
       if (!user?.emailVerified) {
+        console.log('OTHER ROUTES THREE');
         return context.redirect('/auth/email-verification');
       }
 
@@ -140,6 +149,7 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
       };
 
       if (pathname.startsWith('/admin') && !isAdmin) {
+        console.log('OTHER ROUTES FOUR');
         return context.redirect('/403');
       }
     }
