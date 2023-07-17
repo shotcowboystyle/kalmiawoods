@@ -4,7 +4,8 @@ import { auth } from '@/lib/lucia';
 import { getUser, updateUserEmail } from '@/services/user';
 
 export const put: APIRoute = async (context) => {
-  const session = await context.locals.auth.validate();
+  const authRequest = auth.handleRequest(context);
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({

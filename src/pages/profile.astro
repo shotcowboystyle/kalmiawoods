@@ -2,14 +2,7 @@
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
 import UserSettings from '@/modules/Profile/UserSettings.vue';
 
-const { session, user } = await Astro.locals.auth.validateUser();
-if (!session) {
-  return Astro.redirect("/login", 302);
-}
-
-if (!user.emailVerified) {
-  return Astro.redirect('/email-verification', 302);
-}
+const { user } = Astro.locals;
 ---
 
 <LayoutSidebar>

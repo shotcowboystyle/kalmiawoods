@@ -2,7 +2,12 @@
 /// <reference types="astro/client-image" />
 declare namespace App {
   interface Locals {
-    auth: import('lucia-auth').AuthRequest;
+    // auth: import('lucia-auth').AuthRequest;
+    user: {
+      userId: string;
+      email: string;
+      isAdmin: boolean;
+    };
   }
 }
 

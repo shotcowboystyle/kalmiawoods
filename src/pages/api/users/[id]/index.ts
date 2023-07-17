@@ -1,9 +1,11 @@
 import type { APIRoute } from 'astro';
 
+import { auth } from '@/lib/lucia';
 import { deleteUser, getUser } from '@/services/user';
 
 export const get: APIRoute = async (context) => {
-  const session = await context.locals.auth.validate();
+  const authRequest = auth.handleRequest(context);
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -31,7 +33,8 @@ export const get: APIRoute = async (context) => {
 };
 
 export const del: APIRoute = async (context) => {
-  const { user, session } = await context.locals.auth.validateUser();
+  const authRequest = auth.handleRequest(context);
+  const { user, session } = await authRequest.validateUser();
   if (!session) {
     return new Response(
       JSON.stringify({

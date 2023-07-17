@@ -25,7 +25,8 @@ export const post: APIRoute = async (context) => {
     await auth.invalidateAllUserSessions(user.userId);
     await auth.updateKeyPassword('email', user.email, password);
     const session = await auth.createSession(user.userId);
-    context.locals.auth.setSession(session);
+    const authRequest = auth.handleRequest(context);
+    authRequest.setSession(session);
     return new Response(JSON.stringify({ message: 'Success' }), {
       status: 200,
       headers: { 'content-type': 'application/json' },

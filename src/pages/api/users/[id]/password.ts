@@ -4,7 +4,8 @@ import { auth } from '@/lib/lucia';
 import { getUser, updateUserPassword } from '@/services/user';
 
 export const put: APIRoute = async (context) => {
-  const { session, user: sessionUser } = await context.locals.auth.validateUser();
+  const authRequest = auth.handleRequest(context);
+  const { session, user: sessionUser } = await authRequest.validateUser();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -27,7 +28,7 @@ export const put: APIRoute = async (context) => {
 
     if (sessionUser.userId === user.userId) {
       const session = await auth.createSession(user.userId);
-      context.locals.auth.setSession(session);
+      authRequest.setSession(session);
     }
 
     const updatedUser = await getUser(user.userId);

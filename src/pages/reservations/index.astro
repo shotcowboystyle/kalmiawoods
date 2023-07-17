@@ -2,17 +2,11 @@
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
 import FullCalendar from '@/modules/Reservations/FullCalendar.vue';
 
-const { user } = await Astro.locals.auth.validateUser();
-if (!user) {
-  return Astro.redirect('/login', 302);
-}
-if (!user.emailVerified) {
-  return Astro.redirect('/email-verification', 302);
-}
+const { isAdmin } = Astro.locals.user;
 ---
 
 <LayoutSidebar>
   <div class="md:mx-4 md:my-6 md:flex md:items-center md:justify-between md:p-6 xl:p-8">
-    <FullCalendar client:only="vue" isAdmin={user?.role === 'ADMIN'} />
+    <FullCalendar client:only="vue" isAdmin={isAdmin} />
   </div>
 </LayoutSidebar>

@@ -1,136 +1,112 @@
-// import { defineMiddleware, sequence } from 'astro/middleware';
-import type { MiddlewareResponseHandler } from 'astro';
+import { defineMiddleware, sequence } from 'astro/middleware';
 
 import { auth } from '@/lib/lucia';
-// import { publicRoutes } from '@/app/constants';
+
+export const PUBLIC_ROUTES = ['/maintenance', '/403', '/404', '/500', '/email'];
+export const AUTH_ROUTES = ['/auth/login', '/signup', '/auth/password-reset'];
+export const ACCOUNT_ROUTES = ['/auth/email-verification'];
 
 export const config = {
   runtime: 'serverless',
 };
 
-// function skipMiddleware(url: string) {
-//   let shouldSkip = false;
-//   const pathname = new URL(url).pathname;
+function skipMiddleware(url: string) {
+  let shouldSkip = false;
+  const pathname = new URL(url).pathname;
 
-//   for (const route of publicRoutes) {
-//     if (pathname.startsWith(route)) {
-//       shouldSkip = true;
-//       break;
-//     }
-//   }
+  for (const route of PUBLIC_ROUTES) {
+    if (pathname.startsWith(route)) {
+      shouldSkip = true;
+      break;
+    }
+  }
 
-//   return shouldSkip;
-// }
+  return shouldSkip;
+}
 
-// const validation = defineMiddleware(async (context, next) => {
-// 	if (context.request.url.endsWith('/admin')) {
-// 		if (loginInfo.currentTime) {
-// 			const difference = new Date().getTime() - loginInfo.currentTime;
-// 			if (difference > limit) {
-// 				console.log('hit threshold');
-// 				loginInfo.token = undefined;
-// 				loginInfo.currentTime = undefined;
-// 				return context.redirect('/login');
-// 			}
-// 		}
-// 		// we naively check if we have a token
-// 		if (loginInfo.token && loginInfo.token === 'loggedIn') {
-// 			// we fill the locals with user-facing information
-// 			context.locals.user = {
-// 				name: 'AstroUser',
-// 				surname: 'AstroSurname',
-// 			};
-// 			return await next();
-// 		} else {
-// 			loginInfo.token = undefined;
-// 			loginInfo.currentTime = undefined;
-// 			return context.redirect('/login');
-// 		}
-// 	} else if (context.request.url.endsWith('/api/login')) {
-// 		const response = await next();
-// 		// the login endpoint will return to us a JSON with username and password
-// 		const data = await response.json();
-// 		// we naively check if username and password are equals to some string
-// 		if (data.username === 'astro' && data.password === 'astro') {
-// 			// we store the token somewhere outside of locals because the `locals` object is attached to the request
-// 			// and when doing a redirect, we lose that information
-// 			loginInfo.token = 'loggedIn';
-// 			loginInfo.currentTime = new Date().getTime();
-// 			return context.redirect('/admin');
-// 		}
-// 	}
-// 	return next();
-// });
+function isAuthRoute(url: string) {
+  let isRoute = false;
+  const pathname = new URL(url).pathname;
 
-// const authorizationHandler: MiddlewareResponseHandler = async (
-//   { request, redirect },
-//   next,
-// ): Promise<Response> => {
-//   const url = new URL(request.url);
+  for (const route of AUTH_ROUTES) {
+    if (pathname.startsWith(route)) {
+      isRoute = true;
+      break;
+    }
+  }
 
-//   if (skipMiddleware(request.url)) {
+  return isRoute;
+}
+
+function isAccountRoute(url: string) {
+  let isRoute = false;
+  const pathname = new URL(url).pathname;
+
+  for (const route of ACCOUNT_ROUTES) {
+    if (pathname.startsWith(route)) {
+      isRoute = true;
+      break;
+    }
+  }
+
+  return isRoute;
+}
+
+const validationHandler = defineMiddleware(async (context, next): Promise<Response> => {
+  const url = new URL(context.request.url);
+
+  if (skipMiddleware(context.request.url)) {
+    return next();
+  }
+
+  const authRequest = auth.handleRequest(context);
+
+  const { session, user } = await authRequest.validateUser();
+
+  if (isAuthRoute(context.request.url)) {
+    if (session) {
+      if (!user.emailVerified) {
+        return context.redirect('/auth/email-verification');
+      }
+
+      return context.redirect('/');
+    }
+  }
+
+  if (isAccountRoute(context.request.url) && session && user.emailVerified) {
+    return context.redirect('/');
+  }
+
+  if (!session) {
+    return context.redirect('/auth/login');
+  }
+
+  const isAdmin = user.role === 'ADMIN';
+  context.locals.user = {
+    userId: user.userId,
+    email: user.email,
+    isAdmin,
+  };
+
+  if (!user?.emailVerified) {
+    return context.redirect('/auth/email-verification');
+  }
+
+  if (url.pathname.startsWith('/admin') && !isAdmin) {
+    return context.redirect('/403');
+  }
+
+  return next();
+});
+
+export const onRequest = sequence(validationHandler);
+
+// export const onRequest: MiddlewareResponseHandler = async (context, next) => {
+// export const onRequest = defineMiddleware(async (context, next) => {
+//   if (context.request.url.includes('/internal')) {
 //     return next();
 //   }
 
-//   const pathnameIsMissingLocale = supportedLocales.every(
-//     (locale) =>
-//       !url.pathname.startsWith(`/${locale}/`) && url.pathname !== `/${locale}`,
-//   );
-
-//   if (pathnameIsMissingLocale) {
-//     const locale = getLanguageFromAcceptLanguage(
-//       request.headers.get(`accept-language`) || ``,
-//     );
-
-//     const normalizedPathname = normalizePathname(`/${locale}/${url.pathname}`);
-
-//     const nextUrl = new URL(normalizedPathname, request.url).toString();
-
-//     return redirect(nextUrl);
-//   }
-
-//   return next();
-// };
-
-// export const onRequest = sequence(languageHandler, themeHintHandler);
-
-export const onRequest: MiddlewareResponseHandler = async (context, next) => {
-  context.locals.auth = auth.handleRequest(context);
-  return await next();
-};
-
-// export const onRequest = defineMiddleware(async (context, next) => {
-//   if (context.request.headers.get('edgio') !== getENV('EDGIO_HEADER')) {
-//     return new Response(null, {
-//       status: 403,
-//     })
-//   }
-//   const response = await next()
-//   return new Response(response.body, {
-//     status: response.status,
-//     headers: response.headers,
-//   })
-// })
-
-// export const onRequest = defineMiddleware(async (context, next) => {
-//   const bearerToken: string | null | undefined = context.request.headers.get("authorization");
-
-//   if (context.request.url.includes("/internal")) {
-//     return next();
-//   }
-
-//   if (!bearerToken) {
-//     console.info("Could not find any bearer token on the request. Redirecting to login.");
-//     return context.redirect(`/minside-beta/oauth2/login?redirect=${redirectUri}`);
-//   }
-
-//   const validationResult = await validateIdportenToken(bearerToken);
-
-//   if (validationResult !== "valid") {
-//     const error = new Error(`Invalid JWT token found (cause: ${validationResult.errorType} ${validationResult.message}, redirecting to login.`);
-//     console.error(error);
-//     return context.redirect(`/minside-beta/oauth2/login?redirect=${redirectUri}`);
-//   }
-
+//   context.locals.auth = auth.handleRequest(context);
 //   return next();
 // });

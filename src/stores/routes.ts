@@ -1,3 +1,5 @@
+import { RoleEnum as Role } from '@/schemas/auth';
+import type { RoleEnum } from '@/types/Auth';
 import { action, atom } from 'nanostores';
 
 export const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -5,11 +7,6 @@ export const baseAPIPath = `${basePath}/api`;
 
 export const route = (pathName?: string) => `${basePath}/${pathName ?? ''}`;
 export const apiRoute = (pathName?: string) => `${baseAPIPath}/${pathName ?? ''}`.replace(/\/$/, '');
-
-enum RoleEnum {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-}
 
 interface Page {
   name: string;
@@ -35,7 +32,7 @@ export const pages = atom<Page[]>([
     label: 'Users',
     to: route('users'),
     auth: true,
-    role: RoleEnum.ADMIN,
+    role: Role.enum.ADMIN,
   },
   {
     name: 'new_user',
@@ -44,7 +41,7 @@ export const pages = atom<Page[]>([
     to: route('users/create'),
     parent: 'users',
     auth: true,
-    role: RoleEnum.ADMIN,
+    role: Role.enum.ADMIN,
     visible: false,
   },
   {

@@ -2,11 +2,6 @@
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import Logo from '@/components/Logo.astro';
 import FormPasswordRecovery from '@/modules/Auth/FormPasswordRecovery.vue';
-
-const session = await Astro.locals.auth.validate();
-if (session) {
-  return Astro.redirect('/', 302);
-}
 ---
 
 <LayoutStacked>

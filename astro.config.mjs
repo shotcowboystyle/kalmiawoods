@@ -56,26 +56,23 @@ const vitePlugins = [
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: 'hybrid',
   adapter: vercel({
     analytics: true,
-    // imageService: true,
+    imageService: true,
     // excludeFiles: ['.prisma/client/index-browser'],
   }),
-  build: {
-    excludeMiddleware: true,
-  },
   experimental: {
     assets: true,
   },
   // build: {
-  //   excludeMiddleware: false,
-  //   split: true,
+  //   excludeMiddleware: true,
+  //   // split: true,
   // },
-  server: {
-    host: true,
-    // port: 9000,
-  },
+  // server: {
+  //   host: true,
+  //   // port: 9000,
+  // },
   site: APP_SITE,
   base: basePath,
   trailingSlash: 'never',

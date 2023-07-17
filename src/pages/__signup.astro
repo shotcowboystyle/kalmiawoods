@@ -3,7 +3,6 @@
 import { LuciaError } from 'lucia-auth';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
-import { HOME } from '@/app/constants';
 import { auth } from '@/lib/lucia';
 import FormSignUp from '@/modules/Auth/FormSignUp.astro';
 import { sendEmailVerificationEmail } from '@/services/email';
@@ -40,8 +39,10 @@ if (Astro.request.method === "POST") {
         role,
       },
     });
+
     const session = await auth.createSession(user.userId);
-    Astro.locals.auth.setSession(session);
+    const authRequest = auth.handleRequest(Astro);
+    authRequest.setSession(session);
     const token = await emailVerificationToken.issue(user.userId);
     await sendEmailVerificationEmail(email, token.toString());
     return Astro.redirect('/email-verification', 302);
@@ -61,15 +62,6 @@ if (Astro.request.method === "POST") {
     errorMessage = 'An unknown error occurred';
     return null;
   }
-}
-
-const { session, user } = await Astro.locals.auth.validateUser();
-if (session) {
-  if (!user.emailVerified) {
-    return Astro.redirect('/email-verification', 302);
-  }
-
-  return Astro.redirect(HOME, 302);
 }
 ---
 

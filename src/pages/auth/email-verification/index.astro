@@ -39,11 +39,6 @@ if (Astro.request.method === "POST") {
     return null;
   }
 }
-
-const { session, user } = await Astro.locals.auth.validateUser();
-if (session && user.emailVerified) {
-  return Astro.redirect('/', 302);
-}
 ---
 
 <LayoutStacked>

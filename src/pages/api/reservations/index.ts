@@ -1,9 +1,11 @@
 import type { APIRoute } from 'astro';
 
+import { auth } from '@/lib/lucia';
 import { createReservation, deleteReservation, getReservations, updateReservation } from '@/services/reservation';
 
 export const get: APIRoute = async (context) => {
-  const session = await context.locals.auth.validate();
+  const authRequest = auth.handleRequest(context);
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -34,7 +36,8 @@ export const get: APIRoute = async (context) => {
 };
 
 export const post: APIRoute = async (context) => {
-  const { user, session } = await context.locals.auth.validateUser();
+  const authRequest = auth.handleRequest(context);
+  const { user, session } = await authRequest.validateUser();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -73,7 +76,8 @@ export const post: APIRoute = async (context) => {
 };
 
 export const put: APIRoute = async (context) => {
-  const session = await context.locals.auth.validate();
+  const authRequest = auth.handleRequest(context);
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -112,7 +116,8 @@ export const put: APIRoute = async (context) => {
 };
 
 export const del: APIRoute = async (context) => {
-  const session = await context.locals.auth.validate();
+  const authRequest = auth.handleRequest(context);
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
