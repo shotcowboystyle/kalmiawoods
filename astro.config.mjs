@@ -65,10 +65,10 @@ export default defineConfig({
   experimental: {
     assets: true,
   },
-  // build: {
-  //   excludeMiddleware: true,
-  //   // split: true,
-  // },
+  build: {
+    excludeMiddleware: true,
+    split: true,
+  },
   // server: {
   //   host: true,
   //   // port: 9000,
