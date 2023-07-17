@@ -9,16 +9,16 @@ import vue from '@astrojs/vue';
 // import compress from 'astro-compress';
 // import compressor from 'astro-compressor';
 // import critters from 'astro-critters';
-import devOnlyRoutes from 'astro-dev-only-routes';
+// import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
-// import { nodeExternalsPlugin } from 'esbuild-node-externals';
-// import { dirname, resolve } from 'path';
+import { nodeExternalsPlugin } from 'esbuild-node-externals';
+import { dirname } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
-// import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 // import mkcert from 'vite-plugin-mkcert';
 // import { prismaClient } from './src/lib/db';
@@ -28,8 +28,8 @@ const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTR
   process.cwd(),
   '',
 );
-// const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
-// const __dirname = dirname(fileURLToPath(import.meta.url));
+const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const vitePlugins = [
   Components({
@@ -65,16 +65,16 @@ export default defineConfig({
   experimental: {
     assets: true,
   },
-  build: {
-    excludeMiddleware: true,
-    // split: true,
-  },
+  // build: {
+  //   excludeMiddleware: true,
+  //   // split: true,
+  // },
   // server: {
   //   host: true,
   //   // port: 9000,
   // },
   site: APP_SITE,
-  // base: basePath,
+  base: basePath,
   trailingSlash: 'never',
   integrations: [
     vue({
@@ -129,7 +129,7 @@ export default defineConfig({
     //   logger: 1,
     // }),
     // compressor({ gzip: true, brotli: true }),
-    devOnlyRoutes(),
+    // devOnlyRoutes(),
     // prismaClient,
   ],
   markdown: {},
@@ -138,27 +138,27 @@ export default defineConfig({
     //   copyPublicDir: false,
     //   // sourcemap: true,
     // },
-    // ssr: {
-    //   // external: ['svgo'],
-    //   // external: ['.prisma/client/index-browser'],
-		// 	noExternal: ["lucia-auth", "@lucia-auth/adapter-prisma"],
-		// 	external: ["cookie"],
-    // },
+    ssr: {
+      // external: ['svgo'],
+      // external: ['.prisma/client/index-browser'],
+			noExternal: ["lucia-auth", "@lucia-auth/adapter-prisma"],
+			// external: ["cookie"],
+    },
     // define: {
     //   __DATE__: `'${new Date().toISOString()}'`,
     // },
-    // server: {
-    //   https: true,
-    //   // strictPort: true,
-    //   // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
-    // },
+    server: {
+      https: true,
+      // strictPort: true,
+      // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
+    },
     plugins: vitePlugins,
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
       // allowNodeBuiltins: true,
-      // esbuildOptions: {
-      //   plugins: [nodeExternalsPlugin()],
-      // },
+      esbuildOptions: {
+        plugins: [nodeExternalsPlugin()],
+      },
     },
     // resolve: {
     //   alias: {
