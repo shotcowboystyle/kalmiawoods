@@ -104,86 +104,44 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
   const AUTH_ROUTES = ['/auth/login', '/signup', '/auth/password-reset'];
   const ACCOUNT_ROUTES = ['/auth/email-verification'];
 
-  function skipMiddleware(url: string) {
-    let shouldSkip = false;
-    const pathname = new URL(url).pathname;
+  const pathname = new URL(context.request.url).pathname;
 
-    for (const route of PUBLIC_ROUTES) {
-      if (pathname.startsWith(route)) {
-        shouldSkip = true;
-        break;
+  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+    return await next();
+  } else {
+    const authRequest = auth.handleRequest(context);
+
+    const { session, user } = await authRequest.validateUser();
+
+    if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
+      if (session) {
+        if (!user.emailVerified) {
+          return context.redirect('/auth/email-verification');
+        }
+
+        return context.redirect('/');
       }
-    }
-
-    return shouldSkip;
-  }
-
-  function isAuthRoute(url: string) {
-    let isRoute = false;
-    const pathname = new URL(url).pathname;
-
-    for (const route of AUTH_ROUTES) {
-      if (pathname.startsWith(route)) {
-        isRoute = true;
-        break;
+    } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
+      return context.redirect('/');
+    } else {
+      if (!session) {
+        return context.redirect('/auth/login');
       }
-    }
 
-    return isRoute;
-  }
-
-  function isAccountRoute(url: string) {
-    let isRoute = false;
-    const pathname = new URL(url).pathname;
-
-    for (const route of ACCOUNT_ROUTES) {
-      if (pathname.startsWith(route)) {
-        isRoute = true;
-        break;
-      }
-    }
-
-    return isRoute;
-  }
-
-  const url = new URL(context.request.url);
-
-  if (skipMiddleware(context.request.url)) {
-    return next();
-  }
-
-  const authRequest = auth.handleRequest(context);
-
-  const { session, user } = await authRequest.validateUser();
-
-  if (isAuthRoute(context.request.url)) {
-    if (session) {
-      if (!user.emailVerified) {
+      if (!user?.emailVerified) {
         return context.redirect('/auth/email-verification');
       }
 
-      return context.redirect('/');
-    }
-  } else if (isAccountRoute(context.request.url) && session && user.emailVerified) {
-    return context.redirect('/');
-  } else {
-    if (!session) {
-      return context.redirect('/auth/login');
-    }
+      const isAdmin = user.role === 'ADMIN';
+      context.locals.user = {
+        userId: user.userId,
+        email: user.email,
+        isAdmin,
+      };
 
-    if (!user?.emailVerified) {
-      return context.redirect('/auth/email-verification');
-    }
-
-    const isAdmin = user.role === 'ADMIN';
-    context.locals.user = {
-      userId: user.userId,
-      email: user.email,
-      isAdmin,
-    };
-
-    if (url.pathname.startsWith('/admin') && !isAdmin) {
-      return context.redirect('/403');
+      if (pathname.startsWith('/admin') && !isAdmin) {
+        return context.redirect('/403');
+      }
     }
   }
 

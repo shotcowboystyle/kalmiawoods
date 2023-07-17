@@ -68,7 +68,7 @@ export default defineConfig({
   },
   build: {
     excludeMiddleware: true,
-    // split: true,
+    split: true,
   },
   server: {
     host: true,

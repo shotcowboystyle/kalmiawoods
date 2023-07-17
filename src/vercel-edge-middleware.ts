@@ -1,4 +1,3 @@
-import { next } from '@vercel/edge';
 
 export const config = {
   runtime: 'serverless',
@@ -12,5 +11,6 @@ export const config = {
  */
 export default function ({ request, context }) {
   // do something with request and context
-  return next();
+  // return next();
+  return { request, context };
 }
