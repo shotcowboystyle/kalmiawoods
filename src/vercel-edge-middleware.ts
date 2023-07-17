@@ -1,3 +1,9 @@
+import { next } from '@vercel/edge';
+
+export const config = {
+  runtime: 'serverless',
+};
+
 /**
  *
  * @param options.request {Request}
@@ -6,5 +12,5 @@
  */
 export default function ({ request, context }) {
   // do something with request and context
-  return { request, context };
+  return next();
 }

@@ -53,6 +53,9 @@ dependencies:
   '@sentry/browser':
     specifier: ^7.58.1
     version: 7.58.1
+  '@vercel/edge':
+    specifier: ^0.3.4
+    version: 0.3.4
   '@vueuse/core':
     specifier: ^10.2.1
     version: 10.2.1(vue@3.3.4)
@@ -178,6 +181,9 @@ devDependencies:
   dotenv-cli:
     specifier: ^7.2.1
     version: 7.2.1
+  esbuild-node-externals:
+    specifier: ^1.8.0
+    version: 1.8.0(esbuild@0.18.13)
   eslint:
     specifier: ^8.44.0
     version: 8.44.0
@@ -2809,6 +2815,10 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@vercel/edge@0.3.4:
+    resolution: {integrity: sha512-dFU+yAUDQRwpuRGxRDlEO1LMq0y1LGsBgkyryQWe4w15/Fy2/lCnpvdIoAhHl3QvIGAxCLHzwRHsqfLRdpxgJQ==}
+    dev: false
+
   /@vercel/nft@0.22.6:
     resolution: {integrity: sha512-gTsFnnT4mGxodr4AUlW3/urY+8JKKB452LwF3m477RFUJTAaDmcz2JqFuInzvdybYIeyIv1sSONEJxsxnbQ5JQ==}
     engines: {node: '>=14'}
@@ -4823,6 +4833,17 @@ packages:
       is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
+    dev: true
+
+  /esbuild-node-externals@1.8.0(esbuild@0.18.13):
+    resolution: {integrity: sha512-pYslmT8Bl383UnfxzHQQRpCgBNIOwAzDaYheuIeI4CODxelsN/eQroVn5STDow5QOpRalMgWUR+R8LfSgUROcw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      esbuild: 0.12 - 0.18
+    dependencies:
+      esbuild: 0.18.13
+      find-up: 5.0.0
+      tslib: 2.6.0
     dev: true
 
   /esbuild@0.17.19:
