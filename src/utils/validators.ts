@@ -38,26 +38,32 @@ export default {
       errorMessage: `${errorMessagePrefix} don't match.`,
     };
   },
-  required: (value: string | boolean) => {
+  required: (value: string[] | string | boolean) => {
     return {
-      isValid: (value && String(value).length > 0) || value === true,
+      isValid: (Array.isArray(value) && value.length > 0) || (value && String(value).length > 0) || value === true,
       errorMessage: 'This field is required.',
     };
   },
-} as
-  | Record<'email' | 'password' | 'required', (value: string | boolean) => { isValid: boolean; errorMessage: string }>
-  | Record<'phone' | 'currentPassword', (value: string) => { isValid: boolean; errorMessage: string }>
-  | Record<
-      'isMatch',
-      (
-        value: string | boolean,
-        extraArgs?: { match: string; errorMessagePrefix: string },
-      ) => { isValid: boolean; errorMessage: string }
-    >
-  | Record<
-      'isUnique',
-      (
-        value: string | boolean,
-        extraArgs?: { matchers: string[]; errorMessagePrefix: string },
-      ) => { isValid: boolean; errorMessage: string }
-    >;
+} as Record<
+  'email' | 'password' | 'required' | 'phone' | 'isMatch' | 'isUnique',
+  (
+    value: string[] | string | boolean,
+    extraArgs?: { matchers?: string[]; match?: string; errorMessagePrefix: string },
+  ) => { isValid: boolean; errorMessage: string }
+>;
+// | Record<'email' | 'password' | 'required', (value: string | boolean) => { isValid: boolean; errorMessage: string }>
+// | Record<'phone', (value: string) => { isValid: boolean; errorMessage: string }>
+// | Record<
+//     'isMatch',
+//     (
+//       value: string | boolean,
+//       extraArgs?: { match: string; errorMessagePrefix: string },
+//     ) => { isValid: boolean; errorMessage: string }
+//   >
+// | Record<
+//     'isUnique',
+//     (
+//       value: string | boolean,
+//       extraArgs?: { matchers: string[]; errorMessagePrefix: string },
+//     ) => { isValid: boolean; errorMessage: string }
+//   >;

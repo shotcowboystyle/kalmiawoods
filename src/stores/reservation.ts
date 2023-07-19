@@ -35,6 +35,19 @@ export const fetchMonthReservations = (year: number, month: number) => {
   setMonthEndDate(getLastDayOfMonth(year, month).toDateString());
 };
 
+export const reservedDates = computed([reservations], (_reservations) =>
+  Object.values(_reservations).reduce(
+    (acc, cur) => {
+      acc.push({
+        start: cur!.checkInDate,
+        end: cur!.checkOutDate,
+      });
+      return acc;
+    },
+    [] as { start: Date; end: Date }[],
+  ),
+);
+
 export const addReservation = action(reservations, 'addReservation', async (store, newReservation) => {
   const { reservationId } = newReservation;
   const existingEntry = store.get()[reservationId];
@@ -57,6 +70,8 @@ export const removeReservation = action(reservations, 'removeReservation', (stor
 const initReservationData = {
   reservationId: null,
   userId: null,
+  title: null,
+  buildings: null,
   checkInDate: null,
   checkOutDate: null,
 };

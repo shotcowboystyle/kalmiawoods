@@ -113,10 +113,7 @@ model Reservation {
 
   buildings Building[] @default([HOUSE])
 
-  // /// Date of Reservation's creation in the database
-  // createdAt   DateTime @default(now()) @map("created_at")
-  // /// Date of last update to Reservation's record
-  // updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
+  title String?
 
   user_id   String
   auth_user AuthUser @relation(fields: [user_id], references: [id], onDelete: Cascade)

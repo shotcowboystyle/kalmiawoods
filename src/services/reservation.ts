@@ -12,6 +12,7 @@ interface DatabaseReservation extends PrismaReservation {
 
 const transformDatabaseReservation = (databaseReservation: DatabaseReservation): Reservation => ({
   reservationId: databaseReservation.id,
+  title: databaseReservation.title ?? undefined,
   checkInDate: databaseReservation.check_in_date,
   checkOutDate: databaseReservation.check_out_date,
   buildings: databaseReservation.buildings,
@@ -27,11 +28,13 @@ const transformDatabaseReservation = (databaseReservation: DatabaseReservation):
 });
 
 export const createReservation = async ({
+  title,
   checkInDate,
   checkOutDate,
   buildings,
   userId,
 }: {
+  title?: string;
   checkInDate: Date;
   checkOutDate: Date;
   buildings: BuildingEnum[];
@@ -46,6 +49,7 @@ export const createReservation = async ({
       },
     },
     data: {
+      ...(title && title.length && { title }),
       check_in_date: checkInDate,
       check_out_date: checkOutDate,
       buildings,
@@ -58,11 +62,13 @@ export const createReservation = async ({
 
 export const updateReservation = async ({
   reservationId,
+  title,
   checkInDate,
   checkOutDate,
   buildings,
 }: {
   reservationId: string;
+  title?: string;
   checkInDate: Date;
   checkOutDate: Date;
   buildings: BuildingEnum[];
@@ -71,6 +77,7 @@ export const updateReservation = async ({
     const updatedReservation = await prisma.reservation.update({
       where: { id: reservationId },
       data: {
+        ...(title && title.length && { title }),
         check_in_date: checkInDate,
         check_out_date: checkOutDate,
         buildings,

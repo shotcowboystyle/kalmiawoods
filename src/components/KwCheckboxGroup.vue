@@ -5,16 +5,11 @@ defineOptions({ inheritAttrs: false });
 const props = defineProps({
   class: [String, Array, Object],
   label: String,
-  labelAlt: String,
-  bottomLabelLeft: String,
-  bottomLabelRight: String,
   required: Boolean,
   rules: Array,
   disabled: Boolean,
-  modelValue: String,
-  validationMatch: String,
-  validationMatchers: Array,
-  errorMessagePrefix: String,
+  modelValue: Array,
+  options: Object,
 });
 
 const model = useVModel(props, 'modelValue');
@@ -44,40 +39,43 @@ function checkError() {
   });
   error.value = !validated.isValid;
   errorMessage.value = validated.errorMessage;
-
-  if (error.value && input.value) {
-    input.value.focus();
-  }
 }
 </script>
 
 <template>
   <!--eslint-disable-next-line vue/no-parsing-error-->
-  <div :class="class">
-    <label :for="$attrs.id" class="label">
-      <span class="label-text">{{ label }}</span>
-      <span v-if="labelAlt" class="label-text-alt">{{ labelAlt }}</span>
-    </label>
-    <input
-      ref="input"
-      v-bind="$attrs"
-      v-model="model"
-      @input="checkError"
-      class="input input-bordered w-full max-w-xs"
-      :class="[
-        {
-          'input-error': error,
+  <fieldset :class="class">
+    <legend class="label mb-1">
+      <span
+        class="label-text"
+        :class="{
           required: required,
-        },
-      ]"
-      :disabled="disabled" />
-    <!-- <font-awesome-icon v-if="disabled" class="absolute right-[12px] top-[13px] text-sm text-zinc-500" icon="lock" /> -->
-    <label v-if="bottomLabelLeft || bottomLabelRight" :for="$attrs.id" class="label">
-      <span v-if="bottomLabelLeft" class="label-text-alt">{{ bottomLabelLeft }}</span>
-      <span v-if="bottomLabelRight" class="label-text-alt">{{ bottomLabelRight }}</span>
-    </label>
+        }">
+        {{ label }}
+      </span>
+    </legend>
+
+    <div v-for="option in options" :key="option.value" class="form-control">
+      <label class="cursor-pointer label justify-normal" :for="option.value">
+        <!-- @input="checkError" -->
+        <input
+          ref="input"
+          v-bind="$attrs"
+          :id="option.value"
+          type="checkbox"
+          class="checkbox"
+          :class="{
+            'checkbox-error': error,
+          }"
+          :name="option.value"
+          :value="option.value"
+          v-model="model" />
+        <span class="label-text ml-2">{{ option.name }}</span>
+      </label>
+    </div>
+
     <div v-if="error" class="mt-2 text-sm font-normal text-red-600">
       {{ errorMessage }}
     </div>
-  </div>
+  </fieldset>
 </template>

@@ -1,5 +1,9 @@
 import validators from '@/utils/validators';
 
+type Validators = typeof validators;
+type ValidatorRulesKeys = keyof Validators;
+type ValidatorRules = 'email' | 'phone' | 'password' | 'isMatch' | 'isUnique' | 'required';
+
 export function useFormValidator() {
   function allRules(required: boolean, rules: string[]) {
     if (!rules && required) {
@@ -14,9 +18,9 @@ export function useFormValidator() {
   }
 
   function validate(
-    value: string,
+    value: string[] | string,
     rules: Array<string | { isValid: Function; errorMessage: string }>,
-    extraArgs: { match?: string; matchers?: string[]; errorMessagePrefix?: string } = {},
+    extraArgs: { match?: string; matchers?: string[]; errorMessagePrefix: string },
   ) {
     const errorMessage = ref('');
     if (!Array.isArray(rules) || rules.length <= 0) {
@@ -26,14 +30,10 @@ export function useFormValidator() {
       return true;
     }
 
-    const normalizedValue = rules.includes('phone') ? value.replace(/\D/g, '') : value;
+    const normalizedValue = rules.includes('phone') ? (value as string).replace(/\D/g, '') : value;
 
     const failedRule = rules.find((rule: string | { isValid: Function; errorMessage: string }) => {
-      if (
-        typeof rule === 'function' ||
-        (validators[rule as 'email' | 'phone' | 'password' | 'isMatch' | 'isUnique' | 'required'] == null &&
-          typeof rule !== 'object')
-      ) {
+      if (typeof rule === 'function' || (validators[rule as ValidatorRulesKeys] == null && typeof rule !== 'object')) {
         return false;
       }
 
@@ -41,12 +41,7 @@ export function useFormValidator() {
         return !rule.isValid(normalizedValue);
       }
 
-      return (
-        validators[rule as 'email' | 'phone' | 'password' | 'isMatch' | 'isUnique' | 'required'](
-          normalizedValue,
-          extraArgs,
-        ).isValid === false
-      );
+      return validators[rule as ValidatorRules](normalizedValue, extraArgs).isValid === false;
     });
 
     if (failedRule) {
@@ -55,9 +50,7 @@ export function useFormValidator() {
         return !failedRule;
       }
 
-      const failedValidator = validators[
-        failedRule as 'email' | 'phone' | 'password' | 'isMatch' | 'isUnique' | 'required'
-      ](normalizedValue, extraArgs);
+      const failedValidator = validators[failedRule as ValidatorRules](normalizedValue, extraArgs);
 
       errorMessage.value = failedValidator.errorMessage;
     }

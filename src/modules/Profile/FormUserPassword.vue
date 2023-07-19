@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
 
-import { authUser } from '@/stores/auth';
-import { activeUserId, profileData, updateUser } from '@/stores/user';
+import { activeUser, activeUserId, updateUser } from '@/stores/user';
 import { fetchPost, fetchPut } from '@/utils/fetchClient';
 
 const toast: { error: Function; success: Function } | undefined = inject('toast');
@@ -11,14 +10,13 @@ const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
 const togglePasswordVisibility = () => (hidePassword.value = !hidePassword.value);
 const passwordFieldType = computed(() => (hidePassword.value ? 'password' : 'text'));
-const currentPasswordErrorMessage = ref(null);
+const currentPasswordErrorMessage = ref('');
 
-const $authUser = useStore(authUser);
 const $activeUserId = useStore(activeUserId);
-const $profileData = useStore(profileData);
+const $user = useStore(activeUser);
 
 console.log('ACTIVE USER ID', $activeUserId);
-console.log('PROFILE DATA', $profileData);
+console.log('PROFILE DATA', $user);
 
 const isSubmitting = ref(false);
 const formData = reactive({
@@ -29,33 +27,28 @@ const formData = reactive({
 
 async function submit() {
   console.log('HELLO');
-  currentPasswordErrorMessage.value = null;
+  currentPasswordErrorMessage.value = '';
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost(`users/${$activeUserId.value}/password`, {
-      email: $profileData.value.email,
+    const currentPasswordCheck = await fetchPost(`users/${$activeUserId.value}/password`, {
+      email: $user.value.email,
       currentPassword: formData.currentPassword,
     });
 
-    if (response.status !== 200) {
+    if (currentPasswordCheck.status !== 200) {
       currentPasswordErrorMessage.value = 'Your current password is incorrect.';
+      return;
     }
-  } catch (error) {
-    currentPasswordErrorMessage.value = 'Your current password is incorrect.';
-  } finally {
-    return (isSubmitting.value = false);
-  }
 
-  try {
-    const response = await fetchPut(`users/${$activeUserId.value}/password`, {
+    const updatePasswordResponse = await fetchPut(`users/${$activeUserId.value}/password`, {
       newPassword: formData.newPassword,
     });
 
-    const data = await response.json();
+    const data = await updatePasswordResponse.json();
     updateUser(data);
     toast?.success('Update successful.');
-  } catch (error) {
+  } catch (error: any) {
     toast?.error(error.message);
   } finally {
     isSubmitting.value = false;
@@ -76,6 +69,9 @@ async function submit() {
         :type="passwordFieldType"
         autocomplete="off" />
       <!-- :invalid="currentPasswordErrorMessage" -->
+      <div v-if="currentPasswordErrorMessage.length" class="mt-2 text-sm font-normal text-red-600">
+        {{ currentPasswordErrorMessage }}
+      </div>
     </div>
 
     <div class="flex gap-x-6 mb-4">

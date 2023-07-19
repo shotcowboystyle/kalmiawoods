@@ -9,18 +9,15 @@ const props = defineProps({
   bottomLabelLeft: String,
   bottomLabelRight: String,
   required: Boolean,
-  rules: Array,
   disabled: Boolean,
   modelValue: String,
-  validationMatch: String,
-  validationMatchers: Array,
-  errorMessagePrefix: String,
+  optionDescription: String,
+  options: Object,
 });
 
 const model = useVModel(props, 'modelValue');
 const error = ref(false);
 const errorMessage = ref('');
-const formValidator = useFormValidator();
 const kalmiaWoodsForm = inject('kalmiaWoodsForm', undefined);
 const input = ref(null);
 
@@ -33,17 +30,14 @@ watch(
 );
 
 function checkError() {
-  if (!props.required && !props.rules?.length) {
+  if (!props.required) {
     return;
   }
 
-  const validated = formValidator.validate(model.value, formValidator.allRules(props.required, props.rules), {
-    match: props.validationMatch,
-    matchers: props.validationMatchers,
-    errorMessagePrefix: props.errorMessagePrefix,
-  });
-  error.value = !validated.isValid;
-  errorMessage.value = validated.errorMessage;
+  const { value } = model;
+  const isValid = value && String(value).length > 0;
+  error.value = !isValid;
+  errorMessage.value = 'This field is required.';
 
   if (error.value && input.value) {
     input.value.focus();
@@ -58,19 +52,22 @@ function checkError() {
       <span class="label-text">{{ label }}</span>
       <span v-if="labelAlt" class="label-text-alt">{{ labelAlt }}</span>
     </label>
-    <input
+    <select
       ref="input"
       v-bind="$attrs"
       v-model="model"
-      @input="checkError"
-      class="input input-bordered w-full max-w-xs"
+      class="w-full max-w-xs select select-bordered"
       :class="[
         {
-          'input-error': error,
+          'select-error': error,
           required: required,
         },
       ]"
-      :disabled="disabled" />
+      :disabled="disabled">
+      <option v-if="optionDescription" disabled value="">{{ optionDescription }}</option>
+      <option v-for="option in options" :key="option.value" :value="option.value">{{ option.name }}</option>
+    </select>
+
     <!-- <font-awesome-icon v-if="disabled" class="absolute right-[12px] top-[13px] text-sm text-zinc-500" icon="lock" /> -->
     <label v-if="bottomLabelLeft || bottomLabelRight" :for="$attrs.id" class="label">
       <span v-if="bottomLabelLeft" class="label-text-alt">{{ bottomLabelLeft }}</span>

@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/vue';
 
 import { HOME } from '@/app/constants';
 import Modal from '@/components/Modal/Modal.vue';
+import KwToast from '@/components/Toast/KwToast.vue';
 import { fetchNewUsers, setActiveUserId, users } from '@/stores/user';
 import { phoneFormatUSA } from '@/utils/phone';
 import FormDeleteUser from './FormDeleteUser.vue';

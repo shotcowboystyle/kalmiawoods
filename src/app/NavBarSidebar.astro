@@ -6,7 +6,7 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
 ---
 
 <nav
-  class="fixed z-30 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+  class="fixed z-30 w-full bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
@@ -14,10 +14,10 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
           id="toggleSidebarMobile"
           aria-expanded="true"
           aria-controls="sidebar"
-          class="cursor-pointer rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-700 lg:hidden">
+          class="p-2 text-gray-600 rounded cursor-pointer hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-700 lg:hidden">
           <svg
             id="toggleSidebarMobileHamburger"
-            class="h-6 w-6"
+            class="w-6 h-6"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
           >
           <svg
             id="toggleSidebarMobileClose"
-            class="hidden h-6 w-6"
+            class="hidden w-6 h-6"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -38,10 +38,10 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
               clip-rule="evenodd"></path></svg
           >
         </button>
-        <a href="/" class="ml-2 flex md:mr-24">
+        <a href="/" class="flex ml-2 md:mr-24">
           <Logo />
           <span
-            class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl"
+            class="self-center ml-3 text-xl font-semibold whitespace-nowrap dark:text-white sm:text-2xl"
             >Kalmia Woods</span
           >
         </a>
@@ -51,7 +51,7 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
         <!-- Dropdown menu -->
         <div
           id="dropdownNavbar"
-          class="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700">
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:divide-gray-600 dark:bg-gray-700">
           <ul
             class="py-2 text-sm text-gray-700 dark:text-gray-400"
             aria-labelledby="dropdownNavbarButton">

@@ -2,6 +2,7 @@
 import { HOME } from '@/app/constants';
 import { fetchPost } from '@/utils/fetchClient';
 
+const showErrorMessage = ref(false);
 const isSubmitting = ref(false);
 const formData = reactive({
   email: '',
@@ -15,9 +16,11 @@ async function submit() {
     const response = await fetchPost('auth', formData);
     if (response.status === 200) {
       location.href = HOME;
+    } else {
+      showErrorMessage.value = true;
     }
-  } catch (error) {
-    console.log('ERROR', error);
+  } catch {
+    showErrorMessage.value = true;
   } finally {
     isSubmitting.value = false;
   }
@@ -25,6 +28,7 @@ async function submit() {
 </script>
 
 <template>
+  <div v-if="showErrorMessage" class="mb-4 text-sm font-normal text-red-600">Incorrect email or password</div>
   <KwForm @submit="submit" class="mt-8 space-y-6">
     <div class="form-control w-full max-w-xs">
       <KwTextField

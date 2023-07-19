@@ -42,7 +42,7 @@ async function submit() {
     const data = await response.json();
     updateUser(data);
     toast?.success('Update successful.');
-  } catch (error) {
+  } catch (error: any) {
     console.log('error', error);
     toast?.error(error.message);
   } finally {
@@ -58,7 +58,6 @@ async function submit() {
         type="text"
         class="form-control w-full max-w-xs"
         label="First name"
-        labelAlt="required"
         name="firstName"
         id="firstName"
         placeholder="enter user's first name"
@@ -69,7 +68,6 @@ async function submit() {
         type="text"
         class="form-control w-full max-w-xs"
         label="Last name"
-        labelAlt="required"
         name="lastName"
         id="lastName"
         placeholder="enter user's last name"
@@ -80,7 +78,6 @@ async function submit() {
     <KwTextField
       class="form-control w-full max-w-xs"
       label="Mobile phone"
-      labelAlt="required"
       name="mobilePhone"
       id="mobilePhone"
       placeholder="enter user's mobile phone"

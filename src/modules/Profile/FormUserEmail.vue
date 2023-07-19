@@ -24,7 +24,7 @@ async function submit() {
     const data = await response.json();
     updateUser(data);
     toast?.success('Update successful.');
-  } catch (error) {
+  } catch (error: any) {
     console.log('error', error);
     toast?.error(error.message);
   } finally {

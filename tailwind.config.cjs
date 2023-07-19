@@ -7,7 +7,7 @@ module.exports = {
   content: [
     //
     './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
-    './node_modules/flowbite/**/*.js',
+    // './node_modules/flowbite/**/*.js',
     // './node_modules/@kalmiawoods/ui/dist/**/*.{js,ts,vue}',
   ],
 
@@ -95,9 +95,9 @@ module.exports = {
         width: 'width',
       },
       textDecoration: ['active'],
-      minWidth: {
-        kanban: '28rem',
-      },
+      // minWidth: {
+      //   kanban: '28rem',
+      // },
     },
   },
 
@@ -125,6 +125,9 @@ module.exports = {
 
     // For Astro one
     'grid',
+
+    // For Daisy UI
+    'checkbox',
   ],
 
   daisyui: {
@@ -153,8 +156,8 @@ module.exports = {
 
   plugins: [
     //
-    require('flowbite/plugin'),
-    require('flowbite-typography'),
+    // require('flowbite/plugin'),
+    // require('flowbite-typography'),
     require('tailwind-scrollbar')({ nocompatible: true }),
     require('daisyui'),
   ],

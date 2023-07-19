@@ -5,8 +5,9 @@ import { DatePicker } from 'v-calendar';
 import 'v-calendar/dist/style.css';
 
 import { theme } from '@/stores/app';
-import { addReservation, removeReservation, reservation, reservations } from '@/stores/reservation';
-import { fetchNewUsers, users } from '@/stores/user';
+import { addReservation, removeReservation, reservation, reservedDates } from '@/stores/reservation';
+import { users } from '@/stores/user';
+import { fetchDelete, fetchPost, fetchPut } from '@/utils/fetchClient';
 
 export interface Props {
   isAdmin?: boolean;
@@ -22,12 +23,29 @@ const props = withDefaults(defineProps<Props>(), {
   handleCloseModal: () => {},
 });
 
+const toast: { error: Function } | undefined = inject('toast');
+
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const smAndLarger = breakpoints.greater('sm');
 const colorMode = useStore(theme);
 
 const $reservation = useStore(reservation);
 const $users = useStore(users);
+
+const buildingsOptions = [
+  {
+    value: 'HOUSE',
+    name: 'Main house',
+  },
+  {
+    value: 'GARAGE',
+    name: 'Garage',
+  },
+  {
+    value: 'WORKSHOP',
+    name: 'Workshop',
+  },
+];
 
 const selectUserOptions = computed(() => [
   ...Object.values($users.value)?.map((u) => {
@@ -38,64 +56,40 @@ const selectUserOptions = computed(() => [
   }),
 ]);
 
+const submitButtonText = props.isEditingReservation ? 'Update' : 'Create';
 const isSubmitting = ref(false);
-const hasErrors = ref(false);
-const formValues = reactive({
+const formData = reactive({
   reservationId: props.isEditingReservation ? $reservation.value.reservationId : null,
   userId: props.isEditingReservation && $reservation.value.userId ? $reservation.value.userId : undefined,
+  title: props.isEditingReservation && $reservation.value.title ? $reservation.value.title : undefined,
+  buildings: props.isEditingReservation && $reservation.value.buildings ? $reservation.value.buildings : ['HOUSE'],
   range: {
     start: props.isEditingReservation ? $reservation.value.checkInDate : props.selectedDate,
     end: props.isEditingReservation ? $reservation.value.checkOutDate : props.selectedDate,
   },
 });
 
-function invalidateForm() {
-  hasErrors.value = true;
-}
-
-const $fetchedReservations = useStore(reservations);
-const disabledDates = computed(() => {
-  let existingReservations = Object.values($fetchedReservations.value)?.map((r) => {
-    return {
-      start: r?.checkInDate,
-      end: r?.checkOutDate,
-    };
-  });
-
-  if (props.isEditingReservation) {
-    existingReservations = existingReservations.filter(
-      (r) => r.start !== $reservation.value.checkInDate && r.end !== $reservation.value.checkOutDate,
-    );
-  }
-
-  return existingReservations;
-});
+const disabledDates = useStore(reservedDates);
 
 const popover = ref({
   visibility: 'click',
-  // placement: 'auto',
 });
-
-// const bodyEl = ref();
-const usersList = ref();
-const { arrivedState } = useScroll(usersList);
 
 async function submit() {
   isSubmitting.value = true;
 
-  const response = await fetch('/api/reservations', {
-    method: props.isEditingReservation ? 'PUT' : 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formValues),
-  });
-
-  if (response.status === 200) {
+  try {
+    const response = props.isEditingReservation
+      ? await fetchPut(`reservations/${$reservation.value.reservationId}`, formData)
+      : await fetchPost('reservations', formData);
     const data = await response.json();
     addReservation(data);
     props.handleCloseModal();
+  } catch (error: any) {
+    console.log('error', error);
+    toast?.error(error.message);
+  } finally {
+    isSubmitting.value = false;
   }
 }
 
@@ -103,32 +97,23 @@ const isDeleting = ref(false);
 async function deleteReservation(reservationId: string) {
   isDeleting.value = true;
 
-  const response = await fetch('/api/reservations', {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ reservationId }),
-  });
-
-  if (response.status === 200) {
+  try {
+    await fetchDelete(`reservations/${reservationId}`);
     removeReservation(reservationId);
     props.handleCloseModal();
+  } catch (error: any) {
+    console.log('error', error);
+    toast?.error(error.message);
+  } finally {
+    isDeleting.value = false;
   }
 }
-
-watch(arrivedState, ({ bottom }) => {
-  if (bottom) {
-    fetchNewUsers();
-  }
-});
 </script>
 
 <template>
-  <form @submit.prevent="submit" :class="[{ errors: hasErrors }]">
+  <KwForm @submit="submit">
     <DatePicker
-      v-model.range="formValues.range"
+      v-model.range="formData.range"
       :class="{ 'border-0': smAndLarger }"
       color="green"
       :columns="smAndLarger ? 2 : 1"
@@ -143,89 +128,81 @@ watch(arrivedState, ({ bottom }) => {
       <template #default="{ inputValue, inputEvents }">
         <div class="flex items-center justify-center">
           <div class="mb-4 grid h-full flex-grow grid-cols-[1fr,1fr] items-center gap-8 px-0">
-            <div class="form-control w-full">
-              <label for="checkInDate" class="label">
-                <span class="label-text">Check in</span>
-              </label>
-              <input
-                id="checkInDate"
-                type="text"
-                name="checkInDate"
-                placeholder="Select date"
-                :value="inputValue.start"
-                v-on="inputEvents.start"
-                class="input input-bordered w-full" />
-            </div>
+            <KwTextField
+              type="text"
+              class="w-full form-control"
+              label="Check in"
+              name="checkInDate"
+              id="checkInDate"
+              placeholder="Select date"
+              :value="inputValue.start"
+              v-on="inputEvents.start"
+              required />
 
-            <div class="form-control w-full">
-              <label for="checkOutDate" class="label">
-                <span class="label-text">Check out</span>
-              </label>
-              <input
-                id="checkOutDate"
-                type="text"
-                name="checkOutDate"
-                placeholder="Select date"
-                :value="inputValue.end"
-                v-on="inputEvents.end"
-                class="input input-bordered w-full" />
-            </div>
+            <KwTextField
+              type="text"
+              class="w-full form-control"
+              label="Check out"
+              name="checkOutDate"
+              id="checkOutDate"
+              placeholder="Select date"
+              :value="inputValue.end"
+              v-on="inputEvents.end"
+              required />
           </div>
         </div>
       </template>
     </DatePicker>
 
-    <div v-if="isAdmin" class="form-control w-full mb-6">
-      <label for="userId" class="label">
-        <span class="label-text">Main guest</span>
-      </label>
-      <select
-        v-model="formValues.userId"
-        id="userId"
+    <div v-if="isAdmin" class="w-full mb-6 form-control">
+      <KwSelectField
+        class="w-full max-w-xs form-control"
+        label="Main Guest"
         name="userId"
-        class="select select-bordered w-full max-w-xs"
-        required>
-        <option disabled selected>Who shot first?</option>
-        <option v-for="(option, idx) in selectUserOptions" :key="idx" :value="option.value">{{ option.name }}</option>
-      </select>
+        id="userId"
+        optionDescription="Select user to link reservation to"
+        :options="selectUserOptions"
+        v-model="formData.userId"
+        required />
     </div>
 
-    <div class="mb-4 w-auto block max-w-fit">
-      <p class="label-text mb-1">Locations</p>
-      <div class="form-control">
-        <label class="label cursor-pointer justify-normal">
-          <input type="checkbox" class="checkbox mr-2" />
-          <span class="label-text">Main house</span>
-        </label>
-      </div>
-      <div class="form-control">
-        <label class="label cursor-pointer justify-normal">
-          <input type="checkbox" class="checkbox mr-2" />
-          <span class="label-text">Workshop</span>
-        </label>
-      </div>
-    </div>
+    <KwTextField
+      type="text"
+      class="w-full max-w-xs mb-4 form-control"
+      label="Title"
+      name="title"
+      id="title"
+      bottomLabelLeft="ie., Marge and the kids"
+      v-model="formData.title" />
 
-    <div class="mt-16 flex justify-evenly">
-      <button
+    <KwCheckboxGroup
+      class="block w-auto mb-4 max-w-fit"
+      label="Locations"
+      :options="buildingsOptions"
+      v-model="formData.buildings"
+      required />
+
+    <div class="flex mt-16 justify-evenly">
+      <KwButton
         v-if="$reservation.reservationId"
-        type="button"
-        class="btn btn-error"
+        variant="danger"
+        text="Delete"
+        icon-left="arrow-left"
         @click="deleteReservation($reservation.reservationId)"
-        :disabled="isDeleting">
-        <span v-if="isDeleting" class="loading loading-spinner"></span>
-        <span v-else>Delete</span>
-      </button>
+        :disabled="isDeleting"
+        :loading="isDeleting" />
 
-      <div class="flex justify-end grow gap-4">
-        <button type="button" class="btn btn-link" @click="props.handleCloseModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-          <span v-if="isSubmitting" class="loading loading-spinner"></span>
-          <span v-else>Save Reservation</span>
-        </button>
+      <div class="flex justify-end gap-4 grow">
+        <button type="button" class="btn btn-link hidden md:flex" @click="props.handleCloseModal()">Cancel</button>
+        <KwButton
+          variant="primary"
+          :text="submitButtonText"
+          type="submit"
+          :disabled="isSubmitting"
+          :loading="isSubmitting" />
       </div>
     </div>
-  </form>
+  </KwForm>
 </template>
 
 <style>

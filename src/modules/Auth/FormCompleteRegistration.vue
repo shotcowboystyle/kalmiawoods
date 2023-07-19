@@ -27,11 +27,11 @@ async function submit(e: Event) {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost(`/api/email-verification/${props.token}`, { password: formData.password });
+    const response = await fetchPost(`/api/email-verification/${props.token}`, { password: formData.newPassword });
     if (response.status === 200) {
       document.location = HOME;
     }
-  } catch (error) {
+  } catch (error: any) {
     toast?.error(error.message);
   }
 }
@@ -50,6 +50,8 @@ async function submit(e: Event) {
           required
           :rules="['password']"
           :type="passwordFieldType"
+          @focus="showPasswordMeter = !showPasswordMeter"
+          @blur="showPasswordMeter = !showPasswordMeter"
           autocomplete="off" />
         <div class="absolute top-11 right-2.5">
           <button type="button" class="btn btn-ghost btn-sm" @click="togglePasswordVisibility">
@@ -58,12 +60,13 @@ async function submit(e: Event) {
           </button>
         </div>
         <div
-          data-popover
-          id="popover-password"
+          v-if="showPasswordMeter"
           role="tooltip"
-          class="absolute z-10 inline-block w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 shadow-sm transition-opacity duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
-          :class="[{ 'invisible opacity-0': !showPasswordMeter }]">
-          <PasswordStrength :password="formData.newPassword" />
+          tabindex="0"
+          class="absolute top-24 dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-100 text-base-content">
+          <div class="card-body">
+            <PasswordStrength :password="formData.newPassword" />
+          </div>
         </div>
       </div>
 

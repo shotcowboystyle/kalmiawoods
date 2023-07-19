@@ -5,8 +5,9 @@ import { Calendar } from 'v-calendar';
 import 'v-calendar/dist/style.css';
 
 import Modal from '@/components/Modal/Modal.vue';
+import KwToast from '@/components/Toast/KwToast.vue';
 import { theme } from '@/stores/app';
-import { reservations, setActiveReservationId } from '@/stores/reservation';
+import { reservations, reservedDates, setActiveReservationId } from '@/stores/reservation';
 import type { CalendarDay } from '@/types/FullCalendar';
 import FormReservation from './FormReservation.vue';
 
@@ -15,9 +16,9 @@ defineProps<{
 }>();
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
-const smAndLarger = breakpoints.greaterOrEqual('sm');
+const mdAndLarger = breakpoints.greaterOrEqual('md');
 
-const isModalOpen = ref(false);
+const showModal = ref(false);
 const isEditingReservation = ref(false);
 
 const colorMode = useStore(theme);
@@ -25,14 +26,7 @@ const colorMode = useStore(theme);
 const calendar = ref(null);
 const $fetchedReservations = useStore(reservations);
 
-const disabledDates = computed(() => [
-  ...Object.entries($fetchedReservations.value)?.map(([, val]) => {
-    return {
-      start: val?.checkInDate,
-      end: val?.checkOutDate,
-    };
-  }),
-]);
+const disabledDates = useStore(reservedDates);
 
 const attrs = computed(() => [
   ...Object.entries($fetchedReservations.value)?.map(([key, val]) => {
@@ -68,11 +62,11 @@ const onDayClick = (day: CalendarDay, reservationId = null) => {
     isEditingReservation.value = false;
   }
 
-  isModalOpen.value = true;
+  showModal.value = true;
 };
 
 const closeModal = () => {
-  isModalOpen.value = false;
+  showModal.value = false;
 };
 </script>
 
@@ -80,8 +74,8 @@ const closeModal = () => {
   <div class="sm:w-[40vw] md:w-[90vw]">
     <Calendar
       ref="calendar"
-      class="calendar max-w-full overflow-hidden rounded-lg shadow-xl"
-      :class="{ 'custom-calendar': smAndLarger }"
+      class="max-w-full overflow-hidden rounded-lg shadow-xl calendar"
+      :class="{ 'custom-calendar': mdAndLarger }"
       :masks="masks"
       :attributes="attrs"
       :min-date="new Date()"
@@ -94,29 +88,44 @@ const closeModal = () => {
       <template #header-title="{ monthLabel, yearLabel }">
         <div class="self-center text-lg font-thin">
           <span class="font-extrabold">{{ monthLabel }}</span>
-          <span class="text-slate-900">{{ yearLabel }}</span>
+          <span class="text-slate-900 ml-2">{{ yearLabel }}</span>
         </div>
       </template>
       <template #day-content="{ day, attributes }">
         <div
-          class="min-h-16 z-10 flex h-full w-full cursor-pointer flex-col overflow-hidden"
+          class="z-10 flex h-full flex-col overflow-hidden cursor-pointer md:min-h-16 md:w-full"
           :class="[
             { 'is-disabled': !isAdmin && day.isDisabled },
             { 'is-reserved': day.isDisabled },
-            { 'hover:bg-neutral-100 focus:bg-neutral-100': !day.isDisabled },
+            { 'hover:bg-neutral-50 focus:bg-neutral-50': !day.isDisabled },
           ]"
           :aria-disabled="day.isDisabled"
           @click="onDayClick(day, attributes?.[0]?.key)">
-          <span class="day-label text-gray-90 0 self-center py-4 text-sm md:p-4 md:leading-4">
+          <span class="self-center py-4 text-sm day-label text-gray-90 0 md:p-4 md:leading-4">
             {{ day.day }}
           </span>
           <div class="flex-grow overflow-x-auto overflow-y-auto">
             <p
               v-if="attributes?.[0]"
               :key="attributes?.[0]?.key"
-              class="bg-primary text-primary-content rounded-sm p-1 text-xs md:mb-1 md:mt-0 md:leading-tight">
-              {{ attributes?.[0]?.customData?.user?.firstName }}
-              {{ attributes?.[0]?.customData?.user?.lastName }}
+              class="p-1 text-xs rounded-sm bg-primary text-primary-content md:mb-1 md:mt-0 font-semibold md:leading-tight truncate">
+              <span class="hidden md:inline">
+                <span v-if="attributes?.[0]?.customData?.title?.length">{{ attributes?.[0]?.customData?.title }}</span>
+                <span v-else>
+                  {{ attributes?.[0]?.customData?.user?.firstName }}
+                  {{ attributes?.[0]?.customData?.user?.lastName }}
+                </span>
+              </span>
+              <span v-if="attributes?.[0]?.customData?.buildings?.length > 0" class="hidden md:inline">
+                <span v-if="attributes?.[0]?.customData?.buildings?.length === 3"> - All locations </span>
+                <span v-else>
+                  -
+                  <template v-for="(building, idx) in attributes?.[0]?.customData?.buildings" :key="building">
+                    <span v-if="idx === 1"> and </span>
+                    <span class="lowercase">{{ building }}</span>
+                  </template>
+                </span>
+              </span>
             </p>
           </div>
         </div>
@@ -124,9 +133,9 @@ const closeModal = () => {
     </Calendar>
   </div>
 
-  <Modal size="5xl" v-if="isModalOpen" @close="closeModal">
+  <Modal size="3xl" v-if="showModal" @close="closeModal">
     <template #header>
-      <div class="font-bold text-lg">{{ modalTitlePrefix }} reservation</div>
+      <div class="text-lg font-bold">{{ modalTitlePrefix }} reservation</div>
     </template>
     <template #body>
       <FormReservation
@@ -137,6 +146,8 @@ const closeModal = () => {
         :is-editing-reservation="isEditingReservation" />
     </template>
   </Modal>
+
+  <KwToast v-model="$toastItems" class="z-50" />
 </template>
 
 <style lang="postcss">
@@ -160,33 +171,33 @@ const closeModal = () => {
   }
 
   .vc-weeks {
-    @apply border-t border-neutral-200 p-0;
+    @apply border-t border-neutral-300 p-0;
   }
 
   .vc-weekday {
     @apply self-center;
 
     &:not(:last-child) {
-      @apply border-r border-neutral-200;
+      @apply border-r border-neutral-300;
     }
   }
   .vc-day {
-    @apply p-0;
+    @apply p-0 md:w-max;
 
     &.on-top {
-      @apply border-t border-neutral-200;
+      @apply border-t border-neutral-300;
     }
 
     &:not(.on-bottom) {
-      @apply border-b border-neutral-200;
+      @apply border-b border-neutral-300;
     }
 
     &:not(.on-right) {
-      @apply border-r border-neutral-200;
+      @apply border-r border-neutral-300;
     }
   }
   .vc-day .is-reserved {
-    @apply rounded-none bg-neutral-300 hover:bg-neutral-300 focus:bg-neutral-300;
+    @apply rounded-none bg-neutral-200 hover:bg-neutral-200 focus:bg-neutral-200;
   }
   .vc-day .is-disabled {
     @apply cursor-not-allowed;
@@ -216,7 +227,7 @@ const closeModal = () => {
   }
 
   & .vc-day {
-    @apply relative flex h-40 w-full min-w-[90px] flex-col items-start justify-start;
+    @apply relative flex w-full md:min-w-[90px] flex-col items-start justify-start md:h-40;
 
     & .vc-day-content {
       @apply relative

@@ -21,6 +21,7 @@ const variants: {
   accent: string;
   ghost: string;
   link: string;
+  danger: string;
 } = {
   neutral: 'btn-neutral',
   primary: 'btn-primary',
@@ -28,6 +29,7 @@ const variants: {
   accent: 'btn-accent',
   ghost: 'btn-ghost',
   link: 'btn-link',
+  danger: 'btn-error',
 };
 
 const sizes: { xs: string; sm: string; lg: string; base: string; responsive: string } = {
@@ -40,7 +42,10 @@ const sizes: { xs: string; sm: string; lg: string; base: string; responsive: str
 </script>
 
 <template>
-  <button type="button" class="btn" :class="[variants[variant], sizes[size]]">
+  <button
+    type="button"
+    class="btn"
+    :class="[variants[variant as keyof typeof variants], sizes[size as keyof typeof sizes]]">
     <KwSpinner class="h-4 w-4 border-[2px]" v-if="loading && !iconRight" />
     <!-- <font-awesome-icon v-else-if="iconLeft" class="text-base" :icon="iconLeft" /> -->
     <span v-if="text"> {{ text }}</span>

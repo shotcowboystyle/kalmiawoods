@@ -1,4 +1,4 @@
-// import type { Email } from '@prisma/client';
+import type { Email } from '@prisma/client';
 
 import { BASE_APP_URL } from '@/app/constants';
 import { prisma } from '@/lib/db.js';
@@ -30,9 +30,7 @@ export const sendPasswordResetEmail = async (emailAddress: string, resetToken: s
   await sendEmail(emailAddress, 'Password reset', emailContent);
 };
 
-// const transformDatabaseEmail = (databaseEmail: Email) => ({
-//   emailId: databaseEmail.id,
-const transformDatabaseEmail = (databaseEmail) => ({
+const transformDatabaseEmail = (databaseEmail: Email) => ({
   emailId: databaseEmail.id,
   toAddress: databaseEmail.email_address,
   dateSent: databaseEmail.date_sent,
@@ -52,8 +50,7 @@ export const getEmails = async (emailAddressQuery?: string) => {
     },
   });
 
-  // return databaseEmails.map((databaseEmail: Email) => transformDatabaseEmail(databaseEmail));
-  return databaseEmails.map((databaseEmail) => transformDatabaseEmail(databaseEmail));
+  return databaseEmails.map((databaseEmail: Email) => transformDatabaseEmail(databaseEmail));
 };
 
 export const getEmail = async (emailId: string) => {
