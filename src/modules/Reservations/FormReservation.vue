@@ -86,7 +86,6 @@ async function submit() {
     addReservation(data);
     props.handleCloseModal();
   } catch (error: any) {
-    console.log('error', error);
     toast?.error(error.message);
   } finally {
     isSubmitting.value = false;
@@ -102,7 +101,6 @@ async function deleteReservation(reservationId: string) {
     removeReservation(reservationId);
     props.handleCloseModal();
   } catch (error: any) {
-    console.log('error', error);
     toast?.error(error.message);
   } finally {
     isDeleting.value = false;

@@ -39,7 +39,6 @@ export default {
     };
 
     const addErrorToast = (title: string) => {
-      console.log('ERROR TOAST ADDED');
       app.config.globalProperties.$toastItems.push({
         title,
         variant: 'danger',
@@ -51,7 +50,7 @@ export default {
       app.config.globalProperties.$toastItems.push({
         title,
         variant: 'success',
-        time: 500000,
+        time: 5000,
       });
     };
 

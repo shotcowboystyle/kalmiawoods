@@ -46,7 +46,6 @@ export const updateUserProfile = async (profileId: string, data: UserProfileWith
 
     return transformDatabaseUserProfileWithAuthUser(updatedUserProfile);
   } catch (error: any) {
-    console.log('ERROR', error);
     if (error.code === 'P2002') {
       throw new Error('Mobile phone number is already registered to another user');
     }

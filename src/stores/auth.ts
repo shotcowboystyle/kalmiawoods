@@ -53,7 +53,7 @@ onMount(authUser, () => {
 
       authUser.set({ isLoading: false, ...authUserData });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   });
 });

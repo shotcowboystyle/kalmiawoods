@@ -64,8 +64,7 @@ export const post: APIRoute = async (context) => {
       status: 200,
       headers: { 'content-type': 'application/json' },
     });
-  } catch (error) {
-    console.log('ERROR', error);
+  } catch (error: any) {
     return new Response(
       JSON.stringify({
         message: error.message ?? 'There was an error creating this user. Please try again later.',

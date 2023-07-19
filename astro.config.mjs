@@ -3,15 +3,12 @@ import partytown from '@astrojs/partytown';
 import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
-// import node from '@astrojs/node';
 import vue from '@astrojs/vue';
-// import { sentryVitePlugin } from '@sentry/vite-plugin';
 import compress from 'astro-compress';
-// import compressor from 'astro-compressor';
 import critters from 'astro-critters';
 import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
-import { defineConfig } from 'astro/config';
+import { defineConfig, sharpImageService } from 'astro/config';
 import { dirname, resolve } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
@@ -20,9 +17,8 @@ import Components from 'unplugin-vue-components/vite';
 import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
-// import { prismaClient } from './src/lib/db';
 
-const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTRY_ORG, DEBUGGING } = loadEnv(
+const { APP_SITE, APP_BASE } = loadEnv(
   process.env.MODE,
   process.cwd(),
   '',
@@ -43,45 +39,30 @@ const vitePlugins = [
   mkcert(),
 ];
 
-// if (SENTRY_DSN.length && DEBUGGING !== 'true') {
-//   vitePlugins.push(
-//     sentryVitePlugin({
-//       include: '.',
-//       org: SENTRY_ORG,
-//       project: SENTRY_PROJECT,
-//       authToken: SENTRY_AUTH_TOKEN,
-//       sourcemaps: { assets: './dist/**' },
-//     }),
-//   );
-// }
-
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: vercel({
-    analytics: true,
-    // includeFiles: ['./middleware.ts'],
-  }),
-  experimental: {
-    assets: true,
-  },
-  // build: {
-  //   excludeMiddleware: false,
-  //   // split: true,
-  // },
-  server: {
-    host: true,
-    // port: 9000,
-  },
   site: APP_SITE,
   base: basePath,
   trailingSlash: 'never',
+  experimental: {
+    assets: true,
+  },
+  build: {
+    inlineStylesheets: 'auto',
+  },
+  compressHTML: true,
+  output: 'server',
+  adapter: vercel({
+    analytics: true,
+  }),
+  server: {
+    host: true,
+  },
   integrations: [
     vue({
       appEntrypoint: '/src/pages/_app',
       reactivityTransform: true,
     }),
-    // vue(),
     tailwind({
       config: {
         applyBaseStyles: false,
@@ -96,9 +77,9 @@ export default defineConfig({
         'icon-park-outline': ['game-ps', 'camp'],
       },
     }),
-    // image({
-    //   service: sharpImageService(),
-    // }),
+    image({
+      service: sharpImageService(),
+    }),
     mdx(),
     partytown({
       config: {
@@ -128,42 +109,29 @@ export default defineConfig({
       svg: false,
       logger: 1,
     }),
-    // compressor({ gzip: true, brotli: true }),
     devOnlyRoutes(),
-    // prismaClient,
   ],
   markdown: {},
   vite: {
-    // build: {
-    //   copyPublicDir: false,
-    //   // sourcemap: true,
-    // },
-    // ssr: {
-    //   // external: ['svgo'],
-    //   // external: ['.prisma/client/index-browser'],
-    //   external: ['lucia-auth', '@lucia-auth/adapter-prisma'],
-    //   // external: ["cookie"],
-    // },
-    // define: {
-    //   __DATE__: `'${new Date().toISOString()}'`,
-    // },
+    build: {
+      sourcemap: true,
+    },
+    css: {
+      devSourcemap: true
+    },
+    ssr: {
+      external: ['svgo'],
+    },
     server: {
       https: true,
-      // strictPort: true,
-      // hmr: { protocol: 'ws', host: ipv4, port: 5183 }
     },
     plugins: vitePlugins,
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
-      // allowNodeBuiltins: true,
-      // esbuildOptions: {
-      //   plugins: [nodeExternalsPlugin()],
-      // },
     },
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
-        // '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',
       },
     },
   },

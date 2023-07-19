@@ -44,7 +44,6 @@ async function submit() {
     addUser(data);
     props.handleCloseModal();
   } catch (error: any) {
-    console.log('error', error);
     toast?.error(error.message);
   } finally {
     isSubmitting.value = false;

@@ -15,9 +15,6 @@ const currentPasswordErrorMessage = ref('');
 const $activeUserId = useStore(activeUserId);
 const $user = useStore(activeUser);
 
-console.log('ACTIVE USER ID', $activeUserId);
-console.log('PROFILE DATA', $user);
-
 const isSubmitting = ref(false);
 const formData = reactive({
   currentPassword: undefined,
@@ -26,7 +23,6 @@ const formData = reactive({
 });
 
 async function submit() {
-  console.log('HELLO');
   currentPasswordErrorMessage.value = '';
   isSubmitting.value = true;
 

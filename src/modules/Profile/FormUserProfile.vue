@@ -43,7 +43,6 @@ async function submit() {
     updateUser(data);
     toast?.success('Update successful.');
   } catch (error: any) {
-    console.log('error', error);
     toast?.error(error.message);
   } finally {
     isSubmitting.value = false;
