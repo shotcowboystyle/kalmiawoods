@@ -47,6 +47,9 @@ export default defineConfig({
   experimental: {
     assets: true,
   },
+  image: {
+    service: sharpImageService(),
+  },
   build: {
     inlineStylesheets: 'auto',
   },
@@ -76,9 +79,6 @@ export default defineConfig({
         brandico: ['facebook-rect', 'instagram', 'linkedin-rect'],
         'icon-park-outline': ['game-ps', 'camp'],
       },
-    }),
-    image({
-      service: sharpImageService(),
     }),
     mdx(),
     partytown({
