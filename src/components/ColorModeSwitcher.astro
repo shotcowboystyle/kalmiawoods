@@ -1,6 +1,10 @@
 <script>
+  import { theme as appTheme } from '@/stores/app';
+
   const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
   const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+  appTheme.set(window.localStorage.getItem("color-theme") || 'light')
 
   // Change the icons inside the button based on previous settings
   if (

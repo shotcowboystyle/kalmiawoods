@@ -18,7 +18,7 @@ export interface DisabledReservationDates {
 // };
 
 export interface ReservationForm {
-  id?: string;
+  reservationId?: string;
   userId?: string;
   checkInDate: string;
   checkOutDate: string;

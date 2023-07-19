@@ -2,8 +2,8 @@
 import { useStore } from '@nanostores/vue';
 
 import { authUser } from '@/stores/auth';
-import { activeUserId, updateUser } from '@/stores/user';
-import { fetchPut } from '@/utils/fetchClient';
+import { activeUserId, profileData, updateUser } from '@/stores/user';
+import { fetchPost, fetchPut } from '@/utils/fetchClient';
 
 const toast: { error: Function; success: Function } | undefined = inject('toast');
 
@@ -11,9 +11,14 @@ const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
 const togglePasswordVisibility = () => (hidePassword.value = !hidePassword.value);
 const passwordFieldType = computed(() => (hidePassword.value ? 'password' : 'text'));
+const currentPasswordErrorMessage = ref(null);
 
 const $authUser = useStore(authUser);
 const $activeUserId = useStore(activeUserId);
+const $profileData = useStore(profileData);
+
+console.log('ACTIVE USER ID', $activeUserId);
+console.log('PROFILE DATA', $profileData);
 
 const isSubmitting = ref(false);
 const formData = reactive({
@@ -23,7 +28,24 @@ const formData = reactive({
 });
 
 async function submit() {
+  console.log('HELLO');
+  currentPasswordErrorMessage.value = null;
   isSubmitting.value = true;
+
+  try {
+    const response = await fetchPost(`users/${$activeUserId.value}/password`, {
+      email: $profileData.value.email,
+      currentPassword: formData.currentPassword,
+    });
+
+    if (response.status !== 200) {
+      currentPasswordErrorMessage.value = 'Your current password is incorrect.';
+    }
+  } catch (error) {
+    currentPasswordErrorMessage.value = 'Your current password is incorrect.';
+  } finally {
+    return (isSubmitting.value = false);
+  }
 
   try {
     const response = await fetchPut(`users/${$activeUserId.value}/password`, {
@@ -34,7 +56,6 @@ async function submit() {
     updateUser(data);
     toast?.success('Update successful.');
   } catch (error) {
-    console.log('error', error);
     toast?.error(error.message);
   } finally {
     isSubmitting.value = false;
@@ -54,10 +75,11 @@ async function submit() {
         required
         :type="passwordFieldType"
         autocomplete="off" />
+      <!-- :invalid="currentPasswordErrorMessage" -->
     </div>
 
     <div class="flex gap-x-6 mb-4">
-      <div class="form-control w-full max-w-xs">
+      <div class="form-control w-full max-w-xs relative">
         <KwTextField
           class="form-control w-full max-w-xs"
           label="New password"
@@ -67,17 +89,24 @@ async function submit() {
           required
           :rules="['password']"
           :type="passwordFieldType"
+          @focus="showPasswordMeter = !showPasswordMeter"
+          @blur="showPasswordMeter = !showPasswordMeter"
           autocomplete="off" />
-        <div class="absolute bottom-2.5 right-2.5">
-          <button type="button" class="btn btn-primary" @click="togglePasswordVisibility">Show</button>
+        <div class="absolute top-11 right-2.5">
+          <button type="button" class="btn btn-ghost btn-sm" @click="togglePasswordVisibility">
+            <span v-if="!hidePassword">Hide</span>
+            <span v-else>Show</span>
+          </button>
         </div>
+
         <div
-          data-popover
-          id="popover-password"
+          v-if="showPasswordMeter"
           role="tooltip"
-          class="absolute z-10 inline-block w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 shadow-sm transition-opacity duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
-          :class="[{ 'invisible opacity-0': !showPasswordMeter }]">
-          <PasswordStrength :password="formData.newPassword" />
+          tabindex="0"
+          class="absolute top-24 dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-100 text-base-content">
+          <div class="card-body">
+            <PasswordStrength :password="formData.newPassword" />
+          </div>
         </div>
       </div>
 
@@ -98,13 +127,7 @@ async function submit() {
     </div>
 
     <div class="flex gap-6 justify-start mt-8">
-      <KwButton
-        variant="primary"
-        text="Save"
-        icon-right="arrow-right"
-        type="submit"
-        :disabled="isSubmitting"
-        :loading="isSubmitting" />
+      <KwButton variant="primary" text="Save" type="submit" :disabled="isSubmitting" :loading="isSubmitting" />
     </div>
   </KwForm>
 </template>

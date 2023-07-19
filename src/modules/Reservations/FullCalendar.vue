@@ -3,8 +3,9 @@ import { useStore } from '@nanostores/vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { Calendar } from 'v-calendar';
 import 'v-calendar/dist/style.css';
-// import { useTheme } from '@kalmiawoods/ui';
+
 import Modal from '@/components/Modal/Modal.vue';
+import { theme } from '@/stores/app';
 import { reservations, setActiveReservationId } from '@/stores/reservation';
 import type { CalendarDay } from '@/types/FullCalendar';
 import FormReservation from './FormReservation.vue';
@@ -18,10 +19,8 @@ const smAndLarger = breakpoints.greaterOrEqual('sm');
 
 const isModalOpen = ref(false);
 const isEditingReservation = ref(false);
-// const isDark = ref();
-// document.addEventListener('dark-mode', () => {
-//   chart.updateOptions(getTrafficChannelsChartOptions());
-// });
+
+const colorMode = useStore(theme);
 
 const calendar = ref(null);
 const $fetchedReservations = useStore(reservations);
@@ -29,8 +28,8 @@ const $fetchedReservations = useStore(reservations);
 const disabledDates = computed(() => [
   ...Object.entries($fetchedReservations.value)?.map(([, val]) => {
     return {
-      start: val.checkInDate,
-      end: val.checkOutDate,
+      start: val?.checkInDate,
+      end: val?.checkOutDate,
     };
   }),
 ]);
@@ -40,12 +39,12 @@ const attrs = computed(() => [
     return {
       key,
       popover: {
-        label: `${val.user.firstName} ${val.user.lastName}`,
+        label: `${val?.user.firstName} ${val?.user.lastName}`,
       },
       customData: val,
       dates: {
-        start: new Date(val.checkInDate),
-        end: new Date(val.checkOutDate),
+        start: val && new Date(val.checkInDate),
+        end: val && new Date(val.checkOutDate),
       },
     };
   }),
@@ -90,8 +89,8 @@ const closeModal = () => {
       disable-page-swipe
       is-expanded
       trim-weeks
+      :is-dark="colorMode === 'dark'"
       title-position="left">
-      <!-- :is-dark="isDark" -->
       <template #header-title="{ monthLabel, yearLabel }">
         <div class="self-center text-lg font-thin">
           <span class="font-extrabold">{{ monthLabel }}</span>
@@ -139,33 +138,6 @@ const closeModal = () => {
     </template>
   </Modal>
 </template>
-
-<!-- <style lang="postcss">
-@media (max-width: 768px) {
-  .custom-calendar .vc-weekday {
-    display: none;
-  }
-
-  .custom-calendar .vc-day {
-    grid-column: 1 / 2;
-    width: 100%;
-    height: auto !important;
-    min-height: 180px;
-    padding: 10px;
-    margin-bottom: -1px;
-  }
-
-  .custom-calendar,
-  .custom-calendar .vc-weeks,
-  .custom-calendar .vc-day {
-    grid-template-columns: 1fr;
-  }
-
-  .custom-calendar .vc-day-content {
-    align-self: flex-start;
-  }
-}
-</style> -->
 
 <style lang="postcss">
 .calendar.vc-container {

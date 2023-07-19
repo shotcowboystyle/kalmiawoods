@@ -1,10 +1,16 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
+import { checkAuth } from '@/app/check-auth';
 import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { emailVerificationToken } from '@/services/verification-token';
 import { isValidEmail } from '@/utils/email';
+
+const redirect = await checkAuth(Astro);
+if (redirect) {
+  return Astro.redirect(redirect);
+}
 
 let email: string | null = null;
 let errorMessage: string | null = null;

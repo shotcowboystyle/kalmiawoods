@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { addReservation, removeReservation, reservation, reservations } from '@/stores/reservation';
-import { fetchNewUsers, users } from '@/stores/user';
 import { useStore } from '@nanostores/vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { DatePicker } from 'v-calendar';
 import 'v-calendar/dist/style.css';
+
+import { theme } from '@/stores/app';
+import { addReservation, removeReservation, reservation, reservations } from '@/stores/reservation';
+import { fetchNewUsers, users } from '@/stores/user';
 
 export interface Props {
   isAdmin?: boolean;
@@ -22,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const smAndLarger = breakpoints.greater('sm');
+const colorMode = useStore(theme);
 
 const $reservation = useStore(reservation);
 const $users = useStore(users);
@@ -29,8 +32,8 @@ const $users = useStore(users);
 const selectUserOptions = computed(() => [
   ...Object.values($users.value)?.map((u) => {
     return {
-      value: u.id,
-      name: `${u.firstName} ${u.lastName}`,
+      value: u?.userId,
+      name: `${u?.firstName} ${u?.lastName}`,
     };
   }),
 ]);
@@ -54,8 +57,8 @@ const $fetchedReservations = useStore(reservations);
 const disabledDates = computed(() => {
   let existingReservations = Object.values($fetchedReservations.value)?.map((r) => {
     return {
-      start: r.checkInDate,
-      end: r.checkOutDate,
+      start: r?.checkInDate,
+      end: r?.checkOutDate,
     };
   });
 
@@ -97,7 +100,7 @@ async function submit() {
 }
 
 const isDeleting = ref(false);
-async function deleteReservation(reservationId) {
+async function deleteReservation(reservationId: string) {
   isDeleting.value = true;
 
   const response = await fetch('/api/reservations', {
@@ -132,6 +135,7 @@ watch(arrivedState, ({ bottom }) => {
       :min-date="new Date()"
       is-range
       is-required
+      :is-dark="colorMode === 'dark'"
       :popover="popover"
       :is-expanded="smAndLarger"
       :trim-weeks="!smAndLarger"

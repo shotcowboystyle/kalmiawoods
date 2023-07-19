@@ -11,7 +11,7 @@ interface DatabaseReservation extends PrismaReservation {
 }
 
 const transformDatabaseReservation = (databaseReservation: DatabaseReservation): Reservation => ({
-  id: databaseReservation.id,
+  reservationId: databaseReservation.id,
   checkInDate: databaseReservation.check_in_date,
   checkOutDate: databaseReservation.check_out_date,
   buildings: databaseReservation.buildings,
@@ -127,7 +127,9 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
       // },
     });
 
-    return (databaseReservations as DatabaseReservation[]).map((databaseReservation) => transformDatabaseReservation(databaseReservation));
+    return (databaseReservations as DatabaseReservation[]).map((databaseReservation) =>
+      transformDatabaseReservation(databaseReservation),
+    );
   } catch (error: any) {
     throw new Error(error.message);
   }

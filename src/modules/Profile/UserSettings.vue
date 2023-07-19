@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
 
+import KwToast from '@/components/Toast/KwToast.vue';
 import FormUserEmail from '@/modules/Profile/FormUserEmail.vue';
 import FormUserPassword from '@/modules/Profile/FormUserPassword.vue';
 import FormUserProfile from '@/modules/Profile/FormUserProfile.vue';

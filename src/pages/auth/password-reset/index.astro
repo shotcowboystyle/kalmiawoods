@@ -1,7 +1,13 @@
 ---
 import LayoutStacked from '@/app/LayoutStacked.astro';
+import { checkAuth } from '@/app/check-auth';
 import Logo from '@/components/Logo.astro';
 import FormPasswordRecovery from '@/modules/Auth/FormPasswordRecovery.vue';
+
+const redirect = await checkAuth(Astro);
+if (redirect) {
+  return Astro.redirect(redirect);
+}
 ---
 
 <LayoutStacked>

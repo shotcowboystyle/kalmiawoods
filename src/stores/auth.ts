@@ -43,8 +43,7 @@ onMount(authUser, () => {
 
   task(async () => {
     try {
-      const response = await fetchGet('auth-user');
-      const data = await response.json();
+      const data = await fetchGet('auth-user');
       const authUserData = {
         email: data.email,
         role: data.role,

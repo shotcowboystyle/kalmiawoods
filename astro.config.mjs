@@ -1,26 +1,25 @@
 import mdx from '@astrojs/mdx';
-// import partytown from '@astrojs/partytown';
-// import prefetch from '@astrojs/prefetch';
+import partytown from '@astrojs/partytown';
+import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 // import node from '@astrojs/node';
 import vue from '@astrojs/vue';
 // import { sentryVitePlugin } from '@sentry/vite-plugin';
-// import compress from 'astro-compress';
+import compress from 'astro-compress';
 // import compressor from 'astro-compressor';
-// import critters from 'astro-critters';
-// import devOnlyRoutes from 'astro-dev-only-routes';
+import critters from 'astro-critters';
+import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
-import { nodeExternalsPlugin } from 'esbuild-node-externals';
-import { dirname } from 'path';
+import { dirname, resolve } from 'path';
 import AutoImport from 'unplugin-auto-import/astro';
 import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
 import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
-// import mkcert from 'vite-plugin-mkcert';
+import mkcert from 'vite-plugin-mkcert';
 // import { prismaClient } from './src/lib/db';
 
 const { APP_SITE, APP_BASE, SENTRY_AUTH_TOKEN, SENTRY_PROJECT, SENTRY_DSN, SENTRY_ORG, DEBUGGING } = loadEnv(
@@ -41,7 +40,7 @@ const vitePlugins = [
     autoInstall: true,
     compiler: 'vue3',
   }),
-  // mkcert(),
+  mkcert(),
 ];
 
 // if (SENTRY_DSN.length && DEBUGGING !== 'true') {
@@ -61,14 +60,15 @@ export default defineConfig({
   output: 'server',
   adapter: vercel({
     analytics: true,
+    // includeFiles: ['./middleware.ts'],
   }),
   experimental: {
     assets: true,
   },
-  build: {
-    excludeMiddleware: true,
-    // split: true,
-  },
+  // build: {
+  //   excludeMiddleware: false,
+  //   // split: true,
+  // },
   server: {
     host: true,
     // port: 9000,
@@ -100,11 +100,11 @@ export default defineConfig({
     //   service: sharpImageService(),
     // }),
     mdx(),
-    // partytown({
-    //   config: {
-    //     forward: ['dataLayer.push'],
-    //   },
-    // }),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
+    }),
     AutoImport({
       imports: [
         'vue',
@@ -116,20 +116,20 @@ export default defineConfig({
       dirs: ['src/composables', 'src/plugins'],
       vueTemplate: true,
     }),
-    // prefetch(),
-    // critters({ logger: 2 }),
-    // compress({
-    //   css: false,
-    //   html: {
-    //     removeAttributeQuotes: false,
-    //   },
-    //   img: false,
-    //   js: true,
-    //   svg: false,
-    //   logger: 1,
-    // }),
+    prefetch(),
+    critters({ logger: 2 }),
+    compress({
+      css: false,
+      html: {
+        removeAttributeQuotes: false,
+      },
+      img: false,
+      js: true,
+      svg: false,
+      logger: 1,
+    }),
     // compressor({ gzip: true, brotli: true }),
-    // devOnlyRoutes(),
+    devOnlyRoutes(),
     // prismaClient,
   ],
   markdown: {},
@@ -138,12 +138,12 @@ export default defineConfig({
     //   copyPublicDir: false,
     //   // sourcemap: true,
     // },
-    ssr: {
-      // external: ['svgo'],
-      // external: ['.prisma/client/index-browser'],
-			noExternal: ["lucia-auth", "@lucia-auth/adapter-prisma"],
-			// external: ["cookie"],
-    },
+    // ssr: {
+    //   // external: ['svgo'],
+    //   // external: ['.prisma/client/index-browser'],
+    //   external: ['lucia-auth', '@lucia-auth/adapter-prisma'],
+    //   // external: ["cookie"],
+    // },
     // define: {
     //   __DATE__: `'${new Date().toISOString()}'`,
     // },
@@ -156,15 +156,15 @@ export default defineConfig({
     optimizeDeps: {
       include: ['vue', '@vueuse/core', 'v-calendar'],
       // allowNodeBuiltins: true,
-      esbuildOptions: {
-        plugins: [nodeExternalsPlugin()],
+      // esbuildOptions: {
+      //   plugins: [nodeExternalsPlugin()],
+      // },
+    },
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, './src'),
+        // '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',
       },
     },
-    // resolve: {
-    //   alias: {
-    //     '@': resolve(__dirname, './src'),
-    //     '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js',
-    //   },
-    // },
   },
 });

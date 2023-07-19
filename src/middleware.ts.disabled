@@ -95,12 +95,9 @@
 
 // export const onRequest = sequence(validationHandler);
 
+import type { MiddlewareResponseHandler } from 'astro';
 
-import type { MiddlewareResponseHandler } from "astro";
-
-export const config = {
-  runtime: 'serverless',
-};
+import { auth } from '@/lib/lucia';
 
 // export const onRequest = async (context, next) => {
 export const onRequest: MiddlewareResponseHandler = async (context, next) => {
@@ -110,59 +107,44 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
 
   const pathname = new URL(context.request.url).pathname;
 
-  console.log('MIDDLEWARE ONE');
-  const response = await next();
-  console.log('MIDDLEWARE TWO');
+  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+    return await next();
+  } else {
+    const authRequest = auth.handleRequest(context);
 
-  // if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
-  //   console.log('PUBLIC ROUTES');
-  //   return await next();
-  // } else {
-  //   const authRequest = auth.handleRequest(context);
+    const { session, user } = await authRequest.validateUser();
 
-  //   const { session, user } = await authRequest.validateUser();
-  //   console.log('NON PUBLIC ROUTES', JSON.stringify(session), JSON.stringify(user));
+    if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
+      if (session) {
+        if (!user.emailVerified) {
+          return context.redirect('/auth/email-verification');
+        }
 
-  //   if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
-  //     console.log('AUTH ROUTES ONE');
-  //     if (session) {
-  //       console.log('AUTH ROUTES TWO');
-  //       if (!user.emailVerified) {
-  //         console.log('AUTH ROUTES THREE');
-  //         return context.redirect('/auth/email-verification');
-  //       }
+        return context.redirect('/');
+      }
+    } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
+      return context.redirect('/');
+    } else {
+      if (!session) {
+        return context.redirect('/auth/login');
+      }
 
-  //       return context.redirect('/');
-  //     }
-  //   } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
-  //     console.log('ACCOUNT ROUTES ONE');
-  //     return context.redirect('/');
-  //   } else {
-  //     console.log('OTHER ROUTES ONE');
-  //     if (!session) {
-  //       console.log('OTHER ROUTES TWO');
-  //       return context.redirect('/auth/login');
-  //     }
+      if (!user?.emailVerified) {
+        return context.redirect('/auth/email-verification');
+      }
 
-  //     if (!user?.emailVerified) {
-  //       console.log('OTHER ROUTES THREE');
-  //       return context.redirect('/auth/email-verification');
-  //     }
+      const isAdmin = user.role === 'ADMIN';
+      context.locals.user = {
+        userId: user.userId,
+        email: user.email,
+        isAdmin,
+      };
 
-  //     const isAdmin = user.role === 'ADMIN';
-  //     context.locals.user = {
-  //       userId: user.userId,
-  //       email: user.email,
-  //       isAdmin,
-  //     };
+      if (pathname.startsWith('/admin') && !isAdmin) {
+        return context.redirect('/403');
+      }
+    }
+  }
 
-  //     if (pathname.startsWith('/admin') && !isAdmin) {
-  //       console.log('OTHER ROUTES FOUR');
-  //       return context.redirect('/403');
-  //     }
-  //   }
-  // }
-
-  // return await next();
-  return response;
+  return await next();
 };

@@ -1,7 +1,7 @@
-const specialCharRegex = /[^A-Za-z0-9]/g;
-const lowercaseRegex = /(.*[a-z].*)/g;
-const uppercaseRegex = /(.*[A-Z].*)/g;
-const numberRegex = /(.*[0-9].*)/g;
+const specialCharRegex = /[!@#\$%\^\&*\)\(+=._-]/;
+const lowercaseRegex = /[a-z]/;
+const uppercaseRegex = /[A-Z]/;
+const numberRegex = /\d/;
 const repeatCharRegex = /(\w)(\1+\1+\1+\1+)/g;
 
 const nameScore = (score: number): string => {

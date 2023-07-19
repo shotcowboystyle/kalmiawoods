@@ -30,7 +30,7 @@ reservationsPartial.subscribe((r) => {
   }
 });
 
-export const fetchMonthReservations = (year, month) => {
+export const fetchMonthReservations = (year: number, month: number) => {
   setMonthStartDate(getFirstDayOfMonth(year, month).toDateString());
   setMonthEndDate(getLastDayOfMonth(year, month).toDateString());
 };
@@ -69,7 +69,7 @@ export const setActiveReservationId = action(activeReservationId, 'setActiveRese
 export const reservation = computed(
   [reservations, activeReservationId],
   (_reservations, _reservationId) =>
-    Object.values(_reservations).find((r) => r?.id === _reservationId) ?? initReservationData,
+    Object.values(_reservations).find((r) => r?.reservationId === _reservationId) ?? initReservationData,
 );
 
 export const reservationDates = map({

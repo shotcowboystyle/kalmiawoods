@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useStore } from '@nanostores/vue';
 
+import { fetchPost } from '@/utils/fetchClient';
 import { HOME } from '@/app/constants';
 import { authUser } from '@/stores/auth';
 
@@ -13,14 +14,7 @@ const $authUser = useStore(authUser);
 // const onToggle = () => (dropdownOpen.value = !dropdownOpen.value);
 
 const handleLogout = async () => {
-  await fetch('/logout', {
-    method: 'POST',
-    // headers: {
-    //   Accept: 'application/json',
-    //   'Content-Type': 'application/json',
-    // },
-    // body: JSON.stringify(formValues),
-  });
+  await fetchPost('/logout');
 };
 </script>
 
@@ -30,9 +24,7 @@ const handleLogout = async () => {
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
           <span class="sr-only">Open user menu</span>
-          <img
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-            alt="user photo" />
+          <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
         </div>
       </label>
       <div tabindex="0" class="dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-100 text-base-content">
@@ -47,26 +39,13 @@ const handleLogout = async () => {
           </div>
           <ul class="menu w-full">
             <li>
-              <a
-                :href="HOME"
-                role="menuitem"
-                >Home</a
-              >
+              <a :href="HOME" role="menuitem">Home</a>
             </li>
             <li>
-              <a
-                href="/profile"
-                role="menuitem"
-                >Profile</a
-              >
+              <a href="/profile" role="menuitem">Profile</a>
             </li>
             <li>
-              <a
-                href="#"
-                role="menuitem"
-                @click.prevent="handleLogout"
-                >Logout</a
-              >
+              <a href="#" role="menuitem" @click.prevent="handleLogout">Logout</a>
             </li>
           </ul>
         </div>

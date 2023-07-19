@@ -1,6 +1,12 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
+import { checkAuth } from '@/app/check-auth';
 import UserSettings from '@/modules/Profile/UserSettings.vue';
+
+const redirect = await checkAuth(Astro);
+if (redirect) {
+  return Astro.redirect(redirect);
+}
 
 const { id } = Astro.params;
 ---

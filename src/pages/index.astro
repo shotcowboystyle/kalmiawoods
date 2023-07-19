@@ -1,10 +1,16 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
+import { checkAuth } from '@/app/check-auth';
 import Contact from '@/modules/Contact/Contact.astro';
 import Hero from '@/modules/Dashboard/Hero.astro';
 import NearbyAttractions from '@/modules/Dashboard/NearbyAttractions.astro';
 import PhotoGallery from '@/modules/Dashboard/PhotoGallery.astro';
 import Summary from '@/modules/Dashboard/Summary.astro';
+
+const redirect = await checkAuth(Astro);
+if (redirect) {
+  return Astro.redirect(redirect);
+}
 ---
 
 <LayoutSidebar>
