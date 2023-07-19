@@ -17,11 +17,9 @@
 
     // Enable top-level await, and other modern ESM features.
     "target": "es5",
-    // "target": "ESNext",
     "module": "esnext",
     // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
-    // "moduleResolution": "bundler",
     "baseUrl": ".",
     // Enable stricter transpilation for better output.
     "isolatedModules": true,
@@ -33,16 +31,9 @@
       }
     ],
 
-    // "verbatimModuleSyntax": true,
-
-    // "skipLibCheck": true,
-
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"]
-  // ,
-  // "exclude": ["dist", ".vercel"]
-  // "exclude": ["node_modules"]
 }
