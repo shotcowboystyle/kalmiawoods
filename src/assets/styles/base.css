@@ -59,6 +59,10 @@ body {
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path fill="crimson" d="M110 16 76 57v1l51-10v32l-51-9-1 1 35 39-28 17-18-50-1 1-18 49-28-17 34-40-50 9V48l50 10v-1L17 17 46 1l17 48h1L82 1l28 15z"/></svg>') no-repeat 0 25%;
 }
 
+.modal {
+  @apply bg-black bg-opacity-40;
+}
+
 [astro-icon].icon-light > * {
   stroke-width: 1.2;
 }

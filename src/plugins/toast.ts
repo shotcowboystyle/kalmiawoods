@@ -1,5 +1,7 @@
+import type { App } from 'vue';
+
 export default {
-  install: (app, options) => {
+  install: (app: App<any>): any => {
     app.config.globalProperties.$toastItems = reactive([]);
 
     type button = {

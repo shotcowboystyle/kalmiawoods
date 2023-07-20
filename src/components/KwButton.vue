@@ -32,10 +32,11 @@ const variants: {
   danger: 'btn-error',
 };
 
-const sizes: { xs: string; sm: string; lg: string; base: string; responsive: string } = {
+const sizes: { xs: string; sm: string; lg: string; block: string; base: string; responsive: string } = {
   xs: 'btn-xs',
   sm: 'btn-sm',
   lg: 'btn-lg',
+  block: 'btn-block',
   base: '',
   responsive: 'btn-xs sm:btn-sm md:btn-md lg:btn-lg',
 };

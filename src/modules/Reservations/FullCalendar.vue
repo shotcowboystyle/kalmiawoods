@@ -4,22 +4,22 @@ import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { Calendar } from 'v-calendar';
 import 'v-calendar/dist/style.css';
 
+import { HOME } from '@/app/constants';
 import Modal from '@/components/Modal/Modal.vue';
 import KwToast from '@/components/Toast/KwToast.vue';
 import { theme } from '@/stores/app';
+import { authUser } from '@/stores/auth';
 import { reservations, reservedDates, setActiveReservationId } from '@/stores/reservation';
 import type { CalendarDay } from '@/types/FullCalendar';
 import FormReservation from './FormReservation.vue';
-
-defineProps<{
-  isAdmin?: boolean;
-}>();
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const mdAndLarger = breakpoints.greaterOrEqual('md');
 
 const showModal = ref(false);
 const isEditingReservation = ref(false);
+
+const $authUser = useStore(authUser);
 
 const colorMode = useStore(theme);
 
@@ -65,13 +65,67 @@ const onDayClick = (day: CalendarDay, reservationId = null) => {
   showModal.value = true;
 };
 
+const addNewReservation = () => {
+  setActiveReservationId(null);
+  modalTitlePrefix.value = 'Add';
+  selectedReservationDate.value = new Date().toDateString();
+  isEditingReservation.value = false;
+  showModal.value = true;
+};
+
 const closeModal = () => {
   showModal.value = false;
 };
 </script>
 
 <template>
-  <div class="sm:w-[40vw] md:w-[90vw]">
+  <div class="mb-2">
+    <nav class="mb-5 flex" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+        <li class="inline-flex items-center">
+          <a
+            :href="HOME"
+            class="hover:text-primary-600 inline-flex items-center text-gray-700 dark:text-gray-300 dark:hover:text-white">
+            <svg class="mr-2.5 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+            </svg>
+            Home
+          </a>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <svg
+              class="h-6 w-6 text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <span class="ml-1 text-gray-400 dark:text-gray-500 md:ml-2" aria-current="page">Reservations</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="flex justify-between items-center">
+      <h1 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Reservations</h1>
+      <button type="button" class="btn btn-primary btn-sm md:btn-md" @click="addNewReservation">
+        <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"></path>
+        </svg>
+        New reservation
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-8 w-full">
     <Calendar
       ref="calendar"
       class="max-w-full overflow-hidden rounded-lg shadow-xl calendar"
@@ -95,7 +149,7 @@ const closeModal = () => {
         <div
           class="z-10 flex h-full flex-col overflow-hidden cursor-pointer md:min-h-16 md:w-full"
           :class="[
-            { 'is-disabled': !isAdmin && day.isDisabled },
+            { 'is-disabled': !$authUser.isAdmin && day.isDisabled },
             { 'is-reserved': day.isDisabled },
             { 'hover:bg-neutral-50 focus:bg-neutral-50': !day.isDisabled },
           ]"
@@ -142,7 +196,7 @@ const closeModal = () => {
         class="mt-4"
         :selected-date="selectedReservationDate"
         :handle-close-modal="closeModal"
-        :is-admin="isAdmin"
+        :is-admin="$authUser.isAdmin"
         :is-editing-reservation="isEditingReservation" />
     </template>
   </Modal>
@@ -197,7 +251,7 @@ const closeModal = () => {
     }
   }
   .vc-day .is-reserved {
-    @apply rounded-none bg-neutral-200 hover:bg-neutral-200 focus:bg-neutral-200;
+    @apply rounded-none bg-neutral-200 dark:bg-slate-800 hover:bg-neutral-200 focus:bg-neutral-200 dark:hover:bg-slate-800 dark:focus:bg-slate-800;
   }
   .vc-day .is-disabled {
     @apply cursor-not-allowed;

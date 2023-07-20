@@ -39,7 +39,7 @@ const handleLogout = async () => {
             <a href="/profile" role="menuitem">Profile</a>
           </li>
           <li>
-            <a href="#" role="menuitem" @click.prevent="handleLogout">Logout</a>
+            <a href="/logout" role="menuitem" @click.prevent="handleLogout">Logout</a>
           </li>
         </ul>
       </div>

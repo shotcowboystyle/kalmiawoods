@@ -95,3 +95,6 @@ export const pages = [
     visible: false,
   },
 ];
+
+export const UNEXPECTED_SERVER_ERROR_MESSAGE =
+  'There was an unexpected server when completing this request. Please try again later.';

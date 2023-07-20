@@ -54,26 +54,24 @@ async function submit() {
 
 <template>
   <KwForm @submit="submit">
-    <div class="form-control w-full max-w-xs mb-4">
-      <KwTextField
-        class="form-control w-full max-w-xs"
-        label="Current password"
-        name="currentPassword"
-        id="currentPassword"
-        v-model="formData.currentPassword"
-        required
-        :type="passwordFieldType"
-        autocomplete="off" />
-      <!-- :invalid="currentPasswordErrorMessage" -->
-      <div v-if="currentPasswordErrorMessage.length" class="mt-2 text-sm font-normal text-red-600">
-        {{ currentPasswordErrorMessage }}
-      </div>
+    <KwTextField
+      class="form-control w-full max-w-xs mb-4"
+      label="Current password"
+      name="currentPassword"
+      id="currentPassword"
+      v-model="formData.currentPassword"
+      required
+      :type="passwordFieldType"
+      autocomplete="off" />
+    <!-- :invalid="currentPasswordErrorMessage" -->
+    <div v-if="currentPasswordErrorMessage.length" class="mt-2 text-sm font-normal text-red-600">
+      {{ currentPasswordErrorMessage }}
     </div>
 
-    <div class="flex gap-x-6 mb-4">
-      <div class="form-control w-full max-w-xs relative">
+    <div class="flex flex-col sm:flex-row gap-y-4 sm:gap-y-0 sm:gap-x-6 mb-4">
+      <div class="relative w-full">
         <KwTextField
-          class="form-control w-full max-w-xs"
+          class="form-control w-full"
           label="New password"
           name="newPassword"
           id="newPassword"
@@ -102,23 +100,21 @@ async function submit() {
         </div>
       </div>
 
-      <div class="form-control w-full max-w-xs">
-        <KwTextField
-          class="form-control w-full max-w-xs"
-          label="Confirm new password"
-          name="confirmNewPassword"
-          id="confirmNewPassword"
-          v-model="formData.confirmNewPassword"
-          required
-          :rules="['isMatch']"
-          :validation-match="formData.newPassword"
-          errorMessagePrefix="Passwords"
-          :type="passwordFieldType"
-          autocomplete="off" />
-      </div>
+      <KwTextField
+        class="form-control w-full"
+        label="Confirm new password"
+        name="confirmNewPassword"
+        id="confirmNewPassword"
+        v-model="formData.confirmNewPassword"
+        required
+        :rules="['isMatch']"
+        :validation-match="formData.newPassword"
+        errorMessagePrefix="Passwords"
+        :type="passwordFieldType"
+        autocomplete="off" />
     </div>
 
-    <div class="flex gap-6 justify-start mt-8">
+    <div class="flex gap-6 justify-end mt-8">
       <KwButton variant="primary" text="Save" type="submit" :disabled="isSubmitting" :loading="isSubmitting" />
     </div>
   </KwForm>

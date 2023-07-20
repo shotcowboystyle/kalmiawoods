@@ -12,7 +12,7 @@ async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost('password-reset', formData);
+    const response = await fetchPost('email-verification', formData);
     const data = await response.json();
     if (response.status !== 200) {
       toast?.error(data.message);
@@ -40,7 +40,7 @@ async function submit() {
       type="email" />
 
     <div class="flex flex-wrap items-start">
-      Remember your password? &nbsp;
+      Already completed registration? &nbsp;
       <a href="/auth/login" class="link text-primary">Login</a>.
     </div>
 

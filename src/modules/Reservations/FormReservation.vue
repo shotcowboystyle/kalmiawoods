@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import { useStore } from '@nanostores/vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { DatePicker } from 'v-calendar';
@@ -97,9 +98,13 @@ async function deleteReservation(reservationId: string) {
   isDeleting.value = true;
 
   try {
-    await fetchDelete(`reservations/${reservationId}`);
-    removeReservation(reservationId);
-    props.handleCloseModal();
+    const response = await fetchDelete(`reservations/${reservationId}`);
+    if (response.status === 200) {
+      removeReservation(reservationId);
+      props.handleCloseModal();
+    } else {
+      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
+    }
   } catch (error: any) {
     toast?.error(error.message);
   } finally {

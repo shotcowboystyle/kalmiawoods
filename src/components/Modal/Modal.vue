@@ -61,8 +61,8 @@ const modalId = generateId(4);
 </script>
 
 <template>
-  <dialog :id="modalId" class="modal" open>
-    <form method="dialog" class="modal-box bg-base-100" :class="`${modalSizeClasses[size]}`" ref="modalRef">
+  <dialog :id="modalId" class="modal modal-bottom sm:modal-middle" open>
+    <form method="dialog" class="modal-box" :class="`${modalSizeClasses[size]}`" ref="modalRef">
       <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="closeModal">✕</button>
       <slot class="font-bold text-lg" name="header" />
       <slot class="pt-8 pb-4" name="body" />

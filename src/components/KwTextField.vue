@@ -63,7 +63,7 @@ function checkError() {
       v-bind="$attrs"
       v-model="model"
       @input="checkError"
-      class="input input-bordered w-full max-w-xs"
+      class="input input-bordered w-full"
       :class="[
         {
           'input-error': error,

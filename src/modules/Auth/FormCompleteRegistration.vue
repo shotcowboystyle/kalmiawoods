@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { HOME } from '@/app/constants';
+import { HOME, UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import PasswordStrength from '@/components/PasswordStrength.vue';
 import { fetchPost } from '@/utils/fetchClient';
 
-const props = defineProps({
-  token: {
-    type: String,
-    default: '',
-  },
+export interface Props {
+  token: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  token: undefined,
 });
 
-const toast: { error: Function; success: Function } | undefined = inject('toast');
+const toast: { error: Function } | undefined = inject('toast');
 
 const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
@@ -23,26 +24,30 @@ const formData = reactive({
   confirmNewPassword: undefined,
 });
 
-async function submit(e: Event) {
+async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost(`/api/email-verification/${props.token}`, { password: formData.newPassword });
+    const response = await fetchPost(`email-verification/${props.token}`, { password: formData.newPassword });
     if (response.status === 200) {
       document.location = HOME;
+    } else {
+      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
     toast?.error(error.message);
+  } finally {
+    isSubmitting.value = false;
   }
 }
 </script>
 
 <template>
-  <KwForm @submit="submit">
+  <KwForm @submit="submit" class="mt-8 space-y-6">
     <div class="w-full">
-      <div class="form-control w-full max-w-xs relative">
+      <div class="relative">
         <KwTextField
-          class="form-control w-full max-w-xs"
+          class="form-control w-full mb-4"
           label="New password"
           name="newPassword"
           id="newPassword"
@@ -70,27 +75,25 @@ async function submit(e: Event) {
         </div>
       </div>
 
-      <div class="form-control w-full max-w-xs">
-        <KwTextField
-          class="form-control w-full max-w-xs"
-          label="Confirm new password"
-          name="confirmNewPassword"
-          id="confirmNewPassword"
-          v-model="formData.confirmNewPassword"
-          required
-          :rules="['isMatch']"
-          :validation-match="formData.newPassword"
-          errorMessagePrefix="Passwords"
-          :type="passwordFieldType"
-          autocomplete="off" />
-      </div>
+      <KwTextField
+        class="form-control w-full mb-4"
+        label="Confirm new password"
+        name="confirmNewPassword"
+        id="confirmNewPassword"
+        v-model="formData.confirmNewPassword"
+        required
+        :rules="['isMatch']"
+        :validation-match="formData.newPassword"
+        errorMessagePrefix="Passwords"
+        :type="passwordFieldType"
+        autocomplete="off" />
     </div>
 
     <div class="flex gap-6 justify-start mt-8">
       <KwButton
         variant="primary"
+        size="block"
         text="Complete Registration"
-        icon-right="arrow-right"
         type="submit"
         :disabled="isSubmitting"
         :loading="isSubmitting" />

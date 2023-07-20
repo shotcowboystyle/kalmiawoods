@@ -2,7 +2,33 @@ import type { APIRoute } from 'astro';
 import { LuciaError } from 'lucia-auth';
 
 import { auth } from '@/lib/lucia';
+import { getUser } from '@/services/user';
 import { emailRegex } from '@/utils/email';
+
+export const get: APIRoute = async (context) => {
+  const authRequest = auth.handleRequest(context);
+  const { user } = await authRequest.validateUser();
+
+  if (!user || !Object.keys(user).length) {
+    return new Response(JSON.stringify(null), {
+      status: 401,
+      headers: { 'content-type': 'application/json' },
+    });
+  }
+
+  try {
+    const authUserWithProfile = await getUser(user.userId);
+    return new Response(JSON.stringify(authUserWithProfile), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ message: 'An unknown error occurred' }), {
+      status: 400,
+      headers: { 'content-type': 'application/json' },
+    });
+  }
+};
 
 export const post: APIRoute = async (context) => {
   const genericErrorMessage = 'Incorrect email or password';

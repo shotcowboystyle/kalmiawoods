@@ -1,11 +1,17 @@
 ---
-import LayoutStacked from '@/app/LayoutStacked.astro';
+import type { InferGetStaticParamsType } from 'astro';
+
+import LayoutFrameless from '@/app/LayoutFrameless.astro';
 import FormCompleteRegistration from '@/modules/Auth/FormCompleteRegistration.vue';
 
-const { token } = Astro.params;
+type Params = InferGetStaticParamsType<{ token: string; }>;
+
+const { token } = Astro.params as Params;
 ---
 
-<LayoutStacked>
-  <h1>Complete you're registration</h1>
-  <FormCompleteRegistration client:only="vue" token={token!} />
-</LayoutStacked>
+<LayoutFrameless>
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+    Complete registration
+  </h2>
+  <FormCompleteRegistration client:only="vue" token={token} />
+</LayoutFrameless>

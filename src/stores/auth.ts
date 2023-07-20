@@ -1,17 +1,15 @@
 import { persistentMap } from '@nanostores/persistent';
 import { onMount, task } from 'nanostores';
 
+import { RoleEnum as Role } from '@/schemas/auth';
+import type { RoleEnum } from '@/types/Auth';
 import { fetchGet } from '@/utils/fetchClient';
-
-enum Role {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-}
 
 interface AuthUser {
   isLoading: boolean;
   email: string;
-  role: Role;
+  role: RoleEnum;
+  isAdmin: boolean;
   name: string;
   avatar: string;
 }
@@ -21,7 +19,8 @@ export const authUser = persistentMap<AuthUser>(
   {
     isLoading: false,
     email: '',
-    role: Role.USER,
+    role: Role.enum.USER,
+    isAdmin: false,
     name: '',
     avatar: '',
   },
@@ -43,10 +42,11 @@ onMount(authUser, () => {
 
   task(async () => {
     try {
-      const data = await fetchGet('auth-user');
+      const data = await fetchGet('auth');
       const authUserData = {
         email: data.email,
         role: data.role,
+        isAdmin: data.role === Role.enum.ADMIN,
         name: `${data.firstName} ${data.lastName}`,
         avatar: data.avatar,
       };

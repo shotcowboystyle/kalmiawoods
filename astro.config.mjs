@@ -18,11 +18,7 @@ import { fileURLToPath } from 'url';
 import { loadEnv } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
-const { APP_SITE, APP_BASE } = loadEnv(
-  process.env.MODE,
-  process.cwd(),
-  '',
-);
+const { APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -64,7 +60,6 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: '/src/pages/_app',
-      reactivityTransform: true,
     }),
     tailwind({
       config: {
@@ -117,7 +112,7 @@ export default defineConfig({
       sourcemap: true,
     },
     css: {
-      devSourcemap: true
+      devSourcemap: true,
     },
     ssr: {
       external: ['svgo'],

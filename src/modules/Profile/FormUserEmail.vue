@@ -34,24 +34,22 @@ async function submit() {
 
 <template>
   <KwForm @submit="submit">
-    <p>Current email: {{ $user.email }}</p>
-    <div class="form-control w-full max-w-xs mb-4">
-      <KwTextField
-        class="form-control w-full max-w-xs"
-        label="New email"
-        name="newEmail"
-        id="newEmail"
-        v-model="emailModel"
-        required
-        :rules="['email', 'isUnique']"
-        :validation-matchers="$usersEmails"
-        errorMessagePrefix="Email"
-        type="email"
-        placeholder="enter user's new email"
-        autocomplete="off" />
-    </div>
+    <p class="mb-4">Current email: {{ $user.email }}</p>
+    <KwTextField
+      class="form-control w-full mb-4"
+      label="New email"
+      name="newEmail"
+      id="newEmail"
+      v-model="emailModel"
+      required
+      :rules="['email', 'isUnique']"
+      :validation-matchers="$usersEmails"
+      errorMessagePrefix="Email"
+      type="email"
+      placeholder="enter user's new email"
+      autocomplete="off" />
 
-    <div class="flex gap-6 justify-start mt-8">
+    <div class="flex gap-6 justify-end mt-8">
       <KwButton
         variant="primary"
         text="Save"

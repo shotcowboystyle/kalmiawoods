@@ -30,35 +30,37 @@ async function submit() {
 <template>
   <div v-if="showErrorMessage" class="mb-4 text-sm font-normal text-red-600">Incorrect email or password</div>
   <KwForm @submit="submit" class="mt-8 space-y-6">
-    <div class="form-control w-full max-w-xs">
-      <KwTextField
-        class="form-control w-full max-w-xs"
-        label="Email"
-        name="email"
-        id="email"
-        v-model="formData.email"
-        required
-        :rules="['email']"
-        type="email" />
-    </div>
+    <KwTextField
+      class="form-control w-full"
+      label="Email"
+      name="email"
+      id="email"
+      v-model="formData.email"
+      :rules="['email']"
+      required
+      type="email" />
 
-    <div class="form-control w-full max-w-xs">
-      <KwTextField
-        class="form-control w-full max-w-xs"
-        label="Password"
-        name="password"
-        id="password"
-        v-model="formData.password"
-        required
-        type="password" />
-    </div>
+    <KwTextField
+      class="form-control w-full"
+      label="Password"
+      name="password"
+      id="password"
+      v-model="formData.password"
+      required
+      type="password" />
 
-    <div class="flex flex-wrap items-start">
+    <div class="text-right">
       <a href="/auth/password-reset" class="link text-primary"> Lost Password? </a>
     </div>
 
     <div class="flex gap-6 justify-start mt-8">
-      <KwButton variant="primary" text="Login" type="submit" :disabled="isSubmitting" :loading="isSubmitting" />
+      <KwButton
+        variant="primary"
+        size="block"
+        text="Login"
+        type="submit"
+        :disabled="isSubmitting"
+        :loading="isSubmitting" />
     </div>
   </KwForm>
 </template>

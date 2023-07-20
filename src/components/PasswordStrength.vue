@@ -176,34 +176,27 @@ const passwordClass = computed(() => {
 
 <style lang="postcss">
 .po-password-strength-bar {
-  border-radius: 2px;
+  @apply rounded-sm h-1 mt-2 bg-slate-100;
   transition: all 0.2s linear;
-  height: 5px;
-  margin-top: 8px;
 }
 
 .po-password-strength-bar.risky {
-  background-color: #f95e68;
-  width: 10%;
+  @apply bg-error w-1/5;
 }
 
 .po-password-strength-bar.guessable {
-  background-color: #fb964d;
-  width: 32.5%;
+  @apply bg-warning w-2/5;
 }
 
 .po-password-strength-bar.weak {
-  background-color: #fdd244;
-  width: 55%;
+  @apply bg-yellow-400 w-3/5;
 }
 
 .po-password-strength-bar.safe {
-  background-color: #b0dc53;
-  width: 77.5%;
+  @apply bg-emerald-400 w-4/5;
 }
 
 .po-password-strength-bar.secure {
-  background-color: #35cc62;
-  width: 100%;
+  @apply bg-green-600 w-full;
 }
 </style>

@@ -1,100 +1,103 @@
 <script setup lang="ts">
-import { HOME } from '@/app/constants';
-// import PasswordStrength from '@/components/PasswordStrength.vue';
+import { HOME, UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
+import PasswordStrength from '@/components/PasswordStrength.vue';
+import { fetchPost } from '@/utils/fetchClient';
 
-const props = defineProps({
-  token: String,
+export interface Props {
+  token: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  token: undefined,
 });
 
-const hasErrors = ref(false);
-const errorMessage = ref('');
-const confirmPasswordErrorMessage = ref('');
+const toast: { error: Function } | undefined = inject('toast');
+
 const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
-const isSubmitting = ref(false);
-const formData = reactive({
-  password: '',
-  confirmPassword: '',
-});
-
 const togglePasswordVisibility = () => (hidePassword.value = !hidePassword.value);
 const passwordFieldType = computed(() => (hidePassword.value ? 'password' : 'text'));
 
-function invalidateForm() {
-  hasErrors.value = true;
-}
+const isSubmitting = ref(false);
+const formData = reactive({
+  newPassword: undefined,
+  confirmNewPassword: undefined,
+});
 
 async function submit() {
   isSubmitting.value = true;
 
-  const response = await fetch(`/api/password-reset/${props.token}`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ password: formData.password }),
-  });
-
-  if (response.status !== 200) {
-    const data = await response.json();
-    errorMessage.value = data.message;
-  } else {
-    location.href = HOME;
+  try {
+    const response = await fetchPost(`password-reset/${props.token}`, { password: formData.newPassword });
+    if (response.status === 200) {
+      document.location = HOME;
+      // location.href = HOME;
+    } else {
+      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
+    }
+  } catch (error: any) {
+    toast?.error(error.message);
+  } finally {
+    isSubmitting.value = false;
   }
 }
 </script>
 
 <template>
-  <form @submit.prevent="submit" class="mt-8 space-y-6" :class="[{ errors: hasErrors }]">
-    <div class="form-control w-full max-w-xs">
-      <label class="label" for="password">
-        <span class="label-text">New password</span>
-      </label>
-      <input
-        v-model="formData.password"
-        class="input input-bordered w-full max-w-xs"
-        type="password"
-        name="password"
-        id="password"
-        placeholder="name@company.com"
-        required />
-      <div class="absolute bottom-2.5 right-2.5">
-        <button type="button" class="btn btn-primary" @click="togglePasswordVisibility">Show</button>
+  <KwForm @submit="submit" class="mt-8 space-y-6">
+    <div class="w-full">
+      <div class="relative">
+        <KwTextField
+          class="form-control w-full mb-4"
+          label="New password"
+          name="newPassword"
+          id="newPassword"
+          v-model="formData.newPassword"
+          required
+          :rules="['password']"
+          :type="passwordFieldType"
+          @focus="showPasswordMeter = !showPasswordMeter"
+          @blur="showPasswordMeter = !showPasswordMeter"
+          autocomplete="off" />
+        <div class="absolute top-11 right-2.5">
+          <button type="button" class="btn btn-ghost btn-sm" @click="togglePasswordVisibility">
+            <span v-if="!hidePassword">Hide</span>
+            <span v-else>Show</span>
+          </button>
+        </div>
+        <div
+          v-if="showPasswordMeter"
+          role="tooltip"
+          tabindex="0"
+          class="absolute top-24 dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-100 text-base-content">
+          <div class="card-body">
+            <PasswordStrength :password="formData.newPassword" />
+          </div>
+        </div>
       </div>
-      <p class="text-error text-sm" v-if="errorMessage.length">{{ errorMessage }}</p>
-      <div
-        data-popover
-        id="popover-password"
-        role="tooltip"
-        class="absolute z-10 inline-block w-72 rounded-lg border border-gray-200 bg-white text-sm text-gray-500 shadow-sm transition-opacity duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
-        :class="[{ 'invisible opacity-0': !showPasswordMeter }]">
-        <PasswordStrength :password="formData.password" />
-      </div>
+
+      <KwTextField
+        class="form-control w-full mb-4"
+        label="Confirm new password"
+        name="confirmNewPassword"
+        id="confirmNewPassword"
+        v-model="formData.confirmNewPassword"
+        required
+        :rules="['isMatch']"
+        :validation-match="formData.newPassword"
+        errorMessagePrefix="Passwords"
+        :type="passwordFieldType"
+        autocomplete="off" />
     </div>
 
-    <div class="form-control w-full max-w-xs">
-      <label class="label" for="confirm-password">
-        <span class="label-text">Confirm password</span>
-      </label>
-      <input
-        v-model="formData.confirmPassword"
-        class="input input-bordered w-full max-w-xs"
-        type="confirm-password"
-        name="confirm-password"
-        id="confirm-password"
-        placeholder="name@company.com"
-        required />
-      <p class="text-error text-sm" v-if="confirmPasswordErrorMessage.length">{{ confirmPasswordErrorMessage }}</p>
+    <div class="flex gap-6 justify-start mt-8">
+      <KwButton
+        variant="primary"
+        size="block"
+        text="Reset Password"
+        type="submit"
+        :disabled="isSubmitting"
+        :loading="isSubmitting" />
     </div>
-
-    <div class="flex flex-wrap items-start">
-      <a href="/auth/password-reset" class="link text-primary"> Lost Password? </a>
-    </div>
-
-    <button type="submit" class="btn btn-primary btn-block" :disabled="isSubmitting">
-      <span v-if="isSubmitting" class="loading loading-spinner"></span>
-      <span v-else>Login</span>
-    </button>
-  </form>
+  </KwForm>
 </template>

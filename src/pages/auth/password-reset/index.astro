@@ -1,7 +1,6 @@
 ---
-import LayoutStacked from '@/app/LayoutStacked.astro';
+import LayoutFrameless from '@/app/LayoutFrameless.astro';
 import { checkAuth } from '@/app/check-auth';
-import Logo from '@/components/Logo.astro';
 import FormPasswordRecovery from '@/modules/Auth/FormPasswordRecovery.vue';
 
 const redirect = await checkAuth(Astro);
@@ -10,22 +9,9 @@ if (redirect) {
 }
 ---
 
-<LayoutStacked>
-  <div class="flex min-h-screen pb-[12vh] align-middle">
-    <div
-      class="pt:mt-0 mx-auto flex w-full flex-col items-center justify-center px-6 pt-8 dark:bg-gray-900">
-      <a
-        href="#"
-        class="mb-8 flex items-center justify-center text-2xl font-semibold dark:text-white lg:mb-10">
-        <Logo />
-        <span>Kalmia Woods</span>
-      </a>
-      <div class="w-full max-w-xl space-y-8 rounded-lg bg-white p-6 shadow dark:bg-gray-800 sm:p-8">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-          Password recovery
-        </h2>
-        <FormPasswordRecovery client:only="vue" />
-      </div>
-    </div>
-  </div>
-</LayoutStacked>
+<LayoutFrameless>
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+    Password recovery
+  </h2>
+  <FormPasswordRecovery client:only="vue" />
+</LayoutFrameless>

@@ -1,4 +1,6 @@
 ---
+import type { InferGetStaticParamsType } from 'astro';
+
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
 import { checkAuth } from '@/app/check-auth';
 import UserSettings from '@/modules/Profile/UserSettings.vue';
@@ -8,11 +10,13 @@ if (redirect) {
   return Astro.redirect(redirect);
 }
 
-const { id } = Astro.params;
+type Params = InferGetStaticParamsType<{ id: string; }>;
+
+const { id } = Astro.params as Params;
 ---
 
 <LayoutSidebar>
-  <div class="p-2 md:p-4">
-    <UserSettings mode={id!} client:only="vue" />
+  <div class="px-4 pt-8">
+    <UserSettings client:only="vue" mode={id} />
   </div>
 </LayoutSidebar>

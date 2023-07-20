@@ -1,59 +1,18 @@
 ---
-import LayoutStacked from '@/app/LayoutStacked.astro';
+import LayoutFrameless from '@/app/LayoutFrameless.astro';
 import { checkAuth } from '@/app/check-auth';
-import { prisma } from '@/lib/db.js';
-import { auth } from '@/lib/lucia';
-import { sendEmailVerificationEmail } from '@/services/email';
-import { emailVerificationToken } from '@/services/verification-token';
-import { isValidEmail } from '@/utils/email';
+import FormRegistrationRecovery from '@/modules/Auth/FormRegistrationRecovery.vue';
 
 const redirect = await checkAuth(Astro);
 if (redirect) {
   return Astro.redirect(redirect);
 }
-
-let email: string | null = null;
-let errorMessage: string | null = null;
-let success = false;
-
-if (Astro.request.method === "POST") {
-  const formData = await Astro.request.formData();
-  email = formData.get('email')?.toString() ?? '';
-  if (email === null || !isValidEmail(email)) {
-    errorMessage = 'Invalid email';
-    return null;
-  }
-  try {
-    const databaseUser = await prisma.authUser.findFirst({
-      where: {
-        email,
-      },
-    });
-
-    if (!databaseUser) {
-      errorMessage = 'Email does not exist';
-      return null;
-    }
-
-    const user = auth.transformDatabaseUser(databaseUser);
-    const token = await emailVerificationToken.issue(user.userId);
-    await sendEmailVerificationEmail(user.email, token.toString());
-    success = true;
-    return null;
-  } catch (e) {
-    errorMessage = 'An unknown error occurred';
-    return null;
-  }
-}
 ---
 
-<LayoutStacked>
-  <h1>Complete registration</h1>
-  <form method="post">
-    <label for="email">Email</label>
-    <input id="email" name="email" value={email} />
-    <input type="submit" class="btn btn-primary" value="Send email" />
-  </form>
-  {errorMessage && <p class="error">{errorMessage}</p>}
-  {success && <p class="message">A verification email was sent to your inbox.</p>}
-</LayoutStacked>
+<LayoutFrameless>
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+    Email verification
+  </h2>
+  <p>In order to use this site, you first need to verify you're email and complete your account registration by creating a password. Use the form below to receive an email with a link to finish setting up your account.</p>
+  <FormRegistrationRecovery client:only="vue" />
+</LayoutFrameless>

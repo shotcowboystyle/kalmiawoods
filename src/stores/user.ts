@@ -6,7 +6,7 @@ import { createFetcherStore, isReady } from './fetcher';
 
 import type { UpdateUserProfileInput, User } from '@/types/User';
 
-const API_URL = apiRoute('users');
+const API_URL = apiRoute('admin/users');
 
 export const viewMode = atom('latest');
 export const setViewMode = action(viewMode, 'setViewMode', (viewMode, newValue: string) => viewMode.set(newValue));

@@ -53,10 +53,10 @@ async function submit() {
 
 <template>
   <KwForm @submit="submit">
-    <div class="flex gap-x-6 mb-4">
+    <div class="flex flex-col sm:flex-row gap-y-4 sm:gap-y-0 sm:gap-x-6 mb-4">
       <KwTextField
         type="text"
-        class="form-control w-full max-w-xs"
+        class="form-control w-full"
         label="First name"
         name="firstName"
         id="firstName"
@@ -66,7 +66,7 @@ async function submit() {
 
       <KwTextField
         type="text"
-        class="form-control w-full max-w-xs"
+        class="form-control w-full"
         label="Last name"
         name="lastName"
         id="lastName"
@@ -75,46 +75,45 @@ async function submit() {
         required />
     </div>
 
-    <div class="flex gap-x-6 mb-4">
-      <KwTextField
-        class="form-control w-full max-w-xs"
-        label="Email"
-        name="email"
-        id="email"
-        v-model="formData.email"
-        required
-        :rules="['email', 'isUnique']"
-        :validation-matchers="$usersEmails"
-        errorMessagePrefix="Email"
-        type="email"
-        placeholder="enter user's email"
-        autocomplete="off" />
+    <KwTextField
+      class="form-control w-full mb-4"
+      label="Email"
+      name="email"
+      id="email"
+      v-model="formData.email"
+      required
+      :rules="['email', 'isUnique']"
+      :validation-matchers="$usersEmails"
+      errorMessagePrefix="Email"
+      type="email"
+      placeholder="enter user's email"
+      autocomplete="off" />
 
-      <KwTextField
-        class="form-control w-full max-w-xs"
-        label="Mobile phone"
-        name="mobilePhone"
-        id="mobilePhone"
-        placeholder="enter user's mobile phone"
-        autocomplete="off"
-        v-model="formData.mobilePhone"
-        required
-        :rules="['phone', 'isUnique']"
-        :validation-matchers="$usersMobilePhones"
-        type="tel"
-        @input="maskPhone" />
-    </div>
+    <KwTextField
+      class="form-control w-full mb-4"
+      label="Mobile phone"
+      name="mobilePhone"
+      id="mobilePhone"
+      placeholder="enter user's mobile phone"
+      autocomplete="off"
+      v-model="formData.mobilePhone"
+      required
+      :rules="['phone', 'isUnique']"
+      :validation-matchers="$usersMobilePhones"
+      type="tel"
+      @input="maskPhone" />
 
     <KwTextField
       type="text"
-      class="form-control w-full max-w-xs mb-4"
+      class="form-control w-full mb-4"
       label="Address"
       name="address"
       id="address"
       placeholder="enter user's address"
       v-model="formData.address" />
 
-    <div class="flex gap-6 justify-start mt-8">
+    <div class="flex gap-6 justify-end mt-8">
+      <button type="button" class="btn btn-ghost" @click="handleCloseModal">Cancel</button>
       <KwButton
         variant="primary"
         text="Create User"
@@ -122,7 +121,6 @@ async function submit() {
         type="submit"
         :disabled="isSubmitting"
         :loading="isSubmitting" />
-      <button type="button" class="btn btn-link" @click="handleCloseModal">Cancel</button>
     </div>
   </KwForm>
 </template>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import { removeUser } from '@/stores/user';
+import { fetchDelete } from '@/utils/fetchClient';
 
 export interface Props {
   userId: string;
@@ -7,29 +9,32 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  userId: '-1',
+  userId: undefined,
   handleCloseModal: () => {},
 });
 
-async function deleteUser() {
-  const response = await fetch(`/api/users/${props.userId}`, {
-    method: 'DELETE',
-    // headers: {
-    //   Accept: 'application/json',
-    //   'Content-Type': 'application/json',
-    // },
-    // body: JSON.stringify({ userId: props.userId }),
-  });
+const toast: { error: Function } | undefined = inject('toast');
 
-  if (response.status === 200) {
-    removeUser(props.userId);
-    props.handleCloseModal();
+const isDeleting = ref(false);
+async function submit() {
+  try {
+    const response = await fetchDelete(`users/${props.userId}`);
+    if (response.status === 200) {
+      removeUser(props.userId);
+      props.handleCloseModal();
+    } else {
+      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
+    }
+  } catch (error: any) {
+    toast?.error(error.message);
+  } finally {
+    isDeleting.value = false;
   }
 }
 </script>
 
 <template>
-  <div class="p-6 pt-0 text-center">
+  <div class="p-0 text-center">
     <svg
       class="mx-auto h-16 w-16 text-error"
       fill="none"
@@ -42,16 +47,16 @@ async function deleteUser() {
         stroke-width="2"
         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
     </svg>
-    <h3 class="base-content py-4">Are you sure you want to delete this user?</h3>
-    <button
-      class="mr-2 inline-flex btn btn-error"
-      @click.prevent="deleteUser">
-      Yes, I'm sure
-    </button>
-    <button
-      class="btn btn-ghost"
-      @click="handleCloseModal">
-      No, cancel
-    </button>
+    <h3 class="base-content pt-4 pb-6 px-12 sm:px-0">Are you sure you want to delete this user?</h3>
+    <KwForm @submit="submit" class="space-x-4">
+      <KwButton
+        v-if="userId"
+        variant="danger"
+        text="Yes, I'm sure"
+        type="submit"
+        :disabled="isDeleting"
+        :loading="isDeleting" />
+      <button class="btn" @click="handleCloseModal">No, cancel</button>
+    </KwForm>
   </div>
 </template>

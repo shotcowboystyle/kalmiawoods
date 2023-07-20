@@ -4,6 +4,8 @@
     "strictNullChecks": true,
 
     "allowJs": true,
+    // "allowJs": false,
+    "checkJs": false,
 
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
@@ -11,25 +13,46 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
+    // "esModuleInterop": false,
     "resolveJsonModule": true,
     "jsx": "preserve",
     "incremental": true,
+    "allowSyntheticDefaultImports": true,
 
     // Enable top-level await, and other modern ESM features.
-    "target": "es5",
+    // "target": "es5",
+    "target": "esnext",
     "module": "esnext",
     // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
     "baseUrl": ".",
     // Enable stricter transpilation for better output.
     "isolatedModules": true,
-    "types": ["unplugin-icons/types/astro", "src/vue-custom.d.ts"],
-
-    "plugins": [
-      {
-        "name": "@astrojs/ts-plugin"
-      }
+    "types": [
+      "@types/node",
+      "unplugin-icons/types/astro",
+      "src/vue-custom.d.ts",
+      "src/auto-imports.d.ts",
+      "src/components.d.ts"
     ],
+
+    "plugins": [{ "name": "@astrojs/ts-plugin" }],
+
+    "moduleDetection": "force",
+
+    "rootDir": "./",
+    "allowImportingTsExtensions": true,
+    "allowArbitraryExtensions": true,
+
+    "disableSizeLimit": false,
+
+    "verbatimModuleSyntax": true,
+    "preserveSymlinks": true,
+
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
 
     "paths": {
       "@/*": ["./src/*"]

@@ -1,12 +1,10 @@
 ---
-/* eslint max-lines: 'off' */
-
 import { url } from '@/utils/site';
 ---
 
 <aside
   id="sidebar"
-  class="transition-width fixed left-0 top-0 z-20 flex hidden h-full w-64 flex-shrink-0 flex-col pt-16 font-normal duration-75 lg:flex"
+  class="transition-width fixed left-0 top-0 z-20 hidden h-full w-64 flex-shrink-0 flex-col pt-16 font-normal duration-75 lg:flex"
   aria-label="Sidebar">
   <div
     class="relative flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white pt-0 dark:border-gray-700 dark:bg-gray-800">
@@ -55,7 +53,7 @@ import { url } from '@/utils/site';
               <span class="ml-3" sidebar-toggle-item>Reservations</span>
             </a>
           </li>
-          <li>
+          <li id="users-menu-item" class="hidden">
             <a
               href={url('admin/users')}
               class="group flex items-center rounded-lg p-2 text-base text-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
@@ -101,6 +99,15 @@ import { url } from '@/utils/site';
 </div>
 
 <script>
+  import { authUser } from '@/stores/auth';
+
+  const { role } = authUser.get();
+  const isAdmin = role === 'ADMIN';
+  if (isAdmin) {
+    const usersMenuItem = document.getElementById('users-menu-item');
+    usersMenuItem?.classList.remove('hidden');
+  }
+
   const sidebar = document.getElementById('sidebar');
 
   if (sidebar) {
