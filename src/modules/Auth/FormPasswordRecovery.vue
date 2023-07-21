@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { useToast } from 'vue-toastification';
+
 import { fetchPost } from '@/utils/fetchClient';
 
-const toast: { error: Function; success: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const isSubmitting = ref(false);
 const formData = reactive({
@@ -15,12 +17,12 @@ async function submit() {
     const response = await fetchPost('password-reset', formData);
     const data = await response.json();
     if (response.status !== 200) {
-      toast?.error(data.message);
+      toast.error(data.message);
     } else {
-      toast?.success(data.message);
+      toast.success(data.message);
     }
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }

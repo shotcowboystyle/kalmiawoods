@@ -46,6 +46,7 @@ const validated = computed(() => {
 });
 
 function onSubmit() {
+  console.log('VALIDATED VALUE', validated.value);
   updateWatcher();
   if (validated.value) {
     emit('submit');

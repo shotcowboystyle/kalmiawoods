@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { useStore } from '@nanostores/vue';
+import { useToast } from 'vue-toastification';
+
 import { addUser, usersEmails, usersMobilePhones } from '@/stores/user';
 import type { CreateUserInput } from '@/types/User';
 import { fetchPost } from '@/utils/fetchClient';
 import { formatPhoneInputUSA } from '@/utils/phone';
-import { useStore } from '@nanostores/vue';
-
-const toast: { error: Function } | undefined = inject('toast');
 
 export interface Props {
   handleCloseModal: () => void;
@@ -16,6 +16,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits(['input-mobile-phone']);
+
+const toast = useToast();
 
 const $usersEmails = useStore(usersEmails);
 const $usersMobilePhones = useStore(usersMobilePhones);
@@ -39,12 +41,12 @@ async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost('users', formData);
+    const response = await fetchPost('admin/users', formData);
     const data = await response.json();
     addUser(data);
     props.handleCloseModal();
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }

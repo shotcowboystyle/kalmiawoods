@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useStore, useVModel } from '@nanostores/vue';
+import { useToast } from 'vue-toastification';
 
 import { activeUser, activeUserId, profileData, updateUser, usersMobilePhones } from '@/stores/user';
 import { diff } from '@/utils/diff';
@@ -8,7 +9,7 @@ import { formatPhoneInputUSA } from '@/utils/phone';
 
 const emit = defineEmits(['input-mobile-phone']);
 
-const toast: { error: Function; success: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const $activeUserId = useStore(activeUserId);
 const $usersMobilePhones = useStore(usersMobilePhones);
@@ -35,15 +36,15 @@ async function submit() {
   const changedData = diff($user.value, formData);
 
   try {
-    const response = await fetchPut(`users/${$activeUserId.value}/profile`, {
+    const response = await fetchPut(`admin/users/${$activeUserId.value}/profile`, {
       profileId: $user.value.profileId,
       profileData: changedData,
     });
     const data = await response.json();
     updateUser(data);
-    toast?.success('Update successful.');
+    toast.success('Update successful.');
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }

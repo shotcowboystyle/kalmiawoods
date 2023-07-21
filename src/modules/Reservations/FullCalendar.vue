@@ -6,11 +6,11 @@ import 'v-calendar/dist/style.css';
 
 import { HOME } from '@/app/constants';
 import Modal from '@/components/Modal/Modal.vue';
-import KwToast from '@/components/Toast/KwToast.vue';
 import { theme } from '@/stores/app';
 import { authUser } from '@/stores/auth';
 import { reservations, reservedDates, setActiveReservationId } from '@/stores/reservation';
 import type { CalendarDay } from '@/types/FullCalendar';
+import { capitalize } from '@/utils/string';
 import FormReservation from './FormReservation.vue';
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -125,67 +125,68 @@ const closeModal = () => {
     </div>
   </div>
 
-  <div class="mt-8 w-full">
-    <Calendar
-      ref="calendar"
-      class="max-w-full overflow-hidden rounded-lg shadow-xl calendar"
-      :class="{ 'custom-calendar': mdAndLarger }"
-      :masks="masks"
-      :attributes="attrs"
-      :min-date="new Date()"
-      :disabled-dates="disabledDates"
-      disable-page-swipe
-      is-expanded
-      trim-weeks
-      :is-dark="colorMode === 'dark'"
-      title-position="left">
-      <template #header-title="{ monthLabel, yearLabel }">
-        <div class="self-center text-lg font-thin">
+  <Calendar
+    ref="calendar"
+    class="shadow-xl calendar"
+    :class="{ 'custom-calendar': mdAndLarger }"
+    :masks="masks"
+    :attributes="attrs"
+    :min-date="new Date()"
+    :disabled-dates="disabledDates"
+    disable-page-swipe
+    is-expanded
+    trim-weeks
+    :is-dark="colorMode === 'dark'"
+    title-position="left">
+    <template #title="{ monthLabel, yearLabel }">
+      <div class="vc-header is-lg self-center text-lg text-base-content" style="grid-template-columns: [title] auto 1fr [prev] auto [next] auto;">
+        <button type="button" class="vc-title">
           <span class="font-extrabold">{{ monthLabel }}</span>
-          <span class="text-slate-900 ml-2">{{ yearLabel }}</span>
-        </div>
-      </template>
-      <template #day-content="{ day, attributes }">
-        <div
-          class="z-10 flex h-full flex-col overflow-hidden cursor-pointer md:min-h-16 md:w-full"
-          :class="[
-            { 'is-disabled': !$authUser.isAdmin && day.isDisabled },
-            { 'is-reserved': day.isDisabled },
-            { 'hover:bg-neutral-50 focus:bg-neutral-50': !day.isDisabled },
-          ]"
-          :aria-disabled="day.isDisabled"
-          @click="onDayClick(day, attributes?.[0]?.key)">
-          <span class="self-center py-4 text-sm day-label text-gray-90 0 md:p-4 md:leading-4">
-            {{ day.day }}
-          </span>
-          <div class="flex-grow overflow-x-auto overflow-y-auto">
-            <p
-              v-if="attributes?.[0]"
-              :key="attributes?.[0]?.key"
-              class="p-1 text-xs rounded-sm bg-primary text-primary-content md:mb-1 md:mt-0 font-semibold md:leading-tight truncate">
-              <span class="hidden md:inline">
+          <span class="font-thin text-slate-900 ml-2">{{ yearLabel }}</span>
+        </button>
+      </div>
+    </template>
+    <template #day-content="{ day, attributes }">
+      <div
+        class="z-10 flex h-full flex-col overflow-hidden cursor-pointer md:min-h-16 md:w-full"
+        :class="[
+          { 'is-disabled': !$authUser.isAdmin && day.isDisabled },
+          { 'is-reserved': day.isDisabled },
+          // { 'hover:bg-neutral-50 focus:bg-neutral-50 hover:dark:bg-blate-800 focus:dark:bg-blate-800': !day.isDisabled },
+        ]"
+        :aria-disabled="day.isDisabled"
+        @click="onDayClick(day, attributes?.[0]?.key)">
+        <span class="self-center py-4 text-sm day-label text-gray-90 0 md:p-4 md:leading-4">
+          {{ day.day }}
+        </span>
+        <div class="flex-grow overflow-x-auto overflow-y-auto">
+          <p
+            v-if="attributes?.[0]"
+            :key="attributes?.[0]?.key"
+            class="p-2 text-sm rounded-sm bg-primary text-primary-content md:mb-1 md:mt-0">
+            <div class="hidden md:inline">
+              <p class="font-bold truncate">
                 <span v-if="attributes?.[0]?.customData?.title?.length">{{ attributes?.[0]?.customData?.title }}</span>
                 <span v-else>
                   {{ attributes?.[0]?.customData?.user?.firstName }}
                   {{ attributes?.[0]?.customData?.user?.lastName }}
                 </span>
-              </span>
-              <span v-if="attributes?.[0]?.customData?.buildings?.length > 0" class="hidden md:inline">
-                <span v-if="attributes?.[0]?.customData?.buildings?.length === 3"> - All locations </span>
+              </p>
+              <p v-if="attributes?.[0]?.customData?.buildings?.length > 0">
+                <span v-if="attributes?.[0]?.customData?.buildings?.length === 3">All locations </span>
                 <span v-else>
-                  -
                   <template v-for="(building, idx) in attributes?.[0]?.customData?.buildings" :key="building">
                     <span v-if="idx === 1"> and </span>
-                    <span class="lowercase">{{ building }}</span>
+                    <span>{{ capitalize(building) }}</span>
                   </template>
                 </span>
-              </span>
-            </p>
-          </div>
+              </p>
+            </div>
+          </p>
         </div>
-      </template>
-    </Calendar>
-  </div>
+      </div>
+    </template>
+  </Calendar>
 
   <Modal size="3xl" v-if="showModal" @close="closeModal">
     <template #header>
@@ -200,8 +201,6 @@ const closeModal = () => {
         :is-editing-reservation="isEditingReservation" />
     </template>
   </Modal>
-
-  <KwToast v-model="$toastItems" class="z-50" />
 </template>
 
 <style lang="postcss">
@@ -225,33 +224,37 @@ const closeModal = () => {
   }
 
   .vc-weeks {
-    @apply border-t border-neutral-300 p-0;
+    @apply border-t border-neutral-200 dark:border-neutral-700 p-0;
   }
 
   .vc-weekday {
     @apply self-center;
 
     &:not(:last-child) {
-      @apply border-r border-neutral-300;
+      @apply border-r border-neutral-200 dark:border-neutral-700;
     }
   }
   .vc-day {
     @apply p-0 md:w-max;
 
     &.on-top {
-      @apply border-t border-neutral-300;
+      @apply border-t border-neutral-200 dark:border-neutral-700;
     }
 
     &:not(.on-bottom) {
-      @apply border-b border-neutral-300;
+      @apply border-b border-neutral-200 dark:border-neutral-700;
     }
 
     &:not(.on-right) {
-      @apply border-r border-neutral-300;
+      @apply border-r border-neutral-200 dark:border-neutral-700;
     }
   }
   .vc-day .is-reserved {
-    @apply rounded-none bg-neutral-200 dark:bg-slate-800 hover:bg-neutral-200 focus:bg-neutral-200 dark:hover:bg-slate-800 dark:focus:bg-slate-800;
+    @apply rounded-none bg-neutral-200 dark:bg-slate-800 hover:bg-neutral-200 focus:bg-neutral-200 hover:dark:bg-slate-800 focus:dark:bg-slate-800;
+
+    .day-label {
+      @apply dark:text-slate-500;
+    }
   }
   .vc-day .is-disabled {
     @apply cursor-not-allowed;

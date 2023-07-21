@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
+import { useToast } from 'vue-toastification';
 
 import { activeUser, activeUserId, updateUser } from '@/stores/user';
 import { fetchPost, fetchPut } from '@/utils/fetchClient';
 
-const toast: { error: Function; success: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
@@ -23,11 +24,10 @@ const formData = reactive({
 });
 
 async function submit() {
-  currentPasswordErrorMessage.value = '';
   isSubmitting.value = true;
 
   try {
-    const currentPasswordCheck = await fetchPost(`users/${$activeUserId.value}/password`, {
+    const currentPasswordCheck = await fetchPost(`admin/users/${$activeUserId.value}/password`, {
       email: $user.value.email,
       currentPassword: formData.currentPassword,
     });
@@ -37,15 +37,15 @@ async function submit() {
       return;
     }
 
-    const updatePasswordResponse = await fetchPut(`users/${$activeUserId.value}/password`, {
+    const updatePasswordResponse = await fetchPut(`admin/users/${$activeUserId.value}/password`, {
       newPassword: formData.newPassword,
     });
 
     const data = await updatePasswordResponse.json();
     updateUser(data);
-    toast?.success('Update successful.');
+    toast.success('Update successful.');
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }

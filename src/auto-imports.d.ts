@@ -6,6 +6,8 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const KwToastSymbol: typeof import('./composables/useToast')['KwToastSymbol']
+  const ToastEventBus: typeof import('./plugins/ToastEventBus')['default']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
   const customRef: typeof import('vue')['customRef']
@@ -58,6 +60,8 @@ declare global {
   const usePasswordChecker: typeof import('./composables/usePasswordChecker')['usePasswordChecker']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useSlots: typeof import('vue')['useSlots']
+  const useTheme: typeof import('./composables/useTheme')['useTheme']
+  const useToast: typeof import('./composables/useToast')['useToast']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -115,7 +119,6 @@ declare module 'vue' {
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
-    readonly toast: UnwrapRef<typeof import('./plugins/toast')['default']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
@@ -125,6 +128,7 @@ declare module 'vue' {
     readonly usePasswordChecker: UnwrapRef<typeof import('./composables/usePasswordChecker')['usePasswordChecker']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useTheme: UnwrapRef<typeof import('./composables/useTheme')['useTheme']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
@@ -176,7 +180,6 @@ declare module '@vue/runtime-core' {
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
-    readonly toast: UnwrapRef<typeof import('./plugins/toast')['default']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
@@ -186,6 +189,7 @@ declare module '@vue/runtime-core' {
     readonly usePasswordChecker: UnwrapRef<typeof import('./composables/usePasswordChecker')['usePasswordChecker']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useTheme: UnwrapRef<typeof import('./composables/useTheme')['useTheme']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

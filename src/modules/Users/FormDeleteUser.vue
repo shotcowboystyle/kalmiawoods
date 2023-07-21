@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useToast } from 'vue-toastification';
+
 import { UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import { removeUser } from '@/stores/user';
 import { fetchDelete } from '@/utils/fetchClient';
@@ -13,20 +15,20 @@ const props = withDefaults(defineProps<Props>(), {
   handleCloseModal: () => {},
 });
 
-const toast: { error: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const isDeleting = ref(false);
 async function submit() {
   try {
-    const response = await fetchDelete(`users/${props.userId}`);
+    const response = await fetchDelete(`admin/users/${props.userId}`);
     if (response.status === 200) {
       removeUser(props.userId);
       props.handleCloseModal();
     } else {
-      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
+      toast.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isDeleting.value = false;
   }

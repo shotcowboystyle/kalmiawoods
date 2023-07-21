@@ -33,6 +33,8 @@ export default {
     };
   },
   isMatch: (value: string, { match, errorMessagePrefix = 'Value' }: { match: string; errorMessagePrefix: string }) => {
+    console.log('VALUE', value);
+    console.log('MATCH', match);
     return {
       isValid: value === match,
       errorMessage: `${errorMessagePrefix} don't match.`,
@@ -48,7 +50,7 @@ export default {
   'email' | 'password' | 'required' | 'phone' | 'isMatch' | 'isUnique',
   (
     value: string[] | string | boolean,
-    extraArgs?: { matchers?: string[]; match?: string; errorMessagePrefix: string },
+    extraArgs?: { matchers?: string[]; match?: string; errorMessagePrefix?: string },
   ) => { isValid: boolean; errorMessage: string }
 >;
 // | Record<'email' | 'password' | 'required', (value: string | boolean) => { isValid: boolean; errorMessage: string }>

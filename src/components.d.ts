@@ -69,5 +69,6 @@ declare module 'vue' {
     UtilsFlowbiteThemableComponentsFlowbiteThemableChildFlowbiteThemableChild: typeof import('./components/utils/FlowbiteThemable/components/FlowbiteThemableChild/FlowbiteThemableChild.vue')['default']
     UtilsFlowbiteThemableFlowbiteThemable: typeof import('./components/utils/FlowbiteThemable/FlowbiteThemable.vue')['default']
     UtilsSlotListenerSlotListener: typeof import('./components/utils/SlotListener/SlotListener.vue')['default']
+    VueWrapper: typeof import('./components/VueWrapper.vue')['default']
   }
 }

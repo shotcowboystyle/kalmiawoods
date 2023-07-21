@@ -1,5 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const lightTheme = require('daisyui/src/theming/themes')['[data-theme=garden]'];
+const lightTheme = require('daisyui/src/theming/themes')['[data-theme=autumn]'];
 const darkTheme = require('daisyui/src/theming/themes')['[data-theme=forest]'];
 
 /** @type {import('tailwindcss').Config} */
@@ -119,18 +119,36 @@ module.exports = {
       {
         light: {
           ...lightTheme,
+          primary: '#20D489',
+          secondary: '#E4E6EF',
+          accent: '#6610f2',
+          neutral: '#181C32',
+          'base-100': '#F5F8FA',
+          info: '#5710B2',
+          success: '#00B2FF',
+          warning: '#FFC700',
+          error: '#F1416C',
           '.bg-light': {
-            'background-color': lightTheme['base-100'],
+            'background-color': '#F5F8FA',
           },
         },
         dark: {
           ...darkTheme,
-          accent: '#b45309',
-          neutral: '#191D24',
-          'base-100': '#2A303C',
-          '--rounded-btn': '0.5rem',
+          // accent: '#b45309',
+          // neutral: '#3F4254',
+          // 'base-100': '#181C32',
+          '--rounded-btn': '0.65rem',
+          primary: '#bbea69',
+          secondary: '#1acc87',
+          accent: '#45ce2d',
+          neutral: '#2f2730',
+          'base-100': '#433d51',
+          info: '#80caea',
+          success: '#139659',
+          warning: '#df9a07',
+          error: '#fa665c',
           '.bg-dark': {
-            'background-color': darkTheme['base-100'],
+            'background-color': '#181C32',
           },
         },
       },
@@ -138,8 +156,5 @@ module.exports = {
     darkTheme: 'dark',
   },
 
-  plugins: [
-    require('tailwind-scrollbar')({ nocompatible: true }),
-    require('daisyui'),
-  ],
+  plugins: [require('tailwind-scrollbar')({ nocompatible: true }), require('daisyui')],
 };

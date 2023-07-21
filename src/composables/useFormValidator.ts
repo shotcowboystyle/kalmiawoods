@@ -20,7 +20,7 @@ export function useFormValidator() {
   function validate(
     value: string[] | string,
     rules: Array<string | { isValid: Function; errorMessage: string }>,
-    extraArgs: { match?: string; matchers?: string[]; errorMessagePrefix: string },
+    extraArgs: { match?: string; matchers?: string[]; errorMessagePrefix?: string } = {},
   ) {
     const errorMessage = ref('');
     if (!Array.isArray(rules) || rules.length <= 0) {

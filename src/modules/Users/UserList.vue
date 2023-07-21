@@ -3,7 +3,6 @@ import { useStore } from '@nanostores/vue';
 
 import { HOME } from '@/app/constants';
 import Modal from '@/components/Modal/Modal.vue';
-import KwToast from '@/components/Toast/KwToast.vue';
 import { fetchNewUsers, setActiveUserId, users } from '@/stores/user';
 import { phoneFormatUSA } from '@/utils/phone';
 import FormDeleteUser from './FormDeleteUser.vue';
@@ -18,7 +17,6 @@ const isDeleteModalOpen = ref(false);
 const deleteUserId = ref('');
 
 const $users = useStore(users);
-console.log('$USERS', $users);
 
 const onCreateUser = () => {
   setActiveUserId(null);
@@ -175,6 +173,4 @@ watch(arrivedState, ({ bottom }) => {
       <FormDeleteUser :user-id="deleteUserId" :handle-close-modal="closeDeleteModal" />
     </template>
   </Modal>
-
-  <KwToast v-model="$toastItems" class="z-50" />
 </template>

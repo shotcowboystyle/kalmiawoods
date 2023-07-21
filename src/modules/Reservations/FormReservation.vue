@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import { useStore } from '@nanostores/vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { DatePicker } from 'v-calendar';
 import 'v-calendar/dist/style.css';
+import { useToast } from 'vue-toastification';
 
+import { UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import { theme } from '@/stores/app';
 import { addReservation, removeReservation, reservation, reservedDates } from '@/stores/reservation';
 import { users } from '@/stores/user';
@@ -24,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   handleCloseModal: () => {},
 });
 
-const toast: { error: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const smAndLarger = breakpoints.greater('sm');
@@ -87,7 +88,7 @@ async function submit() {
     addReservation(data);
     props.handleCloseModal();
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }
@@ -103,10 +104,10 @@ async function deleteReservation(reservationId: string) {
       removeReservation(reservationId);
       props.handleCloseModal();
     } else {
-      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
+      toast.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isDeleting.value = false;
   }

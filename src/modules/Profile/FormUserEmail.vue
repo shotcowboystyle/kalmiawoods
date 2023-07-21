@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue';
+import { useToast } from 'vue-toastification';
 
 import { activeUser, activeUserId, updateUser, usersEmails } from '@/stores/user';
 import { fetchPut } from '@/utils/fetchClient';
 
-const toast: { error: Function; success: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const $user = useStore(activeUser);
 const $activeUserId = useStore(activeUserId);
@@ -17,15 +18,15 @@ async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPut(`users/${$activeUserId.value}/email`, {
+    const response = await fetchPut(`admin/users/${$activeUserId.value}/email`, {
       newEmail: emailModel.value,
     });
 
     const data = await response.json();
     updateUser(data);
-    toast?.success('Update successful.');
+    toast.success('Update successful.');
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }

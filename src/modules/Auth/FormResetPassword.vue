@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useToast } from 'vue-toastification';
+
 import { HOME, UNEXPECTED_SERVER_ERROR_MESSAGE } from '@/app/constants';
 import PasswordStrength from '@/components/PasswordStrength.vue';
 import { fetchPost } from '@/utils/fetchClient';
@@ -11,7 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
   token: undefined,
 });
 
-const toast: { error: Function } | undefined = inject('toast');
+const toast = useToast();
 
 const hidePassword = ref(true);
 const showPasswordMeter = ref(false);
@@ -33,10 +35,10 @@ async function submit() {
       document.location = HOME;
       // location.href = HOME;
     } else {
-      toast?.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
+      toast.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
-    toast?.error(error.message);
+    toast.error(error.message);
   } finally {
     isSubmitting.value = false;
   }
