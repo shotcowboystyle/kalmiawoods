@@ -1,12 +1,11 @@
 import type { App } from 'vue';
-import type { PluginOptions } from 'vue-toastification';
-import Toast, { POSITION } from 'vue-toastification';
+import Toast from 'vue-toastification';
 
-const toastOptions: PluginOptions = {
+const toastOptions = {
   transition: 'Vue-Toastification__bounce',
   maxToasts: 20,
   newestOnTop: true,
-  position: POSITION.TOP_RIGHT,
+  position: 'top-right',
   timeout: 5000,
   closeOnClick: true,
   pauseOnFocusLoss: true,
