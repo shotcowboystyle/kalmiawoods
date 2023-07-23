@@ -40,12 +40,16 @@ function checkError() {
   error.value = !validated.isValid;
   errorMessage.value = validated.errorMessage;
 }
+
+function handleSelectAll() {
+  model.value = props.options.map((option) => option.value);
+}
 </script>
 
 <template>
   <!--eslint-disable-next-line vue/no-parsing-error-->
   <fieldset :class="class">
-    <legend class="label mb-1">
+    <legend class="label mb-1 w-full">
       <span
         class="label-text"
         :class="{
@@ -53,6 +57,7 @@ function checkError() {
         }">
         {{ label }}
       </span>
+      <button type="button" class="btn btn-link label-text-alt" @click="handleSelectAll">Select all</button>
     </legend>
 
     <div v-for="option in options" :key="option.value" class="form-control">

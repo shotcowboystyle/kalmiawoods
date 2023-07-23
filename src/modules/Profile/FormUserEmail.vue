@@ -2,12 +2,12 @@
 import { useStore } from '@nanostores/vue';
 import { useToast } from 'vue-toastification';
 
-import { activeUser, activeUserId, updateUser, usersEmails } from '@/stores/user';
+import { activeUserId, updateUser, user, usersEmails } from '@/stores/user';
 import { fetchPut } from '@/utils/fetchClient';
 
 const toast = useToast();
 
-const $user = useStore(activeUser);
+const $user = useStore(user);
 const $activeUserId = useStore(activeUserId);
 const $usersEmails = useStore(usersEmails);
 
@@ -25,8 +25,9 @@ async function submit() {
     const data = await response.json();
     updateUser(data);
     toast.success('Update successful.');
+    emailModel.value = '';
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isSubmitting.value = false;
   }
@@ -47,17 +48,10 @@ async function submit() {
       :validation-matchers="$usersEmails"
       errorMessagePrefix="Email"
       type="email"
-      placeholder="enter user's new email"
       autocomplete="off" />
 
     <div class="flex gap-6 justify-end mt-8">
-      <KwButton
-        variant="primary"
-        text="Save"
-        icon-right="arrow-right"
-        type="submit"
-        :disabled="isSubmitting"
-        :loading="isSubmitting" />
+      <KwButton variant="primary" text="Save" type="submit" :disabled="isSubmitting" :loading="isSubmitting" />
     </div>
   </KwForm>
 </template>

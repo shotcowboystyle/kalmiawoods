@@ -2,7 +2,8 @@
 import { HOME } from '@/app/constants';
 import ColorModeSwitcher from '@/components/ColorModeSwitcher.astro';
 import Logo from '@/components/Logo.astro';
-import ProfileDropdown from '@/components/ProfileDropdown.vue';
+import LogoutButton from '@/components/LogoutButton.vue';
+import ProfileDropdown from '@/components/ProfileDropdown.astro';
 ---
 
 <nav
@@ -38,17 +39,15 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
               clip-rule="evenodd"></path></svg
           >
         </button>
-        <a href="/" class="flex ml-2 md:mr-24">
+        <a href={HOME} class="flex ml-2 md:mr-24">
           <Logo />
-          <span
-            class="self-center ml-3 text-xl font-semibold whitespace-nowrap dark:text-white sm:text-2xl"
-            >Kalmia Woods</span
-          >
+          <span class="self-center ml-3 text-xl font-semibold whitespace-nowrap dark:text-white sm:text-2xl">
+            Kalmia Woods
+          </span>
         </a>
       </div>
 
       <div class="flex items-center">
-        <!-- Dropdown menu -->
         <div
           id="dropdownNavbar"
           class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:divide-gray-600 dark:bg-gray-700">
@@ -64,35 +63,17 @@ import ProfileDropdown from '@/components/ProfileDropdown.vue';
             </li>
             <li>
               <a
-                href="#"
+                href="/profile"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >Profile</a
               >
             </li>
-            <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Earnings</a
-              >
-            </li>
+            <LogoutButton client:only="vue" />
           </ul>
-          <div class="py-2">
-            <form method="post" action="/logout">
-              <input type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white" value="Sign out" />
-            </form>
-
-            <!-- <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Sign out</a
-            > -->
-          </div>
         </div>
 
         <ColorModeSwitcher />
-        <ProfileDropdown client:only="vue" />
-        </div>
+        <ProfileDropdown />
       </div>
     </div>
   </div>

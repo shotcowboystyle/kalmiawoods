@@ -56,7 +56,7 @@ function checkError() {
       ref="input"
       v-bind="$attrs"
       v-model="model"
-      class="w-full max-w-xs select select-bordered"
+      class="w-full select select-bordered"
       :class="[
         {
           'select-error': error,

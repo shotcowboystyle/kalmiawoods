@@ -28,7 +28,7 @@ async function submit() {
       toast.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isDeleting.value = false;
   }

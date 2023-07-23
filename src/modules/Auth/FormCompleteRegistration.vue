@@ -30,14 +30,14 @@ async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost(`email-verification/${props.token}`, { password: formData.newPassword });
+    const response = await fetchPost(`auth/email-verification/${props.token}`, { password: formData.newPassword });
     if (response.status === 200) {
       document.location = HOME;
     } else {
       toast.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isSubmitting.value = false;
   }

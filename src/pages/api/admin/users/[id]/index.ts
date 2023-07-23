@@ -46,7 +46,7 @@ export const del: APIRoute = async (context) => {
     );
   }
 
-  if (!user || user.role !== 'ADMIN') {
+  if (user?.role !== 'ADMIN') {
     return new Response(
       JSON.stringify({
         message: 'Unauthorized',

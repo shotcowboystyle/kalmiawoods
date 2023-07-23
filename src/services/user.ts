@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { emailVerificationToken } from '@/services/verification-token';
+import { isValidEmail } from '@/utils/email';
 import { generatePassword } from '@/utils/generate-password';
 
 import type { User } from '@/types/User';
@@ -92,10 +93,22 @@ export const createUser = async (data: User) => {
   return transformDatabaseUserWithProfile(createdUser as DatabaseUserWithProfile);
 };
 
-export const updateUserEmail = async (userId: string, email: string) => {
+export const updateUserEmail = async (userId: string, currentEmail: string, newEmail: string) => {
+  if (!isValidEmail(newEmail)) {
+    throw new Error('Invalid email address');
+  }
+
   try {
+    await prisma.authKey.update({
+      where: {
+        id: 'email:' + currentEmail,
+      },
+      data: {
+        id: 'email:' + newEmail,
+      },
+    });
     return await auth.updateUserAttributes(userId, {
-      email,
+      email: newEmail,
     });
   } catch (error: any) {
     if (error instanceof LuciaError && error.message === 'AUTH_DUPLICATE_KEY_ID') {
@@ -169,11 +182,11 @@ export const deleteUser = async (userId: string) => {
 
   if (userProfile) {
     // deleteTransactions.push(
-      await prisma.userProfile.delete({
-        where: {
-          user_id: userId,
-        },
-      });
+    await prisma.userProfile.delete({
+      where: {
+        user_id: userId,
+      },
+    });
     // );
   }
 

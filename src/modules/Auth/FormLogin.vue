@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { HOME } from '@/app/constants';
-import { fetchPost } from '@/utils/fetchClient';
+import { login } from '@/stores/auth';
 
 const showErrorMessage = ref(false);
 const isSubmitting = ref(false);
@@ -13,12 +13,8 @@ async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost('auth', formData);
-    if (response.status === 200) {
-      location.href = HOME;
-    } else {
-      showErrorMessage.value = true;
-    }
+    await login(formData);
+    location.href = HOME;
   } catch {
     showErrorMessage.value = true;
   } finally {

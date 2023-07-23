@@ -1,11 +1,11 @@
 ---
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
 import { checkAuth } from '@/app/check-auth';
-import Contact from '@/modules/Contact/Contact.astro';
+// import Contact from '@/modules/Contact/Contact.astro';
 import Hero from '@/modules/Dashboard/Hero.astro';
-import NearbyAttractions from '@/modules/Dashboard/NearbyAttractions.astro';
-import PhotoGallery from '@/modules/Dashboard/PhotoGallery.astro';
-import Summary from '@/modules/Dashboard/Summary.astro';
+// import NearbyAttractions from '@/modules/Dashboard/NearbyAttractions.astro';
+// import PhotoGallery from '@/modules/Dashboard/PhotoGallery.astro';
+// import Summary from '@/modules/Dashboard/Summary.astro';
 
 const redirect = await checkAuth(Astro);
 if (redirect) {
@@ -20,10 +20,11 @@ if (redirect) {
     <section class="flex justify-center w-full pb-24">
       <div class="w-full">
         <Hero />
-        <NearbyAttractions />
+        <p class="w-full text-base-content text-center">Coming soon: This page will host a property guidebook for all information you may need regarding your stay.</p>
+        <!-- <NearbyAttractions />
         <PhotoGallery />
         <Summary />
-        <Contact />
+        <Contact /> -->
       </div>
     </section>
   </div>

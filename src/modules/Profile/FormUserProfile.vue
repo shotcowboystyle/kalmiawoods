@@ -44,7 +44,7 @@ async function submit() {
     updateUser(data);
     toast.success('Update successful.');
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isSubmitting.value = false;
   }

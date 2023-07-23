@@ -1,16 +1,12 @@
-import {
-handleError,
-handleSuccessful as handleSuccess,
-} from "./handleResponse";
+import { handleRequestError, handleRequestSuccess } from './handleResponse';
 
 export async function handleRequest(request: Request, callable: Function) {
   // console.log("R: ", request.method, request.url);
 
   try {
     const result = await callable();
-
-    return handleSuccess(result);
+    return handleRequestSuccess(result);
   } catch (error) {
-    return handleError(error);
+    return handleRequestError(error);
   }
 }

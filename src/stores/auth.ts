@@ -1,12 +1,13 @@
 import { persistentMap } from '@nanostores/persistent';
-import { onMount, task } from 'nanostores';
+import { action, onMount, task } from 'nanostores';
 
 import { RoleEnum as Role } from '@/schemas/auth';
 import type { RoleEnum } from '@/types/Auth';
-import { fetchGet } from '@/utils/fetchClient';
+import { fetchGet, fetchPost } from '@/utils/fetchClient';
 
 interface AuthUser {
   isLoading: boolean;
+  userId: string;
   email: string;
   role: RoleEnum;
   isAdmin: boolean;
@@ -14,36 +15,35 @@ interface AuthUser {
   avatar: string;
 }
 
-export const authUser = persistentMap<AuthUser>(
-  'authUser:',
-  {
-    isLoading: false,
-    email: '',
-    role: Role.enum.USER,
-    isAdmin: false,
-    name: '',
-    avatar: '',
+const initAuthUser = {
+  isLoading: false,
+  userId: '',
+  email: '',
+  role: Role.enum.USER,
+  isAdmin: false,
+  name: '',
+  avatar: '',
+};
+
+export const authUser = persistentMap<AuthUser>('authUser:', initAuthUser, {
+  encode(value) {
+    return JSON.stringify(value);
   },
-  {
-    encode(value) {
-      return JSON.stringify(value);
-    },
-    decode(value) {
-      if (value !== '') {
-        return JSON.parse(value);
-      }
-      return value;
-    },
+  decode(value) {
+    if (value !== '') {
+      return JSON.parse(value);
+    }
+    return value;
   },
-);
+});
 
 onMount(authUser, () => {
   authUser.setKey('isLoading', true);
-
   task(async () => {
     try {
       const data = await fetchGet('auth');
       const authUserData = {
+        userId: data.userId,
         email: data.email,
         role: data.role,
         isAdmin: data.role === Role.enum.ADMIN,
@@ -52,8 +52,47 @@ onMount(authUser, () => {
       };
 
       authUser.set({ isLoading: false, ...authUserData });
-    } catch (e) {
-      // console.log(e);
+    } catch (error: any) {
+      throw new Error(error);
     }
   });
+});
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+export const login = action(authUser, 'login', async (user, loginData: LoginData) => {
+  try {
+    await fetchPost('auth', loginData);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+
+  try {
+    const data = await fetchGet('auth');
+    const authUserData = {
+      userId: data.userId,
+      email: data.email,
+      role: data.role,
+      isAdmin: data.role === Role.enum.ADMIN,
+      name: `${data.firstName} ${data.lastName}`,
+      avatar: data.avatar,
+    };
+
+    return user.set({ isLoading: false, ...authUserData });
+  } catch (error: any) {
+    throw new Error(error);
+  }
+});
+
+export const logout = action(authUser, 'logout', async (user) => {
+  try {
+    await fetchPost('auth/logout', {});
+    user.set(initAuthUser);
+    location.href = '/auth/login';
+  } catch (error: any) {
+    throw new Error(error);
+  }
 });

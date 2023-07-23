@@ -22,9 +22,10 @@ export const put: APIRoute = async (context) => {
 
   try {
     const user = await auth.getUser(id!);
-    await auth.invalidateAllUserSessions(user.userId);
 
     await updateUserPassword(user.email, newPassword);
+
+    await auth.invalidateAllUserSessions(user.userId);
 
     if (sessionUser.userId === user.userId) {
       const session = await auth.createSession(user.userId);

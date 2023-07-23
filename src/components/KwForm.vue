@@ -1,5 +1,4 @@
-<!-- <script setup lang="ts"> -->
-<script setup>
+<script setup lang="ts">
 const emit = defineEmits(['submit']);
 const watcher = ref(false);
 const slots = useSlots();
@@ -13,9 +12,9 @@ provide('kalmiaWoodsForm', {
   watcher,
 });
 
-let allChildrenInputs = [];
+let allChildrenInputs: any[] = [];
 
-function recursivelyFindKeyValue(key, keyValue, list) {
+function recursivelyFindKeyValue(key: string, keyValue: any, list: any[]) {
   for (let i = 0; i < list.length; i++) {
     const item = list[i];
     if (Array.isArray(item.children) && item.children?.length > 0) {
@@ -27,18 +26,28 @@ function recursivelyFindKeyValue(key, keyValue, list) {
 }
 
 const validated = computed(() => {
-  recursivelyFindKeyValue('dynamicProps', 'modelValue', slots.default());
+  recursivelyFindKeyValue('dynamicProps', 'modelValue', slots.default!());
 
   const hasInvalidInput = !allChildrenInputs.some((e) => {
     if (!formValidator || !formValidator.allRules) {
       return false;
     }
+
     const value = e.props?.modelValue;
     const required = e.props?.required?.length >= 0 || e.props?.required === true;
     const rules = e.props?.rules || [];
-
+    const matchers = e.props?.['validation-matchers'] || [];
+    const match = e.props?.['validation-match'];
+    const errorMessagePrefix = e.props?.errorMessagePrefix;
     const allRules = formValidator.allRules(required, rules);
-    return formValidator?.validate(value, allRules).isValid === false;
+
+    return (
+      formValidator?.validate(value, allRules, {
+        match,
+        matchers,
+        errorMessagePrefix,
+      }).isValid === false
+    );
   });
 
   allChildrenInputs = [];
@@ -46,7 +55,6 @@ const validated = computed(() => {
 });
 
 function onSubmit() {
-  console.log('VALIDATED VALUE', validated.value);
   updateWatcher();
   if (validated.value) {
     emit('submit');

@@ -5,7 +5,7 @@ import { getUser, updateUserEmail } from '@/services/user';
 
 export const put: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
-  const session = await authRequest.validate();
+  const { session, user: sessionUser } = await authRequest.validateUser();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -21,10 +21,16 @@ export const put: APIRoute = async (context) => {
   const { newEmail } = await context.request.json();
 
   try {
-    await updateUserEmail(id!, newEmail);
-
     const user = await auth.getUser(id!);
+
+    await updateUserEmail(id!, user.email, newEmail);
+
     await auth.invalidateAllUserSessions(user.userId);
+
+    if (sessionUser.userId === user.userId) {
+      const session = await auth.createSession(user.userId);
+      authRequest.setSession(session);
+    }
 
     const updatedUser = await getUser(user.userId);
     return new Response(JSON.stringify(updatedUser), {

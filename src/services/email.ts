@@ -15,7 +15,7 @@ const sendEmail = async (emailAddress: string, subject: string, content: string)
 };
 
 export const sendEmailVerificationEmail = async (emailAddress: string, verificationToken: string) => {
-  const resetLink = `${BASE_APP_URL}/auth/email-verification/${verificationToken}`;
+  const resetLink = `${BASE_APP_URL}auth/email-verification/${verificationToken}`;
   const emailContent = `Please complete your registration for Kalmia Woods via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;
@@ -23,7 +23,7 @@ export const sendEmailVerificationEmail = async (emailAddress: string, verificat
 };
 
 export const sendPasswordResetEmail = async (emailAddress: string, resetToken: string) => {
-  const resetLink = `${BASE_APP_URL}/auth/password-reset/${resetToken}`;
+  const resetLink = `${BASE_APP_URL}auth/password-reset/${resetToken}`;
   const emailContent = `Please reset your password via the link below:<br/><br/>
 
 <a href="${resetLink}">${resetLink}</a>`;

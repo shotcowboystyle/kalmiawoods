@@ -34,3 +34,11 @@ export const isWithinExpiration = (expiresInMs: number | bigint) => {
   }
   return true;
 };
+
+export const dateInPast = function (date: Date) {
+  if (date.setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0)) {
+    return true;
+  }
+
+  return false;
+};

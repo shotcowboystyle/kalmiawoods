@@ -14,15 +14,11 @@ async function submit() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetchPost('email-verification', formData);
+    const response = await fetchPost('auth/email-verification', formData);
     const data = await response.json();
-    if (response.status !== 200) {
-      toast.error(data.message);
-    } else {
-      toast.success(data.message);
-    }
+    toast.success(data.message);
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isSubmitting.value = false;
   }

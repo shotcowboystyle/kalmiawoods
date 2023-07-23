@@ -10,6 +10,7 @@ import { theme } from '@/stores/app';
 import { authUser } from '@/stores/auth';
 import { reservations, reservedDates, setActiveReservationId } from '@/stores/reservation';
 import type { CalendarDay } from '@/types/FullCalendar';
+import { dateInPast } from '@/utils/date';
 import { capitalize } from '@/utils/string';
 import FormReservation from './FormReservation.vue';
 
@@ -50,8 +51,12 @@ const masks = ref({
 
 const modalTitlePrefix = ref<string>('Add');
 const selectedReservationDate = ref<string | undefined>();
-const onDayClick = (day: CalendarDay, reservationId = null) => {
-  if (reservationId) {
+const onDayClick = (day: CalendarDay, reservationId = null, userId = null) => {
+  if (dateInPast(day.date)) {
+    return;
+  }
+
+  if (reservationId && ($authUser.value.isAdmin || (userId && userId === $authUser.value.userId))) {
     setActiveReservationId(reservationId);
     modalTitlePrefix.value = 'Edit';
     isEditingReservation.value = true;
@@ -62,7 +67,9 @@ const onDayClick = (day: CalendarDay, reservationId = null) => {
     isEditingReservation.value = false;
   }
 
-  showModal.value = true;
+  if (!reservationId || (reservationId && ($authUser.value.isAdmin || (userId && userId === $authUser.value.userId)))) {
+    showModal.value = true;
+  }
 };
 
 const addNewReservation = () => {
@@ -148,29 +155,36 @@ const closeModal = () => {
     </template>
     <template #day-content="{ day, attributes }">
       <div
-        class="z-10 flex h-full flex-col overflow-hidden cursor-pointer md:min-h-16 md:w-full"
+        class="flex h-full flex-col cursor-pointer md:min-h-16 md:w-full"
         :class="[
-          { 'is-disabled': !$authUser.isAdmin && day.isDisabled },
+          { 'is-disabled': !$authUser.isAdmin && attributes?.[0]?.customData?.userId !== $authUser.userId && day.isDisabled },
           { 'is-reserved': day.isDisabled },
-          // { 'hover:bg-neutral-50 focus:bg-neutral-50 hover:dark:bg-blate-800 focus:dark:bg-blate-800': !day.isDisabled },
         ]"
         :aria-disabled="day.isDisabled"
-        @click="onDayClick(day, attributes?.[0]?.key)">
+        @click="onDayClick(day, attributes?.[0]?.key, attributes?.[0]?.customData?.userId)">
         <span class="self-center py-4 text-sm day-label text-gray-90 0 md:p-4 md:leading-4">
           {{ day.day }}
         </span>
-        <div class="flex-grow overflow-x-auto overflow-y-auto">
+        <div class="day-events">
           <p
             v-if="attributes?.[0]"
             :key="attributes?.[0]?.key"
-            class="p-2 text-sm rounded-sm bg-primary text-primary-content md:mb-1 md:mt-0">
+            class="day-event"
+            :class="[
+              { 'day-event-secondary': day.date.toString() !== attributes?.[0]?.targetDate?.start.toString() },
+              { 'day-event-end': day.range.end.toString() === attributes?.[0]?.targetDate?.end.toString() },
+              { 'day-event-has-secondary': day.date.toString() === attributes?.[0]?.targetDate?.start.toString() && attributes?.[0]?.targetDate?.isRange && attributes?.[0]?.targetDate?.start.toString() !== attributes?.[0]?.targetDate?.end.toString() },
+              { 'is-user-event': attributes?.[0]?.customData?.userId === $authUser.userId },
+            ]"
+          >
             <div class="hidden md:inline">
               <p class="font-bold truncate">
-                <span v-if="attributes?.[0]?.customData?.title?.length">{{ attributes?.[0]?.customData?.title }}</span>
-                <span v-else>
+                <span v-if="($authUser.isAdmin || $authUser.userId === attributes?.[0]?.customData?.userId) && attributes?.[0]?.customData?.title?.length">{{ attributes?.[0]?.customData?.title }}</span>
+                <span v-else-if="($authUser.isAdmin || $authUser.userId === attributes?.[0]?.customData?.userId)">
                   {{ attributes?.[0]?.customData?.user?.firstName }}
                   {{ attributes?.[0]?.customData?.user?.lastName }}
                 </span>
+                <span v-else>Reserved</span>
               </p>
               <p v-if="attributes?.[0]?.customData?.buildings?.length > 0">
                 <span v-if="attributes?.[0]?.customData?.buildings?.length === 3">All locations </span>
@@ -198,6 +212,7 @@ const closeModal = () => {
         :selected-date="selectedReservationDate"
         :handle-close-modal="closeModal"
         :is-admin="$authUser.isAdmin"
+        :auth-user-id="$authUser.userId"
         :is-editing-reservation="isEditingReservation" />
     </template>
   </Modal>
@@ -234,8 +249,9 @@ const closeModal = () => {
       @apply border-r border-neutral-200 dark:border-neutral-700;
     }
   }
+
   .vc-day {
-    @apply p-0 md:w-max;
+    @apply p-0 md:w-max hover:bg-neutral-50 focus:bg-neutral-50 hover:dark:bg-slate-800 focus:dark:bg-slate-800;
 
     &.on-top {
       @apply border-t border-neutral-200 dark:border-neutral-700;
@@ -249,6 +265,19 @@ const closeModal = () => {
       @apply border-r border-neutral-200 dark:border-neutral-700;
     }
   }
+
+  .day-events {
+    @apply flex-grow;
+  }
+
+  .day-event {
+    @apply p-1 bg-primary;
+
+    &.is-user-event {
+      @apply bg-info;
+    }
+  }
+
   .vc-day .is-reserved {
     @apply rounded-none bg-neutral-200 dark:bg-slate-800 hover:bg-neutral-200 focus:bg-neutral-200 hover:dark:bg-slate-800 focus:dark:bg-slate-800;
 
@@ -309,8 +338,30 @@ const closeModal = () => {
     }
 
     & .vc-highlights .vc-day-layer .vc-highlight.vc-highlight-base-start {
-      @apply ml-5;
-      width: 100% !important;
+      @apply ml-5 !w-full;
+    }
+  }
+
+  & .day-events {
+    @apply overflow-visible;
+  }
+
+  & .day-event {
+    @apply p-2 text-sm text-primary-content mb-1 mt-0 mx-6 rounded-sm;
+  }
+
+  & .day-event-end {
+    @apply !w-11/12 !rounded-none !rounded-r-sm !ml-0;
+  }
+
+  & .day-event-has-secondary {
+    @apply rounded-none rounded-s-sm !mr-0;
+  }
+
+  & .day-event-secondary {
+    @apply rounded-none !mx-0 !-ml-1;
+    & p {
+      @apply invisible;
     }
   }
 

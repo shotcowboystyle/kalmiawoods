@@ -1,13 +1,13 @@
-export function handleSuccessful(payload: any) {
+export function handleRequestSuccess(payload: any) {
   return new Response(JSON.stringify(payload), {
     status: 200,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 }
 
-export function handleError(error: unknown) {
+export function handleRequestError(error: unknown) {
   // console.log("HR: An error occurred");
   // console.log(JSON.stringify(error, null, 2));
 

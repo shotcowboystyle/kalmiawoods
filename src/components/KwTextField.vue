@@ -15,6 +15,7 @@ const props = defineProps({
   validationMatch: String,
   validationMatchers: Array,
   errorMessagePrefix: String,
+  setInvalidClass: Boolean,
 });
 
 const model = useVModel(props, 'modelValue');
@@ -66,7 +67,7 @@ function checkError() {
       class="input input-bordered w-full"
       :class="[
         {
-          'input-error': error,
+          'input-error': error || setInvalidClass,
           required: required,
         },
       ]"

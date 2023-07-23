@@ -13,6 +13,7 @@ import { fetchDelete, fetchPost, fetchPut } from '@/utils/fetchClient';
 
 export interface Props {
   isAdmin?: boolean;
+  authUserId: string;
   isEditingReservation?: boolean;
   selectedDate?: string;
   handleCloseModal: () => void;
@@ -62,7 +63,12 @@ const submitButtonText = props.isEditingReservation ? 'Update' : 'Create';
 const isSubmitting = ref(false);
 const formData = reactive({
   reservationId: props.isEditingReservation ? $reservation.value.reservationId : null,
-  userId: props.isEditingReservation && $reservation.value.userId ? $reservation.value.userId : undefined,
+  userId:
+    props.isEditingReservation && $reservation.value.userId
+      ? $reservation.value.userId
+      : props.isAdmin
+      ? ''
+      : props.authUserId,
   title: props.isEditingReservation && $reservation.value.title ? $reservation.value.title : undefined,
   buildings: props.isEditingReservation && $reservation.value.buildings ? $reservation.value.buildings : ['HOUSE'],
   range: {
@@ -88,7 +94,7 @@ async function submit() {
     addReservation(data);
     props.handleCloseModal();
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isSubmitting.value = false;
   }
@@ -107,7 +113,7 @@ async function deleteReservation(reservationId: string) {
       toast.error(UNEXPECTED_SERVER_ERROR_MESSAGE);
     }
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isDeleting.value = false;
   }
@@ -116,6 +122,27 @@ async function deleteReservation(reservationId: string) {
 
 <template>
   <KwForm @submit="submit">
+    <div v-if="isAdmin" class="w-full mb-6 form-control">
+      <KwSelectField
+        class="w-full form-control"
+        label="Main Guest"
+        name="userId"
+        id="userId"
+        optionDescription="Select user to link reservation to"
+        :options="selectUserOptions"
+        v-model="formData.userId"
+        required />
+    </div>
+
+    <KwTextField
+      type="text"
+      class="w-full mb-4 form-control"
+      label="Title"
+      name="title"
+      id="title"
+      bottomLabelLeft="ie., Marge and the kids"
+      v-model="formData.title" />
+
     <DatePicker
       v-model.range="formData.range"
       :class="{ 'border-0': smAndLarger }"
@@ -123,7 +150,6 @@ async function deleteReservation(reservationId: string) {
       :columns="smAndLarger ? 2 : 1"
       :min-date="new Date()"
       is-range
-      is-required
       :is-dark="colorMode === 'dark'"
       :popover="popover"
       :is-expanded="smAndLarger"
@@ -158,29 +184,8 @@ async function deleteReservation(reservationId: string) {
       </template>
     </DatePicker>
 
-    <div v-if="isAdmin" class="w-full mb-6 form-control">
-      <KwSelectField
-        class="w-full max-w-xs form-control"
-        label="Main Guest"
-        name="userId"
-        id="userId"
-        optionDescription="Select user to link reservation to"
-        :options="selectUserOptions"
-        v-model="formData.userId"
-        required />
-    </div>
-
-    <KwTextField
-      type="text"
-      class="w-full max-w-xs mb-4 form-control"
-      label="Title"
-      name="title"
-      id="title"
-      bottomLabelLeft="ie., Marge and the kids"
-      v-model="formData.title" />
-
     <KwCheckboxGroup
-      class="block w-auto mb-4 max-w-fit"
+      class="w-full form-control mb-4"
       label="Locations"
       :options="buildingsOptions"
       v-model="formData.buildings"

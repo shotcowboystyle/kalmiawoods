@@ -69,9 +69,9 @@ export const addUser = action(users, 'addUser', async (store, newUser) => {
 });
 
 export const updateUser = action(users, 'updateUser', async (store, updatedUser) => {
-  const { id } = updatedUser;
-  const existingEntry = store.get()[id];
-  store.setKey(id, {
+  const { userId } = updatedUser;
+  const existingEntry = store.get()[userId];
+  store.setKey(userId, {
     ...existingEntry,
     ...updatedUser,
   });
@@ -122,7 +122,7 @@ export const activeUser = computed([_activeUser], (res) => {
   return initUserData;
 });
 
-// export const user = computed(
-//   [users, viewMode],
-//   (_users, _userId) => Object.values(_users).find((u) => u?.userId === _userId) ?? initUserData,
-// );
+export const user = computed(
+  [users, activeUserId],
+  (_users, _userId) => Object.values(_users).find((u) => u?.userId === _userId) ?? initUserData,
+);

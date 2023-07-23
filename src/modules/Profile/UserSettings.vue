@@ -6,16 +6,17 @@ import PictureUploader from '@/components/PictureUploader.vue';
 import FormUserEmail from '@/modules/Profile/FormUserEmail.vue';
 import FormUserPassword from '@/modules/Profile/FormUserPassword.vue';
 import FormUserProfile from '@/modules/Profile/FormUserProfile.vue';
-import { activeUser, setActiveUserId } from '@/stores/user';
+import { setActiveUserId, user } from '@/stores/user';
 
 interface Props {
+  isProfile?: boolean;
   mode: string;
 }
 
-const props = withDefaults(defineProps<Props>(), { mode: 'latest' });
+const props = withDefaults(defineProps<Props>(), { isProfile: false, mode: 'latest' });
 
 setActiveUserId(props.mode);
-const $user = useStore(activeUser);
+const $user = useStore(user);
 </script>
 
 <template>
@@ -33,7 +34,7 @@ const $user = useStore(activeUser);
             Home
           </a>
         </li>
-        <li>
+        <li v-if="!isProfile">
           <div class="flex items-center">
             <svg
               class="h-6 w-6 text-gray-400"

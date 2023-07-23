@@ -12,5 +12,7 @@ const { user } = Astro.locals;
 ---
 
 <LayoutSidebar>
-	<UserSettings mode={user.userId} client:only="vue" />
+  <div class="px-4 pt-8">
+    <UserSettings mode={user.userId} isProfile client:only="vue" />
+  </div>
 </LayoutSidebar>

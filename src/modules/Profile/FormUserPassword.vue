@@ -17,26 +17,30 @@ const $activeUserId = useStore(activeUserId);
 const $user = useStore(activeUser);
 
 const isSubmitting = ref(false);
-const formData = reactive({
+const initFormData = {
   currentPassword: undefined,
   newPassword: undefined,
   confirmNewPassword: undefined,
-});
+};
+const formData = reactive({ ...initFormData });
 
 async function submit() {
+  currentPasswordErrorMessage.value = '';
   isSubmitting.value = true;
 
   try {
-    const currentPasswordCheck = await fetchPost(`admin/users/${$activeUserId.value}/password`, {
+    await fetchPost(`admin/users/${$activeUserId.value}/verify-password`, {
       email: $user.value.email,
       currentPassword: formData.currentPassword,
     });
+  } catch (error: any) {
+    currentPasswordErrorMessage.value = 'Your current password is incorrect.';
+    return;
+  } finally {
+    isSubmitting.value = false;
+  }
 
-    if (currentPasswordCheck.status !== 200) {
-      currentPasswordErrorMessage.value = 'Your current password is incorrect.';
-      return;
-    }
-
+  try {
     const updatePasswordResponse = await fetchPut(`admin/users/${$activeUserId.value}/password`, {
       newPassword: formData.newPassword,
     });
@@ -44,8 +48,9 @@ async function submit() {
     const data = await updatePasswordResponse.json();
     updateUser(data);
     toast.success('Update successful.');
+    Object.assign(formData, initFormData);
   } catch (error: any) {
-    toast.error(error.message);
+    toast.error(JSON.parse(error).message);
   } finally {
     isSubmitting.value = false;
   }
@@ -55,16 +60,16 @@ async function submit() {
 <template>
   <KwForm @submit="submit">
     <KwTextField
-      class="form-control w-full max-w-xs mb-4"
+      class="form-control w-full md:w-1/2 md:pr-4 mb-4"
       label="Current password"
       name="currentPassword"
       id="currentPassword"
       v-model="formData.currentPassword"
       required
       :type="passwordFieldType"
+      :set-invalid-class="currentPasswordErrorMessage?.length > 0"
       autocomplete="off" />
-    <!-- :invalid="currentPasswordErrorMessage" -->
-    <div v-if="currentPasswordErrorMessage.length" class="mt-2 text-sm font-normal text-red-600">
+    <div v-if="currentPasswordErrorMessage.length" class="-mt-2 mb-2 text-sm font-normal text-red-600">
       {{ currentPasswordErrorMessage }}
     </div>
 

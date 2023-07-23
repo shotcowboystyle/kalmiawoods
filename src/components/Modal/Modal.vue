@@ -34,17 +34,17 @@ const modalRef = ref();
 const emit = defineEmits(['close']);
 
 const modalSizeClasses = {
-  xs: 'max-w-xs',
-  sm: 'max-w-sm',
-  md: 'max-w-md',
-  lg: 'max-w-lg',
-  xl: 'max-w-xl',
-  '2xl': 'max-w-2xl',
-  '3xl': 'max-w-3xl',
-  '4xl': 'max-w-4xl',
-  '5xl': 'max-w-5xl',
-  '6xl': 'max-w-6xl',
-  '7xl': 'max-w-7xl',
+  xs: '!max-w-xs',
+  sm: '!max-w-sm',
+  md: '!max-w-md',
+  lg: '!max-w-lg',
+  xl: '!max-w-xl',
+  '2xl': '!max-w-2xl',
+  '3xl': '!max-w-3xl',
+  '4xl': '!max-w-4xl',
+  '5xl': '!max-w-5xl',
+  '6xl': '!max-w-6xl',
+  '7xl': '!max-w-7xl',
 };
 
 function closeModal() {
@@ -62,7 +62,7 @@ const modalId = generateId(4);
 
 <template>
   <dialog :id="modalId" class="modal modal-bottom sm:modal-middle" open>
-    <form method="dialog" class="modal-box" :class="`${modalSizeClasses[size]}`" ref="modalRef">
+    <form method="dialog" class="modal-box w-full" :class="`${modalSizeClasses[size]}`" ref="modalRef">
       <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="closeModal">✕</button>
       <slot class="font-bold text-lg" name="header" />
       <slot class="pt-8 pb-4" name="body" />

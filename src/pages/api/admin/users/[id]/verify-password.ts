@@ -11,7 +11,7 @@ export const post: APIRoute = async (context) => {
         message: 'Unauthorized',
       }),
       {
-        status: 400,
+        status: 403,
       },
     );
   }
@@ -30,8 +30,7 @@ export const post: APIRoute = async (context) => {
         message: 'Incorrect password.',
       }),
       {
-        status: 500,
-        headers: { 'content-type': 'application/json' },
+        status: 400,
       },
     );
   }

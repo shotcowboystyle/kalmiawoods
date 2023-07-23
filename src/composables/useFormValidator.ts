@@ -21,19 +21,19 @@ export function useFormValidator() {
     value: string[] | string,
     rules: Array<string | { isValid: Function; errorMessage: string }>,
     extraArgs: { match?: string; matchers?: string[]; errorMessagePrefix?: string } = {},
-  ) {
+  ): { isValid: boolean; errorMessage?: string } {
     const errorMessage = ref('');
     if (!Array.isArray(rules) || rules.length <= 0) {
-      return true;
+      return { isValid: true };
     }
     if ((!value || value?.length <= 0) && !rules.includes('required')) {
-      return true;
+      return { isValid: true };
     }
 
     const normalizedValue = rules.includes('phone') ? (value as string).replace(/\D/g, '') : value;
 
     const failedRule = rules.find((rule: string | { isValid: Function; errorMessage: string }) => {
-      if (typeof rule === 'function' || (validators[rule as ValidatorRulesKeys] == null && typeof rule !== 'object')) {
+      if (typeof rule === 'function' || (validators[rule as ValidatorRulesKeys] === null && typeof rule !== 'object')) {
         return false;
       }
 
@@ -47,7 +47,7 @@ export function useFormValidator() {
     if (failedRule) {
       if (typeof failedRule === 'object') {
         errorMessage.value = failedRule.errorMessage;
-        return !failedRule;
+        return { isValid: !failedRule };
       }
 
       const failedValidator = validators[failedRule as ValidatorRules](normalizedValue, extraArgs);
