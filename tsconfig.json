@@ -28,7 +28,7 @@
     "baseUrl": ".",
     // Enable stricter transpilation for better output.
     "isolatedModules": true,
-    "types": ["@types/node", "unplugin-icons/types/astro"],
+    "types": ["@types/node", "unplugin-icons/types/astro", "vite-plugin-pwa/info"],
 
     "plugins": [{ "name": "@astrojs/ts-plugin" }],
 

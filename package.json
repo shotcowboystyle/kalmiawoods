@@ -105,6 +105,7 @@
     "@nanostores/query": "^0.2.2",
     "@nanostores/vue": "^0.10.0",
     "@prisma/client": "^5.0.0",
+    "@vite-pwa/astro": "^0.1.1",
     "@vueuse/core": "^10.2.1",
     "astro": "2.9.0",
     "astro-compress": "^1.1.49",
@@ -122,8 +123,10 @@
     "tailwind-scrollbar": "^3.0.4",
     "tailwindcss": "^3.3.3",
     "v-calendar": "3.0.0-alpha.8",
+    "vite-plugin-pwa": "^0.16.4",
     "vue": "^3.3.4",
     "vue-toastification": "2.0.0-rc.5",
+    "workbox-window": "^7.0.0",
     "zod": "^3.21.4"
   },
   "engines": {
