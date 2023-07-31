@@ -1,13 +1,13 @@
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
-import prefetch from '@astrojs/prefetch';
+// import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 import vue from '@astrojs/vue';
 import AstroPWA from '@vite-pwa/astro';
-import compress from 'astro-compress';
-import critters from 'astro-critters';
-import devOnlyRoutes from 'astro-dev-only-routes';
+// import compress from 'astro-compress';
+// import critters from 'astro-critters';
+// import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig, sharpImageService } from 'astro/config';
 import { dirname, resolve } from 'path';
@@ -49,14 +49,14 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
   },
-  compressHTML: true,
+  // compressHTML: true,
   output: 'server',
   adapter: vercel({
     analytics: true,
   }),
-  server: {
-    host: true,
-  },
+  // server: {
+  //   host: true,
+  // },
   integrations: [
     vue({
       appEntrypoint: '/src/pages/_app',
@@ -135,19 +135,19 @@ export default defineConfig({
       dirs: ['src/composables', 'src/plugins'],
       vueTemplate: true,
     }),
-    prefetch(),
-    critters({ logger: 2 }),
-    compress({
-      css: false,
-      html: {
-        removeAttributeQuotes: false,
-      },
-      img: false,
-      js: true,
-      svg: false,
-      logger: 1,
-    }),
-    devOnlyRoutes(),
+    // prefetch(),
+    // critters({ logger: 2 }),
+    // compress({
+    //   css: false,
+    //   html: {
+    //     removeAttributeQuotes: false,
+    //   },
+    //   img: false,
+    //   js: true,
+    //   svg: false,
+    //   logger: 1,
+    // }),
+    // devOnlyRoutes(),
   ],
   markdown: {},
   vite: {
@@ -159,12 +159,12 @@ export default defineConfig({
       sourcemap: true,
       copyPublicDir: false,
     },
-    css: {
-      devSourcemap: true,
-    },
-    ssr: {
-      external: ['svgo'],
-    },
+    // css: {
+    //   devSourcemap: true,
+    // },
+    // ssr: {
+    //   external: ['svgo'],
+    // },
     // server: {
     //   https: true,
     // },

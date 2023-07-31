@@ -30,8 +30,8 @@ const { class: clazz } = Astro.props;
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
     <title>{SITE_TITLE} — v{pkg.version}</title>
 
-    <script src="/src/pwa.ts"></script>
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <script src="/src/pwa.ts"></script>
 
     <script is:inline>
       if (
