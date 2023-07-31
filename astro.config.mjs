@@ -76,48 +76,49 @@ export default defineConfig({
       },
     }),
 
-    AstroPWA({
-      // mode: 'development',
-      base: basePath,
-      // base: '/',
-      // scope: '/',
-      includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
-      registerType: 'autoUpdate',
-      manifest: {
-        name: 'Kalmia Woods',
-        short_name: 'Kalmia Woods',
-        background_color: '#bbea69',
-        theme_color: '#bbea69',
-        description: 'Kalmia Woods Guest Guidebook and Reservation Manager',
-        icons: [
-          {
-            src: 'android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
-      },
-      // workbox: {
-      //   navigateFallback: '/404',
-      //   globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
-      // },
-      // devOptions: {
-      //   enabled: true,
-      //   navigateFallbackAllowlist: [/^\/404$/],
-      //   suppressWarnings: true,
-      // },
-    }),
+    AstroPWA(),
+    // AstroPWA({
+    //   // mode: 'development',
+    //   base: basePath,
+    //   // base: '/',
+    //   // scope: '/',
+    //   includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+    //   registerType: 'autoUpdate',
+    //   manifest: {
+    //     name: 'Kalmia Woods',
+    //     short_name: 'Kalmia Woods',
+    //     background_color: '#bbea69',
+    //     theme_color: '#bbea69',
+    //     description: 'Kalmia Woods Guest Guidebook and Reservation Manager',
+    //     icons: [
+    //       {
+    //         src: 'android-chrome-192x192.png',
+    //         sizes: '192x192',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: 'android-chrome-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: 'android-chrome-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //         purpose: 'any maskable',
+    //       },
+    //     ],
+    //   },
+    //   // workbox: {
+    //   //   navigateFallback: '/404',
+    //   //   globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
+    //   // },
+    //   // devOptions: {
+    //   //   enabled: true,
+    //   //   navigateFallbackAllowlist: [/^\/404$/],
+    //   //   suppressWarnings: true,
+    //   // },
+    // }),
     mdx(),
     partytown({
       config: {
@@ -162,9 +163,9 @@ export default defineConfig({
     // css: {
     //   devSourcemap: true,
     // },
-    // ssr: {
-    //   external: ['svgo'],
-    // },
+    ssr: {
+      external: ['svgo'],
+    },
     // server: {
     //   https: true,
     // },
