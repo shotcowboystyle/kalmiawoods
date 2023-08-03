@@ -1,20 +1,5 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "github": { "autoJobCancelation": true, "silent": true },
-  "headers": [
-    {
-      "source": "/_astro/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        },
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        }
-      ]
-    }
-  ]
+  "github": { "autoJobCancelation": true, "silent": true }
 }

@@ -1,20 +1,20 @@
 ---
 import '@/assets/styles/base.css';
-import { url } from '@/utils/site';
 import { pwaInfo } from 'virtual:pwa-info';
 import 'vue-toastification/dist/index.css';
-import pkg from '../../package.json' assert { type: 'json' };
+// import pkg from '../../package.json' assert { type: 'json' };
 
 import { SITE_TITLE } from './constants.js';
 
 export interface Props {
-  class: string;
+  class?: string;
+  title: string;
 }
 
 // replaced dynamically
 // const buildDate = __DATE__;
 
-const { class: clazz } = Astro.props;
+const { class: clazz, title } = Astro.props as Props;
 ---
 
 <!DOCTYPE html>
@@ -22,16 +22,16 @@ const { class: clazz } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/pwa-192x192.png" />
     <link rel="mask-icon" href="/favicon.svg" color="#bbea69" />
     <meta name="msapplication-TileColor" content="#bbea69" />
     <meta name="theme-color" content="#bbea69" />
-    <meta name="description" content={pkg.description} />
-    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
-    <title>{SITE_TITLE} — v{pkg.version}</title>
-
-    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
-    <script src="/src/pwa.ts"></script>
+    <!-- <meta name="description" content={pkg.description} /> -->
+    <!-- <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} /> -->
+    <!-- <title>{SITE_TITLE} — v{pkg.version}</title> -->
+    <title>{SITE_TITLE}</title>
+    <meta name="description" content={title} />
 
     <script is:inline>
       if (
@@ -49,6 +49,12 @@ const { class: clazz } = Astro.props;
     <!-- <script>
 			import '@/lib/sentry';
 		</script> -->
+
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <script src="/src/pwa.ts"></script>
+
+    <!-- { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
+    { import.meta.env.PROD && pwaInfo && <Fragment set:html={pwaInfo.registerSW?.scriptTag} /> } -->
   </head>
   <body
     class:list={[

@@ -5,52 +5,60 @@
 
     "allowJs": true,
     // "allowJs": false,
-    "checkJs": false,
+    // "checkJs": false,
+
+    "composite": false,
+
+    "jsx": "preserve",
+    // "jsxImportSource": "vue",
 
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    // "noEmit": true,
+    // "esModuleInterop": true,
     // "esModuleInterop": false,
     "resolveJsonModule": true,
-    "jsx": "preserve",
-    "incremental": true,
+    // "jsx": "preserve",
+    // "incremental": true,
     "allowSyntheticDefaultImports": true,
 
     // Enable top-level await, and other modern ESM features.
     // "target": "es5",
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     // Enable node-style module resolution, for things like npm package imports.
-    "moduleResolution": "node",
+    // "moduleResolution": "node",
+    // "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "baseUrl": ".",
     // Enable stricter transpilation for better output.
-    "isolatedModules": true,
-    "types": ["@types/node", "unplugin-icons/types/astro", "vite-plugin-pwa/info"],
+    // "isolatedModules": true,
+    "types": ["unplugin-icons/types/astro", "@vite-pwa/astro"],
 
     "plugins": [{ "name": "@astrojs/ts-plugin" }],
 
-    "moduleDetection": "force",
+    // "moduleDetection": "force",
 
     "rootDir": "./",
-    "allowImportingTsExtensions": true,
-    "allowArbitraryExtensions": true,
+    // "allowImportingTsExtensions": true,
+    // "allowArbitraryExtensions": true,
 
-    "disableSizeLimit": false,
+    // "disableSizeLimit": false,
 
     "verbatimModuleSyntax": true,
-    "preserveSymlinks": true,
+    // "preserveSymlinks": true,
 
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
+    // "noImplicitAny": true,
+    // "noImplicitOverride": true,
+    // "allowUnusedLabels": false,
+    // "allowUnreachableCode": false,
 
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["."],
+  "exclude": ["node_modules"]
 }
