@@ -1,18 +1,20 @@
-import prisma from '@lucia-auth/adapter-prisma';
-import lucia from 'lucia-auth';
-import { astro } from 'lucia-auth/middleware';
+import { prisma as prismaAdapter } from '@lucia-auth/adapter-prisma';
+import { lucia } from 'lucia';
+import { astro } from 'lucia/middleware';
 
-import { prisma as dbPrisma } from '@/lib/db.js';
+import { prisma } from '@/lib/db.js';
 
 export const auth = lucia({
   env: import.meta.env.DEV ? 'DEV' : 'PROD',
-  adapter: prisma(dbPrisma),
+  adapter: prismaAdapter(prisma),
   middleware: astro(),
   experimental: {
     debugMode: false,
   },
-  transformDatabaseUser: (userData) => ({
-    userId: userData.id,
+  getUserAttributes: (userData) => ({
+    // IMPORTANT!!!!
+    // `userId` included by default!!
+    // userId: userData.id,
     email: userData.email,
     emailVerified: Boolean(userData.email_verified),
     role: userData.role,

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { LuciaError } from 'lucia-auth';
+import { LuciaError } from 'lucia';
 
 import { auth } from '@/lib/lucia';
 import { getUser } from '@/services/user';
@@ -7,7 +7,8 @@ import { emailRegex } from '@/utils/email';
 
 export const get: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
-  const { user } = await authRequest.validateUser();
+  const session = await authRequest.validate();
+  const user = session?.user;
 
   if (!user || !Object.keys(user).length) {
     return new Response(JSON.stringify(null), {
@@ -61,7 +62,7 @@ export const post: APIRoute = async (context) => {
 
   try {
     const key = await auth.useKey('email', email, password);
-    const session = await auth.createSession(key.userId);
+    const session = await auth.createSession({ userId: key.userId, attributes: {} });
     const authRequest = auth.handleRequest(context);
     authRequest.setSession(session);
     return new Response(JSON.stringify({ userId: key.userId }), {

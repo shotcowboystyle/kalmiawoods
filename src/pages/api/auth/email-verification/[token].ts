@@ -1,12 +1,21 @@
 import type { APIRoute } from 'astro';
 
 import { auth } from '@/lib/lucia';
-import { emailVerificationToken } from '@/services/verification-token';
+import { validateEmailVerificationToken } from '@/services/verification-token';
+
+export const prerender = false;
 
 export const post: APIRoute = async (context) => {
-  const data = await context.request.json();
-  const { password } = data;
+  const { token } = context.params;
+  if (!token) {
+    return new Response(null, {
+      status: 404,
+    });
+  }
 
+  const data = await context.request.json();
+
+  const { password } = data;
   if (password === null || password.length < 8) {
     return new Response(JSON.stringify({ message: 'Invalid password' }), {
       status: 500,
@@ -15,16 +24,18 @@ export const post: APIRoute = async (context) => {
   }
 
   try {
-    const token = await emailVerificationToken.validate(context.params.token ?? '');
-    let user = await auth.getUser(token.userId);
-    if (!user.emailVerified) {
-      user = await auth.updateUserAttributes(user.userId, {
-        email_verified: true,
-      });
-    }
+    const userId = await validateEmailVerificationToken(token);
+    const user = await auth.getUser(userId);
     await auth.invalidateAllUserSessions(user.userId);
+    await auth.updateUserAttributes(user.userId, {
+      email_verified: true,
+    });
     await auth.updateKeyPassword('email', user.email, password);
-    const session = await auth.createSession(user.userId);
+    const session = await auth.createSession({
+      userId: user.userId,
+      attributes: {},
+    });
+
     const authRequest = auth.handleRequest(context);
     authRequest.setSession(session);
     return new Response(JSON.stringify({ message: 'Success' }), {
@@ -34,7 +45,7 @@ export const post: APIRoute = async (context) => {
   } catch (error) {
     return new Response(
       JSON.stringify({
-        message: 'There was an error completing registration for this user. Please try again later.',
+        message: 'Invalid email verification link',
       }),
       {
         status: 500,

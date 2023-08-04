@@ -3,6 +3,8 @@ import type { APIRoute } from 'astro';
 import { auth } from '@/lib/lucia';
 import { deleteUser, getUser } from '@/services/user';
 
+export const prerender = false;
+
 export const get: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
   const session = await authRequest.validate();
@@ -34,7 +36,7 @@ export const get: APIRoute = async (context) => {
 
 export const del: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
-  const { user, session } = await authRequest.validateUser();
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -46,6 +48,7 @@ export const del: APIRoute = async (context) => {
     );
   }
 
+  const user = session.user;
   if (user?.role !== 'ADMIN') {
     return new Response(
       JSON.stringify({

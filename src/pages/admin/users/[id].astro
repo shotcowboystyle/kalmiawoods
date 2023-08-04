@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import type { InferGetStaticParamsType } from 'astro';
 
 import LayoutSidebar from '@/app/LayoutSidebar.astro';
@@ -10,7 +12,7 @@ if (redirect) {
   return Astro.redirect(redirect);
 }
 
-type Params = InferGetStaticParamsType<{ id: string; }>;
+type Params = InferGetStaticParamsType<{ id: string }>;
 
 const { id } = Astro.params as Params;
 ---

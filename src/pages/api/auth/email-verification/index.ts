@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
-import { emailVerificationToken } from '@/services/verification-token';
+import { generateEmailVerificationToken } from '@/services/verification-token';
 import { isValidEmail } from '@/utils/email';
 
 export const post: APIRoute = async (context) => {
@@ -23,7 +23,7 @@ export const post: APIRoute = async (context) => {
   }
 
   try {
-    const databaseUser = await prisma.authUser.findFirst({
+    const databaseUser = await prisma.user.findFirst({
       where: {
         email,
       },
@@ -42,7 +42,7 @@ export const post: APIRoute = async (context) => {
     }
 
     const user = auth.transformDatabaseUser(databaseUser);
-    const token = await emailVerificationToken.issue(user.userId);
+    const token = await generateEmailVerificationToken(user.userId);
     await sendEmailVerificationEmail(user.email, token.toString());
     return new Response(
       JSON.stringify({ message: "An email was sent to your inbox with a link to complete you're registration." }),

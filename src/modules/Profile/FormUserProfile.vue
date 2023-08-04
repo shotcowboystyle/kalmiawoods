@@ -2,8 +2,7 @@
 import { useStore, useVModel } from '@nanostores/vue';
 import { useToast } from 'vue-toastification';
 
-import { activeUser, activeUserId, profileData, updateUser, usersMobilePhones } from '@/stores/user';
-import { diff } from '@/utils/diff';
+import { activeUserId, profileData, updateUser, user, usersMobilePhones } from '@/stores/user';
 import { fetchPut } from '@/utils/fetchClient';
 import { formatPhoneInputUSA } from '@/utils/phone';
 
@@ -12,6 +11,7 @@ const emit = defineEmits(['input-mobile-phone']);
 const toast = useToast();
 
 const $activeUserId = useStore(activeUserId);
+const $user = useStore(user);
 const $usersMobilePhones = useStore(usersMobilePhones);
 
 const isSubmitting = ref(false);
@@ -21,7 +21,6 @@ const { firstNameModel, lastNameModel, mobilePhoneModel, addressModel } = useVMo
   'mobilePhone',
   'address',
 ]);
-const $user = useStore(activeUser);
 
 const maskPhone = (event: Event) => {
   const { value } = event.target as HTMLInputElement;
@@ -33,12 +32,12 @@ async function submit() {
   isSubmitting.value = true;
 
   const formData = profileData.get();
-  const changedData = diff($user.value, formData);
+  // const changedData = diff($user.value, formData);
 
   try {
     const response = await fetchPut(`admin/users/${$activeUserId.value}/profile`, {
-      profileId: $user.value.profileId,
-      profileData: changedData,
+      userId: $activeUserId.value,
+      profileData: formData,
     });
     const data = await response.json();
     updateUser(data);

@@ -37,24 +37,6 @@ export const fetchNewUsers = () => {
   }
 };
 
-export const usersMobilePhones = computed([users], (_users) =>
-  Object.values(_users).reduce((acc, cur) => {
-    if (cur?.mobilePhone?.length) {
-      acc.push(cur.mobilePhone);
-    }
-    return acc;
-  }, [] as string[]),
-);
-
-export const usersEmails = computed([users], (_users) =>
-  Object.values(_users).reduce((acc, cur) => {
-    if (cur?.email?.length) {
-      acc.push(cur.email);
-    }
-    return acc;
-  }, [] as string[]),
-);
-
 export const addUser = action(users, 'addUser', async (store, newUser) => {
   const { id } = newUser;
   const existingEntry = store.get()[id];
@@ -125,4 +107,22 @@ export const activeUser = computed([_activeUser], (res) => {
 export const user = computed(
   [users, activeUserId],
   (_users, _userId) => Object.values(_users).find((u) => u?.userId === _userId) ?? initUserData,
+);
+
+export const usersMobilePhones = computed([users, activeUser], (_users, _user) =>
+  Object.values(_users).reduce((acc, cur) => {
+    if (cur?.mobilePhone?.length && cur.mobilePhone !== _user.mobilePhone) {
+      acc.push(cur.mobilePhone);
+    }
+    return acc;
+  }, [] as string[]),
+);
+
+export const usersEmails = computed([users], (_users) =>
+  Object.values(_users).reduce((acc, cur) => {
+    if (cur?.email?.length) {
+      acc.push(cur.email);
+    }
+    return acc;
+  }, [] as string[]),
 );

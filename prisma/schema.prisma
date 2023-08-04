@@ -1,7 +1,5 @@
 generator client {
   provider      = "prisma-client-js"
-  // previewFeatures = ["postgresqlExtensions"]
-  // output        = "client"
   binaryTargets = ["native", "linux-musl", "linux-arm64-openssl-1.1.x", "debian-openssl-1.1.x", "rhel-openssl-1.0.x"]
 }
 
@@ -14,7 +12,7 @@ datasource db {
 
 /// Complete data structure of the User entity for the database and GraphQL.
 /// A User represents an account holder.
-model AuthUser {
+model User {
   /// User's unique identifier
   id String @id @unique
 
@@ -23,14 +21,14 @@ model AuthUser {
   /// User's email address
   email          String  @unique
   /// User's email address
-  email_verified Boolean
-  // /// User's password
-  // password              String?
+  email_verified Boolean @default(false)
+  // User's password
+  // password_updated Boolean @default(false)
   /// User's access role
   role           Role    @default(USER)
 
-  auth_session AuthSession[]
-  auth_key     AuthKey[]
+  auth_session Session[]
+  auth_key     Key[]
   profile      UserProfile?
   reservation  Reservation[]
 
@@ -39,7 +37,8 @@ model AuthUser {
   // /// Date of last update to User's record
   // updatedAt             DateTime      @updatedAt @map("updated_at")
 
-  @@map("auth_users")
+  // @@map("users")
+  @@map("users")
 }
 
 /// Complete data structure of the Profile entity for the database and GraphQL.
@@ -63,33 +62,49 @@ model UserProfile {
   // updatedAt   DateTime @updatedAt @default(now()) @map("updated_at")
 
   /// The database identifier of the User associated with this Profile
-  user_id   String   @unique
-  auth_user AuthUser @relation(fields: [user_id], references: [id])
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
 
   @@map("user_profile")
 }
 
-model AuthSession {
-  id             String   @id @unique
+model Session {
+  id             String @id @unique
   active_expires BigInt
   idle_expires   BigInt
   user_id        String
-  auth_user      AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
-  @@map("auth_sessions")
+  @@map("user_sessions")
 }
 
-model AuthKey {
-  id              String   @id @unique
+model Key {
+  id              String  @id @unique
   hashed_password String?
-  primary_key     Boolean
-  expires         BigInt?
   user_id         String
-  auth_user       AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
-  @@map("auth_keys")
+  @@map("user_keys")
+}
+
+model EmailVerificationToken {
+  id      String @id @unique
+  user_id String
+  expires BigInt
+
+  @@index([user_id])
+  @@map("email_verification_tokens")
+}
+
+model PasswordResetToken {
+  id      String @id @unique
+  user_id String
+  expires BigInt
+
+  @@index([user_id])
+  @@map("password_reset_tokens")
 }
 
 model Email {
@@ -115,8 +130,8 @@ model Reservation {
 
   title String?
 
-  user_id   String
-  auth_user AuthUser @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
   @@map("reservations")

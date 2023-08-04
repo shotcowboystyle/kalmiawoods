@@ -33,7 +33,7 @@ export const get: APIRoute = async (context) => {
 
 export const post: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
-  const { user, session } = await authRequest.validateUser();
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -45,6 +45,7 @@ export const post: APIRoute = async (context) => {
     );
   }
 
+  const { user } = session;
   if (!user || user.role !== 'ADMIN') {
     return new Response(
       JSON.stringify({

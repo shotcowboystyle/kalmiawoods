@@ -1,9 +1,9 @@
 import { prisma } from '@/lib/db.js';
 import type { User, UserProfile, UserProfileWithoutId } from '@/types/User';
-import type { AuthUser, UserProfile as PrismaUserProfile } from '@prisma/client';
+import type { User as PrismaUser, UserProfile as PrismaUserProfile } from '@prisma/client';
 
 interface DatabaseUserProfileWithAuthUser extends PrismaUserProfile {
-  auth_user: AuthUser;
+  user: PrismaUser;
 }
 
 const transformDatabaseUserProfile = (databaseUserProfile: PrismaUserProfile): UserProfile => ({
@@ -15,11 +15,13 @@ const transformDatabaseUserProfile = (databaseUserProfile: PrismaUserProfile): U
   avatar: databaseUserProfile.avatar ?? undefined,
 });
 
-const transformDatabaseUserProfileWithAuthUser = (databaseUserProfileWithAuthUser: DatabaseUserProfileWithAuthUser): User => ({
-  userId: databaseUserProfileWithAuthUser.auth_user.id,
-  email: databaseUserProfileWithAuthUser.auth_user.email,
-  emailVerified: databaseUserProfileWithAuthUser.auth_user.email_verified,
-  role: databaseUserProfileWithAuthUser.auth_user.role,
+const transformDatabaseUserProfileWithAuthUser = (
+  databaseUserProfileWithAuthUser: DatabaseUserProfileWithAuthUser,
+): User => ({
+  userId: databaseUserProfileWithAuthUser.user.id,
+  email: databaseUserProfileWithAuthUser.user.email,
+  emailVerified: databaseUserProfileWithAuthUser.user.email_verified,
+  role: databaseUserProfileWithAuthUser.user.role,
   profileId: databaseUserProfileWithAuthUser?.id,
   address: databaseUserProfileWithAuthUser?.address ?? undefined,
   firstName: databaseUserProfileWithAuthUser?.first_name,
@@ -28,19 +30,27 @@ const transformDatabaseUserProfileWithAuthUser = (databaseUserProfileWithAuthUse
   avatar: databaseUserProfileWithAuthUser?.avatar ?? undefined,
 });
 
-export const updateUserProfile = async (profileId: string, data: UserProfileWithoutId) => {
+export const updateUserProfile = async (userId: string, data: UserProfileWithoutId) => {
   try {
-    const updatedUserProfile = await prisma.userProfile.update({
-      where: { id: profileId },
+    const updatedUserProfile = await prisma.userProfile.upsert({
+      where: { user_id: userId },
       include: {
-        auth_user: true,
+        user: true,
       },
-      data: {
+      update: {
         ...(data.firstName && { first_name: data.firstName }),
         ...(data.lastName && { last_name: data.lastName }),
         ...(data.address && { address: data.address }),
         ...(data.mobilePhone && { mobile_phone: data.mobilePhone?.replace(/\D/g, '') }),
         // ...(data.avatar && { avatar: data.avatar }),
+      },
+      create: {
+        user_id: userId,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        address: data.address ?? undefined,
+        mobile_phone: data.mobilePhone?.replace(/\D/g, ''),
+        avatar: data.avatar ?? undefined,
       },
     });
 

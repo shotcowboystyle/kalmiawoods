@@ -1,12 +1,12 @@
 ---
 // import { Prisma } from '@prisma/client';
-import { LuciaError } from 'lucia-auth';
+import { LuciaError } from 'lucia';
 
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { auth } from '@/lib/lucia';
 import FormSignUp from '@/modules/Auth/FormSignUp.astro';
 import { sendEmailVerificationEmail } from '@/services/email';
-import { emailVerificationToken } from '@/services/verification-token';
+import { generateEmailVerificationToken } from '@/services/verification-token';
 import { emailRegex } from '@/utils/email';
 
 let errorMessage: string | null = null;
@@ -28,7 +28,7 @@ if (Astro.request.method === "POST") {
   }
   try {
     const user = await auth.createUser({
-      primaryKey: {
+      key: {
         providerId: 'email',
         providerUserId: email,
         password,
@@ -40,10 +40,10 @@ if (Astro.request.method === "POST") {
       },
     });
 
-    const session = await auth.createSession(user.userId);
+    const session = await auth.createSession({ userId: user.userId, attributes: {} });
     const authRequest = auth.handleRequest(Astro);
     authRequest.setSession(session);
-    const token = await emailVerificationToken.issue(user.userId);
+    const token = await generateEmailVerificationToken(user.userId);
     await sendEmailVerificationEmail(email, token.toString());
     return Astro.redirect('/auth/email-verification', 302);
   } catch (e: any) {

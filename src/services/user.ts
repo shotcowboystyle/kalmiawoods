@@ -1,16 +1,16 @@
-import { LuciaError } from 'lucia-auth';
+import { LuciaError } from 'lucia';
 
 import { prisma } from '@/lib/db.js';
 import { auth } from '@/lib/lucia';
 import { sendEmailVerificationEmail } from '@/services/email';
-import { emailVerificationToken } from '@/services/verification-token';
+import { generateEmailVerificationToken } from '@/services/verification-token';
 import { isValidEmail } from '@/utils/email';
 import { generatePassword } from '@/utils/generate-password';
 
 import type { User } from '@/types/User';
-import type { AuthUser, UserProfile } from '@prisma/client';
+import type { User as PrismaUser, UserProfile } from '@prisma/client';
 
-interface DatabaseUserWithProfile extends AuthUser {
+interface DatabaseUserWithProfile extends PrismaUser {
   profile: UserProfile;
 }
 
@@ -33,7 +33,7 @@ export const createUser = async (data: User) => {
   let createdUser;
   try {
     createdUser = await auth.createUser({
-      primaryKey: {
+      key: {
         providerId: 'email',
         providerUserId: data.email,
         password,
@@ -59,11 +59,11 @@ export const createUser = async (data: User) => {
   }
 
   const { userId } = createdUser;
-  const token = await emailVerificationToken.issue(userId);
+  const token = await generateEmailVerificationToken(userId);
   await sendEmailVerificationEmail(data.email, token.toString());
 
   try {
-    createdUser = await prisma.authUser.update({
+    createdUser = await prisma.user.update({
       where: {
         id: userId,
       },
@@ -99,7 +99,7 @@ export const updateUserEmail = async (userId: string, currentEmail: string, newE
   }
 
   try {
-    await prisma.authKey.update({
+    await prisma.key.update({
       where: {
         id: 'email:' + currentEmail,
       },
@@ -138,7 +138,7 @@ export const updateUserPassword = async (email: string, password: string) => {
 };
 
 export const getUsers = async () => {
-  const databaseUsers = await prisma.authUser.findMany({
+  const databaseUsers = await prisma.user.findMany({
     include: {
       profile: true,
     },
@@ -148,7 +148,7 @@ export const getUsers = async () => {
 };
 
 export const getUser = async (userId: string) => {
-  const databaseUser = await prisma.authUser.findFirst({
+  const databaseUser = await prisma.user.findFirst({
     where: {
       id: userId,
     },

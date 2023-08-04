@@ -1,16 +1,18 @@
 ---
+export const prerender = false;
+
 import type { InferGetStaticParamsType } from 'astro';
 
-import LayoutEmail from "@/app/LayoutEmail.astro";
+import LayoutEmail from '@/app/LayoutEmail.astro';
 import { prisma } from '@/lib/db.js';
-import { getEmail } from "@/services/email";
-import { isValidFormSubmission } from "@/utils/forms/submission";
+import { getEmail } from '@/services/email';
+import { isValidFormSubmission } from '@/utils/forms/submission';
 
-type Params = InferGetStaticParamsType<{ email_id: string; }>;
+type Params = InferGetStaticParamsType<{ email_id: string }>;
 
 const { email_id } = Astro.params as Params;
 
-if (Astro.request.method === "POST") {
+if (Astro.request.method === 'POST') {
   const validSubmission = isValidFormSubmission(Astro.request);
   if (!validSubmission) {
     return null;
@@ -20,12 +22,12 @@ if (Astro.request.method === "POST") {
       id: email_id,
     },
   });
-  return Astro.redirect("/email", 302);
+  return Astro.redirect('/email', 302);
 }
 
 const email = await getEmail(email_id);
 if (!email) {
-  return Astro.redirect("/404", 302);
+  return Astro.redirect('/404', 302);
 }
 ---
 
@@ -39,11 +41,7 @@ if (!email) {
   </h1>
   <p set:html={email.content} class="mt-4 break-words" id="email-content" />
   <form method="post" class="mt-6">
-    <input
-      type="submit"
-      value="Delete email"
-      class="text-sm text-red-400 cursor-pointer hover:underline"
-    />
+    <input type="submit" value="Delete email" class="text-sm text-red-400 cursor-pointer hover:underline" />
   </form>
 </LayoutEmail>
 

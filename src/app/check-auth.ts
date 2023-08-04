@@ -12,33 +12,36 @@ export const checkAuth = async (context: any) => {
   if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
     return null;
   } else {
-    const { session, user } = await authRequest.validateUser();
-
+    const session = await authRequest.validate();
+    const user = session?.user;
     if (AUTH_ROUTES.some((route) => pathname.startsWith(route))) {
       if (session) {
-        if (!user.emailVerified) {
+        if (user && !user.emailVerified) {
           return '/auth/email-verification';
         }
 
         return '/';
       }
-    } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route)) && session && user.emailVerified) {
-      return '/';
+    } else if (ACCOUNT_ROUTES.some((route) => pathname.startsWith(route))) {
+      if (session && user?.emailVerified) {
+        return '/';
+      }
     } else {
       if (!session) {
         return '/auth/login';
       }
 
-      if (!user?.emailVerified) {
+      if (user && !user?.emailVerified) {
         return '/auth/email-verification';
       }
 
-      const isAdmin = user.role === 'ADMIN';
-      context.locals.user = {
-        userId: user.userId,
-        email: user.email,
-        isAdmin,
-      };
+      const isAdmin = user?.role === 'ADMIN';
+      if (user && Object.keys(user).length)
+        context.locals.user = {
+          userId: user.userId,
+          email: user.email,
+          isAdmin,
+        };
 
       if (pathname.startsWith('/admin') && !isAdmin) {
         return '/403';

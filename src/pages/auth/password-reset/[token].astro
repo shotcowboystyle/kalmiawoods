@@ -1,17 +1,17 @@
 ---
+export const prerender = false;
+
 import type { InferGetStaticParamsType } from 'astro';
 
 import LayoutFrameless from '@/app/LayoutFrameless.astro';
 import FormResetPassword from '@/modules/Auth/FormResetPassword.vue';
 
-type Params = InferGetStaticParamsType<{ token: string; }>;
+type Params = InferGetStaticParamsType<{ token: string }>;
 
 const { token } = Astro.params as Params;
 ---
 
 <LayoutFrameless>
-  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-    Reset password
-  </h2>
+  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Reset password</h2>
   <FormResetPassword client:only="vue" token={token} />
 </LayoutFrameless>

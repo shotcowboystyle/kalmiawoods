@@ -1,13 +1,13 @@
 import { prisma } from '@/lib/db.js';
 import type { BuildingEnum, Reservation } from '@/types/Reservation';
-import type { AuthUser, Reservation as PrismaReservation, UserProfile } from '@prisma/client';
+import type { Reservation as PrismaReservation, User, UserProfile } from '@prisma/client';
 
-interface AuthUserWithProfile extends AuthUser {
+interface AuthUserWithProfile extends User {
   profile: UserProfile;
 }
 
 interface DatabaseReservation extends PrismaReservation {
-  auth_user: AuthUserWithProfile;
+  user: AuthUserWithProfile;
 }
 
 const transformDatabaseReservation = (databaseReservation: DatabaseReservation): Reservation => ({
@@ -18,12 +18,12 @@ const transformDatabaseReservation = (databaseReservation: DatabaseReservation):
   buildings: databaseReservation.buildings,
   userId: databaseReservation.user_id,
   user: {
-    email: databaseReservation.auth_user.email,
-    address: databaseReservation.auth_user.profile.address ?? undefined,
-    firstName: databaseReservation.auth_user.profile.first_name,
-    lastName: databaseReservation.auth_user.profile.last_name,
-    mobilePhone: databaseReservation.auth_user.profile.mobile_phone,
-    avatar: databaseReservation.auth_user.profile.avatar ?? undefined,
+    email: databaseReservation.user.email,
+    address: databaseReservation.user.profile.address ?? undefined,
+    firstName: databaseReservation.user.profile.first_name,
+    lastName: databaseReservation.user.profile.last_name,
+    mobilePhone: databaseReservation.user.profile.mobile_phone,
+    avatar: databaseReservation.user.profile.avatar ?? undefined,
   },
 });
 
@@ -42,7 +42,7 @@ export const createReservation = async ({
 }) => {
   const createdReservation = await prisma.reservation.create({
     include: {
-      auth_user: {
+      user: {
         include: {
           profile: true,
         },
@@ -83,7 +83,7 @@ export const updateReservation = async ({
         buildings,
       },
       include: {
-        auth_user: {
+        user: {
           include: {
             profile: true,
           },
@@ -123,7 +123,7 @@ export const getReservations = async (reservationQuery: ReservationQuery) => {
         // },
       },
       include: {
-        auth_user: {
+        user: {
           include: {
             profile: true,
           },
@@ -149,7 +149,7 @@ export const getReservation = async (reservationId: string) => {
         id: reservationId,
       },
       include: {
-        auth_user: {
+        user: {
           include: {
             profile: true,
           },

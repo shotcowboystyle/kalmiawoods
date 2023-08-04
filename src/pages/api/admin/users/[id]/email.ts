@@ -3,9 +3,11 @@ import type { APIRoute } from 'astro';
 import { auth } from '@/lib/lucia';
 import { getUser, updateUserEmail } from '@/services/user';
 
+export const prerender = false;
+
 export const put: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
-  const { session, user: sessionUser } = await authRequest.validateUser();
+  const session = await authRequest.validate();
   if (!session) {
     return new Response(
       JSON.stringify({
@@ -27,8 +29,9 @@ export const put: APIRoute = async (context) => {
 
     await auth.invalidateAllUserSessions(user.userId);
 
+    const sessionUser = session.user;
     if (sessionUser.userId === user.userId) {
-      const session = await auth.createSession(user.userId);
+      const session = await auth.createSession({ userId: user.userId, attributes: {} });
       authRequest.setSession(session);
     }
 

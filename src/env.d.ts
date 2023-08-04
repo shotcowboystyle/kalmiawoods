@@ -64,7 +64,6 @@ declare module 'virtual:pwa-info' {
 
 declare namespace App {
   interface Locals {
-    // auth: import('lucia-auth').AuthRequest;
     user: {
       userId: string;
       email: string;
@@ -73,10 +72,10 @@ declare namespace App {
   }
 }
 
-/// <reference types="lucia-auth" />
+/// <reference types="lucia" />
 declare namespace Lucia {
   type Auth = import('@/lib/lucia').Auth;
-  type DatabaseUserAttributes = Omit<import('@prisma/client').AuthUser, 'id'> & {
+  type DatabaseUserAttributes = Omit<import('@prisma/client').User, 'id'> & {
     email: string;
     email_verified: boolean;
     role: 'USER' | 'ADMIN';

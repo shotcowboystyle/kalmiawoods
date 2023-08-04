@@ -6,6 +6,7 @@
 .husky
 .vercel
 dist/
+dev-dist/
 .output/
 node_modules
 generated

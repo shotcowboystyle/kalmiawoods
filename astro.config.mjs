@@ -5,9 +5,9 @@ import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 import vue from '@astrojs/vue';
 import AstroPWA from '@vite-pwa/astro';
-// import compress from 'astro-compress';
+import compress from 'astro-compress';
 // import critters from 'astro-critters';
-// import devOnlyRoutes from 'astro-dev-only-routes';
+import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
 import { defineConfig, sharpImageService } from 'astro/config';
 import { dirname, resolve } from 'path';
@@ -50,8 +50,9 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
   },
-  // compressHTML: true,
-  output: 'server',
+  compressHTML: true,
+  // output: 'server',
+  output: 'hybrid',
   adapter: vercel({
     analytics: true,
   }),
@@ -106,40 +107,149 @@ export default defineConfig({
     //   svg: false,
     //   logger: 1,
     // }),
-    // devOnlyRoutes(),
+    devOnlyRoutes(),
 
-    // AstroPWA(),
     AstroPWA({
-      mode: 'development',
-      // mode: 'production',
-      // base: basePath,
+      mode: 'production',
       base: '/',
       scope: '/',
-      // includeAssets: ['favicon.svg'],
-      // includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.svg'],
       registerType: 'autoUpdate',
-      // injectRegister: 'inline',
-      // strategies: "generateSW",
       manifest: {
         name: 'Kalmia Woods',
         short_name: 'Kalmia Woods',
+        orientation: 'portrait-primary',
         background_color: '#bbea69',
         theme_color: '#bbea69',
         description: 'Kalmia Woods Guest Guidebook and Reservation Manager',
         display: 'standalone',
+        start_url: APP_SITE,
+        // start_url: '/',
+        //   icons: [
+        //     {
+        //       src: 'apple-touch-icon.png',
+        //       sizes: '180x180',
+        //       type: 'image/png',
+        //     },
+        //     {
+        //       src: 'apple-touch-icon-152x152-precomposed.png',
+        //       sizes: '152x152',
+        //       type: 'image/png',
+        //     },
+        //     {
+        //       src: 'android-chrome-512x512.png',
+        //       sizes: '512x512',
+        //       type: 'image/png',
+        //     },
+        //     {
+        //       src: 'safari-pinned-tab.svg',
+        //       sizes: '512x512',
+        //       type: 'image/svg+xml',
+        //     },
+        //     {
+        //       src: 'mstile-150x150.png',
+        //       sizes: '150x150',
+        //       type: 'image/png',
+        //     },
+        //   ],
+        // },
+        // workbox: {
+        //   navigateFallback: '/404',
+        //   // globPatterns: ['**/*.{css,js,html,svg,png,ico,jpg,jpeg,webp,txt,woff,woff2}'],
+        //   globPatterns: ['**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,webmanifest,pdf,xml,json,txt,csv}'],
+        //   globIgnores: ['**/node_modules/**', '**/dist/**'],
+        //   runtimeCaching: [
+        //     // {
+        //     //   // blog posts Network First (Network Falling Back to Cache). Cache is updated when user visits the page.
+        //     //   urlPattern: /^blog\/.*/i,
+        //     //   handler: 'NetworkFirst',
+        //     //   options: {
+        //     //     cacheName: 'blog-cache',
+        //     //     expiration: {
+        //     //       maxEntries: 1000,
+        //     //       maxAgeSeconds: 60 * 60 * 24 // <== 1 day
+        //     //     },
+        //     //     cacheableResponse: {
+        //     //       statuses: [0, 200]
+        //     //     }
+        //     //   }
+        //     // },
+        //     // pdf, xml, json, txt, csv, and webmanifest files Network First (Network Falling Back to Cache). Cache is updated when user visits the page.
+        //     {
+        //       urlPattern: /^.*\.(?:pdf|xml|json|txt|csv|webmanifest)$/i,
+        //       handler: 'NetworkFirst',
+        //       options: {
+        //         cacheName: 'files-cache',
+        //         expiration: {
+        //           maxEntries: 50,
+        //           maxAgeSeconds: 60 * 60 * 24 * 7, // <== 7 days
+        //         },
+        //       },
+        //     },
+        //     // cache favicons and images
+        //     {
+        //       urlPattern: /\.(?:png|gif|jpg|jpeg|svg|ico|webp)$/i,
+        //       handler: 'CacheFirst',
+        //       options: {
+        //         cacheName: 'images-cache',
+        //         expiration: {
+        //           maxEntries: 100,
+        //           maxAgeSeconds: 60 * 60 * 24 * 3, // <== 3 days
+        //         },
+        //         cacheableResponse: {
+        //           statuses: [0, 200],
+        //         },
+        //       },
+        //     },
+        //     {
+        //       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+        //       handler: 'CacheFirst',
+        //       options: {
+        //         cacheName: 'google-fonts-cache',
+        //         expiration: {
+        //           maxEntries: 10,
+        //           maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+        //         },
+        //         cacheableResponse: {
+        //           statuses: [0, 200],
+        //         },
+        //       },
+        //     },
+        //     {
+        //       urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+        //       handler: 'CacheFirst',
+        //       options: {
+        //         cacheName: 'gstatic-fonts-cache',
+        //         expiration: {
+        //           maxEntries: 10,
+        //           maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+        //         },
+        //         cacheableResponse: {
+        //           statuses: [0, 200],
+        //         },
+        //       },
+        //     },
+        //   ],
+        //   skipWaiting: true,
+        //   clientsClaim: true,
+        // },
+        // devOptions: {
+        //   enabled: true,
+        //   navigateFallbackAllowlist: [/^\/404$/],
+        // },
         icons: [
           {
-            src: 'android-chrome-192x192.png',
+            src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'android-chrome-512x512.png',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
           {
-            src: 'android-chrome-512x512.png',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
@@ -148,17 +258,25 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: '/404',
-        globPatterns: ['**/*.{css,js,html,svg,jpg,jpeg,png,ico,txt}'],
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
       },
-      // client: {
-      //   installPrompt: true,
-      //   periodicSyncForUpdates: 20,
-      // },
       devOptions: {
         enabled: true,
-        // type: 'module',
         navigateFallbackAllowlist: [/^\/404$/],
-        // suppressWarnings: true,
+      },
+      client: {
+        installPrompt: true,
+        periodicSyncForUpdates: 20,
+      },
+    }),
+    compress({
+      html: {
+        collapseWhitespace: true,
+        collapseInlineTagWhitespace: true,
+        conservativeCollapse: true,
+        removeRedundantAttributes: true,
+        sortAttributes: true,
+        sortClassName: true,
       },
     }),
   ],
@@ -175,9 +293,9 @@ export default defineConfig({
     css: {
       devSourcemap: true,
     },
-    // ssr: {
-    //   external: ['svgo'],
-    // },
+    ssr: {
+      external: ['svgo'],
+    },
     // server: {
     //   https: true,
     // },
