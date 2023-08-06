@@ -5,7 +5,7 @@ import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 import vue from '@astrojs/vue';
 import AstroPWA from '@vite-pwa/astro';
-import compress from 'astro-compress';
+// import compress from 'astro-compress';
 // import critters from 'astro-critters';
 import devOnlyRoutes from 'astro-dev-only-routes';
 import icon from 'astro-icon';
@@ -50,7 +50,7 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
   },
-  compressHTML: true,
+  // compressHTML: true,
   // output: 'server',
   output: 'hybrid',
   adapter: vercel({
@@ -269,24 +269,24 @@ export default defineConfig({
         periodicSyncForUpdates: 20,
       },
     }),
-    compress({
-      html: {
-        collapseWhitespace: true,
-        collapseInlineTagWhitespace: true,
-        conservativeCollapse: true,
-        removeRedundantAttributes: true,
-        sortAttributes: true,
-        sortClassName: true,
-      },
-    }),
+    // compress({
+    //   html: {
+    //     collapseWhitespace: true,
+    //     collapseInlineTagWhitespace: true,
+    //     conservativeCollapse: true,
+    //     removeRedundantAttributes: true,
+    //     sortAttributes: true,
+    //     sortClassName: true,
+    //   },
+    // }),
   ],
   markdown: {},
   vite: {
     logLevel: 'info',
     build: {
-      assetsInlineLimit: true,
-      cssCodeSplit: false,
-      rollupOptions: { output: { esModule: false } },
+      // assetsInlineLimit: true,
+      // cssCodeSplit: false,
+      // rollupOptions: { output: { esModule: false } },
       sourcemap: true,
       // copyPublicDir: false,
     },
