@@ -51,8 +51,7 @@ export default defineConfig({
     inlineStylesheets: 'auto',
   },
   // compressHTML: true,
-  // output: 'server',
-  output: 'hybrid',
+  output: 'server',
   adapter: vercel({
     analytics: true,
   }),

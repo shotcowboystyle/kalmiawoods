@@ -3,8 +3,6 @@ import type { APIRoute } from 'astro';
 import { auth } from '@/lib/lucia';
 import { validatePasswordResetToken } from '@/services/verification-token';
 
-export const prerender = false;
-
 export const post: APIRoute = async (context) => {
   const { token } = context.params;
   if (!token) {

@@ -5,18 +5,17 @@ import { LuciaError } from 'lucia';
 import LayoutStacked from '@/app/LayoutStacked.astro';
 import { auth } from '@/lib/lucia';
 import FormSignUp from '@/modules/Auth/FormSignUp.astro';
+import { RoleEnum as Role } from '@/schemas/auth';
 import { sendEmailVerificationEmail } from '@/services/email';
 import { generateEmailVerificationToken } from '@/services/verification-token';
 import { emailRegex } from '@/utils/email';
 
 let errorMessage: string | null = null;
 let email = '';
-let role = 'USER';
 
 if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
   email = formData.get('email')?.toString() ?? '';
-  role = formData.get('role')?.toString() ?? 'USER';
   if (email === null || !emailRegex.test(email)) {
     errorMessage = 'Invalid email';
     return null;
@@ -36,7 +35,7 @@ if (Astro.request.method === "POST") {
       attributes: {
         email,
         email_verified: false,
-        role,
+        role: Role.enum.USER,
       },
     });
 

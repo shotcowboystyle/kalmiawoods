@@ -3,8 +3,6 @@ import type { APIRoute } from 'astro';
 import { auth } from '@/lib/lucia';
 import { getUserProfile, updateUserProfile } from '@/services/user-profile';
 
-export const prerender = false;
-
 export const get: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
   const session = await authRequest.validate();

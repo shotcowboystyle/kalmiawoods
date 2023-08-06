@@ -2,8 +2,6 @@ import type { APIRoute } from 'astro';
 
 import { auth } from '@/lib/lucia';
 
-export const prerender = false;
-
 export const post: APIRoute = async (context) => {
   const authRequest = auth.handleRequest(context);
   const session = await authRequest.validate();
