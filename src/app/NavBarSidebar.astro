@@ -6,8 +6,7 @@ import LogoutButton from '@/components/LogoutButton.vue';
 import ProfileDropdown from '@/components/ProfileDropdown.astro';
 ---
 
-<nav
-  class="fixed z-30 w-full bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+<nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start">
@@ -41,7 +40,8 @@ import ProfileDropdown from '@/components/ProfileDropdown.astro';
         </button>
         <a href={HOME} class="flex ml-2 md:mr-24">
           <Logo />
-          <span class="self-center ml-3 text-xl font-semibold whitespace-nowrap dark:text-white sm:text-2xl">
+          <span
+            class="self-center ml-3 text-xl font-semibold whitespace-nowrap dark:text-white sm:text-2xl hidden sm:inline">
             Kalmia Woods
           </span>
         </a>
@@ -51,20 +51,14 @@ import ProfileDropdown from '@/components/ProfileDropdown.astro';
         <div
           id="dropdownNavbar"
           class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:divide-gray-600 dark:bg-gray-700">
-          <ul
-            class="py-2 text-sm text-gray-700 dark:text-gray-400"
-            aria-labelledby="dropdownNavbarButton">
+          <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownNavbarButton">
             <li>
-              <a
-                href={HOME}
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              <a href={HOME} class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >Home</a
               >
             </li>
             <li>
-              <a
-                href="/profile"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                 >Profile</a
               >
             </li>

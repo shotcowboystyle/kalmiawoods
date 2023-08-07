@@ -30,10 +30,9 @@ const vitePlugins = [
     directoryAsNamespace: true,
   }),
   Icons({
-    autoInstall: true,
-    compiler: 'vue3',
+    // autoInstall: true,
+    // compiler: 'vue3',
   }),
-  // mkcert(),
 ];
 
 // https://astro.build/config
@@ -306,6 +305,7 @@ export default defineConfig({
       'import.meta.env.PUBLIC_VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID),
     },
     resolve: {
+      dedupe: ['vue'],
       alias: {
         '@': resolve(__dirname, './src'),
       },

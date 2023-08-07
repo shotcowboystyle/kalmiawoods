@@ -4,6 +4,7 @@ import { pwaInfo } from 'virtual:pwa-info';
 import 'vue-toastification/dist/index.css';
 // import pkg from '../../package.json' assert { type: 'json' };
 
+// import VercelWebVitals from '@/components/VercelWebVitals.astro';
 import { SITE_TITLE } from './constants.js';
 
 export interface Props {
@@ -46,6 +47,9 @@ const { class: clazz, title } = Astro.props as Props;
       const vh100 = window.innerHeight;
       document.documentElement.style.setProperty('--100vh', `${vh100}px`);
     </script>
+
+    <!-- <VercelWebVitals />
+    <script is:inline defer src="/_vercel/insights/script.js"></script> -->
 
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <script src="/src/pwa.ts"></script>
