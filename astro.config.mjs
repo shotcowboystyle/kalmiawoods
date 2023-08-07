@@ -1,5 +1,5 @@
 import mdx from '@astrojs/mdx';
-import partytown from '@astrojs/partytown';
+// import partytown from '@astrojs/partytown';
 // import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
@@ -77,11 +77,11 @@ export default defineConfig({
     }),
 
     mdx(),
-    partytown({
-      config: {
-        forward: ['dataLayer.push'],
-      },
-    }),
+    // partytown({
+    //   config: {
+    //     forward: ['dataLayer.push'],
+    //   },
+    // }),
     AutoImport({
       imports: [
         'vue',
