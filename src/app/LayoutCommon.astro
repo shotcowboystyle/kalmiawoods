@@ -9,7 +9,7 @@ import { SITE_TITLE } from './constants.js';
 
 export interface Props {
   class?: string;
-  title: string;
+  title?: string;
 }
 
 const { class: clazz, title } = Astro.props as Props;
@@ -27,6 +27,7 @@ const { class: clazz, title } = Astro.props as Props;
     <meta name="theme-color" content="#bbea69" />
     <title>{SITE_TITLE}</title>
     <meta name="description" content={title} />
+    <meta http-equiv="Content-Security-Policy" content="connect-src 'vitals.vercel-insights.com';" />
 
     <script is:inline>
       if (
@@ -60,9 +61,10 @@ const { class: clazz, title } = Astro.props as Props;
       clazz,
       'tracking-tight antialiased',
       'bg-base-100',
-      'scrollbar scrollbar-w-3 scrollbar-thumb-rounded-[0.25rem]',
-      'scrollbar-track-slate-200  scrollbar-thumb-gray-400',
-      'dark:scrollbar-track-gray-900 dark:scrollbar-thumb-gray-700',
+      'overflow-hidden lg:overflow-visible',
+      // 'scrollbar scrollbar-w-3 scrollbar-thumb-rounded-[0.25rem]',
+      // 'scrollbar-track-slate-200  scrollbar-thumb-gray-400',
+      // 'dark:scrollbar-track-gray-900 dark:scrollbar-thumb-gray-700',
     ]}>
     <slot />
 
