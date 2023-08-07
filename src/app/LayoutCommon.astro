@@ -27,7 +27,7 @@ const { class: clazz, title } = Astro.props as Props;
     <meta name="theme-color" content="#bbea69" />
     <title>{SITE_TITLE}</title>
     <meta name="description" content={title} />
-    <meta http-equiv="Content-Security-Policy" content="connect-src 'vitals.vercel-insights.com';" />
+    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' vitals.vercel-insights.com;" />
 
     <script is:inline>
       if (
