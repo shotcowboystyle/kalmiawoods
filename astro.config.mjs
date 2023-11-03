@@ -64,10 +64,10 @@ export default defineConfig({
 		speedInsights: {
 			enabled: true,
 		},
-		imagesConfig: {
-			sizes: [320, 640, 1280, 1920],
-		},
-		imageService: true,
+		// imagesConfig: {
+		// 	sizes: [320, 640, 1280, 1920],
+		// },
+		imageService: false,
 		edgeMiddleware: false,
 	}),
 	integrations: [
