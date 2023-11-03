@@ -2,11 +2,11 @@ import prefetch from '@astrojs/prefetch';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel/serverless';
 import vue from '@astrojs/vue';
-import compress from 'astro-compress';
-import compressor from 'astro-compressor';
-import critters from 'astro-critters';
+// import compress from 'astro-compress';
+// import compressor from 'astro-compressor';
+// import critters from 'astro-critters';
 import devOnlyRoutes from 'astro-dev-only-routes';
-import purgecss from 'astro-purgecss';
+// import purgecss from 'astro-purgecss';
 import svgSprite from 'astro-svg-sprite';
 import { defineConfig } from 'astro/config';
 // import analyze from 'rollup-plugin-analyzer';
@@ -98,15 +98,15 @@ export default defineConfig({
 			vueTemplate: true,
 		}),
 		prefetch(),
-		critters({ Logger: 2 }),
-		purgecss({
-			safelist: [/^dot\d/, /^four-/, /^glow-/, /^crater-/, 'github', 'linkedin', 'twitter'],
-		}),
-		compressor(),
-		compress({
-			CSS: false,
-			Logger: 1,
-		}),
+		// critters({ Logger: 2 }),
+		// purgecss({
+		// 	safelist: [/^dot\d/, /^four-/, /^glow-/, /^crater-/, 'github', 'linkedin', 'twitter'],
+		// }),
+		// compressor(),
+		// compress({
+		// 	CSS: false,
+		// 	Logger: 1,
+		// }),
 		devOnlyRoutes(),
 	],
 	vite: {
