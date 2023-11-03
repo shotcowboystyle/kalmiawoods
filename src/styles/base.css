@@ -16,70 +16,68 @@
 	}
 } */
 
-@layer utilities {
-	.bg-guidebook {
-		@apply bg-primary;
-	}
+.bg-guidebook {
+	@apply bg-primary;
+}
 
-	.bg-guidebook-focus {
-		@apply bg-primary-focus;
-	}
+.bg-guidebook-focus {
+	@apply bg-primary-focus;
+}
 
-	.text-guidebook-content {
-		@apply text-primary-content;
-	}
+.text-guidebook-content {
+	@apply text-primary-content;
+}
 
-	.stroke-guidebook {
-		stroke: theme('colors.primary-content');
-	}
+.stroke-guidebook {
+	stroke: theme('colors.primary-content');
+}
 
-	.bg-reservations {
-		@apply bg-accent;
-	}
+.bg-reservations {
+	@apply bg-accent;
+}
 
-	.bg-reservations-focus {
-		@apply bg-accent-focus;
-	}
+.bg-reservations-focus {
+	@apply bg-accent-focus;
+}
 
-	.text-reservations-content {
-		@apply text-accent-content;
-	}
+.text-reservations-content {
+	@apply text-accent-content;
+}
 
-	.stroke-reservations {
-		stroke: theme('colors.accent-content');
-	}
+.stroke-reservations {
+	stroke: theme('colors.accent-content');
+}
 
-	.bg-users {
-		@apply bg-secondary;
-	}
+.bg-users {
+	@apply bg-secondary;
+}
 
-	.bg-users-focus {
-		@apply bg-secondary-focus;
-	}
+.bg-users-focus {
+	@apply bg-secondary-focus;
+}
 
-	.text-users-content {
-		@apply text-secondary-content;
-	}
+.text-users-content {
+	@apply text-secondary-content;
+}
 
-	.stroke-users {
-		stroke: theme('colors.secondary-content');
-	}
+.stroke-users {
+	stroke: theme('colors.secondary-content');
+}
 
-	.bg-profile {
-		@apply bg-neutral;
-	}
+.bg-profile {
+	@apply bg-neutral;
+}
 
-	.bg-profile-focus {
-		@apply bg-neutral-focus;
-	}
+.bg-profile-focus {
+	@apply bg-neutral-focus;
+}
 
-	.text-profile-content {
-		@apply text-neutral-content;
-	}
+.text-profile-content {
+	@apply text-neutral-content;
+}
 
-	.stroke-profile {
-		stroke: theme('colors.neutral-content');
-	}
+.stroke-profile {
+	stroke: theme('colors.neutral-content');
 }
 
 .label-text.required:after,

@@ -9,15 +9,15 @@ import devOnlyRoutes from 'astro-dev-only-routes';
 import purgecss from 'astro-purgecss';
 import svgSprite from 'astro-svg-sprite';
 import { defineConfig } from 'astro/config';
-import analyze from 'rollup-plugin-analyzer';
-import { visualizer } from 'rollup-plugin-visualizer';
+// import analyze from 'rollup-plugin-analyzer';
+// import { visualizer } from 'rollup-plugin-visualizer';
 import AutoImport from 'unplugin-auto-import/astro';
 import Components from 'unplugin-vue-components/vite';
 import { loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { manifest } from './src/seo';
 
-const IS_PROD = process.env.NODE_ENV === 'production';
+// const IS_PROD = process.env.NODE_ENV === 'production';
 
 const { APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
@@ -38,14 +38,14 @@ const vitePlugins = [
 		dts: 'src/components.d.ts',
 		directoryAsNamespace: true,
 	}),
-	IS_PROD && analyze(),
-	IS_PROD &&
-	visualizer({
-		open: false,
-		filename: 'stats.html',
-		gzipSize: true,
-		brotliSize: true,
-	}),
+	// IS_PROD && analyze(),
+	// IS_PROD &&
+	// visualizer({
+	// 	open: false,
+	// 	filename: 'stats.html',
+	// 	gzipSize: true,
+	// 	brotliSize: true,
+	// }),
 ];
 
 // https://astro.build/config
