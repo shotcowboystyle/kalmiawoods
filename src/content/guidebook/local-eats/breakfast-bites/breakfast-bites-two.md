@@ -1,4 +1,11 @@
 ---
+order: 11
+category: 'Local Eats & Drinks'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Breakfast Bites'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Breakfast bites two'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

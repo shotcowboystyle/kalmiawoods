@@ -1,101 +1,117 @@
-// Extracted from https://github.com/JulianCataldo/web-garden/blob/develop/.vscode/settings.json
-
 {
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "editor.formatOnSave": true,
+	"css.validate": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    // "source.fixAll.stylelint": true,
-    "source.organizeImports": true,
-    "source.sortMembers": true
+    "source.fixAll": true,
   },
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+	"editor.inlayHints.enabled": "offUnlessPressed",
+	"editor.linkedEditing": true,
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+	"editor.rulers": [100],
+	"editor.stickyScroll.enabled": true,
   "eslint.enable": true,
-  "eslint.alwaysShowStatus": true,
-  "eslint.options": {
-    // "extensions": [".html", ".js", ".ts", ".vue"],
-    "extensions": [".js", ".ts", ".vue"],
-    "ignoredFilesPattern": ["commitlint.config.js"]
-  },
-  // "eslint.packageManager": "yarn",
+	"eslint.format.enable": true,
+	"eslint.lintTask.enable": true,
+	"eslint.nodePath": "./node_modules",
+	"eslint.validate": [
+		"astro" /* Using `astro-eslint-parser` + `eslint-plugin-astro` */,
+		"javascript",
+		"javascriptreact",
+		"html",
+		"markdown",
+		"typescript",
+		"typescriptreact",
+		"vue"
+	],
   "files.associations": {
-    "*.mdx": "markdown"
+		"*.cjs": "javascript",
+		"*.css": "tailwindcss",
+		"*.mdx": "markdown",
+		"*.mjs": "javascript"
   },
-  // "[scss]": {
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // },
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  // "[jsonc]": {
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  // "[json]": {
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
-  // "[markdown]": {
-  //   "editor.wordWrap": "off",
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // },
-  // "[mdx]": {
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // },
-  // "stylelint.validate": ["css", "postcss", "scss", "vue", "astro"],
-  // "stylelint.snippet": ["css", "postcss", "scss", "vue", "astro"],
-  "typescript.tsdk": "node_modules/typescript/lib",
-
-  /* —————————————————————————————— Typescript —————————————————————————————— */
-  "typescript.inlayHints.parameterNames.enabled": "all",
-
-  /* —————————————————————————————— Tailwind ———————————————————————————————— */
-  "tailwindCSS.includeLanguages": {
-    /*
+	"files.eol": "\n",
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/.classpath": true,
+		"**/.factorypath": true,
+		"**/.project": true,
+		"**/.settings": true
+	},
+	"html.autoCreateQuotes": false,
+	"npm.packageManager": "pnpm",
+	"prettier.documentSelectors": ["**/*.astro"],
+	"search.exclude": {
+		"**/.git": true,
+		"**/.github": true,
+		"**/.output": true,
+		"**/.pnpm": true,
+		"**/.vscode": true,
+		"**/dist/**": true,
+		"**/logs": true,
+		"**/node_modules": true,
+		"**/out/**": true,
+		"**/pnpm-lock.yaml": true,
+		"**/tmp": true,
+		"**/dist": true
+	},
+	"stylelint.enable": false,
+	"stylelint.packageManager": "pnpm",
+	"stylelint.snippet": ["astro", "css", "postcss", "html", "tailwindcss"],
+	"stylelint.validate": ["css", "postcss", "html", "astro", "tailwindcss"],
+	"tailwindCSS.includeLanguages": {
+		/*
       Astro Language Server can handle Tailwind extension communication,
       see https://docs.astro.build/en/guides/integrations-guide/tailwind/#configuring-the-integration
       But if you had troubles like me, you can force the association here.
 		*/
-    /* Adds class inlay hints inside `.astro` templates (acts as HTML) */
-    "astro": "html",
-    /* Useful for adding IntelliSense to Markdown, too */
-    "md": "html"
+		/* Adds class inlay hints inside `.astro` templates (acts as HTML) */
+		"astro": "html",
+		/* Useful for adding IntelliSense to Markdown, too */
+		"md": "html"
+	},
+
+	"tailwindCSS.classAttributes": ["class", "class:list"],
+	"tailwindCSS.validate": true,
+	"terminal.integrated.enablePersistentSessions": false,
+	// "typescript.enablePromptUseWorkspaceTsdk": true,
+	// "typescript.inlayHints.parameterNames.enabled": "all",
+	// "typescript.preferences.importModuleSpecifier": "non-relative",
+	// "typescript.tsdk": "./node_modules/typescript/lib",
+	"workbench.editor.labelFormat": "medium",
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-
-  "tailwindCSS.classAttributes": ["class", "class:list"],
-
-  /* —————————————————————————————— ESLint —————————————————————————————————— */
-  "eslint.validate": [
-    "astro" /* Using `astro-eslint-parser` + `eslint-plugin-astro` */,
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "mdx",
-    "vue"
-  ],
-
-  /* —————————————————————————————— Prettier ———————————————————————————————— */
-  /* Add support for `prettier-plugin-astro` */
-  "prettier.documentSelectors": ["**/*.astro"],
-
-  /* —————————————————————————————— Misc. ———————————————————————————————— */
-
-  "markdown.extension.toc.levels": "2..6",
-  "svg.preview.background": "custom"
+	"[markdown]": {
+		"editor.wordWrap": "on",
+		"editor.codeActionsOnSave": {
+			"source.fixAll.markdownlint": true
+		}
+	},
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "[vue]": {
+    // "editor.defaultFormatter": "Vue.volar"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[svg]": {
+    "editor.defaultFormatter": "jock.svg"
+  },
+  "volar.format.initialIndent": {
+    "html": true
+  },
+  "vue.autoInsert.dotValue": true,
+"vue.inlayHints.missingProps": true,
+"svg.preview.background": "black"
 }

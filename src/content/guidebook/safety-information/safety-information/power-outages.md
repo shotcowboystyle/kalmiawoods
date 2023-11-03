@@ -1,4 +1,11 @@
 ---
+order: 8
+category: 'Safety Information'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Safety Information'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Power outages'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

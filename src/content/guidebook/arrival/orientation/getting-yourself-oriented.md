@@ -1,4 +1,11 @@
 ---
+order: 6
+category: 'Arrival Instructions'
+categoryIcon: 'icon'
+categoryOrder: 3
+subcategory: 'Getting Yourself Oriented'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Getting yourself oriented'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

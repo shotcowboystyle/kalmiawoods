@@ -1,0 +1,91 @@
+---
+import { SUMMARY_FEATURES, SUMMARY_HIGHLIGHTS } from '@/app/constants';
+import SvgSprite from '@/components/SvgSprite.astro';
+---
+
+<section class="mt-16 bg-gradient-to-r from-primary to-secondary py-6 xl:py-24">
+	<div class="flex flex-wrap items-center sm:container">
+		<div class="w-full px-4 sm:px-8 lg:px-0 xl:w-1/2">
+			<div class="relative flex flex-wrap justify-center sm:flex-nowrap sm:gap-x-8">
+				<div class="my-4">
+					{
+						SUMMARY_HIGHLIGHTS.slice(0, 2).map(({ title, description, icon, containerClass }) => (
+							<div
+								class:list={[
+									'flex items-center rounded-lg p-4 shadow-lg md:block md:p-8 md:text-center',
+									containerClass,
+								]}
+							>
+								<div class="mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md dark:bg-neutral">
+									<SvgSprite
+										name={icon}
+										class="h-8 w-8 stroke-black dark:stroke-white"
+									/>
+								</div>
+								<div class="ml-4 md:ml-0 md:mt-4">
+									<p class="font-semibold">{title}</p>
+									<p class="mt-1 text-sm md:mt-2">{description}</p>
+								</div>
+							</div>
+						))
+					}
+				</div>
+
+				<div class="my-4 sm:mt-6">
+					{
+						SUMMARY_HIGHLIGHTS.slice(-2).map(({ title, description, icon, containerClass }) => (
+							<div
+								class:list={[
+									'flex items-center rounded-lg p-4 shadow-lg md:block md:p-8 md:text-center',
+									containerClass,
+								]}
+							>
+								<div class="mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md dark:bg-neutral">
+									<SvgSprite
+										name={icon}
+										class="h-8 w-8 stroke-black dark:stroke-white"
+									/>
+								</div>
+								<div class="ml-4 md:ml-0 md:mt-4">
+									<p class="font-semibold">{title}</p>
+									<p class="mt-1 text-sm md:mt-2">{description}</p>
+								</div>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-6 w-full px-4 text-base leading-relaxed text-white sm:px-8 lg:px-12 xl:w-1/2">
+			<div
+				class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center text-slate-500 shadow-lg dark:bg-neutral"
+			>
+				<SvgSprite
+					name="trees-icon"
+					class="h-16 w-16 stroke-black dark:stroke-white"
+				/>
+			</div>
+			<h3 class="mb-2 text-2xl font-semibold leading-normal">Rustic Meets Modern</h3>
+			<p class="mb-4 mt-4">We have something for everyone. Fun and excitement for all ages.</p>
+			<p class="mb-4 mt-4">
+				Boasts ceiling beams, stone walls, and a wood-burning stove. Set over 2 floors, sleeps 4
+				people and includes a dog bed in the living room. The garden is made up of a vegetable
+				patch, patio furniture and a barbeque.
+			</p>
+			<p class="mb-4 mt-4">
+				The local area offers lovely walking routes, historical castle, horse riding and mushroom
+				picking.
+			</p>
+			<div class="block pb-6">
+				{
+					SUMMARY_FEATURES.map(({ text }) => (
+						<span class="last:mr-xs mr-2 mt-2 inline-block rounded-full bg-white px-2 py-1 text-xs font-semibold uppercase text-base-content dark:bg-neutral dark:text-neutral-content">
+							{text}
+						</span>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>

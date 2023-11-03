@@ -1,23 +1,23 @@
 interface ImageAsset {
-  name: string;
-  src: string;
-  width: number;
-  height: number;
-  format: string;
+	name: string;
+	src: string;
+	width: number;
+	height: number;
+	format: string;
 }
 
 export function getAssets(globs: any[]) {
-  const assets: ImageAsset[] = [];
-  globs.forEach((glob) => {
-    assets.push({
-      name: glob.default.src.split('/').pop().split('.').shift(),
-      src: glob.default.src,
-      width: glob.default.width,
-      height: glob.default.height,
-      format: glob.default.format,
-    });
-  });
-  return assets;
+	const assets: ImageAsset[] = [];
+	globs.forEach((glob) => {
+		assets.push({
+			name: glob.default.src.split('/').pop().split('.').shift(),
+			src: glob.default.src,
+			width: glob.default.width,
+			height: glob.default.height,
+			format: glob.default.format,
+		});
+	});
+	return assets;
 }
 
 // ugly hack to circumvent astro issue with dynamic import

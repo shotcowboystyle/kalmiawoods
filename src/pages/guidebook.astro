@@ -1,0 +1,108 @@
+---
+import Layout from '@/app/LayoutStacked.astro';
+import { Link } from 'astro-link';
+import { getCollection } from 'astro:content';
+
+// import GuidebookPage from '@/modules/Guidebook/GuidebookPage.astro';
+// import { convertArrayToObjectsByKey } from '@/utils/collection';
+/* —————————————————————————————————————————————————————————————————————————— */
+
+// const guidebookCategories = (await getCollection('guidebook')).sort((a, b) => a.data.order - b.data.order);
+// console.log('guidebookCategories', guidebookCategories);
+const guidebookContent = (await getCollection('guidebook'))
+	.sort((a, b) => a.data.order - b.data.order)
+	.reduce((acc, cur) => {
+		let sections = acc;
+		if (!sections[cur.data.category]) {
+			sections = {
+				...sections,
+				[cur.data.category]: {
+					icon: cur.data.categoryIcon,
+					order: cur.data.Order,
+					subcategories: {
+						[cur.data.subcategory]: {
+							icon: cur.data.subcategoryIcon,
+							order: cur.data.categoryOrder,
+							items: [cur],
+						},
+					},
+				},
+			};
+		} else if (!sections[cur.data.category].subcategories[cur.data.subcategory]) {
+			sections = {
+				...sections,
+				[cur.data.category]: {
+					...sections[cur.data.category],
+					subcategories: {
+						...sections[cur.data.category].subcategories,
+						[cur.data.subcategory]: {
+							icon: cur.data.subcategoryIcon,
+							order: cur.data.categoryOrder,
+							items: [cur],
+						},
+					},
+				},
+			};
+		} else {
+			sections = {
+				...sections,
+				[cur.data.category]: {
+					...sections[cur.data.category],
+					subcategories: {
+						...sections[cur.data.category].subcategories,
+						[cur.data.subcategory]: {
+							// ...sections[cur.data.category].subcategories[cur.data.subcategory],
+							icon: cur.data.subcategoryIcon,
+							order: cur.data.categoryOrder,
+							items: [
+								...(sections[cur.data.category]?.subcategories?.[cur.data.subcategory]?.items ??
+									[]),
+								cur,
+							],
+						},
+					},
+				},
+			};
+		}
+
+		return sections;
+	}, {});
+// .map((g) => ({ category: g.data.category, subcategory: g.data.subcategory }));
+// .slice(0, 4)
+
+// const guidebookSections = convertArrayToObjectsByKey(guidebookContent, 'category');
+// const guidebookSections = guidebookContent.reduce((acc, cur) => {
+//   const sections = acc;
+//   if (!sections.includes(cur.category)) {
+//     sections.push(cur.category);
+//   }
+//   return sections;
+// }, []);
+// console.log('guidebookContent', guidebookContent["Where's The Nearest...?"].subcategories['Gas Station'].items[0]);
+---
+
+<Layout>
+	<div slot="sidebar">
+		{
+			Object.entries(guidebookContent).map(([category, categoryData]) => (
+				<div
+					tabindex="0"
+					class="collapse collapse-arrow border border-base-300 bg-base-200"
+				>
+					<input type="checkbox" />
+					<div class="collapse-title text-xl font-medium">{category}</div>
+					<div class="collapse-content">
+						{Object.entries(categoryData.subcategories)
+							.sort(([, a], [, b]) => a.order - b.order)
+							.map(([subcategory]) => (
+								<div>
+									<Link href={`guide/${category.toLowerCase()}/${subcategory}`}>{subcategory}</Link>
+								</div>
+							))}
+					</div>
+				</div>
+			))
+		}
+	</div>
+	<!-- <GuidebookPage guides={guidebookContent} /> -->
+</Layout>

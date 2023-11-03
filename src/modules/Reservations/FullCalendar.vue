@@ -1,372 +1,348 @@
 <script setup lang="ts">
-import { useStore } from '@nanostores/vue';
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
-import { Calendar } from 'v-calendar';
-import 'v-calendar/dist/style.css';
+	import { $authUser } from '@/stores/auth';
+	import { $colorScheme } from '@/stores/color-scheme';
+	import {
+		$disabledReservationDates,
+		$isReservationModalOpen,
+		$reservations,
+		setActiveReservationId,
+		toggleReservationModal,
+	} from '@/stores/reservation';
+	import type { CalendarDay } from '@/types/FullCalendar';
+	import { dateInPast } from '@/utils/date';
+	import { capitalize } from '@/utils/string';
+	import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+	import { Calendar } from 'v-calendar';
+	import FormReservation from './FormReservation.vue';
 
-import { HOME } from '@/app/constants';
-import Modal from '@/components/Modal/Modal.vue';
-import { theme } from '@/stores/app';
-import { authUser } from '@/stores/auth';
-import { reservations, reservedDates, setActiveReservationId } from '@/stores/reservation';
-import type { CalendarDay } from '@/types/FullCalendar';
-import { dateInPast } from '@/utils/date';
-import { capitalize } from '@/utils/string';
-import FormReservation from './FormReservation.vue';
+	const breakpoints = useBreakpoints(breakpointsTailwind);
+	const mdAndLarger = breakpoints.greaterOrEqual('md');
 
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const mdAndLarger = breakpoints.greaterOrEqual('md');
+	const isEditingReservation = ref(false);
 
-const showModal = ref(false);
-const isEditingReservation = ref(false);
+	const calendar = ref(null);
 
-const $authUser = useStore(authUser);
+	const attrs = computed(() => [
+		...Object.entries($reservations.value).map(([key, val]) => {
+			return {
+				key,
+				popover: {
+					label: `${val?.user.firstName} ${val?.user.lastName}`,
+				},
+				customData: val,
+				dates: {
+					start: val && new Date(val.checkInDate),
+					end: val && new Date(val.checkOutDate),
+				},
+			};
+		}),
+	]);
 
-const colorMode = useStore(theme);
+	const masks = ref({
+		weekdays: 'WWW',
+	});
 
-const calendar = ref(null);
-const $fetchedReservations = useStore(reservations);
+	const selectedReservationDate = ref<string | undefined>();
+	const onDayClick = (day: CalendarDay, reservationId = null, userId = null) => {
+		if (dateInPast(day.date)) {
+			return;
+		}
 
-const disabledDates = useStore(reservedDates);
+		if (
+			reservationId &&
+			($authUser.value.isAdmin || (userId && userId === $authUser.value.userId))
+		) {
+			setActiveReservationId(reservationId);
+			isEditingReservation.value = true;
+		} else {
+			setActiveReservationId(null);
+			selectedReservationDate.value = day.date.toDateString();
+			isEditingReservation.value = false;
+		}
 
-const attrs = computed(() => [
-  ...Object.entries($fetchedReservations.value)?.map(([key, val]) => {
-    return {
-      key,
-      popover: {
-        label: `${val?.user.firstName} ${val?.user.lastName}`,
-      },
-      customData: val,
-      dates: {
-        start: val && new Date(val.checkInDate),
-        end: val && new Date(val.checkOutDate),
-      },
-    };
-  }),
-]);
-
-const masks = ref({
-  weekdays: 'WWW',
-});
-
-const modalTitlePrefix = ref<string>('Add');
-const selectedReservationDate = ref<string | undefined>();
-const onDayClick = (day: CalendarDay, reservationId = null, userId = null) => {
-  if (dateInPast(day.date)) {
-    return;
-  }
-
-  if (reservationId && ($authUser.value.isAdmin || (userId && userId === $authUser.value.userId))) {
-    setActiveReservationId(reservationId);
-    modalTitlePrefix.value = 'Edit';
-    isEditingReservation.value = true;
-  } else {
-    setActiveReservationId(null);
-    modalTitlePrefix.value = 'Add';
-    selectedReservationDate.value = day.date.toDateString();
-    isEditingReservation.value = false;
-  }
-
-  if (!reservationId || (reservationId && ($authUser.value.isAdmin || (userId && userId === $authUser.value.userId)))) {
-    showModal.value = true;
-  }
-};
-
-const addNewReservation = () => {
-  setActiveReservationId(null);
-  modalTitlePrefix.value = 'Add';
-  selectedReservationDate.value = new Date().toDateString();
-  isEditingReservation.value = false;
-  showModal.value = true;
-};
-
-const closeModal = () => {
-  showModal.value = false;
-};
+		if (
+			!reservationId ||
+			(reservationId && ($authUser.value.isAdmin || (userId && userId === $authUser.value.userId)))
+		) {
+			toggleReservationModal();
+		}
+	};
 </script>
 
 <template>
-  <div class="mb-2">
-    <nav class="mb-5 flex" aria-label="Breadcrumb">
-      <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
-        <li class="inline-flex items-center">
-          <a
-            :href="HOME"
-            class="hover:text-primary-600 inline-flex items-center text-gray-700 dark:text-gray-300 dark:hover:text-white">
-            <svg class="mr-2.5 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-            </svg>
-            Home
-          </a>
-        </li>
-        <li>
-          <div class="flex items-center">
-            <svg
-              class="h-6 w-6 text-gray-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"></path>
-            </svg>
-            <span class="ml-1 text-gray-400 dark:text-gray-500 md:ml-2" aria-current="page">Reservations</span>
-          </div>
-        </li>
-      </ol>
-    </nav>
+	<Calendar
+		ref="calendar"
+		class="calendar shadow-xl"
+		:class="{ 'custom-calendar': mdAndLarger }"
+		:masks="masks"
+		:attributes="attrs"
+		:min-date="new Date()"
+		:disabled-dates="$disabledReservationDates"
+		disable-page-swipe
+		expanded
+		trim-weeks
+		:is-dark="$colorScheme === 'dark'"
+		title-position="left"
+		:rows="mdAndLarger ? 1 : 2"
+		:step="1"
+	>
+		<template #title="{ monthLabel, yearLabel }">
+			<div
+				class="vc-header is-lg self-center text-lg text-base-content"
+				style="grid-template-columns: [title] auto 1fr [prev] auto [next] auto"
+			>
+				<button
+					type="button"
+					class="vc-title"
+				>
+					<span class="font-extrabold">{{ monthLabel }}</span>
+					<span class="ml-2 font-thin text-slate-900">{{ yearLabel }}</span>
+				</button>
+			</div>
+		</template>
+		<template #day-content="{ day, attributes }">
+			<div
+				class="flex h-full cursor-pointer flex-col md:min-h-16 md:w-full"
+				:class="[
+					{
+						'is-disabled':
+							!$authUser.isAdmin &&
+							attributes?.[0]?.customData?.userId !== $authUser.userId &&
+							day.isDisabled,
+					},
+					{ 'is-reserved': day.isDisabled },
+				]"
+				:aria-disabled="day.isDisabled"
+				@click="onDayClick(day, attributes?.[0]?.key, attributes?.[0]?.customData?.userId)"
+			>
+				<span class="day-label text-gray-90 0 self-center py-4 text-sm md:p-4 md:leading-4">
+					{{ day.day }}
+				</span>
+				<div class="day-events">
+					<div
+						v-if="attributes?.[0]"
+						:key="attributes?.[0]?.key"
+						class="day-event"
+						:class="[
+							{
+								'day-event-secondary':
+									day.date.toString() !== attributes?.[0]?.targetDate?.start.toString(),
+							},
+							{
+								'day-event-end':
+									day.date.toString() === attributes?.[0]?.targetDate?.end.toString(),
+							},
+							{
+								'day-event-has-secondary':
+									day.date.toString() === attributes?.[0]?.targetDate?.start.toString() &&
+									attributes?.[0]?.targetDate?.isRange &&
+									attributes?.[0]?.targetDate?.start.toString() !==
+										attributes?.[0]?.targetDate?.end.toString(),
+							},
+							{ 'is-user-event': attributes?.[0]?.customData?.userId === $authUser.userId },
+						]"
+					>
+						<div class="hidden md:inline">
+							<p class="truncate font-bold">
+								<span
+									v-if="
+										($authUser.isAdmin ||
+											$authUser.userId === attributes?.[0]?.customData?.userId) &&
+										attributes?.[0]?.customData?.title?.length
+									"
+								>
+									{{ attributes?.[0]?.customData?.title }}
+								</span>
+								<span
+									v-else-if="
+										$authUser.isAdmin || $authUser.userId === attributes?.[0]?.customData?.userId
+									"
+								>
+									{{ attributes?.[0]?.customData?.user?.firstName }}
+									{{ attributes?.[0]?.customData?.user?.lastName }}
+								</span>
+								<span v-else>Reserved</span>
+							</p>
+							<p v-if="attributes?.[0]?.customData?.buildings?.length > 0">
+								<span v-if="attributes?.[0]?.customData?.buildings?.length === 3">
+									All locations
+								</span>
+								<span v-else>
+									<template
+										v-for="(building, idx) in attributes?.[0]?.customData?.buildings"
+										:key="building"
+									>
+										<span v-if="idx === 1"> and </span>
+										<span>{{ capitalize(building) }}</span>
+									</template>
+								</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+	</Calendar>
 
-    <div class="flex justify-between items-center">
-      <h1 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Reservations</h1>
-      <button type="button" class="btn btn-primary btn-sm md:btn-md" @click="addNewReservation">
-        <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path
-            fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd"></path>
-        </svg>
-        New reservation
-      </button>
-    </div>
-  </div>
-
-  <Calendar
-    ref="calendar"
-    class="shadow-xl calendar"
-    :class="{ 'custom-calendar': mdAndLarger }"
-    :masks="masks"
-    :attributes="attrs"
-    :min-date="new Date()"
-    :disabled-dates="disabledDates"
-    disable-page-swipe
-    is-expanded
-    trim-weeks
-    :is-dark="colorMode === 'dark'"
-    title-position="left">
-    <template #title="{ monthLabel, yearLabel }">
-      <div class="vc-header is-lg self-center text-lg text-base-content" style="grid-template-columns: [title] auto 1fr [prev] auto [next] auto;">
-        <button type="button" class="vc-title">
-          <span class="font-extrabold">{{ monthLabel }}</span>
-          <span class="font-thin text-slate-900 ml-2">{{ yearLabel }}</span>
-        </button>
-      </div>
-    </template>
-    <template #day-content="{ day, attributes }">
-      <div
-        class="flex h-full flex-col cursor-pointer md:min-h-16 md:w-full"
-        :class="[
-          { 'is-disabled': !$authUser.isAdmin && attributes?.[0]?.customData?.userId !== $authUser.userId && day.isDisabled },
-          { 'is-reserved': day.isDisabled },
-        ]"
-        :aria-disabled="day.isDisabled"
-        @click="onDayClick(day, attributes?.[0]?.key, attributes?.[0]?.customData?.userId)">
-        <span class="self-center py-4 text-sm day-label text-gray-90 0 md:p-4 md:leading-4">
-          {{ day.day }}
-        </span>
-        <div class="day-events">
-          <p
-            v-if="attributes?.[0]"
-            :key="attributes?.[0]?.key"
-            class="day-event"
-            :class="[
-              { 'day-event-secondary': day.date.toString() !== attributes?.[0]?.targetDate?.start.toString() },
-              { 'day-event-end': day.range.end.toString() === attributes?.[0]?.targetDate?.end.toString() },
-              { 'day-event-has-secondary': day.date.toString() === attributes?.[0]?.targetDate?.start.toString() && attributes?.[0]?.targetDate?.isRange && attributes?.[0]?.targetDate?.start.toString() !== attributes?.[0]?.targetDate?.end.toString() },
-              { 'is-user-event': attributes?.[0]?.customData?.userId === $authUser.userId },
-            ]"
-          >
-            <div class="hidden md:inline">
-              <p class="font-bold truncate">
-                <span v-if="($authUser.isAdmin || $authUser.userId === attributes?.[0]?.customData?.userId) && attributes?.[0]?.customData?.title?.length">{{ attributes?.[0]?.customData?.title }}</span>
-                <span v-else-if="($authUser.isAdmin || $authUser.userId === attributes?.[0]?.customData?.userId)">
-                  {{ attributes?.[0]?.customData?.user?.firstName }}
-                  {{ attributes?.[0]?.customData?.user?.lastName }}
-                </span>
-                <span v-else>Reserved</span>
-              </p>
-              <p v-if="attributes?.[0]?.customData?.buildings?.length > 0">
-                <span v-if="attributes?.[0]?.customData?.buildings?.length === 3">All locations </span>
-                <span v-else>
-                  <template v-for="(building, idx) in attributes?.[0]?.customData?.buildings" :key="building">
-                    <span v-if="idx === 1"> and </span>
-                    <span>{{ capitalize(building) }}</span>
-                  </template>
-                </span>
-              </p>
-            </div>
-          </p>
-        </div>
-      </div>
-    </template>
-  </Calendar>
-
-  <Modal size="3xl" v-if="showModal" @close="closeModal">
-    <template #header>
-      <div class="text-lg font-bold">{{ modalTitlePrefix }} reservation</div>
-    </template>
-    <template #body>
-      <FormReservation
-        class="mt-4"
-        :selected-date="selectedReservationDate"
-        :handle-close-modal="closeModal"
-        :is-admin="$authUser.isAdmin"
-        :auth-user-id="$authUser.userId"
-        :is-editing-reservation="isEditingReservation" />
-    </template>
-  </Modal>
+	<dialog
+		class="modal modal-bottom sm:modal-middle"
+		:open="$isReservationModalOpen"
+	>
+		<div
+			v-if="$isReservationModalOpen"
+			class="modal-box"
+		>
+			<h3 class="text-lg font-bold">Reservation details</h3>
+			<FormReservation
+				class="mt-4"
+				:selected-date="selectedReservationDate"
+				:is-admin="$authUser.isAdmin"
+				:auth-user-id="$authUser.userId"
+				:is-editing-reservation="isEditingReservation"
+			/>
+		</div>
+	</dialog>
 </template>
 
-<style lang="postcss">
-.calendar.vc-container {
-  border-radius: 0;
+<style>
+	@import 'v-calendar/dist/style.css';
 
-  .vc-header {
-    @apply pb-3;
-  }
+	.calendar.vc-container {
+		border-radius: 0;
 
-  .vc-header .vc-arrows-container {
-    @apply btn-group;
+		.vc-header {
+			@apply mb-2.5;
+		}
 
-    & .vc-arrow {
-      @apply btn btn-sm btn-ghost rounded-none;
+		.vc-header .vc-arrows-container {
+			@apply btn-group;
 
-      & svg {
-        @apply h-5 w-5;
-      }
-    }
-  }
+			& .vc-arrow {
+				@apply btn btn-ghost btn-sm rounded-none;
 
-  .vc-weeks {
-    @apply border-t border-neutral-200 dark:border-neutral-700 p-0;
-  }
+				& svg {
+					@apply h-5 w-5;
+				}
+			}
+		}
 
-  .vc-weekday {
-    @apply self-center;
+		.vc-weeks {
+			@apply border-t border-neutral-200 p-0 dark:border-neutral-700;
+		}
 
-    &:not(:last-child) {
-      @apply border-r border-neutral-200 dark:border-neutral-700;
-    }
-  }
+		.vc-weekday {
+			@apply self-center;
 
-  .vc-day {
-    @apply p-0 md:w-max hover:bg-neutral-50 focus:bg-neutral-50 hover:dark:bg-slate-800 focus:dark:bg-slate-800;
+			&:not(:last-child) {
+				@apply border-r border-neutral-200 dark:border-neutral-700;
+			}
+		}
 
-    &.on-top {
-      @apply border-t border-neutral-200 dark:border-neutral-700;
-    }
+		.vc-day {
+			@apply border-b border-neutral-200 p-0 hover:bg-neutral-50 focus:bg-neutral-50 dark:border-neutral-700 hover:dark:bg-slate-800 focus:dark:bg-slate-800 md:w-max;
 
-    &:not(.on-bottom) {
-      @apply border-b border-neutral-200 dark:border-neutral-700;
-    }
+			&.on-top {
+				@apply border-t;
+			}
 
-    &:not(.on-right) {
-      @apply border-r border-neutral-200 dark:border-neutral-700;
-    }
-  }
+			&:not(.on-right) {
+				@apply border-r;
+			}
+		}
 
-  .day-events {
-    @apply flex-grow;
-  }
+		.day-events {
+			@apply flex-grow;
+		}
 
-  .day-event {
-    @apply p-1 bg-primary;
+		.day-event {
+			@apply bg-primary p-1;
 
-    &.is-user-event {
-      @apply bg-info;
-    }
-  }
+			&.is-user-event {
+				@apply bg-info;
+			}
+		}
 
-  .vc-day .is-reserved {
-    @apply rounded-none bg-neutral-200 dark:bg-slate-800 hover:bg-neutral-200 focus:bg-neutral-200 hover:dark:bg-slate-800 focus:dark:bg-slate-800;
+		.vc-day .is-reserved {
+			@apply rounded-none bg-neutral-200 hover:bg-neutral-200 focus:bg-neutral-200 dark:bg-slate-800 hover:dark:bg-slate-800 focus:dark:bg-slate-800;
 
-    .day-label {
-      @apply dark:text-slate-500;
-    }
-  }
-  .vc-day .is-disabled {
-    @apply cursor-not-allowed;
-  }
-}
+			.day-label {
+				@apply dark:text-slate-500;
+			}
+		}
 
-.custom-calendar.vc-container {
-  width: max-content;
+		.vc-day .is-disabled {
+			@apply cursor-not-allowed;
+		}
+	}
 
-  & .vc-popover-content {
-    max-height: 300px;
-    overflow: hidden;
-    overflow-y: auto;
-  }
+	.custom-calendar.vc-container {
+		width: max-content;
 
-  & .vc-day-popover-row-content {
-    max-width: 250px;
-    flex-direction: column;
-    padding: 8px;
-    border: 1px solid #3082ce;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
+		& .vc-popover-content {
+			max-height: 300px;
+			overflow: hidden;
+			overflow-y: auto;
+		}
 
-  & .vc-weekday {
-    @apply p-2;
-  }
+		& .vc-day-popover-row-content {
+			max-width: 250px;
+			flex-direction: column;
+			padding: 8px;
+			border: 1px solid #3082ce;
+			border-radius: 5px;
+			margin-bottom: 10px;
+		}
 
-  & .vc-day {
-    @apply relative flex w-full md:min-w-[90px] flex-col items-start justify-start md:h-40;
+		& .vc-weekday {
+			@apply p-2;
+		}
 
-    & .vc-day-content {
-      @apply relative
-        h-full
-        w-full
-        items-start
-        justify-start
-        border-0
-        p-4
-        text-sm
-        leading-4
-        hover:rounded-none
-        focus:rounded-none;
-    }
+		& .vc-day {
+			@apply relative flex w-full flex-col items-start justify-start md:h-40 md:min-w-full;
 
-    & .vc-highlights .vc-day-layer {
-      @apply top-2 items-start justify-start;
-    }
+			& .vc-day-content {
+				@apply relative h-full w-full items-start justify-start border-0 p-4 text-sm leading-4 hover:rounded-none focus:rounded-none;
+			}
 
-    & .vc-highlights .vc-day-layer .vc-highlight:not(.vc-highlight-base-start) {
-      @apply ml-3;
-    }
+			& .vc-highlights .vc-day-layer {
+				@apply top-2 items-start justify-start;
+			}
 
-    & .vc-highlights .vc-day-layer .vc-highlight.vc-highlight-base-start {
-      @apply ml-5 !w-full;
-    }
-  }
+			& .vc-highlights .vc-day-layer .vc-highlight:not(.vc-highlight-base-start) {
+				@apply ml-3;
+			}
 
-  & .day-events {
-    @apply overflow-visible;
-  }
+			& .vc-highlights .vc-day-layer .vc-highlight.vc-highlight-base-start {
+				@apply ml-5 !w-full;
+			}
+		}
 
-  & .day-event {
-    @apply p-2 text-sm text-primary-content mb-1 mt-0 mx-6 rounded-sm;
-  }
+		& .day-events {
+			@apply overflow-visible;
+		}
 
-  & .day-event-end {
-    @apply !w-11/12 !rounded-none !rounded-r-sm !ml-0;
-  }
+		& .day-event {
+			@apply mx-6 mb-1 mt-0 rounded-sm p-2 text-sm text-primary-content;
+		}
 
-  & .day-event-has-secondary {
-    @apply rounded-none rounded-s-sm !mr-0;
-  }
+		& .day-event-end {
+			@apply !ml-0 !w-11/12 !rounded-none !rounded-r-sm;
+		}
 
-  & .day-event-secondary {
-    @apply rounded-none !mx-0 !-ml-1;
-    & p {
-      @apply invisible;
-    }
-  }
+		& .day-event-has-secondary {
+			@apply !mr-0 rounded-none rounded-s-sm;
+		}
 
-  & .vc-day-dots {
-    margin-bottom: 5px;
-  }
-}
+		& .day-event-secondary {
+			@apply !mx-0 !-ml-1 rounded-none;
+
+			& p {
+				@apply invisible;
+			}
+		}
+
+		& .vc-day-dots {
+			margin-bottom: 5px;
+		}
+	}
 </style>

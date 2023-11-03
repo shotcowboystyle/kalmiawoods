@@ -1,0 +1,88 @@
+---
+import SvgSprite from '@/components/SvgSprite.astro';
+
+export interface props {
+	buttonClass: string;
+	text: string;
+	to: string;
+}
+
+const { class: className, buttonClass, to, text, ...rest } = Astro.props;
+---
+
+<a
+	href={to}
+	class={className}
+	{...rest}
+>
+	<article
+		class={`navigation-link p-3.5 sm:p-5 ${buttonClass}`}
+		transition:name={`${text} background`}
+	>
+		<span
+			class="h-full w-full flex-grow basis-10/12"
+			transition:name={`${text} icon`}
+		>
+			<slot />
+		</span>
+
+		<span class="flex min-w-full flex-initial items-center">
+			<span
+				class="flex-grow font-extrabold"
+				transition:name={`${text} title`}
+			>
+				{text}
+			</span>
+			<SvgSprite
+				name="arrow-right-circle-icon"
+				class="h-7 w-7 self-center justify-self-end stroke-current"
+			/>
+		</span>
+	</article>
+</a>
+
+<style>
+	.navigation-link {
+		@apply relative flex h-full w-full flex-col items-start justify-start rounded-2xl;
+
+		box-shadow:
+			inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+			0 0 0 1px hsla(0, 0%, 0%, 0.05),
+			0 1px 1px rgba(0, 0, 0, 0.11),
+			0 2px 2px rgba(0, 0, 0, 0.11),
+			0 4px 4px rgba(0, 0, 0, 0.11),
+			0 6px 8px rgba(0, 0, 0, 0.11),
+			0 8px 16px rgba(0, 0, 0, 0.11);
+		transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+		z-index: 1;
+
+		&::after {
+			@apply absolute inset-0 h-full w-full rounded-2xl opacity-0;
+
+			content: '';
+			z-index: -1;
+			box-shadow:
+				inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+				0 0 0 1px hsla(0, 0%, 0%, 0.05),
+				0 2px 1px rgba(0, 0, 0, 0.09),
+				0 4px 2px rgba(0, 0, 0, 0.09),
+				0 8px 4px rgba(0, 0, 0, 0.09),
+				0 16px 8px rgba(0, 0, 0, 0.09),
+				0 32px 16px rgba(0, 0, 0, 0.09);
+			transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+		}
+	}
+
+	.navigation-link:hover {
+		transform: scale(1.05, 1.05);
+	}
+
+	.navigation-link:active:hover,
+	.navigation-link:active:focus {
+		transform: scale(0.95, 0.95);
+	}
+
+	.navigation-link:hover::after {
+		@apply opacity-100;
+	}
+</style>

@@ -1,0 +1,23 @@
+---
+import { AMENITIES_DATA } from '@/app/constants';
+import SvgSprite from '@/components/SvgSprite.astro';
+---
+
+<section class="my-10">
+	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+		<h3 class="mb-4 text-2xl">Amenities</h3>
+		<div class="grid grid-cols-1 gap-4 py-0 md:grid-cols-3 md:gap-8">
+			{
+				AMENITIES_DATA.map(({ icon, description }) => (
+					<div class="flex flex-row items-start">
+						<SvgSprite
+							name={icon}
+							class="h-6 w-6 stroke-black dark:stroke-white"
+						/>
+						<span class="ml-2">{description}</span>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,23 @@
+---
+import { SLEEPING_ARRANGEMENTS_DATA } from '@/app/constants';
+import SvgSprite from '@/components/SvgSprite.astro';
+---
+
+<section class="my-10">
+	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+		<h3 class="mb-4 text-2xl">Sleeping Arrangements</h3>
+		<div class="flex flex-wrap gap-4 lg:grid-cols-4 lg:gap-x-4">
+			{
+				SLEEPING_ARRANGEMENTS_DATA.map((sleepingArrangement) => (
+					<div class="flex flex-col gap-y-2 rounded-md border border-gray-300 p-4">
+						<SvgSprite
+							name={sleepingArrangement.icon}
+							class="h-10 w-10 stroke-black dark:stroke-white"
+						/>
+						<p class="text-sm">{sleepingArrangement.text}</p>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>

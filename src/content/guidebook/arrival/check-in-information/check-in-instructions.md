@@ -1,4 +1,11 @@
 ---
+order: 6
+category: 'Arrival Instructions'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Check-in Information'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Check-in instructions'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

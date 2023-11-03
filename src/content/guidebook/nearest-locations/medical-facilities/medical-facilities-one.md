@@ -1,4 +1,11 @@
 ---
+order: 12
+category: "Where's The Nearest...?"
+categoryIcon: 'icon'
+categoryOrder: 2
+subcategory: 'Medical Facilities'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Medical facility one'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

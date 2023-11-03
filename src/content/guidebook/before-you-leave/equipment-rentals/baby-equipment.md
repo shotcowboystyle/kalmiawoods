@@ -1,5 +1,12 @@
 ---
-title: 'Baby equipment'
+order: 3
+category: 'Before You Leave Home'
+categoryIcon: 'icon'
+categoryOrder: 5
+subcategory: 'Baby Equipment Rental'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
+title: 'Baby Equipment'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'
 heroImage: 'house-cottage-three.jpeg'

@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+const nearbyAttractions = (await getCollection('attractions')).sort(
+	(a: CollectionEntry<'attractions'>, b: CollectionEntry<'attractions'>) =>
+		b.data.order < a.data.order ? 1 : b.data.order > a.data.order ? -1 : 0,
+);
+---
+
+<section class="my-10">
+	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+		<h2 class="mb-4 text-2xl font-bold text-base-content md:text-3xl lg:mb-8 lg:text-4xl">
+			Explore Nearby
+		</h2>
+		<div
+			class="max-xl:carousel max-xl:w-full max-xl:space-x-4 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-4"
+		>
+			{
+				nearbyAttractions.map((attraction) => (
+					<a
+						href={attraction.data.href}
+						target="_blank"
+						class="max-xl:carousel-item"
+					>
+						<div class="flex items-center gap-x-4 py-2 drop-shadow-lg duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40">
+							<div class="avatar">
+								<div class="w-16 rounded-xl">
+									<Image
+										src={attraction.data.image}
+										widths={[64, 128, attraction.data.image.width]}
+										alt={attraction.data.name}
+									/>
+								</div>
+							</div>
+
+							<div class="mt-0">
+								<span class="block font-semibold text-base-content">{attraction.data.name}</span>
+								<span class="text-sm text-base-content">{attraction.data.description}</span>
+							</div>
+						</div>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</section>

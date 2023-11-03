@@ -1,4 +1,11 @@
 ---
+order: 5
+category: 'Pre-Arrival Info'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Getting Here'
+subcategoryIcon: 'icon'
+subcategoryOrder: 3
 title: 'Parking'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

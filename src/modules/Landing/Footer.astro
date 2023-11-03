@@ -1,0 +1,51 @@
+---
+import { HOME, SITE_TITLE } from '@/app/constants';
+
+interface Link {
+	text?: string;
+	href?: string;
+	ariaLabel?: string;
+	icon?: string;
+}
+
+export interface Props {
+	secondaryLinks: Array<Link>;
+	footNote?: string;
+}
+
+const { secondaryLinks = [], footNote = '' } = Astro.props;
+---
+
+<footer class="relative border-t border-neutral-600 bg-neutral">
+	<div
+		class="pointer-events-none absolute inset-0"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div class="relative mx-auto px-4 py-8 text-neutral-content sm:container sm:px-6">
+		<div class="mb-2">
+			<a
+				rel="prefetch"
+				class="inline-block text-xl font-bold"
+				href={HOME}
+				>{SITE_TITLE}</a
+			>
+		</div>
+		<div class="text-muted mb-2 text-sm">
+			{
+				secondaryLinks.map(({ text, href }) => (
+					<a
+						class="text-muted mr-2 transition duration-150 ease-in-out hover:text-gray-700 hover:underline rtl:ml-2 rtl:mr-0 dark:text-gray-400"
+						href={href}
+						set:html={text}
+					/>
+				))
+			}
+		</div>
+
+		<div class="text-sm text-neutral-content">
+			<Fragment set:html={footNote} />
+		</div>
+	</div>
+</footer>

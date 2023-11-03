@@ -1,4 +1,11 @@
 ---
+order: 1
+category: 'Welcome'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Welcome'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Welcome to Kalmia Woods'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'
@@ -29,7 +36,7 @@ Just open the book on your phone and follow the prompt. It'll miraculously add t
 
 ### Print or save a PDF
 
-If you'd like to print some of the pages ahead of travelling, or if you'd like to save a PDF to your device, just tap the print button above. It won't print right away but it will create a PDF that you can save or print.
+If you'd like to print some of the pages ahead of traveling, or if you'd like to save a PDF to your device, just tap the print button above. It won't print right away but it will create a PDF that you can save or print.
 
 ### And now, relax
 

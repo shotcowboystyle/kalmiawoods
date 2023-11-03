@@ -1,4 +1,11 @@
 ---
+order: 11
+category: 'Local Eats & Drinks'
+categoryIcon: 'icon'
+categoryOrder: 3
+subcategory: 'Fine Dining'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Fine dining two'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

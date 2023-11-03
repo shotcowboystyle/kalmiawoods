@@ -1,4 +1,11 @@
 ---
+order: 13
+category: 'So Long, Farewell'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Departure Information'
+subcategoryIcon: 'icon'
+subcategoryOrder: 3
 title: 'Thank you for staying!'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

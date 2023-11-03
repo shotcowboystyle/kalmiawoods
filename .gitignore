@@ -2,6 +2,7 @@
 
 # compiled output
 .astro
+.astro-content
 .turbo
 .husky
 .vercel
@@ -47,3 +48,9 @@ coverage/
 # ssl certs
 *.pem
 *.key
+
+e2e/output
+lighthouse
+stats.html
+.stylelintcache
+.cspellcache

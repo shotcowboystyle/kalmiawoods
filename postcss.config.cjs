@@ -1,12 +1,22 @@
 module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss/nesting'),
-    require('tailwindcss'),
-    require('cssnano')({
-      preset: ['default', { discardComments: { removeAll: true } }],
-      plugins: [require('autoprefixer')],
-    }),
-    // require('autoprefixer'),
-  ],
+	plugins: {
+		'postcss-import': {},
+		'tailwindcss/nesting': 'postcss-nesting',
+		tailwindcss: {},
+		'postcss-preset-env': {
+			features: { 'nesting-rules': false },
+		},
+		'postcss-combine-media-query': {},
+		'postcss-combine-duplicated-selectors': {
+			removeDuplicatedProperties: true,
+			removeDuplicatedValues: false,
+		},
+		autoprefixer: {},
+		cssnano: {
+			preset: 'default',
+			discardComments: { removeAll: true },
+			zindex: false,
+		},
+		'postcss-reporter': {},
+	},
 };

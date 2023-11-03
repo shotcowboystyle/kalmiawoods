@@ -1,4 +1,11 @@
 ---
+order: 3
+category: 'Before You Leave Home'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Access Codes & Instructions'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Access Instructions'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

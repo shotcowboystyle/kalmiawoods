@@ -1,4 +1,11 @@
 ---
+order: 13
+category: 'So Long, Farewell'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Departure Information'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Check-out time'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

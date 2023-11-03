@@ -1,11 +1,48 @@
-dist
-node_modules
-.github
-.changeset
-*.md
-pnpm-workspace.yaml
-.turbo
-.coverage
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# testing
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# production
+dist/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env*.local
+
+# vercel
 .vercel
-public
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# generated
+public/sw.js
+public/fonts
+
+.vscode/
+.eslintignore
+lefthook.yml
+pnpm-lock.yaml
+cspell.json
+.cspellcache
+
+.changeset
+.turbo
 @generated

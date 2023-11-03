@@ -1,4 +1,11 @@
 ---
+order: 6
+category: 'Arrival Instructions'
+categoryIcon: 'icon'
+categoryOrder: 2
+subcategory: 'Leave Us Your First Impressions'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Your first impressions'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'
