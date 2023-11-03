@@ -1,4 +1,11 @@
 ---
+order: 7
+category: 'Essential Property Info'
+categoryIcon: 'icon'
+categoryOrder: 2
+subcategory: 'Equipment & Appliances'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Air conditioning'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

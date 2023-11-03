@@ -1,57 +1,58 @@
 <script setup lang="ts">
-import { useStore } from '@nanostores/vue';
-import { useToast } from 'vue-toastification';
+	import { $activeUserId, $allUserEmails, $user, updateUser } from '@/stores/user';
+	import { fetchPut } from '@/utils/fetchClient';
+	import { useToast } from 'vue-toastification';
 
-import { activeUserId, updateUser, user, usersEmails } from '@/stores/user';
-import { fetchPut } from '@/utils/fetchClient';
+	const toast = useToast();
 
-const toast = useToast();
+	const isSubmitting = ref(false);
+	const emailModel = ref('');
 
-const $user = useStore(user);
-const $activeUserId = useStore(activeUserId);
-const $usersEmails = useStore(usersEmails);
+	async function submit() {
+		isSubmitting.value = true;
 
-const isSubmitting = ref(false);
-const emailModel = ref('');
+		try {
+			const response = await fetchPut(`admin/users/${$activeUserId.value}/email`, {
+				newEmail: emailModel.value,
+			});
 
-async function submit() {
-  isSubmitting.value = true;
-
-  try {
-    const response = await fetchPut(`admin/users/${$activeUserId.value}/email`, {
-      newEmail: emailModel.value,
-    });
-
-    const data = await response.json();
-    updateUser(data);
-    toast.success('Update successful.');
-    emailModel.value = '';
-  } catch (error: any) {
-    toast.error(JSON.parse(error).message);
-  } finally {
-    isSubmitting.value = false;
-  }
-}
+			const data = await response.json();
+			updateUser(data);
+			toast.success('Update successful.');
+			emailModel.value = '';
+		} catch (error) {
+			toast.error((error as Error).message);
+		} finally {
+			isSubmitting.value = false;
+		}
+	}
 </script>
 
 <template>
-  <KwForm @submit="submit">
-    <p class="mb-4">Current email: {{ $user.email }}</p>
-    <KwTextField
-      class="form-control w-full mb-4"
-      label="New email"
-      name="newEmail"
-      id="newEmail"
-      v-model="emailModel"
-      required
-      :rules="['email', 'isUnique']"
-      :validation-matchers="$usersEmails"
-      errorMessagePrefix="Email"
-      type="email"
-      autocomplete="off" />
+	<KwForm @submit="submit">
+		<p class="mb-4">Current email: {{ $user.email }}</p>
+		<KwTextField
+			id="newEmail"
+			v-model="emailModel"
+			class="form-control mb-4 w-full"
+			label="New email"
+			name="newEmail"
+			required
+			:rules="['email', 'isUnique']"
+			:validation-matchers="$allUserEmails"
+			error-message-prefix="Email"
+			type="email"
+			autocomplete="off"
+		/>
 
-    <div class="flex gap-6 justify-end mt-8">
-      <KwButton variant="primary" text="Save" type="submit" :disabled="isSubmitting" :loading="isSubmitting" />
-    </div>
-  </KwForm>
+		<div class="mt-8 flex justify-end gap-6">
+			<KwButton
+				variant="primary"
+				text="Save"
+				type="submit"
+				:disabled="isSubmitting"
+				:loading="isSubmitting"
+			/>
+		</div>
+	</KwForm>
 </template>

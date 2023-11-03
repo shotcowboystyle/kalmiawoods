@@ -1,4 +1,11 @@
 ---
+order: 8
+category: 'Safety Information'
+categoryIcon: 'icon'
+categoryOrder: 2
+subcategory: 'House Rules'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Quiet times'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

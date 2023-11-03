@@ -1,22 +1,46 @@
 ---
-import type { InferGetStaticParamsType } from 'astro';
-
-import LayoutSidebar from '@/app/LayoutSidebar.astro';
-import { checkAuth } from '@/app/check-auth';
+import Layout from '@/app/LayoutUser.astro';
+import SvgSprite from '@/components/SvgSprite.astro';
 import UserSettings from '@/modules/Profile/UserSettings.vue';
-
-const redirect = await checkAuth(Astro);
-if (redirect) {
-  return Astro.redirect(redirect);
-}
+import type { InferGetStaticParamsType } from 'astro';
 
 type Params = InferGetStaticParamsType<{ id: string }>;
 
 const { id } = Astro.params as Params;
 ---
 
-<LayoutSidebar>
-  <div class="px-4 pt-8">
-    <UserSettings client:only="vue" mode={id} />
-  </div>
-</LayoutSidebar>
+<Layout>
+	<header
+		class="bg-users text-users-content navbar"
+		transition:name="Users background"
+	>
+		<div
+			class="flex-none"
+			transition:name="Users icon"
+		>
+			<a
+				href="/admin/users"
+				class="btn btn-square btn-ghost"
+			>
+				<SvgSprite
+					name="arrow-left-icon"
+					class="stroke-users h-6 w-6"
+				/>
+			</a>
+		</div>
+		<div class="flex-1">
+			<span
+				class="fade-in-right fade-out-left m-0 text-xl"
+				transition:name="Users title"
+				>User Details</span
+			>
+		</div>
+	</header>
+
+	<div class="px-0 sm:pt-8">
+		<UserSettings
+			client:only="vue"
+			mode={id}
+		/>
+	</div>
+</Layout>

@@ -1,5 +1,5 @@
 declare namespace astroHTML.JSX {
-  interface TimeHTMLAttributes {
-    pubdate?: boolean;
-  }
+	interface TimeHTMLAttributes {
+		pubdate?: boolean;
+	}
 }

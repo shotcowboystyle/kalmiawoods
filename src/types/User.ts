@@ -1,12 +1,11 @@
-import { z } from 'zod';
-
 import {
-  AuthUserWithProfileSchema,
-  UserProfileSchema,
-  UserProfileWithoutIdSchema,
-  UserSchema,
-  UserWithoutIdSchema,
+	AuthUserWithProfileSchema,
+	UserProfileSchema,
+	UserProfileWithoutIdSchema,
+	UserSchema,
+	UserWithoutIdSchema,
 } from '@/schemas/user';
+import { z } from 'zod';
 
 export type User = z.infer<typeof UserSchema>;
 export type UserProfile = z.infer<typeof UserProfileSchema>;
@@ -18,13 +17,13 @@ export type UserWithProfile = z.infer<typeof AuthUserWithProfileSchema>;
 // export type UserWithProfileData = z.infer<typeof DisplayableUserDetailsSchema>;
 
 export type UpdateUserProfileInput = {
-  firstName: string;
-  lastName: string;
-  mobilePhone: string;
-  address?: string;
-  avatar?: string;
+	firstName: string;
+	lastName: string;
+	mobilePhone: string;
+	address?: string;
+	avatar?: string;
 };
 
 export type CreateUserInput = UpdateUserProfileInput & {
-  email: string;
+	email: string;
 };

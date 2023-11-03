@@ -1,4 +1,11 @@
 ---
+order: 10
+category: 'Your Local Area Guide'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Our Recommendations'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Let us explore'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

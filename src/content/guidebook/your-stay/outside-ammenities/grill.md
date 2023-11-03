@@ -1,4 +1,11 @@
 ---
+order: 9
+category: 'Enjoying Your Time With Us'
+categoryIcon: 'icon'
+categoryOrder: 2
+subcategory: 'Outside Amenities'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Grill and BBQ'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

@@ -4,24 +4,41 @@ import LogoutButton from './LogoutButton.vue';
 import ProfileDropdownUser from './ProfileDropdownUser.vue';
 ---
 
-<div class="dropdown dropdown-end">
-  <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-    <div class="w-10 rounded-full">
-      <span class="sr-only">Open user menu</span>
-      <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
-    </div>
-  </label>
-  <div tabindex="0" class="dropdown-content z-[1] mt-3 shadow bg-base-100 text-base-content">
-    <ProfileDropdownUser client:only="vue" />
-    <div class="divider mt-2 mb-0"></div>
-    <ul class="menu w-full pt-0">
-      <li>
-        <a href={HOME} role="menuitem">Home</a>
-      </li>
-      <li>
-        <a href="/profile" role="menuitem">Profile</a>
-      </li>
-      <LogoutButton client:only="vue" />
-    </ul>
-  </div>
+<div class="col-span-1 row-span-1">
+	<label
+		tabindex="0"
+		class="avatar btn btn-circle btn-ghost"
+	>
+		<div class="w-10 rounded-full">
+			<span class="sr-only">Open user menu</span>
+			<img
+				src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+				alt="user photo"
+			/>
+		</div>
+	</label>
+	<div
+		tabindex="0"
+		class="dropdown-content z-[1] mt-3 bg-base-100 text-base-content shadow"
+	>
+		<ProfileDropdownUser client:only="vue" />
+		<div class="divider mb-0 mt-2"></div>
+		<ul class="menu w-full pt-0">
+			<li>
+				<a
+					href={HOME}
+					role="menuitem"
+					>Home</a
+				>
+			</li>
+			<li>
+				<a
+					href="/profile"
+					role="menuitem"
+					>Profile</a
+				>
+			</li>
+			<LogoutButton client:only="vue" />
+		</ul>
+	</div>
 </div>

@@ -1,4 +1,11 @@
 ---
+order: 7
+category: 'Essential Property Info'
+categoryIcon: 'icon'
+categoryOrder: 3
+subcategory: 'Linen & Towels'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Bed linen and towels'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

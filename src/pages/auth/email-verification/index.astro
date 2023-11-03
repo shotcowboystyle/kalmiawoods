@@ -1,18 +1,14 @@
 ---
 import LayoutFrameless from '@/app/LayoutFrameless.astro';
-import { checkAuth } from '@/app/check-auth';
 import FormRegistrationRecovery from '@/modules/Auth/FormRegistrationRecovery.vue';
-
-const redirect = await checkAuth(Astro);
-if (redirect) {
-  return Astro.redirect(redirect);
-}
 ---
 
 <LayoutFrameless>
-  <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-    Email verification
-  </h2>
-  <p>In order to use this site, you first need to verify you're email and complete your account registration by creating a password. Use the form below to receive an email with a link to finish setting up your account.</p>
-  <FormRegistrationRecovery client:only="vue" />
+	<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Email verification</h2>
+	<p>
+		In order to use this site, you first need to verify you're email and complete your account
+		registration by creating a password. Use the form below to receive an email with a link to
+		finish setting up your account.
+	</p>
+	<FormRegistrationRecovery client:only="vue" />
 </LayoutFrameless>

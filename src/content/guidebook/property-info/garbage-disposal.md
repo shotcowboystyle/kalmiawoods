@@ -1,4 +1,11 @@
 ---
+order: 7
+category: 'Essential Property Info'
+categoryIcon: 'icon'
+categoryOrder: 4
+subcategory: 'Garbage Disposal'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Garbage and Recycling'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

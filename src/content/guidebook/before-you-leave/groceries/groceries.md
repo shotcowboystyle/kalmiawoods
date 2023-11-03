@@ -1,4 +1,11 @@
 ---
+order: 3
+category: 'Before You Leave Home'
+categoryIcon: 'icon'
+categoryOrder: 4
+subcategory: 'Grocery Pick-Up & Delivery'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Stock Up Before You Arrive'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

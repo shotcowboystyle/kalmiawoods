@@ -1,0 +1,26 @@
+---
+import { GUEST_ACCOMMODATIONS_DATA } from '@/app/constants';
+import SvgSprite from '@/components/SvgSprite.astro';
+---
+
+<section class="my-10">
+	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+		<h3 class="mb-4 text-2xl">Overview</h3>
+		<div
+			role="list"
+			class="flex flex-row flex-wrap items-center gap-4 sm:gap-6 md:flex-nowrap"
+		>
+			{
+				GUEST_ACCOMMODATIONS_DATA.map((stat) => (
+					<div class="flex flex-row items-center">
+						<SvgSprite
+							name={stat.icon}
+							class="h-6 w-6 stroke-black dark:stroke-white"
+						/>
+						<span class="ml-2 text-sm leading-6">{stat.text}</span>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>

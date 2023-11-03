@@ -1,82 +1,139 @@
 ---
-import '@/assets/styles/base.css';
+import { ViewTransitions } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 import 'vue-toastification/dist/index.css';
-// import pkg from '../../package.json' assert { type: 'json' };
-
-// import VercelWebVitals from '@/components/VercelWebVitals.astro';
-import { SITE_TITLE } from './constants.js';
+import { SITE_TITLE } from '@/app/constants';
+import ReloadPrompt from '@/components/ReloadPrompt.astro';
+import '@/styles/base.css';
 
 export interface Props {
-  class?: string;
-  title?: string;
+	title?: string;
 }
 
-const { class: clazz, title } = Astro.props as Props;
+const { title } = Astro.props as Props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
-    <link rel="mask-icon" href="/favicon.svg" color="#bbea69" />
-    <meta name="msapplication-TileColor" content="#bbea69" />
-    <meta name="theme-color" content="#bbea69" />
-    <title>{SITE_TITLE}</title>
-    <meta name="description" content={title} />
-    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' vitals.vercel-insights.com;" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<link
+			rel="icon"
+			href="/favicon.svg"
+			type="image/svg+xml"
+		/>
+		<link
+			rel="apple-touch-icon"
+			href="/pwa-192x192.png"
+		/>
+		<link
+			rel="mask-icon"
+			href="/favicon.svg"
+			color="#bbea69"
+		/>
+		<meta
+			name="msapplication-TileColor"
+			content="#bbea69"
+		/>
+		<meta
+			name="theme-color"
+			content="#bbea69"
+		/>
+		<title>{SITE_TITLE}</title>
+		<meta
+			name="description"
+			content={title}
+		/>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="connect-src 'self' vitals.vercel-insights.com vitals.vercel-analytics.com;"
+		/>
 
-    <script is:inline>
-      if (
-        localStorage.getItem('color-theme') === 'dark' ||
-        (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
-        document.documentElement.classList.add('dark');
-        document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.setAttribute('data-theme', 'light');
-      }
-    </script>
+		<script>
+			import { getPreferredColorScheme, setColorScheme } from '@/stores/color-scheme';
 
-    <script>
-      /* Alternative to 100 vh on mobile devices */
-      /* https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html */
-      const vh100 = window.innerHeight;
-      document.documentElement.style.setProperty('--100vh', `${vh100}px`);
-    </script>
+			document.addEventListener('astro:page-load', () => {
+				const colorScheme = getPreferredColorScheme();
+				setColorScheme(colorScheme);
+			});
+		</script>
 
-    <!-- <VercelWebVitals />
-    <script is:inline defer src="/_vercel/insights/script.js"></script> -->
+		<script>
+			import { LOCAL_STORAGE_COLOR_SCHEME_KEY } from '@/app/constants';
+			import { applyColorScheme } from '@/stores/color-scheme';
+			import type { ColorScheme } from '@/types/ColorScheme';
 
-    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
-    <script src="/src/pwa.ts"></script>
-  </head>
-  <body
-    class:list={[
-      //
-      clazz,
-      'tracking-tight antialiased',
-      'bg-base-100',
-      'overflow-hidden lg:overflow-visible',
-      // 'scrollbar scrollbar-w-3 scrollbar-thumb-rounded-[0.25rem]',
-      // 'scrollbar-track-slate-200  scrollbar-thumb-gray-400',
-      // 'dark:scrollbar-track-gray-900 dark:scrollbar-thumb-gray-700',
-    ]}>
-    <slot />
+			document.addEventListener('astro:after-swap', () => {
+				const colorScheme = localStorage.getItem(LOCAL_STORAGE_COLOR_SCHEME_KEY);
+				if (colorScheme != null) {
+					applyColorScheme(colorScheme as ColorScheme);
+				}
+			});
+		</script>
 
-    <!-- <footer>
-      Built at: {buildDate}
-    </footer> -->
-  </body>
+		<script>
+			/* Alternative to 100 vh on mobile devices */
+			/* https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html */
+			const vh100 = window.innerHeight;
+			document.documentElement.style.setProperty('--100vh', `${vh100}px`);
+		</script>
+
+		{pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+		<!-- <script src="/src/pwa.ts"></script> -->
+		<ViewTransitions fallback="swap" />
+	</head>
+	<body class="bg-base-100">
+		<div id="app">
+			<slot />
+		</div>
+		<ReloadPrompt />
+
+		<style is:global>
+			@import url('https://fonts.cdnfonts.com/css/inter');
+
+			.animate-in {
+				animation: animate-in 0.5s ease-in-out;
+			}
+
+			/* Firefox */
+			* {
+				scrollbar-width: auto;
+				scrollbar-color: #c7c7c7 #ededed;
+			}
+
+			/* Chrome, Edge, and Safari */
+			*::-webkit-scrollbar {
+				width: 15px;
+			}
+
+			*::-webkit-scrollbar-track {
+				background: #ededed;
+			}
+
+			*::-webkit-scrollbar-thumb {
+				background-color: #c7c7c7;
+				border-radius: 5px;
+				border: 2px solid #ffffff;
+			}
+
+			@keyframes animate-in {
+				0% {
+					opacity: 0;
+					transform: translateY(1rem);
+				}
+				100% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			img {
+				content-visibility: auto;
+			}
+		</style>
+	</body>
 </html>
-
-<style is:global>
-  @import url('https://fonts.cdnfonts.com/css/inter');
-  img {
-    content-visibility: auto;
-  }
-</style>

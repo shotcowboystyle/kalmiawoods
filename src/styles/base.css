@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @layer base {
+	@font-face {
+		font-family: Thunder;
+		src: url('/fonts/Thunder-VF.ttf');
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'General Sans';
+		src: url('/fonts/GeneralSans-Variable.woff2') format('woff2');
+		font-display: swap;
+	}
+} */
+
+@layer utilities {
+	.bg-guidebook {
+		@apply bg-primary;
+	}
+
+	.bg-guidebook-focus {
+		@apply bg-primary-focus;
+	}
+
+	.text-guidebook-content {
+		@apply text-primary-content;
+	}
+
+	.stroke-guidebook {
+		stroke: theme('colors.primary-content');
+	}
+
+	.bg-reservations {
+		@apply bg-accent;
+	}
+
+	.bg-reservations-focus {
+		@apply bg-accent-focus;
+	}
+
+	.text-reservations-content {
+		@apply text-accent-content;
+	}
+
+	.stroke-reservations {
+		stroke: theme('colors.accent-content');
+	}
+
+	.bg-users {
+		@apply bg-secondary;
+	}
+
+	.bg-users-focus {
+		@apply bg-secondary-focus;
+	}
+
+	.text-users-content {
+		@apply text-secondary-content;
+	}
+
+	.stroke-users {
+		stroke: theme('colors.secondary-content');
+	}
+
+	.bg-profile {
+		@apply bg-neutral;
+	}
+
+	.bg-profile-focus {
+		@apply bg-neutral-focus;
+	}
+
+	.text-profile-content {
+		@apply text-neutral-content;
+	}
+
+	.stroke-profile {
+		stroke: theme('colors.neutral-content');
+	}
+}
+
+.label-text.required:after,
+.form-control:has(input.required) .label-text:after,
+.form-control:has(select.required) .label-text:after {
+	content: '';
+	margin: 0.2em;
+	padding: 0.2em;
+	background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path fill="crimson" d="M110 16 76 57v1l51-10v32l-51-9-1 1 35 39-28 17-18-50-1 1-18 49-28-17 34-40-50 9V48l50 10v-1L17 17 46 1l17 48h1L82 1l28 15z"/></svg>')
+		no-repeat 0 25%;
+}
+
+.modal {
+	@apply bg-black bg-opacity-40;
+}
+
+.svg-sprite {
+	@apply h-24 w-24 stroke-black;
+}

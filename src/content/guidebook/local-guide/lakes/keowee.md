@@ -1,4 +1,11 @@
 ---
+order: 10
+category: 'Your Local Area Guide'
+categoryIcon: 'icon'
+categoryOrder: 3
+subcategory: 'Lakes'
+subcategoryIcon: 'icon'
+subcategoryOrder: 2
 title: 'Lake Keowee'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

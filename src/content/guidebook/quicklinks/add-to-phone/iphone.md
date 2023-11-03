@@ -1,4 +1,11 @@
 ---
+order: 2
+category: 'Quick Links'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Add This App to Your Phone'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Add this app to your iPhone'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

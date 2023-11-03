@@ -1,4 +1,11 @@
 ---
+order: 9
+category: 'Enjoying Your Time With Us'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Inside the House'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'What you will find at the house'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

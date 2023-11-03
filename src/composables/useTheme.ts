@@ -7,17 +7,17 @@ const DARK_THEME = 'dark';
 let activeTheme = LIGHT_THEME;
 
 export function useTheme() {
-  function onThemeChanged(dark: boolean) {
-    if (typeof window !== 'undefined') {
-      activeTheme = dark ? DARK_THEME : LIGHT_THEME;
-      document.documentElement.dataset.theme = activeTheme;
-    }
-  }
+	function onThemeChanged(dark: boolean) {
+		if (typeof window !== 'undefined') {
+			activeTheme = dark ? DARK_THEME : LIGHT_THEME;
+			document.documentElement.dataset.theme = activeTheme;
+		}
+	}
 
-  const isDark = useDark({ onChanged: onThemeChanged });
+	const isDark = useDark({ storageKey: 'color-scheme', onChanged: onThemeChanged });
 
-  return {
-    theme: activeTheme,
-    isDark,
-  };
+	return {
+		theme: activeTheme,
+		isDark,
+	};
 }

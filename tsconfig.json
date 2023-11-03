@@ -1,64 +1,41 @@
 {
-  "extends": "astro/tsconfigs/base",
-  "compilerOptions": {
-    "strictNullChecks": true,
+	"extends": "astro/tsconfigs/strict",
+	"compilerOptions": {
+		"strictNullChecks": true,
+		"allowJs": true,
+		"composite": false,
+		"jsx": "preserve",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowSyntheticDefaultImports": true,
+		// "verbatimModuleSyntax": true,
 
-    "allowJs": true,
-    // "allowJs": false,
-    // "checkJs": false,
+		// Astro will directly run your TypeScript code, no transpilation needed.
+		// "noEmit": true,
+		// Enable JSON imports.
+		"resolveJsonModule": true,
+		// Enable top-level await, and other modern ESM features.
+		"target": "ESNext",
+		"module": "ESNext",
+		// Enable node-style module resolution, for things like npm package imports.
+		// "moduleResolution": "node",
+		"moduleResolution": "Bundler",
+		// Enable stricter transpilation for better output.
+		// "isolatedModules": true,
+		"verbatimModuleSyntax": true,
 
-    "composite": false,
+		"types": ["@vite-pwa/astro"],
+		"plugins": [{ "name": "@astrojs/ts-plugin" }],
 
-    "jsx": "preserve",
-    // "jsxImportSource": "vue",
+		"rootDir": "./",
+		"baseUrl": ".",
 
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    // "noEmit": true,
-    // "esModuleInterop": true,
-    // "esModuleInterop": false,
-    "resolveJsonModule": true,
-    // "jsx": "preserve",
-    // "incremental": true,
-    "allowSyntheticDefaultImports": true,
-
-    // Enable top-level await, and other modern ESM features.
-    // "target": "es5",
-    "target": "ESNext",
-    "module": "ESNext",
-    // Enable node-style module resolution, for things like npm package imports.
-    // "moduleResolution": "node",
-    // "moduleResolution": "NodeNext",
-    "moduleResolution": "Bundler",
-    "baseUrl": ".",
-    // Enable stricter transpilation for better output.
-    // "isolatedModules": true,
-    "types": ["unplugin-icons/types/astro", "@vite-pwa/astro"],
-
-    "plugins": [{ "name": "@astrojs/ts-plugin" }],
-
-    // "moduleDetection": "force",
-
-    "rootDir": "./",
-    // "allowImportingTsExtensions": true,
-    // "allowArbitraryExtensions": true,
-
-    // "disableSizeLimit": false,
-
-    "verbatimModuleSyntax": true,
-    // "preserveSymlinks": true,
-
-    // "noImplicitAny": true,
-    // "noImplicitOverride": true,
-    // "allowUnusedLabels": false,
-    // "allowUnreachableCode": false,
-
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["."],
-  "exclude": ["node_modules"]
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": ["."],
+	"exclude": ["node_modules", ".vscode", "dist"]
 }

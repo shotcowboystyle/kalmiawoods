@@ -1,0 +1,220 @@
+---
+import GuidebookEntry from '@/components/GuidebookEntry.astro';
+import GuidebookNavigation from '@/components/GuidebookNavigation.astro';
+
+// const { guides } = Astro.props as { guides: Guidebook };
+const { guides, navOnly } = Astro.props;
+// const { page } = Astro.params as unknown as { page: GuidebookSectionEntryNames };
+const { page } = Astro.params;
+
+const pageParamsParts = page?.split('/');
+// console.log('GUIDES', guides?.[pageParamsParts[0]]?.subcategories);
+// console.log('PAGE ONE', page);
+// console.log('PAGE TWO', guides?.[pageParamsParts[0]]?.subcategories[pageParamsParts[1]].items[0]);
+---
+
+<main class="h-full">
+	<div class="h-full px-6 py-8">
+		<div class="container mx-auto flex h-full justify-between">
+			<div class="h-full w-4/12 lg:block">
+				<div class="card h-full bg-base-100 shadow-xl">
+					<div class="navbar bg-primary text-primary-content">
+						<div class="navbar-start">
+							<a
+								href="mailto:support@kalmiawoods.com"
+								class="btn btn-circle btn-ghost"
+							>
+								<svg
+									class="h-5 w-5"
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-send"
+									><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg
+								>
+							</a>
+							<a
+								href="tel://1-555-555-5555"
+								class="btn btn-circle btn-ghost"
+							>
+								<svg
+									class="h-5 w-5"
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-phone"
+									><path
+										d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+									></path></svg
+								>
+							</a>
+						</div>
+
+						<div class="navbar-end">
+							<a
+								class="btn btn-circle btn-ghost"
+								href="#"
+							>
+								<svg
+									class="h-5 w-5"
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-share-2"
+									><circle
+										cx="18"
+										cy="5"
+										r="3"
+									></circle><circle
+										cx="6"
+										cy="12"
+										r="3"
+									></circle><circle
+										cx="18"
+										cy="19"
+										r="3"
+									></circle><line
+										x1="8.59"
+										x2="15.42"
+										y1="13.51"
+										y2="17.49"
+									></line><line
+										x1="15.41"
+										x2="8.59"
+										y1="6.51"
+										y2="10.49"
+									></line></svg
+								>
+							</a>
+							<a
+								class="btn btn-circle btn-ghost"
+								href="#"
+							>
+								<svg
+									class="h-5 w-5"
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-printer"
+									><polyline points="6 9 6 2 18 2 18 9"></polyline><path
+										d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"
+									></path><rect
+										width="12"
+										height="8"
+										x="6"
+										y="14"
+									></rect></svg
+								>
+							</a>
+						</div>
+					</div>
+					<div class="content-body-wrapper">
+						<GuidebookNavigation
+							pages={guides}
+							currentPage={page}
+						/>
+					</div>
+				</div>
+			</div>
+
+			{
+				!navOnly && (
+					<div class="-mx-8 h-full w-full lg:w-8/12">
+						<div class="card h-full bg-base-100 shadow-xl">
+							<div class="navbar bg-primary text-primary-content">
+								<div class="navbar-start">
+									<p>Placeholder title</p>
+								</div>
+
+								<div class="navbar-end gap-2">
+									<button class="btn btn-circle btn-outline">
+										<svg
+											class="h-5 w-5"
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											class="lucide lucide-chevrons-up"
+										>
+											<>
+												<path d="m17 11-5-5-5 5" />
+												<path d="m17 18-5-5-5 5" />
+											</>
+										</svg>
+									</button>
+									<button class="btn btn-circle btn-outline">
+										<svg
+											class="h-5 w-5"
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											class="lucide lucide-chevrons-down"
+										>
+											<>
+												<path d="m7 6 5 5 5-5" />
+												<path d="m7 13 5 5 5-5" />
+											</>
+										</svg>
+									</button>
+								</div>
+							</div>
+
+							<div class="content-body-wrapper">
+								{guides?.[pageParamsParts[0]]?.subcategories[pageParamsParts[1]].items.map(
+									(item) => (
+										<GuidebookEntry
+											title={item.data.title}
+											content={item.body}
+										/>
+									),
+								)}
+							</div>
+						</div>
+					</div>
+				)
+			}
+		</div>
+	</div>
+</main>
+
+<style>
+	.content-body-wrapper {
+		@apply card-body p-3;
+		min-height: calc(100vh - 70px);
+	}
+</style>

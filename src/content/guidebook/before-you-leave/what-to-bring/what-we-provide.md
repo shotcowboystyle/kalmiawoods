@@ -1,4 +1,11 @@
 ---
+order: 3
+category: 'Before You Leave Home'
+categoryIcon: 'icon'
+categoryOrder: 2
+subcategory: 'What To Bring'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'What we provide'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

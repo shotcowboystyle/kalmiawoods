@@ -1,0 +1,14 @@
+---
+import { FOOTER_DATA } from '@/app/constants';
+import Footer from '@/modules/Landing/Footer.astro';
+import Header from '@/modules/Landing/Header.astro';
+import LayoutCommon from './LayoutCommon.astro';
+---
+
+<LayoutCommon>
+	<Header />
+	<main id="main-content">
+		<slot />
+	</main>
+	<Footer {...FOOTER_DATA} />
+</LayoutCommon>

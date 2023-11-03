@@ -1,31 +1,22 @@
 ---
-import LayoutSidebar from '@/app/LayoutSidebar.astro';
-import { checkAuth } from '@/app/check-auth';
-// import Contact from '@/modules/Contact/Contact.astro';
-import Hero from '@/modules/Dashboard/Hero.astro';
-// import NearbyAttractions from '@/modules/Dashboard/NearbyAttractions.astro';
-// import PhotoGallery from '@/modules/Dashboard/PhotoGallery.astro';
-// import Summary from '@/modules/Dashboard/Summary.astro';
-
-const redirect = await checkAuth(Astro);
-if (redirect) {
-  return Astro.redirect(redirect);
-}
+import Layout from '@/app/LayoutLanding.astro';
+import Amenities from '@/modules/Landing/Amenities.astro';
+import GuestAccommodations from '@/modules/Landing/GuestAccommodations.astro';
+import Hero from '@/modules/Landing/Hero.astro';
+import Highlights from '@/modules/Landing/Highlights.astro';
+import NearbyAttractions from '@/modules/Landing/NearbyAttractions.astro';
+import PhotoGallery from '@/modules/Landing/PhotoGallery.astro';
+import SleepingArrangements from '@/modules/Landing/SleepingArrangements.astro';
+import Summary from '@/modules/Landing/Summary.astro';
 ---
 
-<LayoutSidebar>
-  <div
-    class="bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 text-slate-800 dark:text-slate-100 mb-20 p-4 lg:p-16 shadow-xl shadow-slate-200 dark:shadow-slate-900"
-  >
-    <section class="flex justify-center w-full pb-24">
-      <div class="w-full">
-        <Hero />
-        <p class="w-full text-base-content text-center">Coming soon: This page will host a property guidebook for all information you may need regarding your stay.</p>
-        <!-- <NearbyAttractions />
-        <PhotoGallery />
-        <Summary />
-        <Contact /> -->
-      </div>
-    </section>
-  </div>
-</LayoutSidebar>
+<Layout>
+	<Hero />
+	<NearbyAttractions />
+	<PhotoGallery />
+	<Summary />
+	<GuestAccommodations />
+	<Highlights />
+	<SleepingArrangements />
+	<Amenities />
+</Layout>

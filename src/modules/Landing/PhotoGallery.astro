@@ -1,0 +1,121 @@
+---
+import kitchenCoverPhoto from '@/assets/images/photos/house-kitchen-1.png';
+import libraryCoverPhoto from '@/assets/images/photos/house-library-1.jpeg';
+import livingAreaCoverPhoto from '@/assets/images/photos/house-living-area-1.jpeg';
+import masterBedroomCoverPhoto from '@/assets/images/photos/house-master-bedroom-1.jpeg';
+import houseOverviewCoverPhoto from '@/assets/images/photos/house-overview-1.jpeg';
+import porchCoverPhoto from '@/assets/images/photos/house-porch-1.png';
+import scenicViewsCoverPhoto from '@/assets/images/photos/house-scenic-views-1.jpeg';
+import upstairsCoverPhoto from '@/assets/images/photos/house-upstairs-1.jpeg';
+import { fetchLocalImages } from '@/utils/images';
+import { Image } from 'astro:assets';
+import 'spotlight.js/dist/css/spotlight.min.css';
+
+export const PHOTO_GALLERY = [
+	{
+		text: 'House Overview',
+		image: houseOverviewCoverPhoto,
+	},
+	{
+		text: 'Master Bedroom',
+		image: masterBedroomCoverPhoto,
+	},
+	{
+		text: 'Living Area',
+		image: livingAreaCoverPhoto,
+	},
+	{
+		text: 'Kitchen',
+		image: kitchenCoverPhoto,
+	},
+	{
+		text: 'Library',
+		image: libraryCoverPhoto,
+	},
+	{
+		text: 'Upstairs',
+		image: upstairsCoverPhoto,
+	},
+	{
+		text: 'Porches',
+		image: porchCoverPhoto,
+	},
+	{
+		text: 'Scenic Views',
+		image: scenicViewsCoverPhoto,
+	},
+];
+
+const imageFiles: Record<string, any> = await fetchLocalImages();
+let images = await Promise.all(
+	Object.entries(imageFiles).map(
+		async ([imageKey, imageValue]) =>
+			imageKey.includes('house-') &&
+			typeof imageValue === 'function' &&
+			(await imageValue()).default,
+	),
+);
+images = images.filter((image) => !!image);
+---
+
+<section
+	class="my-10"
+	data-images={JSON.stringify(images)}
+	id="gallery-root"
+>
+	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+		<h2 class="mb-4 text-2xl font-bold text-base-content md:text-3xl lg:mb-8 lg:text-4xl">
+			Explore Inside
+		</h2>
+		<div
+			class="px-4 py-2 max-xl:carousel max-xl:w-full max-xl:space-x-8 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-2 xl:gap-y-8"
+		>
+			{
+				PHOTO_GALLERY.map(({ image, text }) => (
+					<div class="max-xl:carousel-item">
+						<div class="flex flex-col gap-y-3 drop-shadow-lg duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40">
+							<div
+								role="button"
+								class="gallery-thumbnail avatar"
+							>
+								<div class="w-52 rounded-xl xl:w-64">
+									<Image
+										alt={text}
+										widths={[168, 336, 672, image.width]}
+										src={image}
+									/>
+								</div>
+							</div>
+
+							<span class="text-md font-medium leading-5 text-base-content">{text}</span>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<script>
+	import Spotlight from 'spotlight.js/src/js/spotlight.js';
+
+	const galleryRoot = document.getElementById('gallery-root');
+	const images = galleryRoot?.dataset.images;
+
+	const thumbnails = document.querySelectorAll('div.gallery-thumbnail');
+	thumbnails.forEach((item) => {
+		item.addEventListener(
+			'click',
+			() => {
+				if (images?.length) {
+					Spotlight.show(images && JSON.parse(images), {
+						infinite: true,
+						autofit: true,
+						fit: 'contain',
+					});
+				}
+			},
+			{ passive: true },
+		);
+	});
+</script>

@@ -1,15 +1,12 @@
 ---
-// Other examples:
-// - https://github.com/KaiWissel/wttt-33/blob/d38b988b113ed18571f620a85006e55da45d9ec2/src/components/Logo.astro
-// - https://github.com/thomasledoux1/website-thomas-astro/blob/main/src/components/Logos/HomeLogo.astro
-import Svg from '@jasikpark/astro-svg-loader';
+import SvgSprite from '@/components/SvgSprite.astro';
+
+const { class: className, ...rest } = Astro.props;
 ---
 
-<Fragment>
-  <!-- src={import('@/assets/images/logos/logo-3.svg?raw')} -->
-  <Svg
-    src={import('@/assets/images/logos/kalmia-woods-logo.svg?raw')}
-    aria-label={import.meta.env.APP_NAME}
-    class="h-8 fill-white kw-logo"
-  />
-</Fragment>
+<SvgSprite
+	name="kalmia-woods-logo"
+	aria-label={import.meta.env.APP_NAME}
+	class={className}
+	{...rest}
+/>

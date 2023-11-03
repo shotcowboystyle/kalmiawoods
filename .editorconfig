@@ -5,28 +5,16 @@ root = true
 charset = utf-8
 end_of_line = lf
 indent_size = 2
-indent_style = space
+indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 100
 
-[Makefile]
-indent_style = tab
-
-[{go.mod,go.sum,*.go}]
-indent_style = tab
+[*.{json,yaml,yml}]
+indent_style = space
 
 [*.{md,mdx}]
 insert_final_newline = true
 
-[*.html]
-insert_final_newline = false
-
-[nginx.conf]
-indent_size = 8
-
 [*.svg]
-insert_final_newline = false
-
-[LICENSE]
 insert_final_newline = false

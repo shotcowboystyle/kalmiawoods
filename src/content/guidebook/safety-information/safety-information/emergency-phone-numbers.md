@@ -1,4 +1,11 @@
 ---
+order: 8
+category: 'Safety Information'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Safety Information'
+subcategoryIcon: 'icon'
+subcategoryOrder: 3
 title: 'Emergency phone numbers'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'

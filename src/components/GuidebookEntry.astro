@@ -1,0 +1,23 @@
+---
+// import { Link } from 'astro-link';
+// import './TreeNavigation.scss';
+/* —————————————————————————————————————————————————————————————————————————— */
+
+// interface Props {
+//   pages?: Docs;
+//   currentPage?: string;
+//   headings?: MarkdownHeading[];
+// }
+// const { pages, headings, currentPage } = Astro.props as Props;
+const { title, content } = Astro.props;
+---
+
+<div class="bg-base collapse collapse-arrow my-3 rounded-sm border border-base-300 shadow-lg">
+	<input type="checkbox" />
+	<div class="collapse-title text-xl font-medium">
+		{title}
+	</div>
+	<div class="collapse-content">
+		<Fragment set:html={content} />
+	</div>
+</div>

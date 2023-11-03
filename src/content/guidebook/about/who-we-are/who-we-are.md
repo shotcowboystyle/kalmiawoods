@@ -1,4 +1,11 @@
 ---
+order: 4
+category: 'About Us'
+categoryIcon: 'icon'
+categoryOrder: 1
+subcategory: 'Who We Are'
+subcategoryIcon: 'icon'
+subcategoryOrder: 1
 title: 'Who we are'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'
