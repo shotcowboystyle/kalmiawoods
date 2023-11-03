@@ -1,7 +1,16 @@
 import { auth } from '@/lib/lucia';
 import type { MiddlewareResponseHandler } from 'astro';
 
-const PUBLIC_ROUTES = ['/maintenance', '/403', '/404', '/500', '/__email', '/email', '/api'];
+const PUBLIC_ROUTES = [
+	'/maintenance',
+	'/403',
+	'/404',
+	'/500',
+	'/__email',
+	'/email',
+	'/api',
+	'/_image',
+];
 const AUTH_ROUTES = ['/auth/login', '/signup', '/auth/password-reset'];
 const ACCOUNT_ROUTES = ['/auth/email-verification'];
 
