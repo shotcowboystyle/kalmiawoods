@@ -73,7 +73,7 @@ export default defineConfig({
 		edgeMiddleware: false,
 	}),
 	image: {
-		domains: [],
+		domains: ['kalmiawoods.com'],
 	},
 	integrations: [
 		svgSprite({
