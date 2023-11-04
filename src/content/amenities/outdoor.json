@@ -1,0 +1,23 @@
+{
+	"items": [
+		{
+			"description": "An open space on the property usually covered in grass",
+			"icon": "flower-icon",
+			"title": "Private backyard"
+		},
+		{
+			"icon": "fire-pit-icon",
+			"title": "Fire pit"
+		},
+		{
+			"icon": "outdoor-furniture-icon",
+			"title": "Outdoor furniture"
+		},
+		{
+			"icon": "outdoor-grill-icon",
+			"title": "BBQ grill"
+		}
+	],
+	"name": "Outdoor",
+	"order": 11
+}

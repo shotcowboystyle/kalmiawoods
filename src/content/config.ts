@@ -12,6 +12,21 @@ const attractionsCollection = defineCollection({
 		}),
 });
 
+const amenitiesCollection = defineCollection({
+	type: 'data',
+	schema: z.object({
+		order: z.number(),
+		name: z.string(),
+		items: z.array(
+			z.object({
+				icon: z.string(),
+				title: z.string(),
+				description: z.string().optional(),
+			}),
+		),
+	}),
+});
+
 const guidebookCollection = defineCollection({
 	schema: z.object({
 		order: z.number(),
@@ -38,5 +53,6 @@ const guidebookCollection = defineCollection({
 
 export const collections = {
 	attractions: attractionsCollection,
+	amenities: amenitiesCollection,
 	guidebook: guidebookCollection,
 };

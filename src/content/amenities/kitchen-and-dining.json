@@ -1,0 +1,66 @@
+{
+	"items": [
+		{
+			"description": "Space where guests can cook their own meals",
+			"icon": "kitchen-icon",
+			"title": "Kitchen"
+		},
+		{
+			"icon": "refrigerator-icon",
+			"title": "Refrigerator"
+		},
+		{
+			"icon": "microwave-icon",
+			"title": "Microwave"
+		},
+		{
+			"description": "Pots and pans, oil, salt and pepper",
+			"icon": "kitchen-icon",
+			"title": "Cooking basics"
+		},
+		{
+			"description": "Bowls, chopsticks, plates, cups, etc.",
+			"icon": "dishware-icon",
+			"title": "Dishes and silverware"
+		},
+		{
+			"icon": "refrigerator-icon",
+			"title": "Freezer"
+		},
+		{
+			"icon": "stove-icon",
+			"title": "Gas stove"
+		},
+		{
+			"icon": "coffee-maker-icon",
+			"title": "Coffee maker"
+		},
+		{
+			"icon": "wine-glass-icon",
+			"title": "Wine glasses"
+		},
+		{
+			"icon": "toaster-icon",
+			"title": "Toaster"
+		},
+		{
+			"icon": "blender-icon",
+			"title": "Blender"
+		},
+		{
+			"description": "Grill, charcoal, bamboo skewers/iron skewers, etc.",
+			"icon": "outdoor-grill-icon",
+			"title": "Barbecue utensils"
+		},
+		{
+			"icon": "dining-table-icon",
+			"title": "Dining table"
+		},
+		{
+			"icon": "coffee-maker-icon",
+			"title": "Coffee"
+		}
+	],
+	"name": "Kitchen and dining",
+	"order": 9
+}

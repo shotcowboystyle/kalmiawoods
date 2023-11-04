@@ -8,7 +8,7 @@ import porchCoverPhoto from '@/assets/images/photos/house-porch-1.png';
 import scenicViewsCoverPhoto from '@/assets/images/photos/house-scenic-views-1.jpeg';
 import upstairsCoverPhoto from '@/assets/images/photos/house-upstairs-1.jpeg';
 import { fetchLocalImages } from '@/utils/images';
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import 'spotlight.js/dist/css/spotlight.min.css';
 
 export const PHOTO_GALLERY = [
@@ -73,16 +73,18 @@ images = images.filter((image) => !!image);
 			{
 				PHOTO_GALLERY.map(({ image, text }) => (
 					<div class="max-xl:carousel-item">
-						<div class="flex flex-col gap-y-3 drop-shadow-lg duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40">
+						<div class="flex flex-col gap-y-3">
 							<div
 								role="button"
 								class="gallery-thumbnail avatar"
 							>
-								<div class="w-52 rounded-xl xl:w-64">
-									<Image
+								<div class="w-52 rounded-xl xl:w-72">
+									<Picture
 										alt={text}
-										widths={[168, 336, 672, image.width]}
 										src={image}
+										class="drop-shadow-lg duration-300 hover:scale-105 hover:bg-gray-200 hover:bg-opacity-40"
+										formats={['avif', 'webp']}
+										widths={[168, 336, 672, image.width]}
 									/>
 								</div>
 							</div>
@@ -110,8 +112,9 @@ images = images.filter((image) => !!image);
 				if (images?.length) {
 					Spotlight.show(images && JSON.parse(images), {
 						infinite: true,
-						autofit: true,
+						autofit: false,
 						fit: 'contain',
+						animation: ['scale'],
 					});
 				}
 			},

@@ -1,0 +1,18 @@
+{
+	"items": [
+		{
+			"icon": "thermometer-snowflake-icon",
+			"title": "AC - split type ductless system"
+		},
+		{
+			"icon": "fireplace-icon",
+			"title": "Indoor fireplace - wood-burning"
+		},
+		{
+			"icon": "thermometer-icon",
+			"title": "Portable heater"
+		}
+	],
+	"name": "Heating and cooling",
+	"order": 6
+}

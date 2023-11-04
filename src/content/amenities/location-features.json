@@ -1,0 +1,11 @@
+{
+	"items": [
+		{
+			"description": "Separate street or building entrance",
+			"icon": "door-closed-icon",
+			"title": "Private entrance"
+		}
+	],
+	"name": "Location features",
+	"order": 10
+}

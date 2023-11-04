@@ -1,0 +1,14 @@
+{
+	"items": [
+		{
+			"icon": "key-icon",
+			"title": "Self check-in"
+		},
+		{
+			"icon": "lock-icon",
+			"title": "Smart lock"
+		}
+	],
+	"name": "Services",
+	"order": 13
+}

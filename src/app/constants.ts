@@ -143,11 +143,6 @@ export const SUMMARY_FEATURES = [
 ];
 
 export const AMENITIES_DATA = [
-	// {
-	// 	icon: 'check-circle-icon',
-	// 	title: 'Further info',
-	// 	description: 'Credit cards accepted, Accessible 24/7 and Pets welcome',
-	// },
 	{
 		icon: 'utensils-icon',
 		title: 'Cooking',

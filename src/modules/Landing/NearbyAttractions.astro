@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
@@ -24,13 +24,15 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 						target="_blank"
 						class="max-xl:carousel-item"
 					>
-						<div class="flex items-center gap-x-4 py-2 drop-shadow-lg duration-300 active:scale-105 active:bg-gray-200 active:bg-opacity-40">
+						<div class="flex items-center gap-x-4 py-2">
 							<div class="avatar">
 								<div class="w-16 rounded-xl">
-									<Image
+									<Picture
 										src={attraction.data.image}
-										widths={[64, 128, attraction.data.image.width]}
 										alt={attraction.data.name}
+										formats={['avif', 'webp']}
+										class="drop-shadow-lg"
+										widths={[64, 128, attraction.data.image.width]}
 									/>
 								</div>
 							</div>

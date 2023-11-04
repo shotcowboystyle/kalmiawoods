@@ -31,7 +31,7 @@ import Logo from '@/components/Logo.astro';
 </header>
 
 <script>
-	document.addEventListener('astro:page-load', () => {
+	window.addEventListener('load', () => {
 		let lastKnownScrollPosition = window.scrollY;
 		let ticking = true;
 
@@ -69,6 +69,6 @@ import Logo from '@/components/Logo.astro';
 	}
 
 	#header.scroll #login-button {
-		@apply border-black text-black dark:border-white dark:text-white;
+		@apply border-white text-white;
 	}
 </style>

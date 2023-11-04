@@ -1,0 +1,10 @@
+{
+	"items": [
+		{
+			"icon": "dices-icon",
+			"title": "Board games"
+		}
+	],
+	"name": "Family",
+	"order": 5
+}

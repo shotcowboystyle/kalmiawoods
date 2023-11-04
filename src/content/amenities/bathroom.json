@@ -1,0 +1,30 @@
+{
+	"items": [
+		{
+			"icon": "hair-dryer-icon",
+			"title": "Hair dryer"
+		},
+		{
+			"icon": "cleaning-products-icon",
+			"title": "Cleaning products"
+		},
+		{
+			"icon": "shampoo-bottle-icon",
+			"title": "Shampoo"
+		},
+		{
+			"icon": "shampoo-bottle-icon",
+			"title": "Dove conditioner"
+		},
+		{
+			"icon": "soap-bottle-icon",
+			"title": "Dove body soap"
+		},
+		{
+			"icon": "hot-water-icon",
+			"title": "Hot water"
+		}
+	],
+	"name": "Bathroom",
+	"order": 2
+}

@@ -1,0 +1,14 @@
+{
+	"items": [
+		{
+			"icon": "car-front-icon",
+			"title": "Free parking on premises"
+		},
+		{
+			"icon": "hot-tub-icon",
+			"title": "Private hot tub"
+		}
+	],
+	"name": "Parking and facilities",
+	"order": 12
+}

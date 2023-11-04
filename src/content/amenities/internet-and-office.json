@@ -1,0 +1,10 @@
+{
+	"items": [
+		{
+			"icon": "wifi-icon",
+			"title": "Wifi"
+		}
+	],
+	"name": "Internet and office",
+	"order": 8
+}

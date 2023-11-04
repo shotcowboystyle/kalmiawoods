@@ -1,0 +1,10 @@
+{
+	"items": [
+		{
+			"icon": "tv-icon",
+			"title": "TV / DVD player"
+		}
+	],
+	"name": "Entertainment",
+	"order": 4
+}

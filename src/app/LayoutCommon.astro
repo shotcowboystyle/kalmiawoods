@@ -1,5 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 import 'vue-toastification/dist/index.css';
 import { SITE_TITLE } from '@/app/constants';
@@ -84,7 +83,7 @@ const { title } = Astro.props as Props;
 
 		{pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
 		<!-- <script src="/src/pwa.ts"></script> -->
-		<ViewTransitions fallback="swap" />
+		<slot name="head" />
 	</head>
 	<body class="bg-base-100">
 		<div id="app">

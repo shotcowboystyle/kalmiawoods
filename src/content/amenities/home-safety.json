@@ -1,0 +1,23 @@
+{
+	"items": [
+		{
+			"description": "Outdoor security cameras located on the exterior of the home are on",
+			"icon": "security-camera-icon",
+			"title": "Security cameras"
+		},
+		{
+			"icon": "smoke-alarm-icon",
+			"title": "Smoke alarm"
+		},
+		{
+			"icon": "fire-extinguisher-icon",
+			"title": "Fire extinguisher"
+		},
+		{
+			"icon": "first-aid-kit-icon",
+			"title": "First aid kit"
+		}
+	],
+	"name": "Home safety",
+	"order": 7
+}

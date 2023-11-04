@@ -1,0 +1,31 @@
+{
+	"items": [
+		{
+			"description": "Towels, bed sheets, soap, and toilet paper",
+			"icon": "essentials-icon",
+			"title": "Essentials"
+		},
+		{
+			"icon": "washer-icon",
+			"title": "Washer"
+		},
+		{
+			"icon": "dryer-icon",
+			"title": "Dryer"
+		},
+		{
+			"icon": "bed-linens-icon",
+			"title": "Bed linens"
+		},
+		{
+			"icon": "pillow-icon",
+			"title": "Extra pillows and blankets"
+		},
+		{
+			"icon": "iron-icon",
+			"title": "Iron"
+		}
+	],
+	"name": "Bedroom and laundry",
+	"order": 3
+}
