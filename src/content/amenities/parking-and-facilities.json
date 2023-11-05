@@ -1,11 +1,11 @@
 {
 	"items": [
 		{
-			"icon": "car-front-icon",
+			"icon": "car-front",
 			"title": "Free parking on premises"
 		},
 		{
-			"icon": "hot-tub-icon",
+			"icon": "hot-tub",
 			"title": "Private hot tub"
 		}
 	],

@@ -1,6 +1,7 @@
 ---
 import GuidebookEntry from '@/components/GuidebookEntry.astro';
 import GuidebookNavigation from '@/components/GuidebookNavigation.astro';
+import type { CollectionEntry } from 'astro:content';
 
 // const { guides } = Astro.props as { guides: Guidebook };
 const { guides, navOnly } = Astro.props;
@@ -63,10 +64,7 @@ const pageParamsParts = page?.split('/');
 						</div>
 
 						<div class="navbar-end">
-							<a
-								class="btn btn-circle btn-ghost"
-								href="#"
-							>
+							<button class="btn btn-circle btn-ghost">
 								<svg
 									class="h-5 w-5"
 									xmlns="http://www.w3.org/2000/svg"
@@ -103,11 +101,8 @@ const pageParamsParts = page?.split('/');
 										y2="10.49"
 									></line></svg
 								>
-							</a>
-							<a
-								class="btn btn-circle btn-ghost"
-								href="#"
-							>
+							</button>
+							<button class="btn btn-circle btn-ghost">
 								<svg
 									class="h-5 w-5"
 									xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +124,7 @@ const pageParamsParts = page?.split('/');
 										y="14"
 									></rect></svg
 								>
-							</a>
+							</button>
 						</div>
 					</div>
 					<div class="content-body-wrapper">
@@ -195,8 +190,8 @@ const pageParamsParts = page?.split('/');
 							</div>
 
 							<div class="content-body-wrapper">
-								{guides?.[pageParamsParts[0]]?.subcategories[pageParamsParts[1]].items.map(
-									(item) => (
+								{guides?.[pageParamsParts![0]]?.subcategories[pageParamsParts![1]].items.map(
+									(item: CollectionEntry<'guidebook'>) => (
 										<GuidebookEntry
 											title={item.data.title}
 											content={item.body}

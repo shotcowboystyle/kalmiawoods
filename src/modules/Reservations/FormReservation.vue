@@ -35,17 +35,17 @@
 
 	const buildingsOptions = [
 		{
-			icon: 'home-icon',
+			icon: 'home',
 			name: 'Main House',
 			value: 'HOUSE',
 		},
 		{
-			icon: 'warehouse-icon',
+			icon: 'warehouse',
 			name: 'Garage',
 			value: 'GARAGE',
 		},
 		{
-			icon: 'workshop-icon',
+			icon: 'workshop',
 			name: 'Workshop',
 			value: 'WORKSHOP',
 		},

@@ -1,8 +1,28 @@
 {
 	"items": [
 		{
-			"icon": "tv-icon",
+			"icon": "tv",
 			"title": "TV / DVD player"
+		},
+		{
+			"icon": "gamepad",
+			"title": "Game console: Nintendo Wii"
+		},
+		{
+			"icon": "record-player",
+			"title": "Record player"
+		},
+		{
+			"icon": "speaker",
+			"title": "LG sound system with Bluetooth and aux"
+		},
+		{
+			"icon": "exercise-equipment",
+			"title": "Exercise equipment: yoga mat"
+		},
+		{
+			"icon": "book",
+			"title": "Books and reading material"
 		}
 	],
 	"name": "Entertainment",

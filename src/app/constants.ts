@@ -108,25 +108,25 @@ export const SUMMARY_HIGHLIGHTS = [
 	{
 		title: 'Mountain Bike Trails',
 		description: 'Explore the over 5 miles of private mountain biking trails.',
-		icon: 'bike-icon',
+		icon: 'bike',
 		containerClass: 'bg-info text-info-content',
 	},
 	{
 		title: 'Game Room',
 		description: 'A dedicated game room for kids and adults to go wild.',
-		icon: 'gamepad-2-icon',
+		icon: 'gamepad',
 		containerClass: 'mt-8 bg-success text-success-content',
 	},
 	{
 		title: 'Barbecue',
 		description: 'A covered outdoor kitchen for all your culinary needs.',
-		icon: 'outdoor-grill-icon',
+		icon: 'outdoor-grill',
 		containerClass: 'bg-warning text-warning-content',
 	},
 	{
 		title: 'Star Gazing',
 		description: 'With little to no light pollution, watch the night sky light up.',
-		icon: 'sparkles-icon',
+		icon: 'sparkles',
 		containerClass: 'mt-8 bg-error text-error-content',
 	},
 ];
@@ -142,68 +142,24 @@ export const SUMMARY_FEATURES = [
 	{ text: 'Star Gazing' },
 ];
 
-export const AMENITIES_DATA = [
-	{
-		icon: 'utensils-icon',
-		title: 'Cooking',
-		description: 'Oven, microwave, dishwasher and all the other common appliances',
-	},
-	{
-		icon: 'tv-icon',
-		title: 'Entertainment',
-		description: 'TV, DVD player, projector with portable screen',
-	},
-	{
-		icon: 'dices-icon',
-		title: 'Game Room',
-		description: 'Game room with video/board/card games, air hockey, etc.',
-	},
-	{
-		icon: 'library-icon',
-		title: 'Library',
-		description: 'Library with large collection of books.',
-	},
-	{
-		icon: 'air-vent-icon',
-		title: 'Heating/Cooling',
-		description: 'Fireplace and central heating/air',
-	},
-	{
-		icon: 'chef-hat-icon',
-		title: 'Outdoor Kitchen',
-		description: 'Gas and charcoal grills',
-	},
-	{ icon: 'flower-2-icon', title: 'Gardens', description: 'Bonsai garden, herb garden, terrace' },
-	{
-		icon: 'flame-kindling-icon',
-		title: 'Outside',
-		description: 'Outdoor fire pit with plenty of firewood',
-	},
-	{
-		icon: 'parking-square-icon',
-		title: 'Parking',
-		description: 'Plenty parking and utility vehicle storage',
-	},
-];
-
 export const GUEST_ACCOMMODATIONS_DATA = [
-	{ icon: 'users-2-icon', text: '15 Guests' },
-	{ icon: 'door-open-icon', text: '6 Bedrooms' },
-	{ icon: 'bed-double-icon', text: '9 Beds' },
-	{ icon: 'bath-icon', text: '4 Bathrooms' },
+	{ icon: 'users-2', text: '15 Guests' },
+	{ icon: 'door-open', text: '6 Bedrooms' },
+	{ icon: 'bed-double', text: '9 Beds' },
+	{ icon: 'bath', text: '4 Bathrooms' },
 ];
 
 export const HIGHLIGHTS_DATA = [
-	{ icon: 'paw-print-icon', text: 'Pets welcome' },
-	{ icon: 'accessibility-icon', text: 'Handicap accessible' },
-	// { icon: 'wifi-icon', text: 'Wireless broadband internet' },
+	{ icon: 'paw-print', text: 'Pets welcome' },
+	{ icon: 'accessibility', text: 'Handicap accessible' },
+	// { icon: 'wifi', text: 'Wireless broadband internet' },
 ];
 
 export const SLEEPING_ARRANGEMENTS_DATA = [
-	{ icon: 'bed-double-icon', text: '4 queen beds' },
-	{ icon: 'bed-single-icon', text: '4 single beds' },
-	{ icon: 'sofa-icon', text: '2 couches' },
-	{ icon: 'bed-icon', text: '5 air mattresses' },
+	{ icon: 'bed-double', text: '4 queen beds' },
+	{ icon: 'bed-single', text: '4 single beds' },
+	{ icon: 'sofa', text: '2 couches' },
+	{ icon: 'bed', text: '5 air mattresses' },
 ];
 
 export const FOOTER_DATA = {

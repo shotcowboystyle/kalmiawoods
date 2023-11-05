@@ -1,28 +1,36 @@
 {
 	"items": [
 		{
-			"icon": "hair-dryer-icon",
+			"icon": "bath",
+			"title": "Bathtub"
+		},
+		{
+			"icon": "hair-dryer",
 			"title": "Hair dryer"
 		},
 		{
-			"icon": "cleaning-products-icon",
+			"icon": "cleaning-products",
 			"title": "Cleaning products"
 		},
 		{
-			"icon": "shampoo-bottle-icon",
+			"icon": "shampoo-bottle",
 			"title": "Shampoo"
 		},
 		{
-			"icon": "shampoo-bottle-icon",
-			"title": "Dove conditioner"
+			"icon": "shampoo-bottle",
+			"title": "Conditioner"
 		},
 		{
-			"icon": "soap-bottle-icon",
-			"title": "Dove body soap"
+			"icon": "soap-bottle",
+			"title": "Body soap"
 		},
 		{
-			"icon": "hot-water-icon",
+			"icon": "hot-water",
 			"title": "Hot water"
+		},
+		{
+			"icon": "soap-bottle",
+			"title": "Shower gel"
 		}
 	],
 	"name": "Bathroom",

@@ -2,7 +2,7 @@
 	"items": [
 		{
 			"description": "Separate street or building entrance",
-			"icon": "door-closed-icon",
+			"icon": "door-closed",
 			"title": "Private entrance"
 		}
 	],

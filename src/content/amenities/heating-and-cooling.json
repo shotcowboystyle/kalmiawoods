@@ -1,15 +1,21 @@
 {
 	"items": [
 		{
-			"icon": "thermometer-snowflake-icon",
-			"title": "AC - split type ductless system"
+			"description": "One unit central AC, one unit split type ductless system",
+			"icon": "snowflake",
+			"title": "Air conditioning"
 		},
 		{
-			"icon": "fireplace-icon",
-			"title": "Indoor fireplace - wood-burning"
+			"description": "Wood-burning stove",
+			"icon": "fireplace",
+			"title": "Indoor fireplace"
 		},
 		{
-			"icon": "thermometer-icon",
+			"icon": "fan",
+			"title": "Portable fans"
+		},
+		{
+			"icon": "thermometer",
 			"title": "Portable heater"
 		}
 	],

@@ -132,6 +132,14 @@ export default defineConfig({
 						if (id.includes('v-calendar')) {
 							return 'v-calendar';
 						}
+
+						if (id.includes('leaflet')) {
+							return 'leaflet';
+						}
+
+						if (id.includes('spotlight.js')) {
+							return 'spotlight';
+						}
 					},
 				},
 			},

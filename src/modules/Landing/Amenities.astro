@@ -1,23 +1,121 @@
 ---
-import { AMENITIES_DATA } from '@/app/constants';
 import SvgSprite from '@/components/SvgSprite.astro';
+import type { Amenity } from '@/types/Landing';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+const amenitiesCollection = (await getCollection('amenities')).sort(
+	(a, b) => a.data.order - b.data.order,
+);
+
+const amenitiesFirstItems = amenitiesCollection.map((category: CollectionEntry<'amenities'>) => {
+	return category.data.items?.[0];
+});
+
+const allAmenitiesItems = amenitiesCollection.reduce(
+	(acc, cur) => [...acc, ...cur.data.items],
+	[] as Amenity[],
+);
 ---
 
 <section class="my-10">
 	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
-		<h3 class="mb-4 text-2xl">Amenities</h3>
-		<div class="grid grid-cols-1 gap-4 py-0 md:grid-cols-3 md:gap-8">
+		<h3 class="mb-8 text-2xl">What this place offers</h3>
+		<div class="mb-8 grid grid-cols-1 gap-4 py-0 md:grid-cols-3 md:gap-8">
 			{
-				AMENITIES_DATA.map(({ icon, description }) => (
+				amenitiesFirstItems.map(({ icon, title }) => (
 					<div class="flex flex-row items-start">
 						<SvgSprite
 							name={icon}
-							class="h-6 w-6 stroke-black dark:stroke-white"
+							class="h-6 w-6"
 						/>
-						<span class="ml-2">{description}</span>
+						<span class="ml-2">{title}</span>
 					</div>
 				))
 			}
 		</div>
+
+		<button
+			class="btn btn-outline"
+			onclick="amenitiesModal.showModal()"
+		>
+			Show all {allAmenitiesItems.length} amenities
+		</button>
+
+		<dialog
+			id="amenitiesModal"
+			class="modal modal-bottom sm:modal-middle"
+		>
+			<div class="modal-box !w-3/5 !max-w-3xl">
+				<form method="dialog">
+					<button class="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
+				</form>
+
+				<div class="mb-8">
+					<h2
+						class="text-lg font-bold"
+						tabindex="-1"
+					>
+						What this place offers
+					</h2>
+				</div>
+
+				{
+					amenitiesCollection.map((amenity) => (
+						<div class="-mt-4 mb-12">
+							<div class="mb-0 py-4 text-lg font-semibold text-base-content">
+								<h3
+									class="amenity-section-title"
+									tabindex="-1"
+								>
+									{amenity.data.name}
+								</h3>
+							</div>
+
+							{amenity.data.items.map(
+								({
+									title,
+									icon,
+									description,
+								}: {
+									title: string;
+									icon: string;
+									description?: string;
+								}) => (
+									<div>
+										<div class="rounded-sm py-6">
+											<div class="flex">
+												<div class="mr-4">
+													<div class="min-h-6 flex items-center">
+														<SvgSprite
+															name={icon}
+															class="h-6 w-6"
+														/>
+													</div>
+												</div>
+
+												<div class="flex w-full flex-auto flex-col justify-center">
+													<div class="text-base-content">{title}</div>
+													{description && (
+														<div class="text-muted mt-1 break-words text-sm">{description}</div>
+													)}
+												</div>
+											</div>
+										</div>
+										<div class="divider my-0" />
+									</div>
+								),
+							)}
+						</div>
+					))
+				}
+			</div>
+			<form
+				method="dialog"
+				class="modal-backdrop"
+			>
+				<button>close</button>
+			</form>
+		</dialog>
 	</div>
 </section>

@@ -26,12 +26,11 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 					>
 						<div class="flex items-center gap-x-4 py-2">
 							<div class="avatar">
-								<div class="w-16 rounded-xl">
+								<div class="w-16 rounded-xl drop-shadow-lg">
 									<Picture
 										src={attraction.data.image}
 										alt={attraction.data.name}
 										formats={['avif', 'webp']}
-										class="drop-shadow-lg"
 										widths={[64, 128, attraction.data.image.width]}
 									/>
 								</div>

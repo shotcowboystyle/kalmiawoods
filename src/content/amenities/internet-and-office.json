@@ -1,8 +1,13 @@
 {
 	"items": [
 		{
-			"icon": "wifi-icon",
+			"icon": "wifi",
 			"title": "Wifi"
+		},
+		{
+			"description": "In a private room with surge protector",
+			"icon": "desk",
+			"title": "Dedicated workspace"
 		}
 	],
 	"name": "Internet and office",

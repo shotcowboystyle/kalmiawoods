@@ -1,29 +1,37 @@
 {
 	"items": [
 		{
-			"description": "Towels, bed sheets, soap, and toilet paper",
-			"icon": "essentials-icon",
-			"title": "Essentials"
-		},
-		{
-			"icon": "washer-icon",
+			"icon": "washer",
 			"title": "Washer"
 		},
 		{
-			"icon": "dryer-icon",
+			"icon": "dryer",
 			"title": "Dryer"
 		},
 		{
-			"icon": "bed-linens-icon",
+			"description": "Towels, bed sheets, soap, and toilet paper",
+			"icon": "essentials",
+			"title": "Essentials"
+		},
+		{
+			"icon": "clothes-hangar",
+			"title": "Hangars"
+		},
+		{
+			"icon": "bed-linens",
 			"title": "Bed linens"
 		},
 		{
-			"icon": "pillow-icon",
+			"icon": "pillow",
 			"title": "Extra pillows and blankets"
 		},
 		{
-			"icon": "iron-icon",
+			"icon": "iron",
 			"title": "Iron"
+		},
+		{
+			"icon": "clothes-storage",
+			"title": "Clothing storage: walk-in closet, closet, and dresser"
 		}
 	],
 	"name": "Bedroom and laundry",

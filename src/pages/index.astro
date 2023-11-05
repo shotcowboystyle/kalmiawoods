@@ -4,10 +4,14 @@ import Amenities from '@/modules/Landing/Amenities.astro';
 import GuestAccommodations from '@/modules/Landing/GuestAccommodations.astro';
 import Hero from '@/modules/Landing/Hero.astro';
 import Highlights from '@/modules/Landing/Highlights.astro';
+// import LocationMap from '@/modules/Landing/LocationMap.astro';
 import NearbyAttractions from '@/modules/Landing/NearbyAttractions.astro';
 import PhotoGallery from '@/modules/Landing/PhotoGallery.astro';
 import SleepingArrangements from '@/modules/Landing/SleepingArrangements.astro';
 import Summary from '@/modules/Landing/Summary.astro';
+
+// const LATITUDE = 34.949952;
+// const LONGITUDE = -83.018268;
 ---
 
 <Layout>
@@ -19,4 +23,9 @@ import Summary from '@/modules/Landing/Summary.astro';
 	<Highlights />
 	<SleepingArrangements />
 	<Amenities />
+	<!-- <LocationMap
+		latitude={LATITUDE}
+		longitude={LONGITUDE}
+		zoom={11}
+	/> -->
 </Layout>

@@ -1,8 +1,12 @@
 {
 	"items": [
 		{
-			"icon": "dices-icon",
+			"icon": "dices",
 			"title": "Board games"
+		},
+		{
+			"icon": "toy",
+			"title": "Children’s books and toys for ages 0-2 years old and 2-5 years old"
 		}
 	],
 	"name": "Family",

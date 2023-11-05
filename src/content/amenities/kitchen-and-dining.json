@@ -2,62 +2,78 @@
 	"items": [
 		{
 			"description": "Space where guests can cook their own meals",
-			"icon": "kitchen-icon",
+			"icon": "kitchen",
 			"title": "Kitchen"
 		},
 		{
-			"icon": "refrigerator-icon",
+			"icon": "refrigerator",
 			"title": "Refrigerator"
 		},
 		{
-			"icon": "microwave-icon",
+			"icon": "microwave",
 			"title": "Microwave"
 		},
 		{
 			"description": "Pots and pans, oil, salt and pepper",
-			"icon": "kitchen-icon",
+			"icon": "kitchen",
 			"title": "Cooking basics"
 		},
 		{
 			"description": "Bowls, chopsticks, plates, cups, etc.",
-			"icon": "dishware-icon",
+			"icon": "dishware",
 			"title": "Dishes and silverware"
 		},
 		{
-			"icon": "refrigerator-icon",
+			"icon": "refrigerator",
 			"title": "Freezer"
 		},
 		{
-			"icon": "stove-icon",
+			"icon": "stove-top",
 			"title": "Gas stove"
 		},
 		{
-			"icon": "coffee-maker-icon",
+			"icon": "oven",
+			"title": "Oven"
+		},
+		{
+			"icon": "dishwasher",
+			"title": "Dishwasher"
+		},
+		{
+			"icon": "kettle",
+			"title": "Hot water kettle"
+		},
+		{
+			"icon": "coffee-maker",
 			"title": "Coffee maker"
 		},
 		{
-			"icon": "wine-glass-icon",
+			"icon": "wine-glass",
 			"title": "Wine glasses"
 		},
 		{
-			"icon": "toaster-icon",
+			"icon": "toaster",
 			"title": "Toaster"
 		},
 		{
-			"icon": "blender-icon",
+			"icon": "baking-sheet",
+			"title": "Baking sheet"
+		},
+		{
+			"icon": "blender",
 			"title": "Blender"
 		},
 		{
 			"description": "Grill, charcoal, bamboo skewers/iron skewers, etc.",
-			"icon": "outdoor-grill-icon",
+			"icon": "outdoor-grill",
 			"title": "Barbecue utensils"
 		},
 		{
-			"icon": "dining-table-icon",
+			"icon": "dining-table",
 			"title": "Dining table"
 		},
 		{
-			"icon": "coffee-maker-icon",
+			"icon": "coffee-maker",
 			"title": "Coffee"
 		}
 	],

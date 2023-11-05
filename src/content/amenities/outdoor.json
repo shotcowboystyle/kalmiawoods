@@ -2,20 +2,44 @@
 	"items": [
 		{
 			"description": "An open space on the property usually covered in grass",
-			"icon": "flower-icon",
+			"icon": "flower",
 			"title": "Private backyard"
 		},
 		{
-			"icon": "fire-pit-icon",
+			"icon": "patio",
+			"title": "Private patio and balcony"
+		},
+		{
+			"icon": "fire-pit",
 			"title": "Fire pit"
 		},
 		{
-			"icon": "outdoor-furniture-icon",
+			"icon": "outdoor-furniture",
 			"title": "Outdoor furniture"
 		},
 		{
-			"icon": "outdoor-grill-icon",
+			"icon": "hammock",
+			"title": "Hammock"
+		},
+		{
+			"icon": "outdoor-furniture",
+			"title": "Outdoor dining area"
+		},
+		{
+			"icon": "outdoor-grill",
 			"title": "BBQ grill"
+		},
+		{
+			"icon": "sun-lounger",
+			"title": "Sun loungers"
+		},
+		{
+			"icon": "bike",
+			"title": "Bicycles"
+		},
+		{
+			"icon": "kayak",
+			"title": "Canoe and kayaks"
 		}
 	],
 	"name": "Outdoor",

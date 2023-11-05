@@ -78,11 +78,11 @@ images = images.filter((image) => !!image);
 								role="button"
 								class="gallery-thumbnail avatar"
 							>
-								<div class="w-52 rounded-xl xl:w-72">
+								<div class="w-52 rounded-xl drop-shadow-lg xl:w-72">
 									<Picture
 										alt={text}
 										src={image}
-										class="drop-shadow-lg duration-300 hover:scale-105 hover:bg-gray-200 hover:bg-opacity-40"
+										class="duration-300 hover:scale-105 hover:bg-gray-200 hover:bg-opacity-40"
 										formats={['avif', 'webp']}
 										widths={[168, 336, 672, image.width]}
 									/>

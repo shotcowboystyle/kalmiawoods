@@ -1,20 +1,20 @@
 {
 	"items": [
 		{
-			"description": "Outdoor security cameras located on the exterior of the home are on",
-			"icon": "security-camera-icon",
+			"description": "For our guest’s safety and security, there is 24/7 exterior video surveillance on the property. There will be a camera on the front porch and the south/west corner soffit. If it makes you uncomfortable, you can unplug it. Please plug it back in when you leave. There's another trail camera near the drive way. It's not facing the house.",
+			"icon": "security-camera",
 			"title": "Security cameras"
 		},
 		{
-			"icon": "smoke-alarm-icon",
+			"icon": "smoke-alarm",
 			"title": "Smoke alarm"
 		},
 		{
-			"icon": "fire-extinguisher-icon",
+			"icon": "fire-extinguisher",
 			"title": "Fire extinguisher"
 		},
 		{
-			"icon": "first-aid-kit-icon",
+			"icon": "first-aid-kit",
 			"title": "First aid kit"
 		}
 	],

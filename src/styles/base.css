@@ -16,68 +16,74 @@
 	}
 } */
 
-.bg-guidebook {
-	@apply bg-primary;
-}
+@layer utilities {
+	.text-muted {
+		@apply text-zinc-400;
+	}
 
-.bg-guidebook-focus {
-	@apply bg-primary-focus;
-}
+	.bg-guidebook {
+		@apply bg-primary;
+	}
 
-.text-guidebook-content {
-	@apply text-primary-content;
-}
+	.bg-guidebook-focus {
+		@apply bg-primary-focus;
+	}
 
-.stroke-guidebook {
-	stroke: theme('colors.primary-content');
-}
+	.text-guidebook-content {
+		@apply text-primary-content;
+	}
 
-.bg-reservations {
-	@apply bg-accent;
-}
+	.stroke-guidebook {
+		stroke: theme('colors.primary-content');
+	}
 
-.bg-reservations-focus {
-	@apply bg-accent-focus;
-}
+	.bg-reservations {
+		@apply bg-accent;
+	}
 
-.text-reservations-content {
-	@apply text-accent-content;
-}
+	.bg-reservations-focus {
+		@apply bg-accent-focus;
+	}
 
-.stroke-reservations {
-	stroke: theme('colors.accent-content');
-}
+	.text-reservations-content {
+		@apply text-accent-content;
+	}
 
-.bg-users {
-	@apply bg-secondary;
-}
+	.stroke-reservations {
+		stroke: theme('colors.accent-content');
+	}
 
-.bg-users-focus {
-	@apply bg-secondary-focus;
-}
+	.bg-users {
+		@apply bg-secondary;
+	}
 
-.text-users-content {
-	@apply text-secondary-content;
-}
+	.bg-users-focus {
+		@apply bg-secondary-focus;
+	}
 
-.stroke-users {
-	stroke: theme('colors.secondary-content');
-}
+	.text-users-content {
+		@apply text-secondary-content;
+	}
 
-.bg-profile {
-	@apply bg-neutral;
-}
+	.stroke-users {
+		stroke: theme('colors.secondary-content');
+	}
 
-.bg-profile-focus {
-	@apply bg-neutral-focus;
-}
+	.bg-profile {
+		@apply bg-neutral;
+	}
 
-.text-profile-content {
-	@apply text-neutral-content;
-}
+	.bg-profile-focus {
+		@apply bg-neutral-focus;
+	}
 
-.stroke-profile {
-	stroke: theme('colors.neutral-content');
+	.text-profile-content {
+		@apply text-neutral-content;
+	}
+
+	.stroke-profile {
+		stroke: theme('colors.neutral-content');
+	}
 }
 
 .label-text.required:after,

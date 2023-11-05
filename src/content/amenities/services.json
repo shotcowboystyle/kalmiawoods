@@ -1,12 +1,18 @@
 {
 	"items": [
 		{
-			"icon": "key-icon",
+			"description": "Assistance animals are always allowed",
+			"icon": "paw-print",
+			"title": "Pets allowed"
+		},
+		{
+			"icon": "key-round",
 			"title": "Self check-in"
 		},
 		{
-			"icon": "lock-icon",
-			"title": "Smart lock"
+			"description": "Check yourself into the home with a door code",
+			"icon": "smart-lock",
+			"title": "Keypad"
 		}
 	],
 	"name": "Services",
