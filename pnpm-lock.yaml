@@ -133,6 +133,9 @@ devDependencies:
   '@typescript-eslint/parser':
     specifier: ^6.9.1
     version: 6.9.1(eslint@8.52.0)(typescript@5.2.2)
+  '@vite-pwa/astro':
+    specifier: ^0.1.4
+    version: 0.1.4(astro@3.4.3)(vite-plugin-pwa@0.16.6)
   '@vue/eslint-config-typescript':
     specifier: ^12.0.0
     version: 12.0.0(eslint-plugin-vue@9.18.1)(eslint@8.52.0)(typescript@5.2.2)
@@ -325,6 +328,9 @@ devDependencies:
   vue-eslint-parser:
     specifier: ^9.3.2
     version: 9.3.2(eslint@8.52.0)
+  workbox-window:
+    specifier: ^7.0.0
+    version: 7.0.0
 
 packages:
 
@@ -4535,6 +4541,16 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    dev: true
+
+  /@vite-pwa/astro@0.1.4(astro@3.4.3)(vite-plugin-pwa@0.16.6):
+    resolution: {integrity: sha512-OmpaMmF9ogxI/YeUFNS0VDhaoPWvoVdRg0iEiQVz4oIQ+AdEjKNx7h0Xbz9p10/tA8EPX+/ugBMUT0xERMAuyQ==}
+    peerDependencies:
+      astro: ^1.6.0 || ^2.0.0 || ^3.0.0
+      vite-plugin-pwa: '>=0.16.5 <1'
+    dependencies:
+      astro: 3.4.3(@types/node@20.8.10)(typescript@5.2.2)
+      vite-plugin-pwa: 0.16.6(vite@4.5.0)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
   /@vitejs/plugin-vue-jsx@3.0.2(vite@4.5.0)(vue@3.3.7):

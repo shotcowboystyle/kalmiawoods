@@ -68,7 +68,7 @@ images = images.filter((image) => !!image);
 			Explore Inside
 		</h2>
 		<div
-			class="px-4 py-2 max-xl:carousel max-xl:w-full max-xl:space-x-8 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-2 xl:gap-y-8"
+			class="py-2 max-xl:carousel max-xl:w-full max-xl:space-x-8 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-2 xl:gap-y-8"
 		>
 			{
 				PHOTO_GALLERY.map(({ image, text }) => (
@@ -78,7 +78,7 @@ images = images.filter((image) => !!image);
 								role="button"
 								class="gallery-thumbnail avatar"
 							>
-								<div class="w-52 rounded-xl drop-shadow-lg xl:w-72">
+								<div class="w-52 rounded-xl drop-shadow-lg xl:w-80">
 									<Picture
 										alt={text}
 										src={image}

@@ -22,6 +22,7 @@
     "golevelup",
     "graphiql",
     "gsap",
+    "gstatic",
     "hudochenkov",
     "ianvs",
     "iconify",
@@ -63,7 +64,8 @@
     "Unipay",
     "unplugin",
     "vueuse",
-    "xtendui"
+    "xtendui",
+    "zindex"
   ],
   "enableFiletypes": [
     "mdx"
