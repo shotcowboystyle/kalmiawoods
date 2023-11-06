@@ -13,14 +13,14 @@ export const manifest: Partial<ManifestOptions> = {
 	name: 'Kalmia Woods',
 	short_name: APP_NAME,
 	description: APP_DESCRIPTION,
-	lang: 'en-US',
-	// dir: 'ltr',
+	lang: 'en',
+	dir: 'ltr',
 	theme_color: '#1eb854',
 	background_color: '#1eb854',
-	// display_override: ['fullscreen', 'minimal-ui'],
+	display_override: ['fullscreen', 'minimal-ui'],
 	display: 'standalone',
 	// orientation: 'landscape-primary',
-	start_url: '/',
+	start_url: '/dashboard',
 	// scope: '/',
 	icons: [
 		{
@@ -48,6 +48,58 @@ export const manifest: Partial<ManifestOptions> = {
 			purpose: 'maskable',
 		},
 	],
+	categories: ['photo', 'productivity', 'utilities'],
+	screenshots: [
+		{
+			src: 'favicons/screenshot1-0ff68546.png',
+			type: 'image/png',
+			sizes: '540x720',
+			form_factor: 'narrow',
+		},
+		{
+			src: 'favicons/screenshot2-1f78c4db.jpg',
+			type: 'image/jpeg',
+			sizes: '540x720',
+			form_factor: 'narrow',
+		},
+		{
+			src: 'favicons/screenshot3-c1e02216.jpg',
+			type: 'image/jpeg',
+			sizes: '540x720',
+			form_factor: 'narrow',
+		},
+		{
+			src: 'favicons/screenshot4-3a706c3c.png',
+			type: 'image/png',
+			sizes: '1024x593',
+			form_factor: 'wide',
+		},
+		{
+			src: 'favicons/screenshot5-ea50826f.jpg',
+			type: 'image/jpeg',
+			sizes: '1024x593',
+			form_factor: 'wide',
+		},
+		{
+			src: 'favicons/screenshot6-0168d284.jpg',
+			type: 'image/jpeg',
+			sizes: '1024x593',
+			form_factor: 'wide',
+		},
+	],
+	share_target: {
+		action: '/?utm_medium=PWA&utm_source=share-target&share-target',
+		method: 'POST',
+		enctype: 'multipart/form-data',
+		params: {
+			files: [
+				{
+					name: 'file',
+					accept: ['image/*'],
+				},
+			],
+		},
+	},
 };
 
 export const workbox: Partial<GenerateSWOptions> = {
