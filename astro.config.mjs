@@ -20,7 +20,7 @@ import { manifest, workbox } from './pwa.config';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
-const { APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
+const { APP_SITE, APP_BASE, APP_HOST } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
 
 const vitePlugins = [
@@ -64,7 +64,7 @@ export default defineConfig({
 		edgeMiddleware: false,
 	}),
 	image: {
-		domains: ['kalmiawoods.com'],
+		domains: [APP_HOST],
 	},
 	integrations: [
 		svgSprite(),
