@@ -143,23 +143,27 @@ export const SUMMARY_FEATURES = [
 ];
 
 export const GUEST_ACCOMMODATIONS_DATA = [
-	{ icon: 'users-2', text: '15 Guests' },
+	{ icon: 'users', text: '15 Guests' },
 	{ icon: 'door-open', text: '6 Bedrooms' },
 	{ icon: 'bed-double', text: '9 Beds' },
 	{ icon: 'bath', text: '4 Bathrooms' },
 ];
 
 export const HIGHLIGHTS_DATA = [
+	{ icon: 'wifi', text: 'Wireless broadband internet' },
 	{ icon: 'paw-print', text: 'Pets welcome' },
 	{ icon: 'accessibility', text: 'Handicap accessible' },
-	// { icon: 'wifi', text: 'Wireless broadband internet' },
 ];
 
 export const SLEEPING_ARRANGEMENTS_DATA = [
-	{ icon: 'bed-double', text: '4 queen beds' },
-	{ icon: 'bed-single', text: '4 single beds' },
-	{ icon: 'sofa', text: '2 couches' },
-	{ icon: 'bed', text: '5 air mattresses' },
+	{ icons: ['bed'], title: 'Bedroom 1', text: '1 queen bed' },
+	{
+		icons: ['bed', 'bed-single', 'sofa'],
+		title: 'Bedroom 2',
+		text: '1 queen bed, 1 day bed, 1 futon',
+	},
+	{ icons: ['bed', 'bunk-bed'], title: 'Bedroom 3', text: '1 queen bed, 1 bunk bed' },
+	{ icons: ['bed', 'bed-single'], title: 'Bedroom 4', text: '1 queen bed, 1 single bed' },
 ];
 
 export const FOOTER_DATA = {

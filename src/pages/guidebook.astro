@@ -1,26 +1,27 @@
 ---
 import Layout from '@/app/LayoutStacked.astro';
+import type { Guidebook } from '@/types/Guidebook';
 import { Link } from 'astro-link';
 import { getCollection } from 'astro:content';
 
-// import GuidebookPage from '@/modules/Guidebook/GuidebookPage.astro';
-// import { convertArrayToObjectsByKey } from '@/utils/collection';
-/* —————————————————————————————————————————————————————————————————————————— */
-
-// const guidebookCategories = (await getCollection('guidebook')).sort((a, b) => a.data.order - b.data.order);
-// console.log('guidebookCategories', guidebookCategories);
 const guidebookContent = (await getCollection('guidebook'))
 	.sort((a, b) => a.data.order - b.data.order)
 	.reduce((acc, cur) => {
+		const idParts: string[] = cur.id.split('/');
+		const categoryId: string = idParts[0];
+		const subcategoryId: string = idParts[1];
+
 		let sections = acc;
-		if (!sections[cur.data.category]) {
+		if (!sections[categoryId]) {
 			sections = {
 				...sections,
-				[cur.data.category]: {
+				[categoryId]: {
+					categoryTitle: cur.data.category,
 					icon: cur.data.categoryIcon,
-					order: cur.data.Order,
+					order: cur.data.order,
 					subcategories: {
-						[cur.data.subcategory]: {
+						[subcategoryId]: {
+							subcategoryTitle: cur.data.subcategory,
 							icon: cur.data.subcategoryIcon,
 							order: cur.data.categoryOrder,
 							items: [cur],
@@ -28,14 +29,15 @@ const guidebookContent = (await getCollection('guidebook'))
 					},
 				},
 			};
-		} else if (!sections[cur.data.category].subcategories[cur.data.subcategory]) {
+		} else if (!sections[categoryId].subcategories[subcategoryId]) {
 			sections = {
 				...sections,
-				[cur.data.category]: {
-					...sections[cur.data.category],
+				[categoryId]: {
+					...sections[categoryId],
 					subcategories: {
-						...sections[cur.data.category].subcategories,
-						[cur.data.subcategory]: {
+						...sections[categoryId].subcategories,
+						[subcategoryId]: {
+							subcategoryTitle: cur.data.subcategory,
 							icon: cur.data.subcategoryIcon,
 							order: cur.data.categoryOrder,
 							items: [cur],
@@ -46,19 +48,15 @@ const guidebookContent = (await getCollection('guidebook'))
 		} else {
 			sections = {
 				...sections,
-				[cur.data.category]: {
-					...sections[cur.data.category],
+				[categoryId]: {
+					...sections[categoryId],
 					subcategories: {
-						...sections[cur.data.category].subcategories,
-						[cur.data.subcategory]: {
-							// ...sections[cur.data.category].subcategories[cur.data.subcategory],
+						...sections[categoryId].subcategories,
+						[subcategoryId]: {
+							subcategoryTitle: cur.data.subcategory,
 							icon: cur.data.subcategoryIcon,
 							order: cur.data.categoryOrder,
-							items: [
-								...(sections[cur.data.category]?.subcategories?.[cur.data.subcategory]?.items ??
-									[]),
-								cur,
-							],
+							items: [...(sections[categoryId]?.subcategories?.[subcategoryId]?.items ?? []), cur],
 						},
 					},
 				},
@@ -66,19 +64,7 @@ const guidebookContent = (await getCollection('guidebook'))
 		}
 
 		return sections;
-	}, {});
-// .map((g) => ({ category: g.data.category, subcategory: g.data.subcategory }));
-// .slice(0, 4)
-
-// const guidebookSections = convertArrayToObjectsByKey(guidebookContent, 'category');
-// const guidebookSections = guidebookContent.reduce((acc, cur) => {
-//   const sections = acc;
-//   if (!sections.includes(cur.category)) {
-//     sections.push(cur.category);
-//   }
-//   return sections;
-// }, []);
-// console.log('guidebookContent', guidebookContent["Where's The Nearest...?"].subcategories['Gas Station'].items[0]);
+	}, {} as Guidebook);
 ---
 
 <Layout>
@@ -86,7 +72,7 @@ const guidebookContent = (await getCollection('guidebook'))
 		{
 			Object.entries(guidebookContent).map(([category, categoryData]) => (
 				<div
-					tabindex="0"
+					tabindex="-1"
 					class="collapse collapse-arrow border border-base-300 bg-base-200"
 				>
 					<input type="checkbox" />

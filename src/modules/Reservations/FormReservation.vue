@@ -19,7 +19,7 @@
 		isAdmin?: boolean;
 		authUserId: string;
 		isEditingReservation?: boolean;
-		selectedDate?: string;
+		selectedDate?: Date;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
@@ -77,14 +77,19 @@
 				? $reservation.value.buildings
 				: ['HOUSE'],
 		range: {
-			start: props.isEditingReservation ? $reservation.value.checkInDate : props.selectedDate,
-			end: props.isEditingReservation ? $reservation.value.checkOutDate : props.selectedDate,
+			start: props.isEditingReservation
+				? $reservation.value.checkInDate
+				: props.selectedDate ?? new Date(),
+			end: props.isEditingReservation
+				? $reservation.value.checkOutDate
+				: props.selectedDate ?? new Date(),
 		},
 	});
+	const range = ref(null);
 
-	const popover = ref({
-		visibility: 'click',
-	});
+	// const popover = {
+	// 	visibility: 'click',
+	// };
 
 	async function submit() {
 		isSubmitting.value = true;
@@ -156,18 +161,18 @@
 		/>
 
 		<DatePicker
-			v-model.range="formData.range"
+			v-model.range="range"
 			:class="{ 'border-0': smAndLarger }"
 			color="green"
 			:columns="smAndLarger ? 2 : 1"
 			:min-date="new Date()"
 			range
 			:is-dark="$colorScheme === 'dark'"
-			:popover="popover"
 			:is-expanded="smAndLarger"
 			:trim-weeks="!smAndLarger"
 			:disabled-dates="$disabledReservationDates"
 		>
+			<!-- :popover="popover" -->
 			<template #default="{ inputValue, inputEvents }">
 				<div class="flex items-center justify-center">
 					<div class="mb-4 grid h-full flex-grow grid-cols-[1fr,1fr] items-center gap-8 px-0">
