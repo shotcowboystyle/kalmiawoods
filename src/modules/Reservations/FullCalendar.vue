@@ -28,11 +28,12 @@
 				key,
 				popover: {
 					label: `${val?.user.firstName} ${val?.user.lastName}`,
+					isInteractive: true,
 				},
 				customData: val,
 				dates: {
-					start: val && new Date(val.checkInDate),
-					end: val && new Date(val.checkOutDate),
+					start: val && val.checkInDate,
+					end: val && val.checkOutDate,
 				},
 			};
 		}),
@@ -42,7 +43,7 @@
 		weekdays: 'WWW',
 	});
 
-	const selectedReservationDate = ref<string | undefined>();
+	const selectedReservationDate = ref<Date | undefined>();
 	const onDayClick = (day: CalendarDay, reservationId = null, userId = null) => {
 		if (dateInPast(day.date)) {
 			return;
@@ -56,7 +57,7 @@
 			isEditingReservation.value = true;
 		} else {
 			setActiveReservationId(null);
-			selectedReservationDate.value = day.date.toDateString();
+			selectedReservationDate.value = day.date;
 			isEditingReservation.value = false;
 		}
 
@@ -83,7 +84,7 @@
 		trim-weeks
 		:is-dark="$colorScheme === 'dark'"
 		title-position="left"
-		:rows="mdAndLarger ? 1 : 2"
+		:rows="mdAndLarger ? 1 : 6"
 		:step="1"
 	>
 		<template #title="{ monthLabel, yearLabel }">

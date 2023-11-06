@@ -13,9 +13,10 @@ import analyze from 'rollup-plugin-analyzer';
 import { visualizer } from 'rollup-plugin-visualizer';
 import AutoImport from 'unplugin-auto-import/astro';
 import Components from 'unplugin-vue-components/vite';
+import AstroPWA from '@vite-pwa/astro';
 import { loadEnv } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
-import { manifest } from './src/seo';
+
+import { manifest, workbox } from './pwa.config';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -23,17 +24,6 @@ const { APP_SITE, APP_BASE } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
 
 const vitePlugins = [
-	VitePWA({
-		registerType: 'autoUpdate',
-		manifest,
-		workbox: {
-			globDirectory: 'dist',
-			globPatterns: ['**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico}'],
-			// Don't fallback on document based (e.g. `/some-page`) requests
-			// This removes an errant console.log message from showing up.
-			navigateFallback: null,
-		},
-	}),
 	Components({
 		dts: 'src/components.d.ts',
 		directoryAsNamespace: true,
@@ -77,9 +67,7 @@ export default defineConfig({
 		domains: ['kalmiawoods.com'],
 	},
 	integrations: [
-		svgSprite({
-			mode: 'verbose',
-		}),
+		svgSprite(),
 		vue({
 			appEntrypoint: '/src/pages/_app',
 			template: {
@@ -103,10 +91,12 @@ export default defineConfig({
 			dirs: ['src/composables'],
 			vueTemplate: true,
 		}),
-		prefetch(),
-		// critters({ Logger: 2 }),
-		// purgecss({
-		// 	safelist: [/^dot\d/, /^four-/, /^glow-/, /^crater-/, 'github', 'linkedin', 'twitter'],
+		prefetch({
+			throttle: 4
+		}),
+		// critters({
+		// 	Logger: 2,
+		// 	exclude: ['index.html', (file: string) => file === './dist/index.html']
 		// }),
 		compressor(),
 		compress({
@@ -118,6 +108,25 @@ export default defineConfig({
 			JavaScript: true,
 			SVG: true,
 			Logger: 1,
+		}),
+		AstroPWA({
+			experimental: { directoryAndTrailingSlashHandler: true },
+			mode: 'production',
+			base: '/dashboard',
+			scope: '/dashboard',
+			includeAssets: ['favicon.ico', 'icons/apple-touch-icon.png', 'favicon.svg'],
+			registerType: 'autoUpdate',
+			injectRegister: 'auto',
+			manifest,
+			workbox,
+			client: {
+				installPrompt: true,
+				periodicSyncForUpdates: 20,
+			},
+			devOptions: {
+				enabled: true,
+				navigateFallbackAllowlist: [/^\/404$/]
+			}
 		}),
 		devOnlyRoutes(),
 	],
@@ -146,6 +155,9 @@ export default defineConfig({
 		},
 		css: {
 			devSourcemap: true,
+		},
+		ssr: {
+			noExternal: ['vue-calendar-3/style'],
 		},
 		plugins: vitePlugins,
 		optimizeDeps: {

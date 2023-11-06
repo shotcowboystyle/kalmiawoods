@@ -4,6 +4,7 @@
 
 <input
 	id="switch-input"
+	name="switchInput"
 	type="checkbox"
 	class="hidden"
 />
@@ -28,6 +29,7 @@
 		for="switch-input"
 		class="h-8 rounded-2xl"
 	>
+		<span class="hidden">Color scheme mode</span>
 		<div
 			id="color-scheme-toggle"
 			class="h-8 rounded-2xl"
@@ -85,9 +87,7 @@
 	}
 
 	#switch-button {
-		@apply relative mx-auto mt-7 w-full cursor-pointer;
-
-		background-color: rgba(0, 0, 0, 0.1);
+		@apply relative mx-auto mt-7 w-full cursor-pointer bg-black/5 dark:bg-base-100/60;
 	}
 
 	#color-scheme-toggle {
