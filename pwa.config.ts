@@ -9,6 +9,7 @@ const APP_DESCRIPTION =
  * Defines the configuration for PWA webmanifest.
  */
 export const manifest: Partial<ManifestOptions> = {
+	id: '/',
 	name: 'Kalmia Woods',
 	short_name: APP_NAME,
 	description: APP_DESCRIPTION,
@@ -23,25 +24,25 @@ export const manifest: Partial<ManifestOptions> = {
 	scope: '/dashboard',
 	icons: [
 		{
-			src: 'icons/android-chrome-192x192.png',
+			src: 'favicons/android-chrome-192x192.png',
 			sizes: '192x192',
 			type: 'image/png',
 			purpose: 'any',
 		},
 		{
-			src: 'icons/android-chrome-192x192.png',
+			src: 'favicons/android-chrome-192x192.png',
 			sizes: '192x192',
 			type: 'image/png',
 			purpose: 'maskable',
 		},
 		{
-			src: 'icons/android-chrome-512x512.png',
+			src: 'favicons/android-chrome-512x512.png',
 			sizes: '512x512',
 			type: 'image/png',
 			purpose: 'any',
 		},
 		{
-			src: 'icons/android-chrome-512x512.png',
+			src: 'favicons/android-chrome-512x512.png',
 			sizes: '512x512',
 			type: 'image/png',
 			purpose: 'maskable',
