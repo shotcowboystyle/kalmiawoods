@@ -112,8 +112,8 @@ export default defineConfig({
 		AstroPWA({
 			experimental: { directoryAndTrailingSlashHandler: true },
 			mode: 'production',
-			base: '/dashboard',
-			scope: '/dashboard',
+			base: '/',
+			// scope: '/',
 			includeAssets: ['favicon.ico', 'favicons/apple-touch-icon.png', 'favicon.svg'],
 			registerType: 'autoUpdate',
 			injectRegister: 'auto',
