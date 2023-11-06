@@ -114,7 +114,7 @@ export default defineConfig({
 			mode: 'production',
 			base: '/dashboard',
 			scope: '/dashboard',
-			includeAssets: ['favicon.ico', 'icons/apple-touch-icon.png', 'favicon.svg'],
+			includeAssets: ['favicon.ico', 'favicons/apple-touch-icon.png', 'favicon.svg'],
 			registerType: 'autoUpdate',
 			injectRegister: 'auto',
 			manifest,
