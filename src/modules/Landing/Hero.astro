@@ -23,43 +23,43 @@ import { Image } from 'astro:assets';
 	/>
 	<SvgSprite
 		name="home-header-mountain-5"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-mountain-4"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-mountain-3"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-mountain-2"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-mountain-1"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-trees"
-		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-landscape"
-		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer absolute left-0 top-0 h-full w-full scale-110 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-forest-3"
-		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full scale-125 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-forest-2"
-		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full scale-125 transform object-cover object-center"
 	/>
 	<SvgSprite
 		name="home-header-forest-1"
-		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full scale-125 transform object-cover object-center"
 	/>
 
 	<!-- <div
@@ -99,11 +99,11 @@ import { Image } from 'astro:assets';
 
 	gsap.registerPlugin(ScrollTrigger);
 
-	const parallaxOffset = (index: number) => (3.45 * 50) / (index >= 2 ? index : 1.75);
+	const parallaxOffset = (index: number) =>
+		(3.45 * 50) / (index >= 5 ? index - 0.5 : index >= 2 ? index : 1.75);
 
 	const initHeaderTilt = () => {
 		const parallaxContainer = document.getElementById('hero-section');
-		// const parallaxContainer = document.getElementById('main-content');
 		if (parallaxContainer) {
 			const parallaxImages = gsap.utils.toArray('.parallax-layer');
 
@@ -118,9 +118,6 @@ import { Image } from 'astro:assets';
 	};
 
 	init();
-	// window.addEventListener('load', () => {
-	// 	init();
-	// });
 </script>
 
 <style is:global>
@@ -131,15 +128,6 @@ import { Image } from 'astro:assets';
 		perspective: 1px;
 		perspective-origin: center;
 	}
-
-	/* #hero-bg {
-		z-index: -1;
-		position: absolute;
-		top: 0%;
-		bottom: 0%;
-		left: 0%;
-		right: 0%;
-	} */
 
 	.parallax-layer {
 		transform-style: preserve-3d;
