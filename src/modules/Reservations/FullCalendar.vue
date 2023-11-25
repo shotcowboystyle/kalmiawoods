@@ -89,7 +89,7 @@
 	>
 		<template #title="{ monthLabel, yearLabel }">
 			<div
-				class="vc-header is-lg self-center text-lg text-base-content"
+				class="vc-header is-lg self-center text-base-content text-lg"
 				style="grid-template-columns: [title] auto 1fr [prev] auto [next] auto"
 			>
 				<button
@@ -103,7 +103,7 @@
 		</template>
 		<template #day-content="{ day, attributes }">
 			<div
-				class="flex h-full cursor-pointer flex-col md:min-h-16 md:w-full"
+				class="md:min-h-16 flex h-full cursor-pointer flex-col md:w-full"
 				:class="[
 					{
 						'is-disabled':
@@ -193,7 +193,7 @@
 			v-if="$isReservationModalOpen"
 			class="modal-box"
 		>
-			<h3 class="text-lg font-bold">Reservation details</h3>
+			<h3 class="font-bold text-lg">Reservation details</h3>
 			<FormReservation
 				class="mt-4"
 				:selected-date="selectedReservationDate"
@@ -216,10 +216,10 @@
 		}
 
 		.vc-header .vc-arrows-container {
-			@apply btn-group;
+			@apply join;
 
 			& .vc-arrow {
-				@apply btn btn-ghost btn-sm rounded-none;
+				@apply btn btn-ghost join-item btn-sm rounded-none;
 
 				& svg {
 					@apply h-5 w-5;
@@ -302,7 +302,7 @@
 			@apply relative flex w-full flex-col items-start justify-start md:h-40 md:min-w-full;
 
 			& .vc-day-content {
-				@apply relative h-full w-full items-start justify-start border-0 p-4 text-sm leading-4 hover:rounded-none focus:rounded-none;
+				@apply relative h-full w-full items-start justify-start border-0 p-4 leading-4 text-sm hover:rounded-none focus:rounded-none;
 			}
 
 			& .vc-highlights .vc-day-layer {
@@ -323,7 +323,7 @@
 		}
 
 		& .day-event {
-			@apply mx-6 mb-1 mt-0 rounded-sm p-2 text-sm text-primary-content;
+			@apply mx-6 mb-1 mt-0 rounded-sm p-2 text-primary-content text-sm;
 		}
 
 		& .day-event-end {
