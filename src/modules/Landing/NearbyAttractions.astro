@@ -1,5 +1,6 @@
 ---
-import { Picture } from 'astro:assets';
+import bgImage from '@/assets/images/photos/house-living-area-1.jpeg';
+import { Image, Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
@@ -7,26 +8,27 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 	(a: CollectionEntry<'attractions'>, b: CollectionEntry<'attractions'>) =>
 		b.data.order < a.data.order ? 1 : b.data.order > a.data.order ? -1 : 0,
 );
+
+// const optimizedBgImage = await getImage({src: bgImage, format: 'avif'});
 ---
 
-<section class="my-10">
-	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
-		<h2 class="mb-4 text-2xl font-bold text-base-content md:text-3xl lg:mb-8 lg:text-4xl">
-			Explore Nearby
-		</h2>
-		<div
-			class="max-xl:carousel max-xl:w-full max-xl:space-x-4 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-4"
-		>
+<section class="section relative h-screen bg-[#e3dcc9]">
+	<div class="container flex h-full flex-col justify-center">
+		<div class="section-text">
+			<h2 class="h2 text-base-content">Explore Nearby</h2>
+		</div>
+
+		<div class="carousel w-full space-x-4 px-0">
 			{
 				nearbyAttractions.map((attraction) => (
 					<a
 						href={attraction.data.href}
 						target="_blank"
-						class="max-xl:carousel-item"
+						class="carousel-item"
 					>
-						<div class="flex items-center gap-x-4 py-2">
-							<div class="avatar">
-								<div class="w-16 rounded-xl drop-shadow-lg">
+						<div class="flex flex-col items-start gap-y-8 py-2">
+							<div class="avatar h-[600px]">
+								<div class="h-full w-full rounded-xl drop-shadow-lg">
 									<Picture
 										src={attraction.data.image}
 										alt={attraction.data.name}
@@ -38,7 +40,7 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 
 							<div class="mt-0">
 								<span class="block font-semibold text-base-content">{attraction.data.name}</span>
-								<span class="text-sm text-base-content">{attraction.data.description}</span>
+								<span class="text-base-content text-sm">{attraction.data.description}</span>
 							</div>
 						</div>
 					</a>
@@ -46,4 +48,19 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 			}
 		</div>
 	</div>
+
+	<div class="section-bg absolute inset-0 -z-[1]">
+		<Image
+			src={bgImage}
+			alt=""
+			widths={[640, 828, 2400, bgImage.width]}
+			class="section-bg-image mask mask-hexagon-2 absolute left-1/2 top-0 p-0 brightness-200"
+		/>
+	</div>
 </section>
+
+<style>
+	.section-bg-image {
+		mask-position: top;
+	}
+</style>

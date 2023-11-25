@@ -1,0 +1,393 @@
+---
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import roomsImage3 from '@/assets/images/photos/house-living-area-3.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section class="section section--bg-blue relative">
+	<div
+		class="c-section-separator js-section-separator c-section-separator--top c-section-separator--blue"
+	>
+		<svg
+			class="u-icon u-icon--separator-main js-section-separator-main js-section-separator-svg"
+			viewBox="0 0 3876 160"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M-174.61 -157V-116.765C-174.61 15.4344 -112.186 139 -3.49988 139C111 139 138.787 62.2189 249.697 62.2189C360.606 62.2189 356 156.175 533.698 156.175C683 156.175 698.557 75.6322 817.699 62.2189C930.436 49.5265 988.565 138.856 1101.7 138.856C1214.83 138.856 1274.79 62.2189 1385.7 62.2189C1496.61 62.2189 1556.57 138.856 1669.7 138.856C1782.84 138.856 1842.79 62.2189 1953.7 62.2189C2064.61 62.2189 2124.57 138.856 2237.7 138.856C2350.84 138.856 2408.57 62.2188 2521.7 62.2189C2634.84 62.2189 2694.8 138.856 2805.71 138.856C2916.61 138.856 2976.57 62.2189 3089.71 62.2189C3202.84 62.2188 3260.57 138.856 3373.71 138.856C3486.84 138.856 3546.8 62.2189 3657.71 62.2189C3768.62 62.2189 3867.02 222.761 3941.71 108.856C3998.61 22.0779 3941.71 -157 3941.71 -157H-174.61Z"
+			></path>
+		</svg>
+
+		<svg
+			class="u-icon u-icon--separator-secondary js-section-separator-secondary js-section-separator-svg"
+			viewBox="0 0 3876 160"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M-196.61 0V21.1232C-196.61 90.5281 -148.913 67.6768 -101.5 115.09C-14.9999 201.59 116.787 115.09 227.697 115.09C338.606 115.09 400.788 152.442 511.698 152.442C622.607 152.442 676.557 122.132 795.699 115.09C908.436 108.426 966.566 155.325 1079.7 155.325C1192.83 155.325 1252.79 115.09 1363.7 115.09C1474.61 115.09 1534.57 155.325 1647.7 155.325C1760.84 155.325 1820.79 115.09 1931.7 115.09C2042.61 115.09 2102.57 155.325 2215.7 155.325C2328.84 155.325 2386.57 115.09 2499.7 115.09C2612.84 115.09 2672.8 155.325 2783.71 155.325C2894.61 155.325 2954.57 115.09 3067.71 115.09C3180.84 115.09 3238.57 155.325 3351.71 155.325C3464.84 155.325 3524.8 115.09 3635.71 115.09C3746.62 115.09 3845.02 185.125 3919.71 125.325C3976.61 79.7659 3919.71 0 3919.71 0H-196.61Z"
+			></path>
+		</svg>
+	</div>
+
+	<div class="section-inner section-inner-py-xl">
+		<div class="container">
+			<div class="c-cta-section-a">
+				<header class="c-cta-section-a__header">
+					<div class="c-animated-big-text u-a5 js-brush-text-scroll">
+						<div class="c-animated-big-text__text relative">
+							<h2 class="c-animated-big-text__text-line js-text-line">
+								Dining options with regional specialities
+							</h2>
+
+							<p
+								class="c-animated-big-text__text-line c-animated-big-text__text-line--clone js-text-line-clone"
+								aria-hidden="true"
+								tabindex="-1"
+							>
+								Dining options with regional specialities
+							</p>
+						</div>
+					</div>
+
+					<p class="c-cta-section-a__description u-b0 js-animated-stagger-element text-center">
+						A romantic sunset dinner, a quick afternoon snack, a relaxed family meal – our
+						contemporary restaurants suit most occasions - and all with spectacular sea views.
+					</p>
+				</header>
+
+				<div class="c-cta-section-a__list">
+					<article class="c-cta-section-a__item js-animated-stagger-element">
+						<figure class="c-responsive-image">
+							<Picture
+								pictureAttributes={{
+									class: 'c-responsive-image__inner c-responsive-image__inner--3-2',
+								}}
+								class="c-responsive-image__img"
+								src={roomsImage1}
+								formats={['avif', 'webp']}
+								alt="A description of my image."
+								widths={[640, 1140, 2000, roomsImage1.width]}
+							/>
+						</figure>
+
+						<h3 class="u-a3 u-fw-400">Restaurant Odisej</h3>
+						<p class="u-b0">
+							The picture perfect panorama of Pomena Bay from the terrace draws a steady crowd to
+							Restaurant Odisej. Every day a buffet breakfast is served, while the dinner menu is
+							focused on regional seafood specialities.
+						</p>
+					</article>
+
+					<article class="c-cta-section-a__item js-animated-stagger-element">
+						<!--RESPONSIVE IMAGE-->
+						<figure class="c-responsive-image">
+							<Picture
+								pictureAttributes={{
+									class: 'c-responsive-image__inner c-responsive-image__inner--3-2',
+								}}
+								class="c-responsive-image__img"
+								src={roomsImage2}
+								formats={['avif', 'webp']}
+								alt="A description of my image."
+								widths={[640, 1140, 2000, roomsImage2.width]}
+							/>
+						</figure>
+
+						<h3 class="u-a3 u-fw-400">Levanat Pizzeria</h3>
+						<p class="u-b0">
+							Overlooking the neatly lined boats at the very pretty Pomena marina, Levanat Pizzeria
+							has enchanting views over the crystal-clear Adriatic. Sample from a menu of fresh
+							pizza, lasagne, salads, and other Italian classics, not the least, delicious gelato.
+						</p>
+					</article>
+
+					<article class="c-cta-section-a__item js-animated-stagger-element">
+						<!--RESPONSIVE IMAGE-->
+						<figure class="c-responsive-image">
+							<Picture
+								pictureAttributes={{
+									class: 'c-responsive-image__inner c-responsive-image__inner--3-2',
+								}}
+								class="c-responsive-image__img"
+								src={roomsImage1}
+								formats={['avif', 'webp']}
+								alt="A description of my image."
+								widths={[640, 1140, 2000, roomsImage1.width]}
+							/>
+						</figure>
+
+						<h3 class="u-a3 u-fw-400">Vista Mare Beach Bar</h3>
+						<p class="u-b0">
+							Enjoy a sublime stretch of gently shaded waterfront next to Pomena pier, where all the
+							yachts and ships dock, Vista Mare Beach Bar serves cocktails, wine, ice cream and more
+							at comfortable rattan sofas and large wooden tables.
+						</p>
+					</article>
+				</div>
+
+				<div class="c-cta-section-a__footer js-animated-stagger-element">
+					<a
+						href="/dining"
+						class="c-cta c-cta--white u-a2"
+						target="target=_blank"
+					>
+						<span>Dining locations</span>
+						<i class="c-cta__icon">
+							<svg
+								class="u-icon u-icon--arrow-right"
+								viewBox="0 0 12 12"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+								></path>
+							</svg>
+						</i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="c-section-separator js-section-separator c-section-separator--bottom c-section-separator--blue"
+	>
+		<svg
+			class="u-icon u-icon--separator-main js-section-separator-main js-section-separator-svg"
+			viewBox="0 0 3876 160"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M-174.61 -157V-116.765C-174.61 15.4344 -112.186 139 -3.49988 139C111 139 138.787 62.2189 249.697 62.2189C360.606 62.2189 356 156.175 533.698 156.175C683 156.175 698.557 75.6322 817.699 62.2189C930.436 49.5265 988.565 138.856 1101.7 138.856C1214.83 138.856 1274.79 62.2189 1385.7 62.2189C1496.61 62.2189 1556.57 138.856 1669.7 138.856C1782.84 138.856 1842.79 62.2189 1953.7 62.2189C2064.61 62.2189 2124.57 138.856 2237.7 138.856C2350.84 138.856 2408.57 62.2188 2521.7 62.2189C2634.84 62.2189 2694.8 138.856 2805.71 138.856C2916.61 138.856 2976.57 62.2189 3089.71 62.2189C3202.84 62.2188 3260.57 138.856 3373.71 138.856C3486.84 138.856 3546.8 62.2189 3657.71 62.2189C3768.62 62.2189 3867.02 222.761 3941.71 108.856C3998.61 22.0779 3941.71 -157 3941.71 -157H-174.61Z"
+			></path>
+		</svg>
+
+		<svg
+			class="u-icon u-icon--separator-secondary js-section-separator-secondary js-section-separator-svg"
+			viewBox="0 0 3876 160"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M-196.61 0V21.1232C-196.61 90.5281 -148.913 67.6768 -101.5 115.09C-14.9999 201.59 116.787 115.09 227.697 115.09C338.606 115.09 400.788 152.442 511.698 152.442C622.607 152.442 676.557 122.132 795.699 115.09C908.436 108.426 966.566 155.325 1079.7 155.325C1192.83 155.325 1252.79 115.09 1363.7 115.09C1474.61 115.09 1534.57 155.325 1647.7 155.325C1760.84 155.325 1820.79 115.09 1931.7 115.09C2042.61 115.09 2102.57 155.325 2215.7 155.325C2328.84 155.325 2386.57 115.09 2499.7 115.09C2612.84 115.09 2672.8 155.325 2783.71 155.325C2894.61 155.325 2954.57 115.09 3067.71 115.09C3180.84 115.09 3238.57 155.325 3351.71 155.325C3464.84 155.325 3524.8 115.09 3635.71 115.09C3746.62 115.09 3845.02 185.125 3919.71 125.325C3976.61 79.7659 3919.71 0 3919.71 0H-196.61Z"
+			></path>
+		</svg>
+	</div>
+</section>
+
+<style>
+	.c-cta-section-a__header {
+		--pb: 72px;
+
+		@media screen(xl) {
+			--pb: 6.25vw;
+		}
+
+		@media screen(lg) {
+			--pb: 120px;
+		}
+		@media screen(sm) {
+			--pb: calc(5vw + 48px);
+		}
+
+		padding-bottom: var(--pb);
+	}
+
+	.c-cta-section-a .c-animated-big-text {
+		--max-width: 687px;
+		--pb: 12px;
+
+		@media screen(xl) {
+			--pb: 1.0416666667vw;
+			--max-width: 35.78125vw;
+		}
+
+		@media screen(lg) {
+			--pb: 20px;
+		}
+		@media screen(sm) {
+			--pb: calc(0.8333333333vw + 8px);
+		}
+
+		max-width: var(--max-width);
+		padding-bottom: var(--pb);
+		margin-left: auto;
+		margin-right: auto;
+		color: #043f5d;
+	}
+
+	.c-cta-section-a__description {
+		--max-width: 480px;
+
+		@media screen(xl) {
+			--max-width: 25vw;
+		}
+
+		max-width: var(--max-width);
+		margin-left: auto;
+		margin-right: auto;
+		color: #f7f7ee;
+	}
+
+	.c-cta-section-a__list {
+		display: grid;
+		grid-template-columns: repeat(22, 1fr);
+	}
+
+	.c-cta-section-a__item {
+		&:nth-child(1) {
+			grid-column: span 5;
+		}
+
+		&:nth-child(2) {
+			--margin-top: 80px;
+
+			@media screen(xl) {
+				--margin-top: 8.3333333333vw;
+			}
+			@media screen(lg) {
+				--margin-top: 160px;
+			}
+			@media screen(sm) {
+				--margin-top: calc(8.3333333333vw + 40px);
+			}
+
+			margin-top: var(--margin-top);
+			grid-column: 12/17;
+		}
+
+		&:nth-child(3) {
+			--margin-top: -10px;
+
+			@media screen(xl) {
+				--margin-top: -0.5208333333vw;
+			}
+
+			margin-top: var(--margin-top);
+			grid-column: 18/23;
+		}
+	}
+
+	.c-cta-section-a__item figure {
+		--border-radius: 20px;
+
+		@media screen(xl) {
+			--margin-bottom: 1.6666666667vw;
+			--border-radius: 1.0416666667vw;
+		}
+
+		@media screen(lg) {
+			--margin-bottom: 32px;
+		}
+		@media screen(sm) {
+			--margin-bottom: calc(1.25vw + 14px);
+		}
+
+		border-radius: var(--border-radius);
+		margin-bottom: var(--margin-bottom);
+		overflow: hidden;
+	}
+
+	.c-cta-section-a__item h3 {
+		--padding-bottom: 8px;
+
+		@media screen(xl) {
+			--padding-bottom: 0.4166666667vw;
+		}
+
+		@media screen(lg) {
+			--padding-bottom: 8px;
+		}
+		@media screen(sm) {
+			--padding-bottom: 8px;
+		}
+
+		padding-bottom: var(--padding-bottom);
+		color: #e3e3c4;
+	}
+
+	.u-fw-400,
+	.u-fw-normal,
+	.u-fw-regular {
+		font-weight: 400;
+	}
+
+	.c-content-editor h2,
+	.u-a3 {
+		--font-size: 30px;
+
+		@media screen(sm) {
+			--font-size: calc(1.0416666667vw + 25px);
+		}
+
+		@media screen(lg) {
+			--font-size: 40px;
+		}
+
+		@media screen(xl) {
+			--font-size: 2.0833333333vw;
+		}
+
+		font-size: var(--font-size);
+		font-family: 'PP Woodland', serif;
+		line-height: 120%;
+		letter-spacing: -0.03em;
+	}
+
+	.c-cta-section-a__item p {
+		color: #f7f7ee;
+	}
+
+	.c-cta-section-a__footer {
+		--margin-top: 72px;
+
+		@media screen(xl) {
+			--margin-top: 6.25vw;
+		}
+
+		@media screen(lg) {
+			--margin-top: 120px;
+		}
+		@media screen(sm) {
+			--margin-top: calc(5vw + 48px);
+		}
+
+		margin-top: var(--margin-top);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.c-cta {
+		--gap: 20px;
+
+		@media screen(xl) {
+			--gap: 1.0416666667vw;
+		}
+
+		gap: var(--gap);
+		display: inline-flex;
+		align-items: center;
+		color: #5b6647;
+	}
+
+	.section--bg-blue .c-cta {
+		color: #f7f7ee;
+	}
+
+	.section--bg-blue .c-cta .c-cta__icon {
+		background-color: #f7f7ee;
+	}
+
+	.c-cta__icon {
+		height: 1em;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		width: 1.9230769231em;
+		border-radius: 2em;
+		overflow: hidden;
+		background-color: #5b6647;
+		transition: all 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+	}
+</style>

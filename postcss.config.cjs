@@ -2,7 +2,10 @@ const browsersList = require('./browserslist.config.cjs');
 
 module.exports = {
 	plugins: {
+		'postcss-for': {},
+		'postcss-random': { round: true, noSeed: true },
 		'postcss-import': {},
+		'postcss-at-rules-variables': {},
 		'tailwindcss/nesting': 'postcss-nesting',
 		tailwindcss: {},
 		'postcss-preset-env': {
@@ -14,15 +17,15 @@ module.exports = {
 					warnings: false,
 					preserve: true
 				},
-				'custom-media-queries': true,
+				// 'custom-media-queries': true,
 				'nesting-rules': false
 			}
 		},
-		'postcss-combine-media-query': {},
-		'postcss-combine-duplicated-selectors': {
-			removeDuplicatedProperties: true,
-			removeDuplicatedValues: false,
-		},
+		// 'postcss-combine-media-query': {},
+		// 'postcss-combine-duplicated-selectors': {
+		// 	removeDuplicatedProperties: true,
+		// 	removeDuplicatedValues: false,
+		// },
 		autoprefixer: {},
 		cssnano: {
 			preset: 'default',

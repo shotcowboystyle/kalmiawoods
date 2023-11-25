@@ -1,0 +1,264 @@
+---
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section
+	id="wellness"
+	class="section relative"
+>
+	<div class="section-inner section-inner-pt-s section-inner-pb-xl">
+		<div class="c-cta-section-b js-cta-section-b">
+			<div
+				id="js-cta-section-b-image-left"
+				class="c-cta-section-b__column"
+			>
+				<figure class="c-responsive-image">
+					<Picture
+						pictureAttributes={{
+							class: 'c-responsive-image__inner c-responsive-image__inner--adopt',
+						}}
+						class="c-responsive-image__img"
+						src={roomsImage1}
+						formats={['avif', 'webp']}
+						alt="A description of my image."
+						widths={[640, 1140, 2000, roomsImage1.width]}
+					/>
+				</figure>
+			</div>
+
+			<div
+				id="js-cta-section-content"
+				class="c-cta-section-b__column c-cta-section-b__column--main"
+			>
+				<h2 class="c-cta-section-b__title u-a5">Relaxing treatments</h2>
+				<p class="c-cta-section-b__description">
+					Massage, sauna sessions, beauty treatments such as pedicures and manicures, a fitness
+					room, an outdoor children's pool filled with sea water or a sun terrace to relax on.
+				</p>
+
+				<div class="c-cta-section-a__footer js-animated-stagger-element">
+					<a
+						href="/wellness"
+						class="c-cta u-a2"
+						target="target=_blank"
+					>
+						<span>Explore Wellness</span>
+						<i class="c-cta__icon">
+							<svg
+								class="u-icon u-icon--arrow-right"
+								viewBox="0 0 12 12"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+								></path>
+							</svg>
+						</i>
+					</a>
+				</div>
+			</div>
+
+			<div
+				id="js-cta-section-b-image-right"
+				class="c-cta-section-b__column"
+			>
+				<figure class="c-responsive-image">
+					<Picture
+						pictureAttributes={{
+							class: 'c-responsive-image__inner c-responsive-image__inner--adopt',
+						}}
+						class="c-responsive-image__img"
+						src={roomsImage2}
+						formats={['avif', 'webp']}
+						alt="A description of my image."
+						widths={[640, 1140, 2000, roomsImage2.width]}
+					/>
+				</figure>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/all';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	function initWellnessImageAnimation() {
+		const wellnessSection = document.getElementById('wellness');
+		const wellnessImageLeft = document.getElementById('js-cta-section-b-image-left');
+		const wellnessImageRight = document.getElementById('js-cta-section-b-image-right');
+		const wellnessContent = document.getElementById('js-cta-section-content');
+		const isMobile = window.innerWidth <= 800;
+
+		gsap
+			.timeline({
+				scrollTrigger: {
+					trigger: wellnessSection,
+					scrub: 1,
+					start: 'top 80%',
+					end: 'bottom 80%',
+				},
+			})
+			.from(wellnessImageLeft, {
+				xPercent: isMobile ? 300 : (5 / 6) * 100,
+				duration: 1,
+			})
+			.from(
+				wellnessImageRight,
+				{
+					xPercent: isMobile ? -300 : (-5 / 6) * 100,
+					duration: 1,
+				},
+				'-=1',
+			)
+			.from(
+				wellnessContent,
+				{
+					opacity: 0,
+				},
+				'-=0.4',
+			);
+	}
+
+	function initializeWellness() {
+		initWellnessImageAnimation();
+	}
+
+	initializeWellness();
+</script>
+
+<style>
+	.c-cta-section-b {
+		display: grid;
+		grid-template-columns: repeat(24, 1fr);
+		overflow: hidden;
+	}
+
+	.c-cta-section-b__column {
+		grid-column: span 6;
+		position: relative;
+		text-align: center;
+		z-index: 1;
+	}
+
+	.c-cta-section-b__column:nth-child(1) .c-responsive-image {
+		--brr: 20px;
+
+		@media screen(xl) {
+			--brr: 1.0416666667vw;
+		}
+
+		border-top-right-radius: var(--brr);
+		border-bottom-right-radius: var(--brr);
+		overflow: hidden;
+	}
+
+	.c-cta-section-b__column:nth-child(1) figure {
+		right: 0;
+	}
+
+	.c-cta-section-b__column figure {
+		position: absolute;
+		width: 200%;
+		top: 0;
+		height: 100%;
+	}
+
+	.c-cta-section-b__column--main {
+		--py: 56px;
+
+		@media screen(xl) {
+			--py: 4.1666666667vw;
+		}
+		@media screen(lg) {
+			--py: 80px;
+		}
+		@media screen(sm) {
+			--py: calc(2.5vw + 44px);
+		}
+
+		padding-top: var(--py);
+		padding-bottom: var(--py);
+		grid-column: 8/18;
+		z-index: 0;
+	}
+
+	.c-cta-section-b__title {
+		--max-width: 490px;
+		--pb: 24px;
+
+		@media screen(xl) {
+			--pb: 2.0833333333vw;
+			--max-width: 25.5208333333vw;
+		}
+		@media screen(lg) {
+			--pb: 40px;
+		}
+		@media screen(sm) {
+			--pb: calc(1.6666666667vw + 16px);
+		}
+
+		max-width: var(--max-width);
+		padding-bottom: var(--pb);
+		margin-left: auto;
+		margin-right: auto;
+		color: #434b34;
+	}
+
+	.c-cta-section-b__description {
+		--max-width: 360px;
+
+		@media screen(xl) {
+			--max-width: 18.75vw;
+		}
+
+		max-width: var(--max-width);
+		margin-left: auto;
+		margin-right: auto;
+		color: #2e3323;
+	}
+
+	.c-cta-section-a__footer {
+		--margin-top: 72px;
+
+		@media screen(xl) {
+			--margin-top: 6.25vw;
+		}
+
+		@media screen(lg) {
+			--margin-top: 120px;
+		}
+		@media screen(sm) {
+			--margin-top: calc(5vw + 48px);
+		}
+
+		margin-top: var(--margin-top);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.c-cta-section-b__column:nth-child(3) {
+		grid-column: 19/25;
+	}
+
+	.c-cta-section-b__column:nth-child(3) .c-responsive-image {
+		--blr: 20px;
+
+		@media screen(xl) {
+			--blr: 1.0416666667vw;
+		}
+
+		border-top-left-radius: var(--blr);
+		border-bottom-left-radius: var(--blr);
+		overflow: hidden;
+	}
+
+	.c-cta-section-b__column:nth-child(3) figure {
+		left: 0;
+	}
+</style>

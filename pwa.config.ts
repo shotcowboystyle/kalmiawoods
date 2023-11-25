@@ -16,13 +16,41 @@ export const manifest: Partial<ManifestOptions> = {
 	lang: 'en',
 	dir: 'ltr',
 	theme_color: '#1eb854',
-	background_color: '#1eb854',
-	display_override: ['fullscreen', 'minimal-ui'],
+	background_color: '#000000',
+	display_override: ['window-controls-overlay', 'minimal-ui'],
 	display: 'standalone',
-	// orientation: 'landscape-primary',
+	orientation: 'portrait',
 	start_url: '/dashboard',
-	// scope: '/',
+	scope: '/',
+	launch_handler: {
+		client_mode: 'focus-existing',
+	},
 	icons: [
+		// {
+		//   "src": "/static/img/icons/android-chrome-36x36.png",
+		//   "sizes": "36x36",
+		//   "type": "image/png"
+		// },
+		// {
+		//   "src": "/static/img/icons/android-chrome-48x48.png",
+		//   "sizes": "48x48",
+		//   "type": "image/png"
+		// },
+		// {
+		//   "src": "/static/img/icons/android-chrome-72x72.png",
+		//   "sizes": "72x72",
+		//   "type": "image/png"
+		// },
+		// {
+		//   "src": "/static/img/icons/android-chrome-96x96.png",
+		//   "sizes": "96x96",
+		//   "type": "image/png"
+		// },
+		// {
+		//   "src": "/static/img/icons/android-chrome-144x144.png",
+		//   "sizes": "144x144",
+		//   "type": "image/png"
+		// },
 		{
 			src: 'favicons/android-chrome-192x192.png',
 			sizes: '192x192',
@@ -35,6 +63,16 @@ export const manifest: Partial<ManifestOptions> = {
 			type: 'image/png',
 			purpose: 'maskable',
 		},
+		// {
+		//   "src": "/static/img/icons/android-chrome-256x256.png",
+		//   "sizes": "256x256",
+		//   "type": "image/png"
+		// },
+		// {
+		//   "src": "/static/img/icons/android-chrome-384x384.png",
+		//   "sizes": "384x384",
+		//   "type": "image/png"
+		// },
 		{
 			src: 'favicons/android-chrome-512x512.png',
 			sizes: '512x512',
@@ -100,6 +138,22 @@ export const manifest: Partial<ManifestOptions> = {
 			],
 		},
 	},
+	shortcuts: [
+		{
+			name: 'Open Reservations',
+			short_name: 'Reservations',
+			description: 'Open the reservations page',
+			url: '/reservations',
+			icons: [{ src: 'assets/icons/192x192.png', sizes: '192x192' }],
+		},
+	],
+	// "author": {
+	// 	"name": "Curtis Blanton",
+	// 	"website": "http://gauravbehere.in",
+	// 	"github": "https://github.com/gauravbehere"
+	// },
+	// gcm_sender_id: '103953800507',
+	// gcm_user_visible_only: true
 };
 
 export const workbox: Partial<GenerateSWOptions> = {

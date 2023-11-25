@@ -14,7 +14,7 @@
 	"editor.stickyScroll.enabled": true,
   "eslint.enable": true,
 	"eslint.format.enable": true,
-	"eslint.lintTask.enable": true,
+	// "eslint.lintTask.enable": true,
 	"eslint.nodePath": "./node_modules",
 	"eslint.validate": [
 		"astro" /* Using `astro-eslint-parser` + `eslint-plugin-astro` */,
@@ -62,10 +62,10 @@
 		"**/tmp": true,
 		"**/dist": true
 	},
-	"stylelint.enable": false,
-	"stylelint.packageManager": "pnpm",
-	"stylelint.snippet": ["astro", "css", "postcss", "html", "tailwindcss"],
-	"stylelint.validate": ["css", "postcss", "html", "astro", "tailwindcss"],
+	// "stylelint.enable": false,
+	// "stylelint.packageManager": "pnpm",
+	// "stylelint.snippet": ["astro", "css", "postcss", "html", "tailwindcss"],
+	// "stylelint.validate": ["css", "postcss", "html", "astro", "tailwindcss"],
 	"tailwindCSS.includeLanguages": {
 		/*
       Astro Language Server can handle Tailwind extension communication,
@@ -105,13 +105,13 @@
   "[javascript]": {
     "editor.defaultFormatter": "Vue.volar"
   },
-  "[svg]": {
-    "editor.defaultFormatter": "jock.svg"
-  },
+  // "[svg]": {
+  //   "editor.defaultFormatter": "jock.svg"
+  // },
   "volar.format.initialIndent": {
     "html": true
   },
   "vue.autoInsert.dotValue": true,
-"vue.inlayHints.missingProps": true,
-"svg.preview.background": "black"
+  "vue.inlayHints.missingProps": true,
+  "svg.preview.background": "black"
 }

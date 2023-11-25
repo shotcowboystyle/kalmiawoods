@@ -1,35 +1,155 @@
 ---
-import heroBgImage from '@/assets/images/landing-cover-photo.jpeg';
-import GradientText from '@/components/typography/GradientText.astro';
-import { Picture } from 'astro:assets';
+import heroBg from '@/assets/images/hero/background.png';
+// import heroLogo from '@/assets/images/hero/hero-logo.png';
+import SvgSprite from '@/components/SvgSprite.astro';
+import { Image } from 'astro:assets';
 ---
 
-<section class="relative h-screen">
-	<div class="absolute z-10 h-4/6 w-full bg-gradient-to-b from-black"></div>
-	<div class="absolute bottom-0 left-0 right-0 top-0 m-0 block overflow-hidden">
-		<Picture
-			src={heroBgImage}
-			alt="Kalmia Woods scenic view"
-			class="h-screen w-screen object-cover object-top xl:h-full"
-			formats={['avif', 'webp']}
-			widths={[640, 750, 828, 1080, 1200, heroBgImage.width]}
-		/>
-	</div>
-	<div class="max-w-2xl">
-		<div class="absolute left-0 right-0 top-[35%] z-10">
-			<div class="text-center text-white">
-				<div>
-					<h1 class="mx-auto max-w-lg px-4 text-2xl font-bold xl:text-4xl">
-						<div>Welcome to</div>
-						<span class="text-6xl font-extrabold xl:text-8xl">
-							<GradientText>{import.meta.env.APP_NAME}</GradientText>
-						</span>
-					</h1>
-					<p class="mx-auto max-w-lg py-2">
-						Our cabin is located in the heart of the Keowee-Toxaway wilderness of Oconee County.
-					</p>
-				</div>
+<section id="hero-section">
+	<Image
+		src={heroBg}
+		alt=""
+		widths={[640, 828, 2400, heroBg.width]}
+		class="absolute inset-0 h-full w-full object-cover"
+	/>
+
+	<SvgSprite
+		name="home-header-sun"
+		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-clouds"
+		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-mountain-5"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-mountain-4"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-mountain-3"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-mountain-2"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-mountain-1"
+		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-trees"
+		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-landscape"
+		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-forest-3"
+		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-forest-2"
+		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+	<SvgSprite
+		name="home-header-forest-1"
+		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center"
+	/>
+
+	<!-- <div
+		class="page-header-body absolute inset-0 flex h-full items-center justify-center text-center"
+	>
+		<div class="page-title-origin relative mb-[5vh] px-[6.25vw] py-0">
+			<div
+				data-powy="0.85"
+				class="page-title js-scroll relative z-[2] [@media(prefers-color-scheme:dark)]:text-base-content"
+				data-shown="1"
+				data-visible="1"
+			>
+				<h1 class="h1 font-display font-bold text-9xl">
+					<div class="clip flip">
+						<span class="o"><span class="t">Kalmia</span></span>
+						<span class="o"><span class="t">Woods</span></span>
+					</div>
+				</h1>
+
+				<p class="lead">
+					<div class="clip flip ja">
+						<span class="o"><span class="t">Our cabin is located in the heart</span></span>
+						<span class="o"
+							><span class="t">of the Keowee-Toxaway wilderness of Oconee County.</span></span
+						>
+					</div>
+				</p>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </section>
+
+<script>
+	import { parallaxScroll } from '@/utils/parallax';
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const parallaxOffset = (index: number) => (3.45 * 50) / (index >= 2 ? index : 1.75);
+
+	const initHeaderTilt = () => {
+		const parallaxContainer = document.getElementById('hero-section');
+		// const parallaxContainer = document.getElementById('main-content');
+		if (parallaxContainer) {
+			const parallaxImages = gsap.utils.toArray('.parallax-layer');
+
+			parallaxImages.forEach((image, index) => {
+				parallaxScroll(image as HTMLElement, parallaxContainer, parallaxOffset(index));
+			});
+		}
+	};
+
+	const init = () => {
+		initHeaderTilt();
+	};
+
+	init();
+	// window.addEventListener('load', () => {
+	// 	init();
+	// });
+</script>
+
+<style is:global>
+	#hero-section {
+		position: relative;
+		height: 100vh;
+		width: 100%;
+		perspective: 1px;
+		perspective-origin: center;
+	}
+
+	/* #hero-bg {
+		z-index: -1;
+		position: absolute;
+		top: 0%;
+		bottom: 0%;
+		left: 0%;
+		right: 0%;
+	} */
+
+	.parallax-layer {
+		transform-style: preserve-3d;
+		will-change: transform;
+	}
+
+	.lead {
+		padding-top: 0.5em;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		line-height: 1.8;
+	}
+</style>

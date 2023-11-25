@@ -1,0 +1,281 @@
+---
+// import SvgSprite from '@/components/SvgSprite.astro';
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import roomsImage3 from '@/assets/images/photos/house-living-area-3.jpeg';
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+
+export interface RoomsGallery {
+	roomImage: ImageMetadata;
+}
+
+const ROOMS_GALLERY: RoomsGallery[] = [
+	{
+		roomImage: roomsImage1,
+	},
+	{
+		roomImage: roomsImage2,
+	},
+	{
+		roomImage: roomsImage3,
+	},
+];
+---
+
+<section class="relative overflow-hidden">
+	<div class="section-inner">
+		<div class="o-container container relative">
+			<div class="c-image-slider js-image-slider js-animated-stagger-element relative">
+				<div
+					id="rooms-gallery-swiper"
+					class="c-image-slider__slider js-image-slider-swiper"
+				>
+					<div class="swiper-wrapper">
+						{
+							ROOMS_GALLERY.map(({ roomImage }) => (
+								<div class="swiper-slide c-image-slider__slide">
+									<div
+										class="c-image-slider__slide-inner"
+										data-swiper-parallax-scale="0.59"
+									>
+										<figure class="c-responsive-image">
+											<Picture
+												pictureAttributes={{
+													class:
+														'c-responsive-image__inner c-responsive-image__inner--16-9-mobile-1-1',
+												}}
+												class="c-responsive-image__img c-responsive-image__img--bottom"
+												src={roomImage}
+												formats={['avif', 'webp']}
+												alt="A description of my image."
+												widths={[640, 1140, 2000, roomImage.width]}
+											/>
+										</figure>
+									</div>
+								</div>
+							))
+						}
+					</div>
+				</div>
+
+				<div class="c-image-slider__navigation">
+					<div class="c-slider-navigation u-b1">
+						<button
+							id="swiper-prev-button"
+							class="c-slider-navigation__button c-slider-navigation__button--prev c-button c-button--small"
+						>
+							<svg
+								class="u-icon u-icon--arrow-left"
+								viewBox="0 0 12 12"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M5.84536 12L7.08247 10.6082C6.12371 9.09278 4.82474 7.85567 2.31959 6.61856C3.34021 6.61856 3.61856 6.92784 5.10309 6.92784L12 6.92784V5.07217L5.10309 5.07217C3.61856 5.07217 3.34021 5.38144 2.31959 5.38144C4.82474 4.14433 6.12371 2.90722 7.08247 1.39175L5.84536 4.35545e-08C4.51547 1.8866 2.87629 3.46392 1.706e-06 5.07217V6.92784C2.87629 8.53608 4.51547 10.1134 5.84536 12Z"
+								></path>
+							</svg>
+						</button>
+
+						<p class="c-slider-navigation__pagination u-b2 u-fw-500"></p>
+
+						<button
+							id="swiper-next-button"
+							class="c-slider-navigation__button c-slider-navigation__button--next c-button c-button--small js-slider-next"
+						>
+							<svg
+								class="u-icon u-icon--arrow-right"
+								viewBox="0 0 12 12"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+								></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { Swiper } from 'swiper';
+	import { Navigation, Pagination, Parallax } from 'swiper/modules';
+	import 'swiper/css';
+
+	new Swiper('#rooms-gallery-swiper', {
+		modules: [Parallax, Navigation, Pagination],
+		parallax: true,
+		speed: 800,
+		spaceBetween: window.innerWidth / 24,
+		slidesPerView: 1,
+		navigation: {
+			nextEl: '#swiper-next-button',
+			prevEl: '#swiper-prev-button',
+		},
+		pagination: {
+			el: '.c-slider-navigation__pagination',
+			type: 'fraction',
+		},
+	}).on('progress', function (e, t) {
+		t = (t * (e.slides.length - 1)) % 1;
+		t.toFixed(4);
+	});
+</script>
+
+<style>
+	.c-image-slider__slider {
+		width: 81.8181818182%;
+		overflow: visible;
+		margin-left: 0;
+		position: relative;
+	}
+
+	.swiper-horizontal {
+		touch-action: pan-y;
+	}
+
+	.swiper,
+	swiper-container {
+		margin-left: auto;
+		margin-right: auto;
+		position: relative;
+		overflow: hidden;
+		list-style: none;
+		padding: 0;
+		z-index: 1;
+		display: block;
+	}
+
+	.swiper-slide,
+	swiper-slide {
+		flex-shrink: 0;
+		width: 100%;
+		height: 100%;
+		position: relative;
+		transition-property: transform;
+		display: block;
+	}
+
+	.swiper-wrapper {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		display: flex;
+		transition-property: transform;
+		transition-timing-function: var(--swiper-wrapper-transition-timing-function, initial);
+		box-sizing: content-box;
+	}
+
+	.swiper-android .swiper-slide,
+	.swiper-wrapper {
+		transform: translate3d(0, 0, 0);
+	}
+
+	.swiper-backface-hidden .swiper-slide {
+		transform: translateZ(0);
+		backface-visibility: hidden;
+	}
+
+	.c-image-slider__slide {
+		box-sizing: border-box;
+	}
+
+	.c-image-slider__slide-inner {
+		--br: 20px;
+
+		@media screen(xl) {
+			--br: 1.0416666667vw;
+		}
+
+		border-radius: var(--br);
+		overflow: hidden;
+		transform-origin: bottom left;
+	}
+
+	.c-image-slider__slide-inner picture {
+		overflow: hidden;
+	}
+
+	.c-image-slider__navigation {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 1;
+	}
+
+	.u-b1 {
+		--font-size: 13px;
+
+		@media screen(xl) {
+			--font-size: 0.6770833333vw;
+		}
+
+		@media screen(lg) {
+			--font-size: 13px;
+		}
+
+		@media screen(sm) {
+			--font-size: 13px;
+		}
+
+		font-size: var(--font-size);
+		font-family: 'DM Sans', sans-serif;
+		line-height: 130%;
+		letter-spacing: -0.02em;
+	}
+
+	.c-slider-navigation {
+		--gap: 12px;
+
+		@media screen(sm) {
+			--gap: calc(0.4166666667vw + 10px);
+		}
+
+		@media screen(lg) {
+			--gap: 16px;
+		}
+
+		@media screen(xl) {
+			--gap: 0.8333333333vw;
+		}
+
+		gap: var(--gap);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		user-select: none;
+		color: #5b6647;
+	}
+
+	.c-slider-navigation__pagination {
+		min-width: 3em;
+		text-align: center;
+	}
+
+	@media (hover: none) {
+		.c-slider-navigation__button--prev {
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		.c-slider-navigation__button--next {
+			-webkit-tap-highlight-color: transparent;
+		}
+	}
+
+	@media (hover: hover), all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+		.c-slider-navigation__button--prev:hover .u-icon {
+			animation:
+				MoveLeftInitial 0.25s forwards,
+				MoveLeftEnd 0.25s forwards 0.25s;
+		}
+
+		.c-slider-navigation__button--next:hover .u-icon {
+			animation:
+				MoveRightInitial 0.25s forwards,
+				MoveRightEnd 0.25s forwards 0.25s;
+		}
+	}
+</style>

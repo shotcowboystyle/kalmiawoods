@@ -1,0 +1,125 @@
+---
+import lakeJocasseeBgImage from '@/assets/images/lake-jocassee-full.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section class="section">
+	<div class="c-pre-footer js-parallax-wrapper relative overflow-hidden">
+		<figure class="c-responsive-image">
+			<Picture
+				pictureAttributes={{
+					class: 'c-responsive-image__inner c-responsive-image__inner--16-9',
+				}}
+				class="c-responsive-image__img js-parallax-item"
+				src={lakeJocasseeBgImage}
+				formats={['avif', 'webp']}
+				alt="A description of my image."
+				widths={[640, 1140, 2000, lakeJocasseeBgImage.width]}
+			/>
+		</figure>
+
+		<div class="c-pre-footer__content js-animated-stagger-element">
+			<h2 class="u-a4 c-pre-footer__title">Get back to nature</h2>
+			<a
+				href="#book"
+				class="c-cta c-cta--white u-a2"
+			>
+				<!-- target="_blank"
+				rel="noopener noreferrer" -->
+				<span>Book your stay</span>
+				<i class="c-cta__icon">
+					<svg
+						class="u-icon u-icon--arrow-right"
+						viewBox="0 0 12 12"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+						></path>
+					</svg>
+				</i>
+			</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.c-pre-footer__content {
+		--pt: 56px;
+		--pb: 56px;
+		--px: 9.0909090909%;
+		--br: 20px;
+		--gap: 40px;
+		--inset-x: 4.1666666667%;
+
+		@media screen(sm) {
+			--pt: calc(2.5vw + 44px);
+			--pb: calc(2.5vw + 44px);
+			--gap: calc(2.5vw + 28px);
+		}
+
+		@media screen(lg) {
+			--pt: 80px;
+			--pb: 80px;
+			--gap: 64px;
+		}
+
+		@media screen(xl) {
+			--pt: 4.1666666667vw;
+			--pb: 4.1666666667vw;
+			--br: 1.0416666667vw;
+			--gap: 3.3333333333vw;
+		}
+
+		padding-top: var(--pt);
+		padding-bottom: var(--pb);
+		border-radius: var(--br);
+		gap: var(--gap);
+		position: absolute;
+		left: var(--inset-x);
+		right: var(--inset-x);
+		bottom: 4.1666666667vw;
+		padding-left: var(--px);
+		padding-right: var(--px);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #5b6647;
+		color: #e3e3c4;
+	}
+
+	.u-a4 {
+		font-size: 36px;
+		font-family: 'PP Woodland', serif;
+		line-height: 110%;
+		letter-spacing: -0.02em;
+
+		@media screen(sm) {
+			font-size: calc(2.5vw + 24px);
+		}
+
+		@media screen(lg) {
+			font-size: 60px;
+		}
+
+		@media screen(xl) {
+			font-size: 3.125vw;
+		}
+	}
+
+	.c-pre-footer .c-cta {
+		color: #f7f7ee;
+		white-space: nowrap;
+	}
+
+	.c-cta {
+		gap: 20px;
+		display: inline-flex;
+		align-items: center;
+		color: #5b6647;
+
+		@media screen(xl) {
+			gap: 1.0416666667vw;
+		}
+	}
+</style>

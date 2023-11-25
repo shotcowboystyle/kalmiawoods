@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AppleAddToHomeScreenModal: typeof import('./components/AppleAddToHomeScreenModal.vue')['default']
     KwButton: typeof import('./components/KwButton.vue')['default']
     KwCheckboxGroup: typeof import('./components/KwCheckboxGroup.vue')['default']
     KwDatePicker: typeof import('./components/KwDatePicker.vue')['default']

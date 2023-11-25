@@ -1,0 +1,302 @@
+---
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section class="section relative">
+	<div class="section-inner section-inner-py-xl">
+		<div class="container">
+			<div class="c-content-images-cta">
+				<header class="c-content-images-cta__header">
+					<h2 class="c-content-images-cta__title u-a5 js-animated-stagger-element">
+						Beyond the retreat
+					</h2>
+
+					<div class="c-content-images-cta__description u-b0 js-animated-stagger-element">
+						<p>
+							Discover the history and uniqueness of Oconee County, which goes all the way back to
+							ancient Greece.
+						</p>
+					</div>
+				</header>
+
+				<div class="c-content-images-cta__list">
+					<article class="c-content-image-card c-content-image-card--image-count-1">
+						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
+							<div class="c-content-image-card__image js-animated-stagger-element">
+								<figure class="c-responsive-image">
+									<Picture
+										pictureAttributes={{
+											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+										}}
+										class="c-responsive-image__img"
+										src={roomsImage1}
+										formats={['avif', 'webp']}
+										alt="A description of my image."
+										widths={[640, 1140, 2000, roomsImage1.width]}
+									/>
+								</figure>
+							</div>
+						</div>
+
+						<div class="c-content-image-card__content">
+							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
+								A Bead in My Palm
+							</h3>
+
+							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
+								<p>
+									An exhibition of traditional beaded jewellery and jewellery making workshop on the
+									the town of Salem, SC.
+								</p>
+							</div>
+
+							<div class="js-animated-stagger-element">
+								<a
+									href="https://www.adriaticluxuryhotels.com/blog/a-bead-in-my-palm/"
+									class="c-cta u-a2"
+									target="target=_blank"
+								>
+									<span>Read More</span>
+									<i class="c-cta__icon">
+										<svg
+											class="u-icon u-icon--arrow-right"
+											viewBox="0 0 12 12"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+											></path>
+										</svg>
+									</i>
+								</a>
+							</div>
+						</div>
+					</article>
+
+					<article
+						class="c-content-image-card c-content-image-card--image-count-1 c-content-image-card--reverse"
+					>
+						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
+							<!--        max broj slika: 3-->
+							<div class="c-content-image-card__image js-animated-stagger-element">
+								<figure class="c-responsive-image">
+									<Picture
+										pictureAttributes={{
+											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+										}}
+										class="c-responsive-image__img"
+										src={roomsImage2}
+										formats={['avif', 'webp']}
+										alt="A description of my image."
+										widths={[640, 1140, 2000, roomsImage2.width]}
+									/>
+								</figure>
+							</div>
+						</div>
+
+						<div class="c-content-image-card__content">
+							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
+								The Island of Ulysses
+							</h3>
+
+							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
+								<p>
+									Have you heard about Ulysses, the great mythical Greek hero and king of Ithaca?
+									According to legends, Odysseus was shipwrecked in Lake Jocassee and lured by the
+									nymph Calypso into a cave where he became her hostage.
+								</p>
+							</div>
+
+							<div class="js-animated-stagger-element">
+								<a
+									href="https://www.adriaticluxuryhotels.com/blog/the-island-of-ulysses/"
+									class="c-cta u-a2"
+									target="target=_blank"
+								>
+									<span>Read More</span>
+									<i class="c-cta__icon">
+										<svg
+											class="u-icon u-icon--arrow-right"
+											viewBox="0 0 12 12"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+											></path>
+										</svg>
+									</i>
+								</a>
+							</div>
+						</div>
+					</article>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.c-content-images-cta__header {
+		--pb: 72px;
+
+		@media screen(xl) {
+			--pb: 6.25vw;
+		}
+
+		@media screen(lg) {
+			--pb: 120px;
+		}
+		@media screen(sm) {
+			--pb: calc(5vw + 48px);
+		}
+
+		padding-bottom: var(--pb);
+	}
+
+	.c-content-images-cta__title {
+		--mw: 680px;
+		--pb: 24px;
+
+		@media screen(xl) {
+			--pb: 2.0833333333vw;
+			--mw: 35.4166666667vw;
+		}
+		@media screen(lg) {
+			--pb: 40px;
+		}
+		@media screen(sm) {
+			--pb: calc(1.6666666667vw + 16px);
+		}
+
+		max-width: var(--mw);
+		padding-bottom: var(--pb);
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		color: #434b34;
+	}
+
+	.c-content-images-cta__description {
+		--mw: 360px;
+
+		@media screen(xl) {
+			--mw: 18.75vw;
+		}
+
+		max-width: var(--mw);
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		color: #2e3323;
+	}
+
+	.c-content-images-cta__list {
+		--gap: 72px;
+
+		@media screen(xl) {
+			--gap: 6.25vw;
+		}
+		@media screen(lg) {
+			--gap: 120px;
+		}
+		@media screen(sm) {
+			--gap: calc(5vw + 48px);
+		}
+
+		gap: var(--gap);
+		display: flex;
+		flex-direction: column;
+	}
+
+	.c-content-image-card {
+		display: grid;
+		grid-template-columns: repeat(22, 1fr);
+		grid-template-areas: 'a a a a a a a a a . . . . b b b b b b b b b';
+	}
+
+	.c-content-image-card--reverse {
+		grid-template-areas: 'b b b b b b b b b . . . . a a a a a a a a a';
+
+		.c-content-image-card__content {
+			width: 360px;
+			margin-left: auto;
+		}
+	}
+
+	.c-content-image-card__image-wrapper {
+		grid-area: a;
+	}
+
+	.c-content-image-card figure {
+		--br: 20px;
+
+		@media screen(xl) {
+			--br: 1.0416666667vw;
+		}
+
+		border-radius: var(--br);
+		overflow: hidden;
+	}
+
+	.c-content-image-card__content {
+		--width: 360px;
+
+		@media screen(xl) {
+			--width: 18.75vw;
+		}
+
+		width: var(--width);
+		grid-area: b;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.c-content-editor h2,
+	.u-a3 {
+		--font-size: 30px;
+
+		@media screen(xl) {
+			--font-size: 2.0833333333vw;
+		}
+
+		@media screen(lg) {
+			--font-size: 40px;
+		}
+		@media screen(sm) {
+			--font-size: calc(1.0416666667vw + 25px);
+		}
+
+		font-size: var(--font-size);
+		font-family: 'PP Woodland', serif;
+		line-height: 120%;
+		letter-spacing: -0.03em;
+	}
+
+	.c-content-image-card__title {
+		--pb: 12px;
+		--mw: 360px;
+
+		@media screen(xl) {
+			--pb: calc(0.8333333333vw + 8px);
+			--mw: 18.75vw;
+		}
+		@media screen(lg) {
+			--pb: 1.0416666667vw;
+		}
+		@media screen(sm) {
+			--pb: 20px;
+		}
+
+		padding-bottom: var(--pb);
+		max-width: var(--mw);
+		color: #434b34;
+	}
+
+	.c-content-image-card__description {
+		max-width: 300px;
+		color: #2e3323;
+	}
+</style>

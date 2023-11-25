@@ -1,0 +1,231 @@
+---
+// import SvgSprite from '@/components/SvgSprite.astro';
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import roomsImage3 from '@/assets/images/photos/house-living-area-3.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section
+	id="enter"
+	class="section o-section o-section--pt-xl o-section--pb-xl o-section--bg-green js-bg-shape-animation-module relative"
+>
+	<div class="section-inner section-inner-pt-l section-inner-pb-m">
+		<div class="container-narrow">
+			<div class="c-image-grid-cta">
+				<div
+					class="c-animated-big-text u-a5 js-brush-text-scroll c-animated-big-text--light mx-auto max-w-[930px]"
+				>
+					<div class="c-animated-big-text__text">
+						<p class="c-animated-big-text__text-line js-text-line">
+							Sweeping view of the Oconee County Forest
+						</p>
+
+						<p
+							class="c-animated-big-text__text-line c-animated-big-text__text-line--clone js-text-line-clone"
+							aria-hidden="true"
+						>
+							Sweeping view of the Oconee County Forest
+						</p>
+					</div>
+				</div>
+
+				<div class="c-image-grid-cta__row">
+					<div class="c-image-grid-cta__column">
+						<div class="c-image-grid-cta__content">
+							<p class="c-image-grid-cta__text u-b0 js-animated-stagger-element">
+								Many rooms have balconies that beckon you to breathe in the pure Mediterranean air
+								of the island. All rooms are air conditioned and feature an elegant ensuite bathroom
+								with shower.
+							</p>
+
+							<div class="js-animated-stagger-element">
+								<a
+									href="/rooms"
+									class="c-cta u-a2"
+									target="target=_blank"
+								>
+									<span>Explore Rooms</span>
+									<i class="c-cta__icon">
+										<svg
+											class="u-icon u-icon--arrow-right"
+											viewBox="0 0 12 12"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M6.15464 0L4.91753 1.39175C5.87629 2.90722 7.17526 4.14433 9.68041 5.38144C8.65979 5.38144 8.38144 5.07216 6.89691 5.07216H0V6.92783H6.89691C8.38144 6.92783 8.65979 6.61856 9.68041 6.61856C7.17526 7.85567 5.87629 9.09278 4.91753 10.6082L6.15464 12C7.48453 10.1134 9.12371 8.53608 12 6.92783V5.07216C9.12371 3.46392 7.48453 1.8866 6.15464 0Z"
+											>
+											</path>
+										</svg>
+									</i>
+								</a>
+							</div>
+						</div>
+
+						<div
+							class="c-image-grid-cta__image c-image-grid-cta__image--1 js-animated-stagger-element"
+						>
+							<figure class="c-responsive-image">
+								<Picture
+									pictureAttributes={{
+										class: 'c-responsive-image__inner c-responsive-image__inner--3-2',
+									}}
+									class="c-responsive-image__img"
+									src={roomsImage1}
+									formats={['avif', 'webp']}
+									alt="A description of my image."
+									widths={[640, 1140, 2000, roomsImage1.width]}
+								/>
+							</figure>
+						</div>
+					</div>
+
+					<div class="c-image-grid-cta__column">
+						<div
+							class="c-image-grid-cta__image c-image-grid-cta__image--2 js-animated-stagger-element"
+						>
+							<figure class="c-responsive-image">
+								<Picture
+									pictureAttributes={{
+										class: 'c-responsive-image__inner c-responsive-image__inner--3-2',
+									}}
+									class="c-responsive-image__img"
+									src={roomsImage2}
+									formats={['avif', 'webp']}
+									alt="A description of my image."
+									widths={[640, 1140, 2000, roomsImage2.width]}
+								/>
+							</figure>
+						</div>
+
+						<div
+							class="c-image-grid-cta__image c-image-grid-cta__image--3 js-animated-stagger-element"
+						>
+							<figure class="c-responsive-image">
+								<Picture
+									pictureAttributes={{
+										class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+									}}
+									class="c-responsive-image__img"
+									src={roomsImage3}
+									formats={['avif', 'webp']}
+									alt="A description of my image."
+									widths={[640, 1140, 2000, roomsImage3.width]}
+								/>
+							</figure>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.c-image-grid-cta .c-animated-big-text {
+		--max-width: 930px;
+		--pb: 64px;
+
+		@media screen(xl) {
+			--pb: 5vw;
+			--max-width: 48.4375vw;
+		}
+
+		@media screen(lg) {
+			--pb: 96px;
+		}
+
+		@media screen(sm) {
+			--pb: calc(3.3333333333vw + 48px);
+		}
+
+		max-width: var(--max-width);
+		padding-bottom: var(--pb);
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.c-animated-big-text,
+	.c-image-grid-cta__content {
+		--pb: 64px;
+
+		@media screen(sm) {
+			--pb: calc(3.3333333333vw + 48px);
+		}
+
+		@media screen(lg) {
+			--pb: 96px;
+		}
+
+		@media screen(xl) {
+			--pb: 5vw;
+		}
+
+		padding-bottom: var(--pb);
+	}
+
+	.c-image-grid-cta__row {
+		@apply grid gap-5;
+
+		grid-template-columns: 45% 1fr;
+
+		@media screen(xl) {
+			gap: 1.0416666667vw;
+		}
+	}
+
+	.c-image-grid-cta__text {
+		--max-width: 360px;
+		--pb: 24px;
+
+		@media screen(xl) {
+			--pb: 2.0833333333vw;
+			--max-width: 18.75vw;
+		}
+
+		@media screen(lg) {
+			--pb: 40px;
+		}
+		@media screen(sm) {
+			--pb: calc(1.6666666667vw + 16px);
+		}
+
+		max-width: var(--max-width);
+		padding-bottom: var(--pb);
+		color: #2e3323;
+	}
+
+	.c-image-grid-cta__image {
+		@apply overflow-hidden rounded-3xl;
+
+		@media screen(xl) {
+			border-radius: 1.0416666667vw;
+		}
+	}
+
+	.c-image-grid-cta__column:nth-child(2) {
+		gap: 20px;
+		display: flex;
+		flex-direction: column;
+
+		@media screen(xl) {
+			gap: 1.0416666667vw;
+		}
+	}
+
+	.c-image-grid-cta__image img {
+		border-radius: 20px;
+
+		@media screen(xl) {
+			border-radius: 1.0416666667vw;
+		}
+	}
+
+	.c-image-grid-cta__image--3 {
+		max-width: 280px;
+
+		@media screen(xl) {
+			max-width: 14.5833333333vw;
+		}
+	}
+</style>

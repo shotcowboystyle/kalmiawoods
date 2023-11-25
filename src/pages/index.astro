@@ -1,14 +1,25 @@
 ---
 import Layout from '@/app/LayoutLanding.astro';
-import Amenities from '@/modules/Landing/Amenities.astro';
-import GuestAccommodations from '@/modules/Landing/GuestAccommodations.astro';
+// import Amenities from '@/modules/Landing/Amenities.astro';
+import BeyondProperty from '@/modules/Landing/BeyondProperty.astro';
+import BookNow from '@/modules/Landing/BookNow.astro';
+import DiningOptions from '@/modules/Landing/DiningOptions.astro';
+import Forest from '@/modules/Landing/Forest.astro';
+// import GuestAccommodations from '@/modules/Landing/GuestAccommodations.astro';
 import Hero from '@/modules/Landing/Hero.astro';
-import Highlights from '@/modules/Landing/Highlights.astro';
+// import Highlights from '@/modules/Landing/Highlights.astro';
 // import LocationMap from '@/modules/Landing/LocationMap.astro';
-import NearbyAttractions from '@/modules/Landing/NearbyAttractions.astro';
-import PhotoGallery from '@/modules/Landing/PhotoGallery.astro';
-import SleepingArrangements from '@/modules/Landing/SleepingArrangements.astro';
-import Summary from '@/modules/Landing/Summary.astro';
+// import Lodgings from '@/modules/Landing/Lodgings.astro';
+import Nearby from '@/modules/Landing/Nearby.astro';
+// import NearbyAttractions from '@/modules/Landing/NearbyAttractions.astro';
+// import PhotoGallery from '@/modules/Landing/PhotoGallery.astro';
+import Rooms from '@/modules/Landing/Rooms.astro';
+import RoomsGallery from '@/modules/Landing/RoomsGallery.astro';
+import RoomsList from '@/modules/Landing/RoomsList.astro';
+// import SleepingArrangements from '@/modules/Landing/SleepingArrangements.astro';
+// import Summary from '@/modules/Landing/Summary.astro';
+import Welcome from '@/modules/Landing/Welcome.astro';
+import Wellness from '@/modules/Landing/Wellness.astro';
 
 // const LATITUDE = 34.949952;
 // const LONGITUDE = -83.018268;
@@ -16,16 +27,31 @@ import Summary from '@/modules/Landing/Summary.astro';
 
 <Layout>
 	<Hero />
-	<NearbyAttractions />
-	<PhotoGallery />
-	<Summary />
-	<GuestAccommodations />
-	<Highlights />
-	<SleepingArrangements />
-	<Amenities />
-	<!-- <LocationMap
-		latitude={LATITUDE}
-		longitude={LONGITUDE}
-		zoom={11}
-	/> -->
+
+	<div class="page-body">
+		<Welcome />
+		<Rooms />
+		<RoomsList />
+		<RoomsGallery />
+		<DiningOptions />
+		<Nearby />
+		<Wellness />
+		<Forest />
+		<BeyondProperty />
+		<!-- <Lodgings />
+		<NearbyAttractions />
+		<PhotoGallery />
+		<Summary />
+		<GuestAccommodations />
+		<Highlights />
+		<SleepingArrangements />
+		<Amenities /> -->
+		<!-- <LocationMap
+				latitude={LATITUDE}
+				longitude={LONGITUDE}
+				zoom={11}
+			/> -->
+	</div>
+
+	<BookNow />
 </Layout>

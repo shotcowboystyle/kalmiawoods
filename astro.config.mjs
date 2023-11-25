@@ -13,29 +13,33 @@ import analyze from 'rollup-plugin-analyzer';
 import { visualizer } from 'rollup-plugin-visualizer';
 import AutoImport from 'unplugin-auto-import/astro';
 import Components from 'unplugin-vue-components/vite';
-import AstroPWA from '@vite-pwa/astro';
+// import AstroPWA from '@vite-pwa/astro';
 import { loadEnv } from 'vite';
-
-import { manifest, workbox } from './pwa.config';
+// import { manifest, workbox } from './pwa.config';
+// import sentry from "@sentry/astro";
 
 const IS_PROD = process.env.NODE_ENV === 'production';
+const {
+	APP_SITE,
+	APP_BASE,
+	APP_HOST,
+	// SENTRY_AUTH_TOKEN,
+} = loadEnv(process.env.MODE, process.cwd(), '');
 
-const { APP_SITE, APP_BASE, APP_HOST } = loadEnv(process.env.MODE, process.cwd(), '');
 const basePath = `${(APP_BASE ?? '/').replace(/\/$/, '')}`;
 
 const vitePlugins = [
 	Components({
 		dts: 'src/components.d.ts',
-		directoryAsNamespace: true,
+		directoryAsNamespace: true
 	}),
 	IS_PROD && analyze(),
-	IS_PROD &&
-	visualizer({
+	IS_PROD && visualizer({
 		open: false,
 		filename: 'stats.html',
 		gzipSize: true,
-		brotliSize: true,
-	}),
+		brotliSize: true
+	})
 ];
 
 // https://astro.build/config
@@ -43,28 +47,28 @@ export default defineConfig({
 	site: APP_SITE,
 	base: basePath,
 	trailingSlash: 'never',
-	// experimental: {
-	// 	devOverlay: true,
-	// },
+	experimental: {
+		devOverlay: true,
+	},
 	output: 'server',
 	adapter: vercel({
 		webAnalytics: {
-			enabled: true,
+			enabled: true
 		},
 		speedInsights: {
-			enabled: true,
+			enabled: true
 		},
 		imagesConfig: {
 			sizes: [640, 750, 828, 1080, 1200],
 			formats: ['image/avif', 'image/webp'],
-			domains: [],
+			domains: []
 		},
 		imageService: true,
 		devImageService: 'sharp',
-		edgeMiddleware: false,
+		edgeMiddleware: false
 	}),
 	image: {
-		domains: [APP_HOST],
+		domains: [APP_HOST]
 	},
 	integrations: [
 		svgSprite(),
@@ -73,23 +77,20 @@ export default defineConfig({
 			template: {
 				compilerOptions: {
 					// treat any tag that starts with ion- as custom elements
-					isCustomElement: (tag) => tag.startsWith('kw-'),
-				},
-			},
+					isCustomElement: tag => tag.startsWith('kw-')
+				}
+			}
 		}),
 		tailwind({
-			applyBaseStyles: false,
+			applyBaseStyles: false
 		}),
 		AutoImport({
-			imports: [
-				'vue',
-				{
-					'@vueuse/core': ['useScroll'],
-				},
-			],
+			imports: ['vue', {
+				'@vueuse/core': ['useScroll']
+			}],
 			dts: 'src/auto-imports.d.ts',
 			dirs: ['src/composables'],
-			vueTemplate: true,
+			vueTemplate: true
 		}),
 		prefetch({
 			throttle: 4
@@ -102,33 +103,42 @@ export default defineConfig({
 		compress({
 			CSS: true,
 			HTML: {
-				removeAttributeQuotes: false,
+				removeAttributeQuotes: false
 			},
 			Image: false,
 			JavaScript: true,
 			SVG: true,
-			Logger: 1,
+			Logger: 1
 		}),
-		AstroPWA({
-			experimental: { directoryAndTrailingSlashHandler: true },
-			mode: 'production',
-			base: '/',
-			// scope: '/',
-			includeAssets: ['favicon.ico', 'favicons/apple-touch-icon.png', 'favicon.svg'],
-			registerType: 'autoUpdate',
-			injectRegister: 'auto',
-			manifest,
-			workbox,
-			client: {
-				installPrompt: true,
-				periodicSyncForUpdates: 20,
-			},
-			devOptions: {
-				enabled: true,
-				navigateFallbackAllowlist: [/^\/404$/]
-			}
-		}),
+		// AstroPWA({
+		// 	experimental: {
+		// 		directoryAndTrailingSlashHandler: true
+		// 	},
+		// 	mode: 'production',
+		// 	base: '/',
+		// 	// scope: '/',
+		// 	includeAssets: ['favicon.ico', 'favicons/apple-touch-icon.png', 'favicon.svg'],
+		// 	registerType: 'autoUpdate',
+		// 	injectRegister: 'auto',
+		// 	manifest,
+		// 	workbox,
+		// 	client: {
+		// 		installPrompt: true,
+		// 		periodicSyncForUpdates: 20
+		// 	},
+		// 	devOptions: {
+		// 		enabled: true,
+		// 		navigateFallbackAllowlist: [/^\/404$/]
+		// 	}
+		// }),
 		devOnlyRoutes(),
+		// sentry({
+		// 	dsn: "https://9d3cccc46cb4464e9c204f8326ab7b1c@o4504967104757760.ingest.sentry.io/4505075411451904",
+		// 	sourceMapsUploadOptions: {
+		// 		project: "kalmiawoods-api",
+		// 		authToken: SENTRY_AUTH_TOKEN,
+		// 	},
+		// }),
 	],
 	vite: {
 		logLevel: 'info',
@@ -137,35 +147,33 @@ export default defineConfig({
 			rollupOptions: {
 				treeshake: true,
 				output: {
-					manualChunks: (id) => {
+					manualChunks: id => {
 						if (id.includes('v-calendar')) {
 							return 'v-calendar';
 						}
-
 						if (id.includes('leaflet')) {
 							return 'leaflet';
 						}
-
 						if (id.includes('spotlight.js')) {
 							return 'spotlight';
 						}
-					},
-				},
-			},
+					}
+				}
+			}
 		},
 		css: {
-			devSourcemap: true,
+			devSourcemap: true
 		},
 		ssr: {
-			noExternal: ['vue-calendar-3/style'],
+			noExternal: ['vue-calendar-3/style']
 		},
 		plugins: vitePlugins,
 		optimizeDeps: {
 			exclude: ['fsevents'],
-			include: ['vue', '@vueuse/core', 'v-calendar'],
+			include: ['vue', '@vueuse/core', 'v-calendar']
 		},
 		define: {
-			'import.meta.env.PUBLIC_VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID),
-		},
-	},
+			'import.meta.env.PUBLIC_VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID)
+		}
+	}
 });

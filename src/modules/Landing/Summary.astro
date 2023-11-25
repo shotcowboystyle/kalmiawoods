@@ -3,7 +3,8 @@ import { SUMMARY_FEATURES, SUMMARY_HIGHLIGHTS } from '@/app/constants';
 import SvgSprite from '@/components/SvgSprite.astro';
 ---
 
-<section class="mt-16 bg-gradient-to-r from-primary to-secondary py-6 xl:py-24">
+<!-- <section class="mt-16 bg-gradient-to-r from-primary to-secondary py-6 xl:py-24"> -->
+<section class="section flex items-center justify-center bg-secondary">
 	<div class="flex flex-wrap items-center sm:container">
 		<div class="w-full px-4 sm:px-8 lg:px-0 xl:w-1/2">
 			<div class="relative flex flex-wrap justify-center sm:flex-nowrap sm:gap-x-8">
@@ -57,7 +58,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 			</div>
 		</div>
 
-		<div class="mt-6 w-full px-4 text-base leading-relaxed text-white sm:px-8 lg:px-12 xl:w-1/2">
+		<div class="mt-6 w-full px-4 leading-relaxed text-white text-base sm:px-8 lg:px-12 xl:w-1/2">
 			<div
 				class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center text-slate-500 shadow-lg dark:bg-neutral"
 			>
@@ -66,7 +67,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 					class="h-16 w-16 stroke-black dark:stroke-white"
 				/>
 			</div>
-			<h3 class="mb-2 text-2xl font-semibold leading-normal">Rustic Meets Modern</h3>
+			<h3 class="mb-2 font-semibold leading-normal text-2xl">Rustic Meets Modern</h3>
 			<p class="mb-4 mt-4">We have something for everyone. Fun and excitement for all ages.</p>
 			<p class="mb-4 mt-4">
 				Boasts ceiling beams, stone walls, and a wood-burning stove. Set over 2 floors, sleeps 4
@@ -80,7 +81,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 			<div class="block pb-6">
 				{
 					SUMMARY_FEATURES.map(({ text }) => (
-						<span class="last:mr-xs mr-2 mt-2 inline-block rounded-full bg-white px-2 py-1 text-xs font-semibold uppercase text-base-content dark:bg-neutral dark:text-neutral-content">
+						<span class="last:mr-xs mr-2 mt-2 inline-block rounded-full bg-white px-2 py-1 font-semibold uppercase text-base-content text-xs dark:bg-neutral dark:text-neutral-content">
 							{text}
 						</span>
 					))
