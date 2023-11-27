@@ -1,0 +1,49 @@
+---
+import Layout from '@/app/LayoutLanding.astro';
+import Nearby from '@/modules/Landing/Nearby.astro';
+import RoomsList from '@/modules/Landing/RoomsList.astro';
+import Wellness from '@/modules/Landing/Wellness.astro';
+import Amenities from '@/modules/Rooms/Amenities.astro';
+import CommonAreas from '@/modules/Rooms/CommonAreas.astro';
+import Descriptions from '@/modules/Rooms/Descriptions.astro';
+import Header from '@/modules/Rooms/Header.astro';
+---
+
+<Layout>
+	<Header />
+
+	<div class="o-page__inner">
+		<RoomsList />
+		<Descriptions />
+		<Amenities />
+		<CommonAreas />
+		<Nearby />
+		<Wellness />
+	</div>
+</Layout>
+
+<script>
+	import HeaderLoadAnimation from '@/lib/header-load.animation';
+
+	const headerLoadAnimation = new HeaderLoadAnimation();
+
+	function initializeApp() {
+		headerLoadAnimation.init();
+	}
+
+	// document.addEventListener('astro:before-preparation', () => {
+	// 	document.body.classList.add('is-transitioning');
+	// 	loaderAnimation.showLoader();
+	// });
+
+	// document.addEventListener('astro:after-preparation', () => {
+	// 	smoothScroll.kill();
+	// 	// headerAnimation.kill();
+	// });
+
+	// document.addEventListener('astro:after-swap', () => {
+	// 	loaderAnimation.hideLoader();
+	// });
+
+	document.addEventListener('astro:page-load', initializeApp);
+</script>

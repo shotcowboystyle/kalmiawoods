@@ -1,0 +1,38 @@
+---
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section class="section">
+	<div class="section-inner section-inner-pt-s section-inner-pb-s">
+		<div class="container-narrow">
+			<div class="c-image-grid c-image-grid--count-2">
+				<figure class="c-responsive-image js-animated-stagger-element">
+					<Picture
+						pictureAttributes={{
+							class: 'c-responsive-image__inner c-responsive-image__inner--4-3',
+						}}
+						class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
+						src={roomsImage1}
+						formats={['avif', 'webp']}
+						alt="A description of my image."
+						widths={[640, 1140, 2000, roomsImage1.width]}
+					/>
+				</figure>
+
+				<figure class="c-responsive-image js-animated-stagger-element">
+					<Picture
+						pictureAttributes={{
+							class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+						}}
+						class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
+						src={roomsImage1}
+						formats={['avif', 'webp']}
+						alt="A description of my image."
+						widths={[640, 1140, 2000, roomsImage1.width]}
+					/>
+				</figure>
+			</div>
+		</div>
+	</div>
+</section>

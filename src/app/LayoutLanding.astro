@@ -1,24 +1,35 @@
 ---
 import { FOOTER_DATA } from '@/app/constants';
+import Loader from '@/app/Loader.astro';
+import BookNow from '@/modules/Landing/BookNow.astro';
 import Footer from '@/modules/Landing/Footer.astro';
 import Menu from '@/modules/Landing/Menu.astro';
 import Nav from '@/modules/Landing/Nav.astro';
-// import Header from '@/modules/Landing/Header.astro';
 import LayoutCommon from './LayoutCommon.astro';
+
+export interface Props {
+	isHomepage?: boolean;
+}
+
+const { isHomepage } = Astro.props as Props;
 ---
 
 <LayoutCommon>
-	<!-- <Header /> -->
-	<Nav />
+	<Loader />
+
+	<Nav isHomepage={isHomepage} />
 	<Menu />
 
 	<main
-		id="main-content"
-		class="relative h-full"
+		id="smooth-wrapper"
+		class="o-page js-smooth-wrapper"
 	>
-		<slot />
+		<div class="js-smooth-content">
+			<slot />
+		</div>
 	</main>
 
+	<BookNow />
 	<Footer {...FOOTER_DATA} />
 
 	<style>
@@ -45,692 +56,48 @@ import LayoutCommon from './LayoutCommon.astro';
 </LayoutCommon>
 
 <script>
-	import Lenis from '@studio-freight/lenis';
-	import { gsap } from 'gsap';
-	import { ScrollTrigger } from 'gsap/all';
-	import SplitType from 'split-type';
-
-	gsap.registerPlugin(ScrollTrigger);
-
-	let lenis: Lenis;
-
-	const hamburgers = document.querySelectorAll('.js-hamburger');
-	const overlay = document.querySelector('.js-mobile-navigation-overlay');
-	const navigation = document.getElementById('nav');
-	const wrapper = document.querySelector('.js-home-header');
-	const logo = document.querySelector('.js-navigation-logo');
-	const image = document.querySelector('.js-home-header-image');
-	const imageWrapper = document.querySelector('.js-home-header-image-wrapper');
-
-	const scrollNavigationOffset = 200;
-	const scrollDelta = 0;
-	const scrollOffset = 0;
-
-	let previousTop: number = 0;
-	let scrolling: boolean = false;
-
-	// const elm = b;
-	const elm = overlay;
-	// const path = (b = this.elm) == null ? undefined : b.querySelectorAll("path");
-	const path = overlay?.querySelectorAll('path');
-	const numPoints = 4;
-	const duration = 800;
-	const delayPointsArray = [];
-	const delayPointsMax = 180;
-	const delayPerPath = 70;
-	let timeStart = Date.now();
-	let isOpened = false;
-	let shapeOverlaysDone = false;
-
-	let isAnimating: boolean = false;
-
-	function initializeGSAPScrollTriggerPinning() {
-		gsap.utils.toArray('.section').forEach((section) => {
-			const $el: HTMLElement = section as HTMLElement;
-			const nextSection = $el.nextElementSibling;
-
-			ScrollTrigger.normalizeScroll({
-				allowNestedScroll: true,
-			});
-
-			if (!$el.classList.contains('four')) {
-				ScrollTrigger.normalizeScroll(false);
-
-				ScrollTrigger.create({
-					trigger: $el,
-					start: 'bottom bottom',
-					pin: true,
-					pinType: 'fixed',
-					pinSpacing: false,
-					anticipatePin: 1,
-					scrub: 0.5,
-					invalidateOnRefresh: true,
-					// ease: 'none'
-				});
-			}
-
-			gsap.to($el, {
-				opacity: 0,
-				// stagger: 0.1,
-				ease: 'Power4.easeInOut',
-				scrollTrigger: {
-					trigger: nextSection,
-					start: 'top bottom',
-					end: 'top top',
-					scrub: 0.5,
-				},
-			});
-		});
-	}
-
-	function onScrollNav() {
-		gsap.to(logo, {
-			yPercent: 0,
-			scale: 1,
-			scrollTrigger: {
-				trigger: navigation,
-				start: 'top top',
-				end: '+=300',
-				scrub: 0.2,
-			},
-		});
-		gsap.to(image, {
-			yPercent: 30,
-			scrollTrigger: {
-				trigger: wrapper,
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 0.1,
-			},
-		});
-		gsap.to(image, {
-			opacity: 0.3,
-			scrollTrigger: {
-				trigger: wrapper,
-				start: '50% top',
-				end: 'bottom top',
-				scrub: 0.1,
-			},
-		});
-	}
-
-	function animateNav() {
-		const isMobile = window.innerWidth <= 800;
-		gsap
-			.timeline({
-				delay: 1,
-			})
-			.set(logo, {
-				yPercent: isMobile ? 250 : 150,
-				scale: 2,
-			})
-			.fromTo(
-				navigation,
-				{
-					y: -40,
-					opacity: 0,
-				},
-				{
-					y: 0,
-					duration: 0.6,
-					opacity: 1,
-					clearProps: 'all',
-					ease: 'power3.out',
-					onComplete: function () {
-						navigation?.classList.add('has-loaded');
-					},
-				},
-			)
-			.to(
-				image,
-				{
-					scale: 1,
-					duration: 1.6,
-					ease: 'expo.inOut',
-				},
-				'0',
-			)
-			.to(
-				imageWrapper,
-				{
-					scale: 1,
-					duration: 1.6,
-					borderRadius: 0,
-					ease: 'expo.inOut',
-					onComplete: function () {
-						document.body.classList.remove('scroll-lock-top');
-						onScrollNav();
-						setTimeout(() => {
-							ScrollTrigger.refresh();
-						}, 100);
-					},
-				},
-				'0',
-			);
-	}
-
-	function scrollingUp(e: number) {
-		(e < scrollNavigationOffset || previousTop - e > scrollDelta) &&
-			navigation?.classList.remove('slide-up');
-	}
-
-	function scrollingDown(e: number) {
-		e > scrollNavigationOffset + scrollOffset
-			? navigation?.classList.add('slide-up')
-			: e > scrollNavigationOffset && navigation?.classList.remove('slide-up');
-	}
-
-	function changeNavigationState(e: number) {
-		console.log('changeNavigationState', e);
-		if (e > scrollNavigationOffset) {
-			navigation?.classList.add('has-scrolled');
-		} else {
-			navigation?.classList.remove('has-scrolled');
-		}
-
-		if (previousTop >= e) {
-			scrollingUp(e);
-		} else {
-			scrollingDown(e);
-		}
-	}
-
-	function checkScroll() {
-		const e = window.pageYOffset | document.body.scrollTop;
-		changeNavigationState(e);
-		previousTop = e;
-		scrolling = false;
-	}
-
-	function initNavOnScroll() {
-		document.addEventListener('scroll', () => {
-			if (!scrolling) {
-				scrolling = true;
-				if (window.requestAnimationFrame) {
-					requestAnimationFrame(function () {
-						return checkScroll();
-					});
-				} else {
-					setTimeout(checkScroll, 250);
-				}
-			}
-		});
-	}
-
-	function initializeBigTextLines() {
-		const textLines = new SplitType('.js-text-line', {
-			types: 'lines',
-			lineClass: 'lineParent',
-		});
-		new SplitType(textLines.lines!, {
-			types: 'lines',
-			lineClass: 'lineChild',
-		});
-		const textCloneLines = new SplitType('.js-text-line-clone', {
-			types: 'lines',
-			lineClass: 'lineParent',
-		});
-		const textCloneLines2 = new SplitType(textCloneLines.lines!, {
-			types: 'lines',
-			lineClass: 'lineChild',
-		});
-
-		gsap.set(textCloneLines2.lines, {
-			x: '100%',
-		});
-		gsap.set(textCloneLines.lines, {
-			x: '-100%',
-		});
-
-		textCloneLines2.lines?.forEach((e) => {
-			gsap.to(e, {
-				x: '0%',
-				scrollTrigger: {
-					scrub: 0.8,
-					trigger: e,
-					start: 'bottom 80%',
-					end: 'bottom '.concat((0.7 * window.innerHeight - e.offsetHeight).toString()),
-					toggleActions: 'play play play play',
-				},
-			});
-		});
-
-		textCloneLines.lines?.forEach((e) => {
-			gsap.to(e, {
-				x: '0%',
-				scrollTrigger: {
-					scrub: 0.8,
-					trigger: e,
-					start: 'bottom 80%',
-					end: 'bottom '.concat((0.7 * window.innerHeight - e.offsetHeight).toString()),
-					toggleActions: 'play play play play',
-				},
-			});
-		});
-	}
-
-	function initializeLenisScroll() {
-		// const lenis = new Lenis({
-		// 	smoothWheel: true,
-		// 	duration: 1.2,
-		// });
-
-		// lenis.on('scroll', ScrollTrigger.update);
-
-		// gsap.ticker.add((time) => {
-		// 	lenis.raf(time * 1000);
-		// });
-
-		// gsap.ticker.lagSmoothing(0);
-
-		const isMacOS = navigator.userAgent.indexOf('Mac OS X') !== -1;
-		const lerp = isMacOS ? 0.4 : 0.1;
-
-		lenis = new Lenis({
-			duration: 1.2,
-			// https://www.desmos.com/calculator/brs54l4xou
-			easing: (t: number) => Math.min(1, 1.001 - 2 ** -10 * t),
-			smoothWheel: true,
-			lerp,
-		});
-
-		function raf(time: number) {
-			lenis.raf(time);
-			ScrollTrigger.update();
-			requestAnimationFrame(raf);
-		}
-
-		requestAnimationFrame(raf);
-
-		lenis.on('scroll', ScrollTrigger.update);
-
-		gsap.ticker.add((time) => {
-			lenis.raf(time * 1000);
-		});
-
-		gsap.ticker.lagSmoothing(0);
-	}
-
-	function scrollLock() {
-		document.body.classList.add('overflow-hidden');
-		lenis && lenis.stop();
-	}
-
-	function unlockScroll() {
-		document.body.classList.remove('overflow-hidden');
-		lenis && lenis.start();
-	}
-
-	function initSeparatorsAnimation() {
-		const separatorsParents = document.querySelectorAll('.js-section-separator');
-		if (separatorsParents?.length) {
-			separatorsParents.forEach(($parentEl) => {
-				const parallaxSeparators = gsap.utils.toArray('.js-section-separator-svg', $parentEl);
-				parallaxSeparators.forEach(($el, index) => {
-					gsap.to($el as HTMLElement, {
-						x: -window.innerHeight / (1.5 * (index + 1)),
-						scrollTrigger: {
-							trigger: $parentEl,
-							start: 'top bottom',
-							end: 'bottom top',
-							scrub: 1,
-						},
-					});
-				});
-			});
-		}
-	}
-
-	function initParallaxAnimation() {
-		const parallaxWrappers = gsap.utils.toArray('.js-parallax-wrapper');
-		parallaxWrappers.forEach(($el) => {
-			const item = ($el as HTMLElement).querySelector('.js-parallax-item');
-			gsap.from(item as HTMLElement, {
-				yPercent: -20,
-				overwrite: true,
-				scrollTrigger: {
-					trigger: $el as HTMLElement,
-					start: 'top bottom',
-					end: 'bottom top',
-					scrub: 0.1,
-				},
-			});
-		});
-	}
-
-	function initBgShapeAnimation() {
-		const bgShapeElements = document.querySelectorAll('.js-bg-shape-animation-svg');
-		if (bgShapeElements?.length) {
-			bgShapeElements.forEach(($shapeEl) => {
-				// const e = e.querySelector(this.DOM.svg);
-				const shapeGradient = null == $shapeEl ? void 0 : $shapeEl.querySelector('linearGradient');
-				const offsetWidth = ($shapeEl as SVGMarkerElement).viewBox.baseVal.width || null;
-				if (shapeGradient && offsetWidth) {
-					gsap.fromTo(
-						shapeGradient,
-						{
-							attr: {
-								x2: 0,
-							},
-						},
-						{
-							attr: {
-								x2: offsetWidth,
-							},
-							scrollTrigger: {
-								trigger: $shapeEl,
-								scrub: 1,
-							},
-						},
-					);
-				}
-			});
-		}
-	}
-
-	function initContentBlocksAnimation() {
-		const animatedContent = document.querySelectorAll('.js-animated-content');
-		// const animatedContentElement = document.querySelectorAll('.js-animated-content-element');
-		const animatedStaggerElements = document.querySelectorAll('.js-animated-stagger-element');
-
-		if (animatedContent.length) {
-			for (let e = 0, t = animatedContent.length; e < t; e++) {
-				const o = animatedContent[e].querySelectorAll('.js-animated-content-element');
-				const tl = gsap.timeline({
-					overwrite: 'auto',
-				});
-
-				tl.add('start').fromTo(
-					o,
-					{
-						y: 40,
-						autoAlpha: 0,
-					},
-					{
-						autoAlpha: 1,
-						duration: 1.2,
-						y: '0%',
-						stagger: {
-							each: 0.075,
-							from: 'start',
-						},
-						ease: 'expo.out',
-					},
-				);
-
-				ScrollTrigger.create({
-					trigger: o,
-					animation: tl,
-					start: 'top bottom-=20%',
-					toggleClass: 'is-animated',
-					once: true,
-				});
-			}
-		}
-
-		if (animatedStaggerElements.length) {
-			gsap.set(animatedStaggerElements, {
-				autoAlpha: 0,
-			});
-
-			animatedStaggerElements.forEach(($staggerEl) => {
-				gsap.fromTo(
-					$staggerEl,
-					{
-						y: 40,
-						autoAlpha: 0,
-					},
-					{
-						autoAlpha: 1,
-						duration: 1.2,
-						overwrite: 'auto',
-						y: 0,
-						ease: 'expo.out',
-						scrollTrigger: {
-							trigger: $staggerEl,
-							start: 'top 90%',
-							end: 'top center',
-							scrub: 1,
-						},
-					},
-				);
-			});
-		}
-	}
-
-	function done() {
-		console.log('DONE');
-		isAnimating = false;
-	}
-
-	function cubicInOut(a: number) {
-		if (a < 0.5) {
-			return a * 4 * a * a;
-		} else {
-			return Math.pow(a * 2 - 2, 3) * 0.5 + 1;
-		}
-	}
-
-	function render() {
-		if (isOpened) {
-			for (let a = 0; a < path!.length; a++) {
-				path?.[a].setAttribute('d', updatePath(Date.now() - (timeStart + delayPerPath * a)));
-			}
-		} else {
-			for (var b = 0; b < path!.length; b++) {
-				path?.[b].setAttribute(
-					'd',
-					updatePath(Date.now() - (timeStart + delayPerPath * (path.length - b - 1))),
-				);
-			}
-		}
-	}
-
-	function renderLoop() {
-		render();
-		if (Date.now() - timeStart < duration + delayPerPath * (path!.length - 1) + delayPointsMax) {
-			requestAnimationFrame(function () {
-				renderLoop();
-			});
-		} else {
-			isAnimating = false;
-			if (shapeOverlaysDone !== null) {
-				done();
-			}
-		}
-	}
-
-	function open() {
-		isOpened = true;
-		elm?.classList.add('is-opened');
-		timeStart = Date.now();
-		renderLoop();
-	}
-
-	function close() {
-		isOpened = false;
-		elm?.classList.remove('is-opened');
-		timeStart = Date.now();
-		renderLoop();
-	}
-
-	function updatePath(b: number) {
-		for (var c = [], d = 0; d < numPoints; d++) {
-			c[d] = cubicInOut(Math.min(Math.max(b - delayPointsArray[d], 0) / duration, 1)) * 100;
-		}
-		var e = '';
-		e += (isOpened ? 'M 0 0 V ' : 'M 0 ').concat(c[0].toString(), ' ');
-		for (var f = 0; f < numPoints - 1; f++) {
-			var g = ((f + 1) / (numPoints - 1)) * 100;
-			var h = g - ((1 / (numPoints - 1)) * 100) / 2;
-			e += 'C '
-				.concat(h.toString(), ' ')
-				.concat(c[f].toString(), ' ')
-				.concat(h.toString(), ' ')
-				.concat(c[f + 1].toString(), ' ')
-				.concat(g.toString(), ' ')
-				.concat(c[f + 1].toString(), ' ');
-		}
-		return (e += isOpened ? 'V 0 H 0' : 'V 100 H 0');
-	}
-
-	function toggleShapeOverlays() {
-		for (
-			var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null,
-				b = ((isAnimating = true), Math.random() * Math.PI * 2),
-				c = 0;
-			c < numPoints;
-			c++
-		) {
-			var d = (c / (numPoints - 1)) * Math.PI * 2;
-			delayPointsArray[c] = ((Math.sin(d + b) + 1) / 2) * delayPointsMax;
-		}
-		if (isOpened === false) {
-			open();
-		} else {
-			close();
-		}
-		shapeOverlaysDone = a;
-	}
-
-	function openNav() {
-		isAnimating = true;
-
-		if (hamburgers?.length) {
-			hamburgers.forEach((e) => {
-				e.classList.add('is-active');
-			});
-
-			const mobileNavigation = document.querySelector('.js-mobile-navigation');
-			mobileNavigation?.classList.add('is-active');
-
-			const mobileNavigationItems = document.querySelectorAll('.js-mobile-navigation-item');
-			const mobileNavigationItemWrapper = document.querySelector(
-				'.js-mobile-navigation-item-wrapper',
-			);
-			const mobileNavigationLogo = document.querySelector('.js-mobile-navigation-logo');
-
-			const mobileNavigationInner = document.querySelector('.js-mobile-navigation-inner');
-			mobileNavigationInner?.classList.add('is-active');
-
-			scrollLock();
-			toggleShapeOverlays(function () {
-				done();
-			});
-
-			gsap.fromTo(
-				mobileNavigationItems,
-				{
-					autoAlpha: 0,
-				},
-				{
-					autoAlpha: 1,
-					duration: 0.4,
-					stagger: {
-						each: 0.1,
-						grid: 'auto',
-						ease: 'power2.inOut',
-					},
-					delay: 0.8,
-				},
-			);
-			gsap.fromTo(
-				mobileNavigationItemWrapper,
-				{
-					y: -20,
-				},
-				{
-					y: 0,
-					duration: 0.8,
-					delay: 0.7,
-				},
-			);
-			gsap.fromTo(
-				mobileNavigationLogo,
-				{
-					autoAlpha: 0,
-					y: -20,
-				},
-				{
-					y: 0,
-					autoAlpha: 1,
-					duration: 0.3,
-					delay: 0.6,
-				},
-			);
-		}
-	}
-
-	function closeNav() {
-		isAnimating = true;
-
-		if (hamburgers?.length) {
-			hamburgers.forEach((e) => {
-				e.classList.remove('is-active');
-			});
-
-			const mobileNavigationItems = document.querySelectorAll('.js-mobile-navigation-item');
-			const mobileNavigationItemWrapper = document.querySelector(
-				'.js-mobile-navigation-item-wrapper',
-			);
-			const mobileNavigationLogo = document.querySelector('.js-mobile-navigation-logo');
-			const mobileNavigationInner = document.querySelector('.js-mobile-navigation-inner');
-
-			gsap.to(mobileNavigationItems, {
-				autoAlpha: 0,
-				duration: 0.4,
-				stagger: {
-					each: 0.1,
-					grid: 'auto',
-					ease: 'power2.inOut',
-				},
-			});
-			gsap.to(mobileNavigationItemWrapper, {
-				y: 20,
-				duration: 0.8,
-				delay: 0,
-			});
-			gsap.to(mobileNavigationLogo, {
-				autoAlpha: 0,
-				y: 20,
-				duration: 0.3,
-				delay: 0.2,
-			});
-
-			setTimeout(() => {
-				mobileNavigationInner?.classList.remove('is-active');
-				unlockScroll();
-				toggleShapeOverlays(function () {
-					mobileNavigation.classList.remove('is-active');
-					done();
-				});
-			}, 600);
-		}
-	}
-
-	function initMobileNavigation() {
-		// shapeOverlays = new i.default(this.overlay);
-		hamburgers.forEach((e) => {
-			e.addEventListener('click', () => {
-				isAnimating || (e.classList.contains('is-active') ? closeNav() : openNav());
-			});
-		});
-	}
+	import BackgroundShapeAnimation from '@/lib/background-shape.animation';
+	import BrushTextAnimation from '@/lib/brush-text.animation';
+	import ContentAnimation from '@/lib/content.animation';
+	// import HeaderAnimation from '@/lib/header.animation';
+	import LoaderAnimation from '@/lib/loader.animation';
+	import NavigationController from '@/lib/navigation-controller';
+	import ParallaxBackgroundAnimation from '@/lib/parallax-bg.animation';
+	import SectionSeparatorsAnimation from '@/lib/section-separators.animation';
+	import SmoothScroll from '@/lib/smooth-scroll';
+
+	const backgroundShapeAnimation = new BackgroundShapeAnimation();
+	const brushTextAnimation = new BrushTextAnimation();
+	const contentAnimation = new ContentAnimation();
+	const navigationController = new NavigationController();
+	const parallaxBackgroundAnimation = new ParallaxBackgroundAnimation();
+	const sectionSeparatorsAnimation = new SectionSeparatorsAnimation();
+	const smoothScroll = new SmoothScroll();
+	const loaderAnimation = new LoaderAnimation();
 
 	function initializeApp() {
-		// initializeGSAPScrollTriggerPinning();
-		initializeLenisScroll();
-		initBgShapeAnimation();
-		initSeparatorsAnimation();
-		initializeBigTextLines();
-		initParallaxAnimation();
-		initContentBlocksAnimation();
-		animateNav();
-		initNavOnScroll();
-		initMobileNavigation();
+		smoothScroll.init();
+		navigationController.init();
+		backgroundShapeAnimation.init();
+		brushTextAnimation.init();
+		parallaxBackgroundAnimation.init();
+		sectionSeparatorsAnimation.init();
+		contentAnimation.init();
 	}
 
-	// initializeApp();
+	document.addEventListener('astro:before-preparation', () => {
+		document.body.classList.add('is-transitioning');
+		loaderAnimation.showLoader();
+	});
 
-	document.addEventListener('DOMContentLoaded', initializeApp);
+	document.addEventListener('astro:after-preparation', () => {
+		smoothScroll.kill();
+		// headerAnimation.kill();
+	});
+
+	document.addEventListener('astro:after-swap', () => {
+		loaderAnimation.hideLoader();
+	});
+
+	document.addEventListener('astro:page-load', initializeApp);
 </script>

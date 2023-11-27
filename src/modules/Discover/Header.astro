@@ -1,0 +1,42 @@
+---
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<div class="o-header js-header">
+	<header class="c-header container">
+		<div class="c-animated-big-text c-animated-big-text--light u-a5 js-brush-text-on-load">
+			<div class="c-animated-big-text__text">
+				<h1 class="c-animated-big-text__text-line js-text-line">
+					An island where nature remains utterly unspoilt
+				</h1>
+				<p
+					class="c-animated-big-text__text-line c-animated-big-text__text-line--clone js-text-line-clone"
+					aria-hidden="true"
+					tabindex="-1"
+				>
+					An island where nature remains utterly unspoilt
+				</p>
+			</div>
+		</div>
+
+		<div class="pin-spacer">
+			<div class="c-header__image js-header-image">
+				<div class="c-header__image-inner js-header-image-inner">
+					<figure class="c-responsive-image">
+						<Picture
+							pictureAttributes={{
+								class: 'c-responsive-image__inner',
+							}}
+							class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center"
+							src={roomsImage1}
+							formats={['avif', 'webp']}
+							alt="A description of my image."
+							widths={[640, 1140, 2000, roomsImage1.width]}
+						/>
+					</figure>
+				</div>
+			</div>
+		</div>
+	</header>
+</div>

@@ -1,7 +1,11 @@
-<p class="my-10 text-center text-sm text-gray-500">
+---
+import { BASE_APP_URL } from '@/app/constants';
+---
+
+<p class="my-10 text-center text-gray-500 text-sm">
 	&copy; {new Date().getFullYear()} —
 	<a
-		href="https://www.kalmiawoods.com"
+		href={BASE_APP_URL}
 		class="hover:underline"
 		target="_blank"
 		>KalmiaWoods.com</a

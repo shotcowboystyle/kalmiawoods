@@ -1,0 +1,51 @@
+---
+import Layout from '@/app/LayoutLanding.astro';
+import Nearby from '@/modules/Landing/Nearby.astro';
+import Clinic from '@/modules/Wellness/Clinic.astro';
+import ContactWellness from '@/modules/Wellness/ContactWellness.astro';
+import Facilities from '@/modules/Wellness/Facilities.astro';
+import Header from '@/modules/Wellness/Header.astro';
+import Offerings from '@/modules/Wellness/Offerings.astro';
+import Summary from '@/modules/Wellness/Summary.astro';
+import SummaryPictures from '@/modules/Wellness/SummaryPictures.astro';
+---
+
+<Layout>
+	<Header />
+
+	<div class="o-page__inner">
+		<Summary />
+		<SummaryPictures />
+		<Clinic />
+		<Nearby />
+		<Offerings />
+		<Facilities />
+		<ContactWellness />
+	</div>
+</Layout>
+
+<script>
+	import HeaderLoadAnimation from '@/lib/header-load.animation';
+
+	const headerLoadAnimation = new HeaderLoadAnimation();
+
+	function initializeApp() {
+		headerLoadAnimation.init();
+	}
+
+	// document.addEventListener('astro:before-preparation', () => {
+	// 	document.body.classList.add('is-transitioning');
+	// 	loaderAnimation.showLoader();
+	// });
+
+	// document.addEventListener('astro:after-preparation', () => {
+	// 	smoothScroll.kill();
+	// 	// headerAnimation.kill();
+	// });
+
+	// document.addEventListener('astro:after-swap', () => {
+	// 	loaderAnimation.hideLoader();
+	// });
+
+	document.addEventListener('astro:page-load', initializeApp);
+</script>

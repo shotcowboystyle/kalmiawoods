@@ -192,68 +192,6 @@ import { Picture } from 'astro:assets';
 		color: #2e3323;
 	}
 
-	.c-content-images-cta__list {
-		--gap: 72px;
-
-		@media screen(xl) {
-			--gap: 6.25vw;
-		}
-		@media screen(lg) {
-			--gap: 120px;
-		}
-		@media screen(sm) {
-			--gap: calc(5vw + 48px);
-		}
-
-		gap: var(--gap);
-		display: flex;
-		flex-direction: column;
-	}
-
-	.c-content-image-card {
-		display: grid;
-		grid-template-columns: repeat(22, 1fr);
-		grid-template-areas: 'a a a a a a a a a . . . . b b b b b b b b b';
-	}
-
-	.c-content-image-card--reverse {
-		grid-template-areas: 'b b b b b b b b b . . . . a a a a a a a a a';
-
-		.c-content-image-card__content {
-			width: 360px;
-			margin-left: auto;
-		}
-	}
-
-	.c-content-image-card__image-wrapper {
-		grid-area: a;
-	}
-
-	.c-content-image-card figure {
-		--br: 20px;
-
-		@media screen(xl) {
-			--br: 1.0416666667vw;
-		}
-
-		border-radius: var(--br);
-		overflow: hidden;
-	}
-
-	.c-content-image-card__content {
-		--width: 360px;
-
-		@media screen(xl) {
-			--width: 18.75vw;
-		}
-
-		width: var(--width);
-		grid-area: b;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-
 	.c-content-editor h2,
 	.u-a3 {
 		--font-size: 30px;
@@ -293,10 +231,5 @@ import { Picture } from 'astro:assets';
 		padding-bottom: var(--pb);
 		max-width: var(--mw);
 		color: #434b34;
-	}
-
-	.c-content-image-card__description {
-		max-width: 300px;
-		color: #2e3323;
 	}
 </style>

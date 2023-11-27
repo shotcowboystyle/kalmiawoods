@@ -10,10 +10,7 @@ import { Picture } from 'astro:assets';
 >
 	<div class="section-inner section-inner-pt-s section-inner-pb-xl">
 		<div class="c-cta-section-b js-cta-section-b">
-			<div
-				id="js-cta-section-b-image-left"
-				class="c-cta-section-b__column"
-			>
+			<div class="c-cta-section-b__column js-cta-section-b-image-left">
 				<figure class="c-responsive-image">
 					<Picture
 						pictureAttributes={{
@@ -28,10 +25,7 @@ import { Picture } from 'astro:assets';
 				</figure>
 			</div>
 
-			<div
-				id="js-cta-section-content"
-				class="c-cta-section-b__column c-cta-section-b__column--main"
-			>
+			<div class="c-cta-section-b__column c-cta-section-b__column--main js-cta-section-content">
 				<h2 class="c-cta-section-b__title u-a5">Relaxing treatments</h2>
 				<p class="c-cta-section-b__description">
 					Massage, sauna sessions, beauty treatments such as pedicures and manicures, a fitness
@@ -60,10 +54,7 @@ import { Picture } from 'astro:assets';
 				</div>
 			</div>
 
-			<div
-				id="js-cta-section-b-image-right"
-				class="c-cta-section-b__column"
-			>
+			<div class="c-cta-section-b__column js-cta-section-b-image-right">
 				<figure class="c-responsive-image">
 					<Picture
 						pictureAttributes={{
@@ -82,53 +73,10 @@ import { Picture } from 'astro:assets';
 </section>
 
 <script>
-	import { gsap } from 'gsap';
-	import { ScrollTrigger } from 'gsap/all';
+	import CtaImageAnimation from '@/lib/cta-image.animation';
 
-	gsap.registerPlugin(ScrollTrigger);
-
-	function initWellnessImageAnimation() {
-		const wellnessSection = document.getElementById('wellness');
-		const wellnessImageLeft = document.getElementById('js-cta-section-b-image-left');
-		const wellnessImageRight = document.getElementById('js-cta-section-b-image-right');
-		const wellnessContent = document.getElementById('js-cta-section-content');
-		const isMobile = window.innerWidth <= 800;
-
-		gsap
-			.timeline({
-				scrollTrigger: {
-					trigger: wellnessSection,
-					scrub: 1,
-					start: 'top 80%',
-					end: 'bottom 80%',
-				},
-			})
-			.from(wellnessImageLeft, {
-				xPercent: isMobile ? 300 : (5 / 6) * 100,
-				duration: 1,
-			})
-			.from(
-				wellnessImageRight,
-				{
-					xPercent: isMobile ? -300 : (-5 / 6) * 100,
-					duration: 1,
-				},
-				'-=1',
-			)
-			.from(
-				wellnessContent,
-				{
-					opacity: 0,
-				},
-				'-=0.4',
-			);
-	}
-
-	function initializeWellness() {
-		initWellnessImageAnimation();
-	}
-
-	initializeWellness();
+	const ctaImageAnimation = new CtaImageAnimation(document.getElementById('wellness'));
+	ctaImageAnimation.init();
 </script>
 
 <style>
@@ -143,6 +91,19 @@ import { Picture } from 'astro:assets';
 		position: relative;
 		text-align: center;
 		z-index: 1;
+	}
+
+	@media (max-width: 800px) {
+		.c-cta-section-b__column:nth-child(1) {
+			grid-column: 1/7;
+			grid-row: 1;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.c-cta-section-b__column:nth-child(1) {
+			grid-column: 1/4;
+		}
 	}
 
 	.c-cta-section-b__column:nth-child(1) .c-responsive-image {
@@ -168,23 +129,44 @@ import { Picture } from 'astro:assets';
 		height: 100%;
 	}
 
+	@media (max-width: 800px) {
+		.c-cta-section-b__column figure {
+			width: 600%;
+		}
+	}
+
 	.c-cta-section-b__column--main {
 		--py: 56px;
 
-		@media screen(xl) {
-			--py: 4.1666666667vw;
+		@media screen(sm) {
+			--py: calc(2.5vw + 44px);
 		}
+
 		@media screen(lg) {
 			--py: 80px;
 		}
-		@media screen(sm) {
-			--py: calc(2.5vw + 44px);
+
+		@media screen(xl) {
+			--py: 4.1666666667vw;
 		}
 
 		padding-top: var(--py);
 		padding-bottom: var(--py);
 		grid-column: 8/18;
 		z-index: 0;
+	}
+
+	@media (max-width: 800px) {
+		.c-cta-section-b__column--main {
+			grid-column: 6/20;
+			grid-row: 1;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.c-cta-section-b__column--main {
+			grid-column: 5/21;
+		}
 	}
 
 	.c-cta-section-b__title {
@@ -244,6 +226,18 @@ import { Picture } from 'astro:assets';
 
 	.c-cta-section-b__column:nth-child(3) {
 		grid-column: 19/25;
+	}
+
+	@media (max-width: 800px) {
+		.c-cta-section-b__column:nth-child(3) {
+			grid-row: 1;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.c-cta-section-b__column:nth-child(3) {
+			grid-column: 22/25;
+		}
 	}
 
 	.c-cta-section-b__column:nth-child(3) .c-responsive-image {

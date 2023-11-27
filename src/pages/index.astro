@@ -2,7 +2,6 @@
 import Layout from '@/app/LayoutLanding.astro';
 // import Amenities from '@/modules/Landing/Amenities.astro';
 import BeyondProperty from '@/modules/Landing/BeyondProperty.astro';
-import BookNow from '@/modules/Landing/BookNow.astro';
 import DiningOptions from '@/modules/Landing/DiningOptions.astro';
 import Forest from '@/modules/Landing/Forest.astro';
 // import GuestAccommodations from '@/modules/Landing/GuestAccommodations.astro';
@@ -25,10 +24,10 @@ import Wellness from '@/modules/Landing/Wellness.astro';
 // const LONGITUDE = -83.018268;
 ---
 
-<Layout>
+<Layout isHomepage>
 	<Hero />
 
-	<div class="page-body">
+	<div class="o-page__inner">
 		<Welcome />
 		<Rooms />
 		<RoomsList />
@@ -38,20 +37,31 @@ import Wellness from '@/modules/Landing/Wellness.astro';
 		<Wellness />
 		<Forest />
 		<BeyondProperty />
-		<!-- <Lodgings />
-		<NearbyAttractions />
-		<PhotoGallery />
-		<Summary />
-		<GuestAccommodations />
-		<Highlights />
-		<SleepingArrangements />
-		<Amenities /> -->
-		<!-- <LocationMap
-				latitude={LATITUDE}
-				longitude={LONGITUDE}
-				zoom={11}
-			/> -->
 	</div>
-
-	<BookNow />
 </Layout>
+
+<script>
+	import HeaderAnimation from '@/lib/header.animation';
+
+	const headerAnimation = new HeaderAnimation();
+
+	function initializeApp() {
+		headerAnimation.init();
+	}
+
+	// document.addEventListener('astro:before-preparation', () => {
+	// 	document.body.classList.add('is-transitioning');
+	// 	loaderAnimation.showLoader();
+	// });
+
+	// document.addEventListener('astro:after-preparation', () => {
+	// 	smoothScroll.kill();
+	// 	// headerAnimation.kill();
+	// });
+
+	// document.addEventListener('astro:after-swap', () => {
+	// 	loaderAnimation.hideLoader();
+	// });
+
+	document.addEventListener('astro:page-load', initializeApp);
+</script>

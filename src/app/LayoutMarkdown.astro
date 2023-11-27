@@ -1,5 +1,5 @@
 ---
-import LayoutStacked from '@/app/LayoutStacked.astro';
+import Layout from '@/app/LayoutLanding.astro';
 
 export interface Props {
 	frontmatter: {
@@ -10,7 +10,42 @@ export interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<LayoutStacked>
-	<h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
-	<slot />
-</LayoutStacked>
+<Layout>
+	<div class="o-header js-header o-header--no-image">
+		<header class="c-header container">
+			<div class="c-animated-big-text c-animated-big-text--light u-a5 js-brush-text-on-load">
+				<div class="c-animated-big-text__text">
+					<h1 class="c-animated-big-text__text-line js-text-line">
+						{frontmatter.title}
+					</h1>
+					<p
+						class="c-animated-big-text__text-line c-animated-big-text__text-line--clone js-text-line-clone"
+						aria-hidden="true"
+						tabindex="-1"
+					>
+						{frontmatter.title}
+					</p>
+				</div>
+			</div>
+		</header>
+	</div>
+
+	<div class="o-page__inner">
+		<section class="section">
+			<div class="section-inner section-inner-pt-xs section-inner-pb-xl">
+				<div class="container-narrow">
+					<div class="c-content-editor">
+						<slot />
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.c-content-editor {
+		max-width: 50%;
+		margin-left: auto;
+	}
+</style>

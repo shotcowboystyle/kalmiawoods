@@ -1,0 +1,45 @@
+---
+import Layout from '@/app/LayoutLanding.astro';
+import Header from '@/modules/Dining/Header.astro';
+import RestarauntList from '@/modules/Dining/RestarauntList.astro';
+import RestarauntSummaryOne from '@/modules/Dining/RestarauntSummaryOne.astro';
+import RestarauntSummaryTwo from '@/modules/Dining/RestarauntSummaryTwo.astro';
+import Forest from '@/modules/Landing/Forest.astro';
+---
+
+<Layout>
+	<Header />
+
+	<div class="o-page__inner">
+		<RestarauntList />
+		<RestarauntSummaryOne />
+		<RestarauntSummaryTwo />
+		<Forest />
+	</div>
+</Layout>
+
+<script>
+	import HeaderLoadAnimation from '@/lib/header-load.animation';
+
+	const headerLoadAnimation = new HeaderLoadAnimation();
+
+	function initializeApp() {
+		headerLoadAnimation.init();
+	}
+
+	// document.addEventListener('astro:before-preparation', () => {
+	// 	document.body.classList.add('is-transitioning');
+	// 	loaderAnimation.showLoader();
+	// });
+
+	// document.addEventListener('astro:after-preparation', () => {
+	// 	smoothScroll.kill();
+	// 	// headerAnimation.kill();
+	// });
+
+	// document.addEventListener('astro:after-swap', () => {
+	// 	loaderAnimation.hideLoader();
+	// });
+
+	document.addEventListener('astro:page-load', initializeApp);
+</script>

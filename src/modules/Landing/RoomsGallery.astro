@@ -24,7 +24,7 @@ const ROOMS_GALLERY: RoomsGallery[] = [
 ---
 
 <section class="relative overflow-hidden">
-	<div class="section-inner">
+	<div class="section-inner section-inner-pt-s section-inner-pb-l">
 		<div class="o-container container relative">
 			<div class="c-image-slider js-image-slider js-animated-stagger-element relative">
 				<div
@@ -204,6 +204,12 @@ const ROOMS_GALLERY: RoomsGallery[] = [
 		top: 0;
 		right: 0;
 		z-index: 1;
+
+		@media (max-width: 800px) {
+			top: unset;
+			bottom: 100%;
+			padding-bottom: 20px;
+		}
 	}
 
 	.u-b1 {

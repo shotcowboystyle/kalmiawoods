@@ -1,0 +1,21 @@
+---
+import Layout from '@/app/LayoutLanding.astro';
+import Departments from '@/modules/Contact/Departments.astro';
+import DirectionsSummary from '@/modules/Contact/DirectionsSummary.astro';
+import GDSCodes from '@/modules/Contact/GDSCodes.astro';
+import Header from '@/modules/Contact/Header.astro';
+// import LocationMap from '@/modules/Contact/LocationMap.astro';
+import Forest from '@/modules/Landing/Forest.astro';
+---
+
+<Layout>
+	<Header />
+
+	<div class="o-page__inner">
+		<Departments />
+		<DirectionsSummary />
+		<GDSCodes />
+		<!-- <LocationMap /> -->
+		<Forest />
+	</div>
+</Layout>

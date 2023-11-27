@@ -1,0 +1,113 @@
+---
+import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import { Picture } from 'astro:assets';
+---
+
+<section class="section o-section--dining">
+	<div class="section-inner section-inner-pt-l section-inner-pb-xl">
+		<div class="container">
+			<div class="c-content-images-cta">
+				<div class="c-content-images-cta__list">
+					<article
+						class="c-content-image-card c-content-image-card--dining c-content-image-card--image-count-2 c-content-image-card--reverse"
+						id="mare-beach-bar"
+					>
+						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
+							<div class="c-content-image-card__image js-animated-stagger-element">
+								<figure class="c-responsive-image">
+									<Picture
+										pictureAttributes={{
+											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+										}}
+										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
+										src={roomsImage1}
+										formats={['avif', 'webp']}
+										alt="A description of my image."
+										widths={[640, 1140, 2000, roomsImage1.width]}
+									/>
+								</figure>
+							</div>
+
+							<div class="c-content-image-card__image js-animated-stagger-element">
+								<figure class="c-responsive-image">
+									<Picture
+										pictureAttributes={{
+											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+										}}
+										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
+										src={roomsImage1}
+										formats={['avif', 'webp']}
+										alt="A description of my image."
+										widths={[640, 1140, 2000, roomsImage1.width]}
+									/>
+								</figure>
+							</div>
+						</div>
+
+						<div class="c-content-image-card__content">
+							<div class="c-content-image-card__tag-list u-a1">
+								<span class="c-content-image-card__tag js-animated-stagger-element">
+									10:00 - 23:00 (<span>MAY-SEPTEMBER</span>)
+								</span>
+							</div>
+
+							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
+								Vista Mare Beach Bar
+							</h3>
+
+							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
+								<p>
+									Enjoy a sublime stretch of gently shaded waterfront next to Pomena pier, where all
+									the yachts and ships dock, Vista Mare Beach Bar serves cocktails, wine, ice cream
+									and more at comfortable rattan sofas and large wooden tables.
+								</p>
+							</div>
+						</div>
+					</article>
+
+					<article
+						class="c-content-image-card c-content-image-card--dining c-content-image-card--image-count-1"
+						id="maestral-snack-bar"
+					>
+						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
+							<div class="c-content-image-card__image js-animated-stagger-element">
+								<figure class="c-responsive-image">
+									<Picture
+										pictureAttributes={{
+											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
+										}}
+										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
+										src={roomsImage1}
+										formats={['avif', 'webp']}
+										alt="A description of my image."
+										widths={[640, 1140, 2000, roomsImage1.width]}
+									/>
+								</figure>
+							</div>
+						</div>
+
+						<div class="c-content-image-card__content">
+							<div class="c-content-image-card__tag-list u-a1">
+								<span class="c-content-image-card__tag js-animated-stagger-element">
+									07:00 - 22:00
+								</span>
+							</div>
+
+							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
+								Maestral Snack Bar
+							</h3>
+
+							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
+								<p>
+									You can’t miss Maestral Snack Bar – it’s part of the light-drenched main lobby of
+									Hotel Odisej Mljet and a convenient spot for sandwiches, desserts, ice creams,
+									cakes or drinks.
+								</p>
+							</div>
+						</div>
+					</article>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

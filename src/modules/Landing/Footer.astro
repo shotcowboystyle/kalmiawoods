@@ -1,23 +1,23 @@
 ---
-// import { HOME, SITE_TITLE } from '@/app/constants';
+import { BASE_APP_URL } from '@/app/constants';
 // import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
 import SvgSprite from '@/components/SvgSprite.astro';
 
 // import { Picture } from 'astro:assets';
 
-interface Link {
-	text?: string;
-	href?: string;
-	ariaLabel?: string;
-	icon?: string;
-}
+// interface Link {
+// 	text?: string;
+// 	href?: string;
+// 	ariaLabel?: string;
+// 	icon?: string;
+// }
 
-export interface Props {
-	secondaryLinks: Array<Link>;
-	footNote?: string;
-}
+// export interface Props {
+// 	secondaryLinks: Array<Link>;
+// 	footNote?: string;
+// }
 
-const { secondaryLinks = [] } = Astro.props;
+// const { secondaryLinks = [] } = Astro.props;
 ---
 
 <footer
@@ -56,10 +56,10 @@ const { secondaryLinks = [] } = Astro.props;
 		</svg>
 	</div>
 
-	<div class="container relative">
+	<div class="relative container">
 		<div class="c-footer__header js-animated-content-element">
 			<div class="c-footer__logo">
-				<a href="https://kalmiawoods.com">
+				<a href={BASE_APP_URL}>
 					<SvgSprite
 						name="logo-light-center"
 						class="u-icon u-icon--logo-footer"
@@ -140,8 +140,7 @@ const { secondaryLinks = [] } = Astro.props;
 			<i class="c-footer__nav-separator"></i>
 			<li class="c-footer__nav-item">
 				<a
-					href="#hello"
-					target=""
+					href="/contact"
 					class="js-focus-shifting-item"
 				>
 					Contact Us
@@ -156,7 +155,7 @@ const { secondaryLinks = [] } = Astro.props;
 					Privacy Policy and Cookies
 				</a>
 			</li>
-			{
+			<!-- {
 				secondaryLinks.map(({ text, href }) => (
 					<a
 						class="text-muted mr-2 transition duration-150 ease-in-out hover:text-gray-700 hover:underline rtl:ml-2 rtl:mr-0 dark:text-gray-400"
@@ -164,7 +163,7 @@ const { secondaryLinks = [] } = Astro.props;
 						set:html={text}
 					/>
 				))
-			}
+			} -->
 		</ul>
 
 		<div class="c-footer__bottom u-b1 js-animated-content-element">
@@ -176,44 +175,9 @@ const { secondaryLinks = [] } = Astro.props;
 					>Shotcowboystyle</a
 				>
 			</p>
-			<!-- <Fragment set:html={footNote} /> -->
 		</div>
 	</div>
 </footer>
-
-<!-- <footer class="relative border-t border-neutral-600 bg-neutral">
-	<div
-		class="pointer-events-none absolute inset-0"
-		aria-hidden="true"
-	>
-	</div>
-
-	<div class="relative mx-auto px-4 py-8 text-neutral-content sm:container sm:px-6">
-		<div class="mb-2">
-			<a
-				rel="prefetch"
-				class="inline-block font-bold text-xl"
-				href={HOME}
-				>{SITE_TITLE}</a
-			>
-		</div>
-		<div class="text-muted mb-2 text-sm">
-			{
-				secondaryLinks.map(({ text, href }) => (
-					<a
-						class="text-muted mr-2 transition duration-150 ease-in-out hover:text-gray-700 hover:underline rtl:ml-2 rtl:mr-0 dark:text-gray-400"
-						href={href}
-						set:html={text}
-					/>
-				))
-			}
-		</div>
-
-		<div class="text-neutral-content text-sm">
-			<Fragment set:html={footNote} />
-		</div>
-	</div>
-</footer> -->
 
 <style>
 	.c-footer {
@@ -241,6 +205,20 @@ const { secondaryLinks = [] } = Astro.props;
 		overflow: hidden;
 	}
 
+	@media (max-width: 800px) {
+		.c-footer .c-bg-shape {
+			min-height: 100%;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.c-footer .c-bg-shape .u-icon {
+			height: 100%;
+			width: auto;
+			position: absolute;
+		}
+	}
+
 	.c-footer__header {
 		--pb: 72px;
 
@@ -260,6 +238,12 @@ const { secondaryLinks = [] } = Astro.props;
 		place-items: center;
 	}
 
+	@media (max-width: 800px) {
+		.c-footer__header {
+			gap: 24px;
+		}
+	}
+
 	.c-footer__logo {
 		grid-column: 2/3;
 	}
@@ -267,6 +251,7 @@ const { secondaryLinks = [] } = Astro.props;
 	.c-footer__logo .u-icon {
 		display: block;
 		width: 100%;
+		max-height: 44px;
 	}
 
 	.c-footer__alh-logo {
@@ -329,6 +314,13 @@ const { secondaryLinks = [] } = Astro.props;
 		border-bottom: 1px solid #05496b;
 	}
 
+	@media (max-width: 640px) {
+		.c-footer__info-list {
+			gap: 16px;
+			grid-template-columns: 1fr;
+		}
+	}
+
 	.c-footer__info-item {
 		display: flex;
 		align-items: center;
@@ -364,6 +356,12 @@ const { secondaryLinks = [] } = Astro.props;
 		grid-template-columns: 31.8181818182% 27.2727272727% 31.8181818182%;
 	}
 
+	@media (max-width: 640px) {
+		.c-footer__nav {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
 	.c-footer__nav-item {
 		display: flex;
 		align-items: center;
@@ -377,6 +375,16 @@ const { secondaryLinks = [] } = Astro.props;
 		}
 	}
 
+	@media (max-width: 640px) {
+		.c-footer__nav-item:nth-of-type(3n + 2) {
+			justify-content: flex-start;
+		}
+
+		.c-footer__nav-item:nth-of-type(3n + 3) {
+			justify-content: flex-start;
+		}
+	}
+
 	.c-footer__nav-item a {
 		transition: opacity 0.2s ease-out;
 	}
@@ -387,6 +395,12 @@ const { secondaryLinks = [] } = Astro.props;
 		height: 1px;
 		width: 100%;
 		background-color: #05496b;
+	}
+
+	@media (max-width: 640px) {
+		.c-footer__nav-separator {
+			display: none;
+		}
 	}
 
 	.u-b1 {
@@ -407,5 +421,12 @@ const { secondaryLinks = [] } = Astro.props;
 		justify-content: space-between;
 		align-items: center;
 		color: rgba(247, 247, 238, 0.6);
+	}
+
+	@media (max-width: 640px) {
+		.c-footer__bottom {
+			flex-direction: column;
+			gap: 1em;
+		}
 	}
 </style>
