@@ -4,9 +4,10 @@ import SvgSprite from '@/components/SvgSprite.astro';
 
 export interface Props {
 	isHomepage?: boolean;
+	useLightNavigation?: boolean;
 }
 
-const { isHomepage } = Astro.props as Props;
+const { isHomepage, useLightNavigation } = Astro.props as Props;
 ---
 
 <nav
@@ -14,7 +15,9 @@ const { isHomepage } = Astro.props as Props;
 	class:list={['o-navigation js-navigation', { 'is-homepage': isHomepage }]}
 >
 	<div class="container">
-		<div class="c-navigation flex items-center">
+		<div
+			class:list={['c-navigation flex items-center', { 'c-navigation--light': useLightNavigation }]}
+		>
 			<div class="c-navigation__hamburger c-navigation__fade-in c-navigation__fade-in--1">
 				<button
 					id="nav-hamburger"
@@ -206,10 +209,6 @@ const { isHomepage } = Astro.props as Props;
 
 		height: var(--height);
 		width: auto;
-	}
-
-	.c-navigation__logo .u-icon__main {
-		color: #434b34;
 	}
 
 	.c-navigation__items {

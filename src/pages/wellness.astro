@@ -10,7 +10,7 @@ import Summary from '@/modules/Wellness/Summary.astro';
 import SummaryPictures from '@/modules/Wellness/SummaryPictures.astro';
 ---
 
-<Layout>
+<Layout useLightNavigation>
 	<Header />
 
 	<div class="o-page__inner">
@@ -24,7 +24,7 @@ import SummaryPictures from '@/modules/Wellness/SummaryPictures.astro';
 	</div>
 </Layout>
 
-<script>
+<!-- <script>
 	import HeaderLoadAnimation from '@/lib/header-load.animation';
 
 	const headerLoadAnimation = new HeaderLoadAnimation();
@@ -48,4 +48,4 @@ import SummaryPictures from '@/modules/Wellness/SummaryPictures.astro';
 	// });
 
 	document.addEventListener('astro:page-load', initializeApp);
-</script>
+</script> -->

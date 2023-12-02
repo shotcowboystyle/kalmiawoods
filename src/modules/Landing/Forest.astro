@@ -1,5 +1,8 @@
 ---
-import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import destinationOconeeImage from '@/assets/images/destination-oconee.jpeg';
+import devilsForkStateParkBeachImage from '@/assets/images/devils-fork-state-park-beach.jpg';
+import lakeJocasseeImage from '@/assets/images/lake-jocassee-2.png';
+import whitewaterFallsImage from '@/assets/images/upper-whitewater-falls.jpg';
 import { Picture } from 'astro:assets';
 ---
 
@@ -11,10 +14,10 @@ import { Picture } from 'astro:assets';
 					class: 'c-responsive-image__inner c-responsive-image__inner--16-9-mobile-1-1',
 				}}
 				class="c-responsive-image__img js-parallax-item"
-				src={roomsImage1}
+				src={lakeJocasseeImage}
 				formats={['avif', 'webp']}
-				alt="A description of my image."
-				widths={[640, 1140, 2000, roomsImage1.width]}
+				alt="Lake Jocassee"
+				widths={[640, 1140, 2000, lakeJocasseeImage.width]}
 			/>
 		</figure>
 
@@ -76,20 +79,20 @@ import { Picture } from 'astro:assets';
 			</svg>
 		</div>
 
-		<div class="sm:container-narrow container">
+		<div class="container sm:container-narrow">
 			<div class="c-cta-section-c">
 				<header class="c-cta-section-c__header">
 					<div class="c-animated-big-text u-a5 js-brush-text-scroll">
 						<div class="c-animated-big-text__text">
 							<h2 class="c-animated-big-text__text-line js-text-line">
-								Oak tree forest of Oconee County National Park
+								Lakes and Waterfalls of Oconee County
 							</h2>
 							<p
 								class="c-animated-big-text__text-line c-animated-big-text__text-line--clone js-text-line-clone"
 								aria-hidden="true"
 								tabindex="-1"
 							>
-								Oak tree forest of Oconee County National Park
+								Lakes and Waterfalls of Oconee County
 							</p>
 						</div>
 					</div>
@@ -109,10 +112,10 @@ import { Picture } from 'astro:assets';
 									class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 								}}
 								class="c-responsive-image__img"
-								src={roomsImage1}
+								src={destinationOconeeImage}
 								formats={['avif', 'webp']}
-								alt="A description of my image."
-								widths={[640, 1140, 2000, roomsImage1.width]}
+								alt="Destination Oconee"
+								widths={[640, 1140, 2000, destinationOconeeImage.width]}
 							/>
 						</figure>
 					</div>
@@ -124,10 +127,10 @@ import { Picture } from 'astro:assets';
 									class: 'c-responsive-image__inner c-responsive-image__inner--3-4',
 								}}
 								class="c-responsive-image__img"
-								src={roomsImage1}
+								src={whitewaterFallsImage}
 								formats={['avif', 'webp']}
-								alt="A description of my image."
-								widths={[640, 1140, 2000, roomsImage1.width]}
+								alt="Upper Whitewater Falls"
+								widths={[640, 1140, 2000, whitewaterFallsImage.width]}
 							/>
 						</figure>
 					</div>
@@ -139,10 +142,10 @@ import { Picture } from 'astro:assets';
 									class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 								}}
 								class="c-responsive-image__img"
-								src={roomsImage1}
+								src={devilsForkStateParkBeachImage}
 								formats={['avif', 'webp']}
-								alt="A description of my image."
-								widths={[640, 1140, 2000, roomsImage1.width]}
+								alt="Devils Fork State Park Beach"
+								widths={[640, 1140, 2000, devilsForkStateParkBeachImage.width]}
 							/>
 						</figure>
 					</div>
@@ -150,9 +153,8 @@ import { Picture } from 'astro:assets';
 
 				<div class="c-cta-section-c__footer js-animated-stagger-element relative">
 					<a
-						href="#oconee"
+						href="/discover-oconee"
 						class="c-cta c-cta--white u-a2"
-						target="target=_blank"
 					>
 						<span>Discover Oconee County</span>
 						<i class="c-cta__icon">
@@ -211,15 +213,16 @@ import { Picture } from 'astro:assets';
 	.c-cta-section-c__header {
 		--pb: 64px;
 
-		@media screen(xl) {
-			--pb: 5vw;
+		@media screen(sm) {
+			--pb: calc(3.3333333333vw + 48px);
 		}
 
 		@media screen(lg) {
 			--pb: 96px;
 		}
-		@media screen(sm) {
-			--pb: calc(3.3333333333vw + 48px);
+
+		@media screen(xl) {
+			--pb: 5vw;
 		}
 
 		padding-bottom: var(--pb);
@@ -280,15 +283,16 @@ import { Picture } from 'astro:assets';
 	.c-cta-section-c__footer {
 		--mt: 72px;
 
-		@media screen(xl) {
-			--mt: 6.25vw;
+		@media screen(sm) {
+			--mt: calc(5vw + 48px);
 		}
 
 		@media screen(lg) {
 			--mt: 120px;
 		}
-		@media screen(sm) {
-			--mt: calc(5vw + 48px);
+
+		@media screen(xl) {
+			--mt: 6.25vw;
 		}
 
 		margin-top: var(--mt);

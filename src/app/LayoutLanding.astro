@@ -9,20 +9,26 @@ import LayoutCommon from './LayoutCommon.astro';
 
 export interface Props {
 	isHomepage?: boolean;
+	useLightNavigation?: boolean;
 }
 
-const { isHomepage } = Astro.props as Props;
+const { isHomepage, useLightNavigation } = Astro.props as Props;
 ---
 
 <LayoutCommon>
 	<Loader />
 
-	<Nav isHomepage={isHomepage} />
+	<Nav
+		isHomepage={isHomepage}
+		useLightNavigation={useLightNavigation}
+	/>
 	<Menu />
 
 	<main
 		id="smooth-wrapper"
 		class="o-page js-smooth-wrapper"
+		transition:animate="initial"
+		transition:name="main"
 	>
 		<div class="js-smooth-content">
 			<slot />
@@ -32,7 +38,7 @@ const { isHomepage } = Astro.props as Props;
 	<BookNow />
 	<Footer {...FOOTER_DATA} />
 
-	<style>
+	<style is:global>
 		html.lenis {
 			height: auto;
 		}
@@ -52,52 +58,32 @@ const { isHomepage } = Astro.props as Props;
 		.lenis.lenis-scrolling iframe {
 			pointer-events: none;
 		}
+
+		.is-transitioning #smooth-wrapper > * {
+			display: none;
+		}
+
+		::view-transition-image-pair(root) {
+			isolation: auto;
+		}
+
+		::view-transition-old(root),
+		::view-transition-new(root) {
+			animation: none;
+			mix-blend-mode: normal;
+		}
+
+		::view-transition-old(main),
+		::view-transition-new(main) {
+			visibility: hidden;
+		}
 	</style>
 </LayoutCommon>
 
 <script>
-	import BackgroundShapeAnimation from '@/lib/background-shape.animation';
-	import BrushTextAnimation from '@/lib/brush-text.animation';
-	import ContentAnimation from '@/lib/content.animation';
-	// import HeaderAnimation from '@/lib/header.animation';
-	import LoaderAnimation from '@/lib/loader.animation';
-	import NavigationController from '@/lib/navigation-controller';
-	import ParallaxBackgroundAnimation from '@/lib/parallax-bg.animation';
-	import SectionSeparatorsAnimation from '@/lib/section-separators.animation';
-	import SmoothScroll from '@/lib/smooth-scroll';
+	import App from '@/lib/modules/app';
 
-	const backgroundShapeAnimation = new BackgroundShapeAnimation();
-	const brushTextAnimation = new BrushTextAnimation();
-	const contentAnimation = new ContentAnimation();
-	const navigationController = new NavigationController();
-	const parallaxBackgroundAnimation = new ParallaxBackgroundAnimation();
-	const sectionSeparatorsAnimation = new SectionSeparatorsAnimation();
-	const smoothScroll = new SmoothScroll();
-	const loaderAnimation = new LoaderAnimation();
-
-	function initializeApp() {
-		smoothScroll.init();
-		navigationController.init();
-		backgroundShapeAnimation.init();
-		brushTextAnimation.init();
-		parallaxBackgroundAnimation.init();
-		sectionSeparatorsAnimation.init();
-		contentAnimation.init();
-	}
-
-	document.addEventListener('astro:before-preparation', () => {
-		document.body.classList.add('is-transitioning');
-		loaderAnimation.showLoader();
+	document.addEventListener('astro:page-load', () => {
+		new App();
 	});
-
-	document.addEventListener('astro:after-preparation', () => {
-		smoothScroll.kill();
-		// headerAnimation.kill();
-	});
-
-	document.addEventListener('astro:after-swap', () => {
-		loaderAnimation.hideLoader();
-	});
-
-	document.addEventListener('astro:page-load', initializeApp);
 </script>

@@ -11,7 +11,7 @@ import { Picture } from 'astro:assets';
 	class="section o-section o-section--pt-xl o-section--pb-xl o-section--bg-green js-bg-shape-animation-module relative"
 >
 	<div class="section-inner section-inner-pt-l section-inner-pb-m">
-		<div class="sm:container-narrow container">
+		<div class="container sm:container-narrow">
 			<div class="c-image-grid-cta">
 				<div
 					class="c-animated-big-text u-a5 js-brush-text-scroll c-animated-big-text--light mx-auto max-w-[930px]"
@@ -43,7 +43,6 @@ import { Picture } from 'astro:assets';
 								<a
 									href="/rooms"
 									class="c-cta u-a2"
-									target="target=_blank"
 								>
 									<span>Explore Rooms</span>
 									<i class="c-cta__icon">
@@ -126,17 +125,17 @@ import { Picture } from 'astro:assets';
 		--max-width: 930px;
 		--pb: 64px;
 
-		@media screen(xl) {
-			--pb: 5vw;
-			--max-width: 48.4375vw;
+		@media screen(sm) {
+			--pb: calc(3.3333333333vw + 48px);
 		}
 
 		@media screen(lg) {
 			--pb: 96px;
 		}
 
-		@media screen(sm) {
-			--pb: calc(3.3333333333vw + 48px);
+		@media screen(xl) {
+			--pb: 5vw;
+			--max-width: 48.4375vw;
 		}
 
 		max-width: var(--max-width);
@@ -184,16 +183,17 @@ import { Picture } from 'astro:assets';
 		--max-width: 360px;
 		--pb: 24px;
 
-		@media screen(xl) {
-			--pb: 2.0833333333vw;
-			--max-width: 18.75vw;
+		@media screen(sm) {
+			--pb: calc(1.6666666667vw + 16px);
 		}
 
 		@media screen(lg) {
 			--pb: 40px;
 		}
-		@media screen(sm) {
-			--pb: calc(1.6666666667vw + 16px);
+
+		@media screen(xl) {
+			--pb: 2.0833333333vw;
+			--max-width: 18.75vw;
 		}
 
 		max-width: var(--max-width);

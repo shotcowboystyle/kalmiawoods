@@ -36,7 +36,6 @@ import { Picture } from 'astro:assets';
 					<a
 						href="/wellness"
 						class="c-cta u-a2"
-						target="target=_blank"
 					>
 						<span>Explore Wellness</span>
 						<i class="c-cta__icon">
@@ -73,7 +72,7 @@ import { Picture } from 'astro:assets';
 </section>
 
 <script>
-	import CtaImageAnimation from '@/lib/cta-image.animation';
+	import CtaImageAnimation from '@/lib/modules/cta-image.animation';
 
 	const ctaImageAnimation = new CtaImageAnimation(document.getElementById('wellness'));
 	ctaImageAnimation.init();
@@ -173,15 +172,17 @@ import { Picture } from 'astro:assets';
 		--max-width: 490px;
 		--pb: 24px;
 
-		@media screen(xl) {
-			--pb: 2.0833333333vw;
-			--max-width: 25.5208333333vw;
+		@media screen(sm) {
+			--pb: calc(1.6666666667vw + 16px);
 		}
+
 		@media screen(lg) {
 			--pb: 40px;
 		}
-		@media screen(sm) {
-			--pb: calc(1.6666666667vw + 16px);
+
+		@media screen(xl) {
+			--pb: 2.0833333333vw;
+			--max-width: 25.5208333333vw;
 		}
 
 		max-width: var(--max-width);
@@ -207,15 +208,16 @@ import { Picture } from 'astro:assets';
 	.c-cta-section-a__footer {
 		--margin-top: 72px;
 
-		@media screen(xl) {
-			--margin-top: 6.25vw;
+		@media screen(sm) {
+			--margin-top: calc(5vw + 48px);
 		}
 
 		@media screen(lg) {
 			--margin-top: 120px;
 		}
-		@media screen(sm) {
-			--margin-top: calc(5vw + 48px);
+
+		@media screen(xl) {
+			--margin-top: 6.25vw;
 		}
 
 		margin-top: var(--margin-top);

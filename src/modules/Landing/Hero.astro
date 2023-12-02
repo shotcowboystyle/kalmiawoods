@@ -1,66 +1,53 @@
 ---
 import heroBg from '@/assets/images/hero/background.png';
-import SvgSprite from '@/components/SvgSprite.astro';
+import heroForest from '@/assets/images/hero/home-header-forest.png';
+import heroLandscape from '@/assets/images/hero/home-header-landscape.png';
+import heroMountains from '@/assets/images/hero/home-header-mountains.png';
+import heroSky from '@/assets/images/hero/home-header-sky.png';
 import { Image } from 'astro:assets';
 ---
 
-<section id="hero-section">
-	<Image
-		src={heroBg}
-		alt=""
-		widths={[640, 828, 2400, heroBg.width]}
-		class="absolute inset-0 h-full w-full object-cover"
-	/>
+<header
+	id="hero-section"
+	class="c-home-header js-home-header"
+>
+	<div class="c-home-header__image-wrapper c-parallax-header__wrapper js-home-header-image-wrapper">
+		<Image
+			src={heroBg}
+			alt=""
+			widths={[640, 828, 2400, heroBg.width]}
+			class="parallax-layer absolute inset-0 h-full w-full object-cover"
+		/>
 
-	<SvgSprite
-		name="home-header-sun"
-		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
-	/>
-	<SvgSprite
-		name="home-header-clouds"
-		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center"
-	/>
-	<SvgSprite
-		name="home-header-mountain-5"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-mountain-4"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-mountain-3"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-mountain-2"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-mountain-1"
-		class="parallax-layer parallax__mountain__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-trees"
-		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-landscape"
-		class="parallax-layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-110 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-forest-3"
-		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-125 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-forest-2"
-		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-125 sm:transform"
-	/>
-	<SvgSprite
-		name="home-header-forest-1"
-		class="parallax-layer parallax__forest__layer absolute left-0 top-0 h-full w-full object-cover object-center sm:scale-125 sm:transform"
-	/>
-</section>
+		<Image
+			src={heroSky}
+			alt=""
+			widths={[640, 828, 2400, heroSky.width]}
+			class="parallax-layer parallax__sky__layer absolute inset-0 h-full w-full object-cover"
+		/>
+
+		<Image
+			src={heroMountains}
+			alt=""
+			widths={[640, 828, 2400, heroMountains.width]}
+			class="parallax-layer parallax__mountain__layer absolute inset-0 h-full w-full object-cover"
+		/>
+
+		<Image
+			src={heroLandscape}
+			alt=""
+			widths={[640, 828, 2400, heroLandscape.width]}
+			class="parallax-layer parallax__landscape__layer absolute inset-0 h-full w-full object-cover"
+		/>
+
+		<Image
+			src={heroForest}
+			alt=""
+			widths={[640, 828, 2400, heroForest.width]}
+			class="parallax-layer parallax__forest__layer absolute inset-0 h-full w-full object-cover"
+		/>
+	</div>
+</header>
 
 <script>
 	import { parallaxScroll } from '@/utils/parallax';
@@ -69,14 +56,12 @@ import { Image } from 'astro:assets';
 
 	gsap.registerPlugin(ScrollTrigger);
 
-	const parallaxOffset = (index: number) =>
-		(3.45 * 50) / (index >= 5 ? index - 0.5 : index >= 2 ? index : 1.75);
+	const parallaxOffset = (index: number) => (3.45 * 50) / (index >= 2 ? index : 1.75);
 
 	const initHeaderTilt = () => {
 		const parallaxContainer = document.getElementById('hero-section');
 		if (parallaxContainer) {
 			const parallaxImages = gsap.utils.toArray('.parallax-layer');
-
 			parallaxImages.forEach((image, index) => {
 				parallaxScroll(image as HTMLElement, parallaxContainer, parallaxOffset(index));
 			});
@@ -90,24 +75,22 @@ import { Image } from 'astro:assets';
 	init();
 </script>
 
-<style is:global>
+<style>
 	#hero-section {
 		position: relative;
 		height: 100vh;
 		width: 100%;
 		perspective: 1px;
 		perspective-origin: center;
+		overflow-x: hidden;
+	}
+
+	.c-parallax-header__wrapper {
+		@apply absolute inset-0 h-full w-full;
 	}
 
 	.parallax-layer {
 		transform-style: preserve-3d;
 		will-change: transform;
-	}
-
-	.lead {
-		padding-top: 0.5em;
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		line-height: 1.8;
 	}
 </style>

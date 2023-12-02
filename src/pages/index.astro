@@ -1,22 +1,13 @@
 ---
 import Layout from '@/app/LayoutLanding.astro';
-// import Amenities from '@/modules/Landing/Amenities.astro';
 import BeyondProperty from '@/modules/Landing/BeyondProperty.astro';
 import DiningOptions from '@/modules/Landing/DiningOptions.astro';
 import Forest from '@/modules/Landing/Forest.astro';
-// import GuestAccommodations from '@/modules/Landing/GuestAccommodations.astro';
 import Hero from '@/modules/Landing/Hero.astro';
-// import Highlights from '@/modules/Landing/Highlights.astro';
-// import LocationMap from '@/modules/Landing/LocationMap.astro';
-// import Lodgings from '@/modules/Landing/Lodgings.astro';
 import Nearby from '@/modules/Landing/Nearby.astro';
-// import NearbyAttractions from '@/modules/Landing/NearbyAttractions.astro';
-// import PhotoGallery from '@/modules/Landing/PhotoGallery.astro';
 import Rooms from '@/modules/Landing/Rooms.astro';
 import RoomsGallery from '@/modules/Landing/RoomsGallery.astro';
 import RoomsList from '@/modules/Landing/RoomsList.astro';
-// import SleepingArrangements from '@/modules/Landing/SleepingArrangements.astro';
-// import Summary from '@/modules/Landing/Summary.astro';
 import Welcome from '@/modules/Landing/Welcome.astro';
 import Wellness from '@/modules/Landing/Wellness.astro';
 
@@ -24,7 +15,10 @@ import Wellness from '@/modules/Landing/Wellness.astro';
 // const LONGITUDE = -83.018268;
 ---
 
-<Layout isHomepage>
+<Layout
+	isHomepage
+	useLightNavigation
+>
 	<Hero />
 
 	<div class="o-page__inner">
@@ -41,27 +35,13 @@ import Wellness from '@/modules/Landing/Wellness.astro';
 </Layout>
 
 <script>
-	import HeaderAnimation from '@/lib/header.animation';
+	import HeaderAnimation from '@/lib/modules/header.animation';
 
 	const headerAnimation = new HeaderAnimation();
 
 	function initializeApp() {
 		headerAnimation.init();
 	}
-
-	// document.addEventListener('astro:before-preparation', () => {
-	// 	document.body.classList.add('is-transitioning');
-	// 	loaderAnimation.showLoader();
-	// });
-
-	// document.addEventListener('astro:after-preparation', () => {
-	// 	smoothScroll.kill();
-	// 	// headerAnimation.kill();
-	// });
-
-	// document.addEventListener('astro:after-swap', () => {
-	// 	loaderAnimation.hideLoader();
-	// });
 
 	document.addEventListener('astro:page-load', initializeApp);
 </script>

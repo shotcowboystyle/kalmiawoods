@@ -25,7 +25,7 @@ const ROOMS_GALLERY: RoomsGallery[] = [
 
 <section class="relative overflow-hidden">
 	<div class="section-inner section-inner-pt-s section-inner-pb-l">
-		<div class="o-container container relative">
+		<div class="o-container relative container">
 			<div class="c-image-slider js-image-slider js-animated-stagger-element relative">
 				<div
 					id="rooms-gallery-swiper"
@@ -215,16 +215,16 @@ const ROOMS_GALLERY: RoomsGallery[] = [
 	.u-b1 {
 		--font-size: 13px;
 
-		@media screen(xl) {
-			--font-size: 0.6770833333vw;
+		@media screen(sm) {
+			--font-size: 13px;
 		}
 
 		@media screen(lg) {
 			--font-size: 13px;
 		}
 
-		@media screen(sm) {
-			--font-size: 13px;
+		@media screen(xl) {
+			--font-size: 0.6770833333vw;
 		}
 
 		font-size: var(--font-size);

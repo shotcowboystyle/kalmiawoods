@@ -1,6 +1,6 @@
 ---
-import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
-import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import salemBg from '@/assets/images/salem-sc.jpeg';
+import senecaBg from '@/assets/images/seneca-sc-mural.jpeg';
 import { Picture } from 'astro:assets';
 ---
 
@@ -15,8 +15,7 @@ import { Picture } from 'astro:assets';
 
 					<div class="c-content-images-cta__description u-b0 js-animated-stagger-element">
 						<p>
-							Discover the history and uniqueness of Oconee County, which goes all the way back to
-							ancient Greece.
+							Explore & enjoy the many outdoor opportunities with places for all ages and interests.
 						</p>
 					</div>
 				</header>
@@ -31,10 +30,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img"
-										src={roomsImage1}
+										src={salemBg}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, salemBg.width]}
 									/>
 								</figure>
 							</div>
@@ -42,21 +41,21 @@ import { Picture } from 'astro:assets';
 
 						<div class="c-content-image-card__content">
 							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
-								A Bead in My Palm
+								Salem, SC
 							</h3>
 
 							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
 								<p>
-									An exhibition of traditional beaded jewellery and jewellery making workshop on the
-									the town of Salem, SC.
+									The gateway to the Blue Ridge Mountains, Lake Jocassee and Lake Keowee, an area
+									well known for outdoor activities and mountain adventures
 								</p>
 							</div>
 
 							<div class="js-animated-stagger-element">
 								<a
-									href="https://www.adriaticluxuryhotels.com/blog/a-bead-in-my-palm/"
+									href="https://visitoconeesc.com/visit/salem/"
 									class="c-cta u-a2"
-									target="target=_blank"
+									target="_blank"
 								>
 									<span>Read More</span>
 									<i class="c-cta__icon">
@@ -79,7 +78,6 @@ import { Picture } from 'astro:assets';
 						class="c-content-image-card c-content-image-card--image-count-1 c-content-image-card--reverse"
 					>
 						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
-							<!--        max broj slika: 3-->
 							<div class="c-content-image-card__image js-animated-stagger-element">
 								<figure class="c-responsive-image">
 									<Picture
@@ -87,10 +85,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img"
-										src={roomsImage2}
+										src={senecaBg}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage2.width]}
+										widths={[640, 1140, 2000, senecaBg.width]}
 									/>
 								</figure>
 							</div>
@@ -98,22 +96,23 @@ import { Picture } from 'astro:assets';
 
 						<div class="c-content-image-card__content">
 							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
-								The Island of Ulysses
+								Seneca’s Historic Downtown
 							</h3>
 
 							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
 								<p>
-									Have you heard about Ulysses, the great mythical Greek hero and king of Ithaca?
-									According to legends, Odysseus was shipwrecked in Lake Jocassee and lured by the
-									nymph Calypso into a cave where he became her hostage.
+									There’s a charming part of town, a short drive from Highway 123, which is worth a
+									stop if you appreciate the past. Seneca’s historic district is a collection of
+									commercial buildings which reflect the development of the downtown area as the
+									center of commerce from around 1887 to 1930.
 								</p>
 							</div>
 
 							<div class="js-animated-stagger-element">
 								<a
-									href="https://www.adriaticluxuryhotels.com/blog/the-island-of-ulysses/"
+									href="https://visitoconeesc.com/visit/seneca-historic-district/"
 									class="c-cta u-a2"
-									target="target=_blank"
+									target="_blank"
 								>
 									<span>Read More</span>
 									<i class="c-cta__icon">
@@ -141,15 +140,16 @@ import { Picture } from 'astro:assets';
 	.c-content-images-cta__header {
 		--pb: 72px;
 
-		@media screen(xl) {
-			--pb: 6.25vw;
+		@media screen(sm) {
+			--pb: calc(5vw + 48px);
 		}
 
 		@media screen(lg) {
 			--pb: 120px;
 		}
-		@media screen(sm) {
-			--pb: calc(5vw + 48px);
+
+		@media screen(xl) {
+			--pb: 6.25vw;
 		}
 
 		padding-bottom: var(--pb);
@@ -159,15 +159,17 @@ import { Picture } from 'astro:assets';
 		--mw: 680px;
 		--pb: 24px;
 
-		@media screen(xl) {
-			--pb: 2.0833333333vw;
-			--mw: 35.4166666667vw;
+		@media screen(sm) {
+			--pb: calc(1.6666666667vw + 16px);
 		}
+
 		@media screen(lg) {
 			--pb: 40px;
 		}
-		@media screen(sm) {
-			--pb: calc(1.6666666667vw + 16px);
+
+		@media screen(xl) {
+			--pb: 2.0833333333vw;
+			--mw: 35.4166666667vw;
 		}
 
 		max-width: var(--mw);
@@ -196,15 +198,16 @@ import { Picture } from 'astro:assets';
 	.u-a3 {
 		--font-size: 30px;
 
-		@media screen(xl) {
-			--font-size: 2.0833333333vw;
+		@media screen(sm) {
+			--font-size: calc(1.0416666667vw + 25px);
 		}
 
 		@media screen(lg) {
 			--font-size: 40px;
 		}
-		@media screen(sm) {
-			--font-size: calc(1.0416666667vw + 25px);
+
+		@media screen(xl) {
+			--font-size: 2.0833333333vw;
 		}
 
 		font-size: var(--font-size);
@@ -217,15 +220,17 @@ import { Picture } from 'astro:assets';
 		--pb: 12px;
 		--mw: 360px;
 
-		@media screen(xl) {
-			--pb: calc(0.8333333333vw + 8px);
-			--mw: 18.75vw;
+		@media screen(sm) {
+			--pb: 20px;
 		}
+
 		@media screen(lg) {
 			--pb: 1.0416666667vw;
 		}
-		@media screen(sm) {
-			--pb: 20px;
+
+		@media screen(xl) {
+			--pb: calc(0.8333333333vw + 8px);
+			--mw: 18.75vw;
 		}
 
 		padding-bottom: var(--pb);

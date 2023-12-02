@@ -19,6 +19,7 @@ const { title } = Astro.props as Props;
 <html
 	lang="en"
 	class="bg-[#f7f7ee]"
+	transition:animate="none"
 >
 	<head>
 		<SeoLanding />
@@ -28,15 +29,6 @@ const { title } = Astro.props as Props;
 			name="description"
 			content={title}
 		/>
-
-		<!-- <script>
-			import { getPreferredColorScheme, setColorScheme } from '@/stores/color-scheme';
-
-			// document.addEventListener('astro:page-load', () => {
-			const colorScheme = getPreferredColorScheme();
-			setColorScheme(colorScheme);
-			// });
-		</script> -->
 
 		<script>
 			import { LOCAL_STORAGE_COLOR_SCHEME_KEY } from '@/app/constants';
@@ -49,13 +41,6 @@ const { title } = Astro.props as Props;
 					applyColorScheme(colorScheme as ColorScheme);
 				}
 			});
-		</script>
-
-		<script is:inline>
-			/* Alternative to 100 vh on mobile devices */
-			/* https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html */
-			const vh100 = window.innerHeight;
-			document.documentElement.style.setProperty('--100vh', `${vh100}px`);
 		</script>
 
 		<!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />} -->
@@ -86,11 +71,11 @@ const { title } = Astro.props as Props;
 				}
 			}
 
-			/* html {
+			html {
 				min-height: calc(100% + env(safe-area-inset-top));
 				padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
 					env(safe-area-inset-left);
-			} */
+			}
 
 			img {
 				content-visibility: auto;

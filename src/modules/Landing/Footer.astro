@@ -23,6 +23,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 <footer
 	id="footer"
 	class="c-footer js-animated-content"
+	data-swap="footer"
 >
 	<div class="c-bg-shape c-bg-shape--top">
 		<svg
@@ -222,14 +223,16 @@ import SvgSprite from '@/components/SvgSprite.astro';
 	.c-footer__header {
 		--pb: 72px;
 
-		@media screen(xl) {
-			--pb: 6.25vw;
+		@media screen(sm) {
+			--pb: calc(5vw + 48px);
 		}
+
 		@media screen(lg) {
 			--pb: 120px;
 		}
-		@media screen(sm) {
-			--pb: calc(5vw + 48px);
+
+		@media screen(xl) {
+			--pb: 6.25vw;
 		}
 
 		padding-bottom: var(--pb);
@@ -273,14 +276,16 @@ import SvgSprite from '@/components/SvgSprite.astro';
 	.u-a1 {
 		--font-size: 18px;
 
-		@media screen(xl) .u-a1 {
-			--font-size: 0.9375vw;
+		@media screen(sm) .u-a1 {
+			--font-size: 18px;
 		}
+
 		@media screen(lg) .u-a1 {
 			--font-size: 18px;
 		}
-		@media screen(sm) .u-a1 {
-			--font-size: 18px;
+
+		@media screen(xl) .u-a1 {
+			--font-size: 0.9375vw;
 		}
 
 		font-size: var(--font-size);
@@ -335,16 +340,17 @@ import SvgSprite from '@/components/SvgSprite.astro';
 		--row-gap: 16px;
 		--pb: 72px;
 
-		@media screen(xl) {
-			--pb: 6.25vw;
-			--row-gap: 0.8333333333vw;
+		@media screen(sm) {
+			--pb: calc(5vw + 48px);
 		}
+
 		@media screen(lg) {
 			--pb: 120px;
 		}
 
-		@media screen(sm) {
-			--pb: calc(5vw + 48px);
+		@media screen(xl) {
+			--pb: 6.25vw;
+			--row-gap: 0.8333333333vw;
 		}
 
 		row-gap: var(--row-gap);

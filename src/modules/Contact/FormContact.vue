@@ -160,14 +160,14 @@
 </script>
 
 <template>
-	<h2 class="title-font mb-1 text-lg font-medium text-gray-800">Have a question?</h2>
+	<h2 class="title-font mb-1 font-medium text-gray-800 text-lg">Have a question?</h2>
 	<p class="mb-4 leading-relaxed text-gray-800">Drop us a line and we'll get right back to you.</p>
 	<div class="form-control mb-4 w-full">
 		<label
 			class="label"
 			for="name"
 		>
-			<span class="label-text text-base text-gray-800">Name</span>
+			<span class="label-text text-gray-800 text-base">Name</span>
 		</label>
 		<input
 			id="name"
@@ -181,7 +181,7 @@
 			class="label"
 			for="email"
 		>
-			<span class="label-text text-base text-gray-800">Email</span>
+			<span class="label-text text-gray-800 text-base">Email</span>
 		</label>
 		<input
 			id="email"
@@ -195,7 +195,7 @@
 			class="label"
 			for="message"
 		>
-			<span class="label-text text-base text-gray-800">Message</span>
+			<span class="label-text text-gray-800 text-base">Message</span>
 		</label>
 		<textarea
 			id="message"
@@ -235,7 +235,7 @@
 		<div class="right"></div>
 	</button>
 
-	<p class="mt-3 text-sm text-gray-800">
+	<p class="mt-3 text-gray-800 text-sm">
 		Give us one business day to respond before getting upset!
 	</p>
 </template>
@@ -312,7 +312,6 @@
 		outline: none;
 		transform: rotate(calc(var(--rotate) * 1deg)) translateZ(0);
 		width: var(--width);
-		-webkit-appearance: none;
 		appearance: none;
 		-webkit-tap-highlight-color: transparent;
 	}
