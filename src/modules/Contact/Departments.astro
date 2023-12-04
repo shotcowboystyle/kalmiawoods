@@ -1,5 +1,5 @@
 ---
-
+import { CONTACT_INFO } from '@/app/constants';
 ---
 
 <section class="section">
@@ -9,26 +9,30 @@
 				<div class="c-info-cards__list">
 					<div class="c-info-cards__item js-animated-stagger-element">
 						<div class="c-info-cards__top">
-							<h3 class="u-a3">Hotel Address</h3>
+							<h3 class="u-a3">Retreat Address</h3>
 						</div>
 
 						<div class="c-info-cards__bottom u-a1">
-							<p>Pomena 16, 20226</p>
-							<p>Pomena, Croatia</p>
+							<p>{CONTACT_INFO.address.line1}</p>
+							<p>{CONTACT_INFO.address.line2}</p>
 						</div>
 					</div>
 
 					<div class="c-info-cards__item js-animated-stagger-element">
 						<div class="c-info-cards__top">
-							<h3 class="u-a3">Hotel Contact</h3>
+							<h3 class="u-a3">Property Contact</h3>
 						</div>
 						<div class="c-info-cards__bottom u-a1">
 							<p>
-								<a href="tel:+38520362111"> +385 20 362 111</a>
+								<a href={`tel:${CONTACT_INFO.propertyManager.phone}`}
+									>{CONTACT_INFO.propertyManager.phone}</a
+								>
 							</p>
 
 							<p>
-								<a href="mailto:hotel.odisej@alh.hr"> hotel.odisej@alh.hr</a>
+								<a href={`mailto:${CONTACT_INFO.propertyManager.email}`}
+									>{CONTACT_INFO.propertyManager.email}</a
+								>
 							</p>
 						</div>
 					</div>
@@ -40,30 +44,15 @@
 
 						<div class="c-info-cards__bottom u-a1">
 							<p>
-								<a href="tel:+38520300300"> +385 20 300 300</a>
+								<a href={`tel:${CONTACT_INFO.reservations.phone}`}
+									>{CONTACT_INFO.reservations.phone}</a
+								>
 							</p>
 
 							<p>
-								<a href="mailto:reservations@alh.hr"> reservations@alh.hr</a>
-							</p>
-						</div>
-					</div>
-
-					<div
-						class="c-info-cards__item js-animated-stagger-element"
-						style="opacity: 0.9986; visibility: inherit; translate: none; rotate: none; scale: none; transform: translate3d(0px, 0.0546px, 0px);"
-					>
-						<div class="c-info-cards__top">
-							<h3 class="u-a3">Sales</h3>
-						</div>
-
-						<div class="c-info-cards__bottom u-a1">
-							<p>
-								<a href="tel:+38520300326"> +385 20 300 326</a>
-							</p>
-
-							<p>
-								<a href="mailto:mice@alh.hr"> mice@alh.hr</a>
+								<a href={`mailto:${CONTACT_INFO.reservations.email}`}
+									>{CONTACT_INFO.reservations.email}</a
+								>
 							</p>
 						</div>
 					</div>

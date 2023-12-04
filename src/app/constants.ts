@@ -173,3 +173,22 @@ export const FOOTER_DATA = {
 	],
 	footNote: `Made by <a class="link link-info link-hover" href="https://shotcowboystyle.github.io">shotcowboystyle</a> · All rights reserved.`,
 };
+
+export const CONTACT_INFO = {
+	address: {
+		line1: '',
+		line2: 'Salem, SC',
+	},
+	reservations: {
+		email: 'reservations@kalmiawoods.com',
+		phone: '843 761 1111',
+	},
+	wellness: {
+		email: 'wellness@kalmiawoods.com',
+		phone: '843 761 1111',
+	},
+	propertyManager: {
+		email: 'property@kalmiawoods.com',
+		phone: '843 761 1111',
+	},
+};

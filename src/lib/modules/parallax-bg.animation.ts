@@ -15,7 +15,6 @@ export default class ParallaxBackgroundAnimation {
 	}
 
 	init(...args: any) {
-		// const e = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : document;
 		const e = 0 < args.length && void 0 !== args[0] ? args[0] : document;
 		const wrappers: NodeListOf<HTMLElement> = e.querySelectorAll(this.DOM.wrapper);
 		if (wrappers.length) {
@@ -27,8 +26,7 @@ export default class ParallaxBackgroundAnimation {
 
 	setup($element: HTMLElement) {
 		const parallaxItem = $element.querySelector(this.DOM.item);
-
-		null !== parallaxItem &&
+		if (parallaxItem) {
 			gsap.from(parallaxItem, {
 				yPercent: -20,
 				overwrite: true,
@@ -39,5 +37,6 @@ export default class ParallaxBackgroundAnimation {
 					scrub: 0.1,
 				},
 			});
+		}
 	}
 }

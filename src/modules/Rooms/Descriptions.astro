@@ -1,5 +1,9 @@
 ---
-import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import forestEscapeImage from '@/assets/images/photos/forest-escape.jpeg';
+import houseImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import houseImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import houseImage3 from '@/assets/images/photos/house-living-area-3.jpeg';
+import workshopImage from '@/assets/images/photos/workshop-front.jpeg';
 import { Picture } from 'astro:assets';
 ---
 
@@ -34,7 +38,7 @@ import { Picture } from 'astro:assets';
 				<div class="c-content-images-cta__list">
 					<article
 						class="c-content-image-card c-content-image-card--room c-content-image-card--image-count-3 c-content-image-card--reverse"
-						id="classic-room"
+						id="cozy_cabin"
 					>
 						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
 							<div class="c-content-image-card__image js-animated-stagger-element">
@@ -44,10 +48,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={houseImage1}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, houseImage1.width]}
 									/>
 								</figure>
 							</div>
@@ -59,10 +63,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={houseImage2}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, houseImage2.width]}
 									/>
 								</figure>
 							</div>
@@ -74,10 +78,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={houseImage3}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, houseImage3.width]}
 									/>
 								</figure>
 							</div>
@@ -86,25 +90,23 @@ import { Picture } from 'astro:assets';
 						<div class="c-content-image-card__content">
 							<div class="c-content-image-card__tag-list u-a1">
 								<span class="c-content-image-card__tag js-animated-stagger-element">
-									With or without balcony
+									With porch hot tub
 								</span>
 							</div>
 
 							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
-								Classic Room
+								Cozy Cabin
 							</h3>
 
 							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
 								<p>
-									A peaceful National Park garden view from your white balcony table is one of the
-									best features of our Classic rooms. Interior white walls are complemented by dark
-									wood furniture, muted colours and contemporary clean lines for a fresh look and
-									feel.
+									A peaceful bonsai garden view from your porch entryway is one of the best features
+									of our Cozy cabin rooms. Yellow pine walls are complemented by dark wood
+									furniture, muted colours and rustic decor for a that mountain home feel.
 								</p>
 								<p>
-									Alternatively, for those seeking a cozy haven indoors, our classic room without a
-									balcony features large windows that invite ample natural light, offering glimpses
-									of the tranquil views of the surrounding area.
+									Alternatively, a loft area exists for the kids as well as a separate detached
+									garage room that comes equipped with bunk beds and full bathroom.
 								</p>
 							</div>
 						</div>
@@ -112,7 +114,7 @@ import { Picture } from 'astro:assets';
 
 					<article
 						class="c-content-image-card c-content-image-card--room c-content-image-card--image-count-3"
-						id="superior-room"
+						id="natures_haven"
 					>
 						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
 							<!--        max broj slika: 3-->
@@ -123,10 +125,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={workshopImage}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, workshopImage.width]}
 									/>
 								</figure>
 							</div>
@@ -137,10 +139,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={workshopImage}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, workshopImage.width]}
 									/>
 								</figure>
 							</div>
@@ -151,10 +153,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={workshopImage}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, workshopImage.width]}
 									/>
 								</figure>
 							</div>
@@ -162,17 +164,19 @@ import { Picture } from 'astro:assets';
 
 						<div class="c-content-image-card__content">
 							<div class="c-content-image-card__tag-list u-a1">
-								<span class="c-content-image-card__tag js-animated-stagger-element">Sea View</span>
+								<span class="c-content-image-card__tag js-animated-stagger-element"
+									>Trail Entrance</span
+								>
 							</div>
 							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
-								Superior Room
+								Nature's Haven
 							</h3>
 
 							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
 								<p>
-									Beautiful blue sea views are the centrepiece of every Superior room with interior
-									white walls, tiled floor, and cool hued furnishings and air-conditioning making
-									the space very comfortable.
+									A smaller, more economical option for two. Secluded with it's own driveway and
+									parking. Here you can relax and listen to the sounds of nature, or take a walk on
+									one of our trails for a possible black bear siting.
 								</p>
 							</div>
 						</div>
@@ -180,7 +184,7 @@ import { Picture } from 'astro:assets';
 
 					<article
 						class="c-content-image-card c-content-image-card--room c-content-image-card--image-count-2 c-content-image-card--reverse"
-						id="deluxe-room"
+						id="forest_escape"
 					>
 						<div class="c-content-image-card__image-wrapper js-animated-stagger-element">
 							<div class="c-content-image-card__image js-animated-stagger-element">
@@ -190,10 +194,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={forestEscapeImage}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, forestEscapeImage.width]}
 									/>
 								</figure>
 							</div>
@@ -205,10 +209,10 @@ import { Picture } from 'astro:assets';
 											class: 'c-responsive-image__inner c-responsive-image__inner--1-1',
 										}}
 										class="c-responsive-image__img c-responsive-image__img--cover c-responsive-image__img--center js-lazy-load entered loaded"
-										src={roomsImage1}
+										src={forestEscapeImage}
 										formats={['avif', 'webp']}
 										alt="A description of my image."
-										widths={[640, 1140, 2000, roomsImage1.width]}
+										widths={[640, 1140, 2000, forestEscapeImage.width]}
 									/>
 								</figure>
 							</div>
@@ -216,17 +220,18 @@ import { Picture } from 'astro:assets';
 
 						<div class="c-content-image-card__content">
 							<div class="c-content-image-card__tag-list u-a1">
-								<span class="c-content-image-card__tag js-animated-stagger-element"> Balcony</span>
-								<span class="c-content-image-card__tag js-animated-stagger-element"> Sea View</span>
+								<span class="c-content-image-card__tag js-animated-stagger-element"> Secluded</span>
+								<span class="c-content-image-card__tag js-animated-stagger-element">
+									Forest View</span
+								>
 							</div>
 							<h3 class="c-content-image-card__title u-a3 js-animated-stagger-element">
-								Deluxe Room
+								Forest Escape
 							</h3>
 							<div class="c-content-image-card__description u-b0 js-animated-stagger-element">
 								<p>
-									Beyond the trees, a mesmerising view of the Adriatic, draws the eye in a Deluxe
-									room. A whitewashed balcony furnished with a table and chairs means you can make
-									the most of the wonderful Mediterranean holiday vista.
+									Tucked away deep in the forest. Get that camping feel with GLAMPING comfort. Our
+									one-of-a-kind wilderness tiny houses are a stay filled with life long memories.
 								</p>
 							</div>
 						</div>

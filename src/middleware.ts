@@ -6,6 +6,8 @@ const PUBLIC_ROUTES = [
 	'/403',
 	'/404',
 	'/contact',
+	'/book-now',
+	'/check-in',
 	'/privacy',
 	'/rooms',
 	'/wellness',

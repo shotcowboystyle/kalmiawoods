@@ -1,23 +1,6 @@
 ---
-import { BASE_APP_URL } from '@/app/constants';
-// import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import { BASE_APP_URL, CONTACT_INFO } from '@/app/constants';
 import SvgSprite from '@/components/SvgSprite.astro';
-
-// import { Picture } from 'astro:assets';
-
-// interface Link {
-// 	text?: string;
-// 	href?: string;
-// 	ariaLabel?: string;
-// 	icon?: string;
-// }
-
-// export interface Props {
-// 	secondaryLinks: Array<Link>;
-// 	footNote?: string;
-// }
-
-// const { secondaryLinks = [] } = Astro.props;
 ---
 
 <footer
@@ -67,23 +50,6 @@ import SvgSprite from '@/components/SvgSprite.astro';
 					/>
 				</a>
 			</div>
-
-			<!-- <div class="c-footer__alh-logo">
-				<a href="https://www.adriaticluxuryhotels.com/">
-					<figure class="c-responsive-image">
-						<Picture
-							pictureAttributes={{
-								class: 'c-responsive-image__inner c-responsive-image__inner--3-2',
-							}}
-							class="c-responsive-image__img object-contain"
-							src={roomsImage1}
-							formats={['avif', 'webp']}
-							alt="A description of my image."
-							widths={[640, 1140, 2000, roomsImage1.width]}
-						/>
-					</figure>
-				</a>
-			</div> -->
 		</div>
 
 		<div class="c-footer__info-list u-a1 js-animated-content-element js-focus-shifting uppercase">
@@ -93,20 +59,24 @@ import SvgSprite from '@/components/SvgSprite.astro';
 
 			<div class="c-footer__info-item js-focus-shifting-item">
 				<a
-					href="mailto:RESERVATIONS@KALMIAWOODS.COM"
+					href={`mailto:${CONTACT_INFO.reservations.email}`}
 					target="_blank"
 				>
-					RESERVATIONS@KALMIAWOODS.COM
+					{CONTACT_INFO.reservations.email}
 				</a>
 			</div>
 
 			<div class="c-footer__info-item js-focus-shifting-item is-focused">
 				<a
-					href="tel:+8437611111"
-					target=""
+					href={`tel:${CONTACT_INFO.reservations.phone}`}
+					target="_blank"
 				>
-					+1 843 761 1111
+					{CONTACT_INFO.reservations.phone}
 				</a>
+			</div>
+
+			<div class="c-footer__info-item js-focus-shifting-item is-focused">
+				<a href="/dashboard"> Member Login</a>
 			</div>
 		</div>
 
@@ -173,7 +143,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 				Design &amp; Developement by <a
 					href="https://shotcowboystyle.github.io"
 					target="_blank"
-					>Shotcowboystyle</a
+					>SHOTCOWBOYSTYLE</a
 				>
 			</p>
 		</div>
@@ -330,6 +300,10 @@ import SvgSprite from '@/components/SvgSprite.astro';
 		display: flex;
 		align-items: center;
 		transition: opacity 0.2s ease-out;
+
+		&:nth-child(2) {
+			justify-content: center;
+		}
 
 		&:nth-child(3) {
 			justify-content: flex-end;

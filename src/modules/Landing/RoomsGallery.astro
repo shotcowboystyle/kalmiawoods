@@ -1,25 +1,68 @@
 ---
-// import SvgSprite from '@/components/SvgSprite.astro';
-import roomsImage1 from '@/assets/images/photos/house-living-area-1.jpeg';
-import roomsImage2 from '@/assets/images/photos/house-living-area-2.jpeg';
-import roomsImage3 from '@/assets/images/photos/house-living-area-3.jpeg';
+import houseBack from '@/assets/images/photos/house-back.jpeg';
+import houseDiningRoom_1 from '@/assets/images/photos/house-dining-room-1.jpeg';
+import houseDiningRoom_2 from '@/assets/images/photos/house-dining-room-2.jpeg';
+import houseDiningRoom_3 from '@/assets/images/photos/house-dining-room-3.jpeg';
+import houseDriveway from '@/assets/images/photos/house-driveway.jpeg';
+import houseKitchen_1 from '@/assets/images/photos/house-kitchen-1.png';
+import houseLibrary_1 from '@/assets/images/photos/house-library-1.jpeg';
+import houseLibrary_2 from '@/assets/images/photos/house-library-2.jpeg';
+import houseLibrary_3 from '@/assets/images/photos/house-library-3.jpeg';
+import houseLivingArea_1 from '@/assets/images/photos/house-living-area-1.jpeg';
+import houseLivingArea_2 from '@/assets/images/photos/house-living-area-2.jpeg';
+import houseLivingArea_3 from '@/assets/images/photos/house-living-area-3.jpeg';
+import houseMasterBedroom_1 from '@/assets/images/photos/house-master-bedroom-1.jpeg';
+import houseMasterBedroom_2 from '@/assets/images/photos/house-master-bedroom-2.jpeg';
+import houseOverview_1 from '@/assets/images/photos/house-overview-1.jpeg';
+import houseOverview_2 from '@/assets/images/photos/house-overview-2.jpeg';
+import housePorch_1 from '@/assets/images/photos/house-porch-1.png';
+import housePorch_2 from '@/assets/images/photos/house-porch-2.jpeg';
+import housePorch_3 from '@/assets/images/photos/house-porch-3.jpeg';
+import houseScenicViews_1 from '@/assets/images/photos/house-scenic-views-1.jpeg';
+import houseScenicViews_2 from '@/assets/images/photos/house-scenic-views-2.jpeg';
+import houseScenicViews_3 from '@/assets/images/photos/house-scenic-views-3.jpeg';
+import houseSunroom_1 from '@/assets/images/photos/house-sunroom-1.jpeg';
+import houseSunroom_2 from '@/assets/images/photos/house-sunroom-2.jpeg';
+import houseUpstairs_1 from '@/assets/images/photos/house-upstairs-1.jpeg';
+import houseUpstairs_2 from '@/assets/images/photos/house-upstairs-2.jpeg';
+import houseUpstairs_3 from '@/assets/images/photos/house-upstairs-3.jpeg';
+import workshopFront from '@/assets/images/photos/workshop-front.jpeg';
 import type { ImageMetadata } from 'astro';
 import { Picture } from 'astro:assets';
 
-export interface RoomsGallery {
-	roomImage: ImageMetadata;
+export interface ImageGallery {
+	image: ImageMetadata;
 }
 
-const ROOMS_GALLERY: RoomsGallery[] = [
-	{
-		roomImage: roomsImage1,
-	},
-	{
-		roomImage: roomsImage2,
-	},
-	{
-		roomImage: roomsImage3,
-	},
+const GALLERY_IMAGES: ImageGallery[] = [
+	{ image: houseBack },
+	{ image: houseDiningRoom_1 },
+	{ image: houseDiningRoom_2 },
+	{ image: houseDiningRoom_3 },
+	{ image: houseDriveway },
+	{ image: houseKitchen_1 },
+	{ image: houseLibrary_1 },
+	{ image: houseLibrary_2 },
+	{ image: houseLibrary_3 },
+	{ image: houseLivingArea_1 },
+	{ image: houseLivingArea_2 },
+	{ image: houseLivingArea_3 },
+	{ image: houseMasterBedroom_1 },
+	{ image: houseMasterBedroom_2 },
+	{ image: houseOverview_1 },
+	{ image: houseOverview_2 },
+	{ image: housePorch_1 },
+	{ image: housePorch_2 },
+	{ image: housePorch_3 },
+	{ image: houseScenicViews_1 },
+	{ image: houseScenicViews_2 },
+	{ image: houseScenicViews_3 },
+	{ image: houseSunroom_1 },
+	{ image: houseSunroom_2 },
+	{ image: houseUpstairs_1 },
+	{ image: houseUpstairs_2 },
+	{ image: houseUpstairs_3 },
+	{ image: workshopFront },
 ];
 ---
 
@@ -33,7 +76,7 @@ const ROOMS_GALLERY: RoomsGallery[] = [
 				>
 					<div class="swiper-wrapper">
 						{
-							ROOMS_GALLERY.map(({ roomImage }) => (
+							GALLERY_IMAGES.map(({ image }) => (
 								<div class="swiper-slide c-image-slider__slide">
 									<div
 										class="c-image-slider__slide-inner"
@@ -46,10 +89,10 @@ const ROOMS_GALLERY: RoomsGallery[] = [
 														'c-responsive-image__inner c-responsive-image__inner--16-9-mobile-1-1',
 												}}
 												class="c-responsive-image__img c-responsive-image__img--bottom"
-												src={roomImage}
+												src={image}
 												formats={['avif', 'webp']}
 												alt="A description of my image."
-												widths={[640, 1140, 2000, roomImage.width]}
+												widths={[640, 1140, 2000, image.width]}
 											/>
 										</figure>
 									</div>

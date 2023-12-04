@@ -1,5 +1,5 @@
 ---
-
+import { CONTACT_INFO } from '@/app/constants';
 ---
 
 <section class="section">
@@ -8,12 +8,12 @@
 			<div class="c-content-images-cta">
 				<header class="c-content-images-cta__header">
 					<h2 class="c-content-images-cta__title u-a5 js-animated-stagger-element">
-						Contact our Wellness
+						Contact our Wellness Department
 					</h2>
 
 					<div class="c-content-images-cta__description u-b0 js-animated-stagger-element">
-						<p>+385 20 362 538</p>
-						<p>mljet@energyclinic.com</p>
+						<p>+{CONTACT_INFO.wellness.phone}</p>
+						<p>{CONTACT_INFO.wellness.email}</p>
 					</div>
 				</header>
 
