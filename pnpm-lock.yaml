@@ -114,7 +114,7 @@ devDependencies:
     version: 5.2.0(astro@3.6.4)
   '@axe-core/playwright':
     specifier: ^4.8.4
-    version: 4.8.4(playwright-core@1.41.1)
+    version: 4.8.4(playwright-core@1.41.2)
   '@commitlint/cli':
     specifier: ^18.6.0
     version: 18.6.0(@types/node@20.11.16)(typescript@5.3.3)
@@ -173,8 +173,8 @@ devDependencies:
     specifier: ^0.5.1
     version: 0.5.1
   astro-compress:
-    specifier: 2.2.8
-    version: 2.2.8
+    specifier: 2.2.9
+    version: 2.2.9
   astro-compressor:
     specifier: ^0.4.1
     version: 0.4.1
@@ -185,8 +185,8 @@ devDependencies:
     specifier: ^0.0.2
     version: 0.0.2(@types/node@20.11.16)(sharp@0.33.2)
   astro-eslint-parser:
-    specifier: ^0.16.2
-    version: 0.16.2
+    specifier: ^0.16.3
+    version: 0.16.3
   astro-purgecss:
     specifier: ^3.2.1
     version: 3.2.1(astro@3.6.4)(purgecss@5.0.0)
@@ -267,7 +267,7 @@ devDependencies:
     version: 1.41.2
   playwright-lighthouse:
     specifier: ^3.2.6
-    version: 3.2.6(playwright-core@1.41.1)(typescript@5.3.3)
+    version: 3.2.6(playwright-core@1.41.2)(typescript@5.3.3)
   postcss:
     specifier: ^8.4.33
     version: 8.4.33
@@ -690,13 +690,13 @@ packages:
       undici: 5.27.0
     dev: true
 
-  /@axe-core/playwright@4.8.4(playwright-core@1.41.1):
+  /@axe-core/playwright@4.8.4(playwright-core@1.41.2):
     resolution: {integrity: sha512-xpwd+T0BODt19hnXW0eX9xf+H/Ns1rdWwZNmuCV9UoTqjZ9mGm1F80pvh/A1r317ooltq8nwqcoVO9jbHWKSdA==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
     dependencies:
       axe-core: 4.8.3
-      playwright-core: 1.41.1
+      playwright-core: 1.41.2
     dev: true
 
   /@babel/code-frame@7.22.13:
@@ -5390,12 +5390,6 @@ packages:
     dependencies:
       '@types/unist': 2.0.10
 
-  /@types/node@20.11.0:
-    resolution: {integrity: sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: true
-
   /@types/node@20.11.16:
     resolution: {integrity: sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==}
     dependencies:
@@ -6312,19 +6306,19 @@ packages:
     hasBin: true
     dev: false
 
-  /astro-compress@2.2.8:
-    resolution: {integrity: sha512-nLV/htvhPt8t4iM7IdxCfLA/+69+4UN+cknOSTFJs6sKg31Dik0tRZQyHBLdAf7ZRVoSUV6M+49vcwg06FGE2g==}
+  /astro-compress@2.2.9:
+    resolution: {integrity: sha512-OxasoKonTi+/OtU87H/1zDtizgnHi4/tDh3mvBANNWxRwaSoTAaAnBzbUFyHqqR4tpHk50mR3LDnB9TdHlYu0Q==}
     dependencies:
       '@types/csso': 5.0.4
       '@types/html-minifier-terser': 7.0.2
       csso: 5.0.5
-      files-pipe: 2.1.6
+      files-pipe: 2.1.7
       html-minifier-terser: 7.2.0
       kleur: 4.1.5
       lightningcss: 1.23.0
       sharp: 0.33.2
       svgo: 3.2.0
-      terser: 5.26.0
+      terser: 5.27.0
     dev: true
 
   /astro-compressor@0.4.1:
@@ -6357,14 +6351,14 @@ packages:
       - terser
     dev: true
 
-  /astro-eslint-parser@0.16.2:
-    resolution: {integrity: sha512-JJ/AlnPEiFgu5Tuuj9AxkSjiyobg2x7hjiXpglZtyzN2Bkj7GSXVppDQL6oavwtk0kHOAAkvyuJJ+8cC5c1NqQ==}
+  /astro-eslint-parser@0.16.3:
+    resolution: {integrity: sha512-CGaBseNtunAV2DCpwBXqTKq8+9Tw65XZetMaC0FsMoZuLj0gxNIkbCf2QyKYScVrNOU7/ayfNdVw8ZCSHBiqCg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     dependencies:
-      '@astrojs/compiler': 2.3.2
+      '@astrojs/compiler': 2.5.0
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
-      astrojs-compiler-sync: 0.3.3(@astrojs/compiler@2.3.2)
+      astrojs-compiler-sync: 0.3.3(@astrojs/compiler@2.5.0)
       debug: 4.3.4
       entities: 4.5.0
       eslint-visitor-keys: 3.4.3
@@ -6548,13 +6542,13 @@ packages:
       - terser
       - typescript
 
-  /astrojs-compiler-sync@0.3.3(@astrojs/compiler@2.3.2):
+  /astrojs-compiler-sync@0.3.3(@astrojs/compiler@2.5.0):
     resolution: {integrity: sha512-LbhchWgsvjvRBb5n5ez8/Q/f9ZKViuox27VxMDOdTUm8MRv9U7phzOiLue5KluqTmC0z1LId4gY2SekvoDrkuw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       '@astrojs/compiler': '>=0.27.0'
     dependencies:
-      '@astrojs/compiler': 2.3.2
+      '@astrojs/compiler': 2.5.0
       synckit: 0.8.5
     dev: true
 
@@ -8559,7 +8553,7 @@ packages:
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.56.0)
       '@jridgewell/sourcemap-codec': 1.4.15
       '@typescript-eslint/types': 5.62.0
-      astro-eslint-parser: 0.16.2
+      astro-eslint-parser: 0.16.3
       eslint: 8.56.0
       eslint-compat-utils: 0.4.1(eslint@8.56.0)
       postcss: 8.4.33
@@ -9053,10 +9047,10 @@ packages:
       fast-glob: 3.3.1
     dev: true
 
-  /files-pipe@2.1.6:
-    resolution: {integrity: sha512-M5z8ff6PQHb4IE5FwOdfFveye9PAyX69g6er7IaHVnYV9xfxR6HSAaXI/2kzIn8Fbe0M8uXlqJ6phKDqQwtF6A==}
+  /files-pipe@2.1.7:
+    resolution: {integrity: sha512-P5PoD4gm62eT36+qF/7VS8JE2bnJu8Y/bHEb7V7fI7LCetRQpGEzPLpxzReRGHzbr+Uq+ktv+maCdxFHMjlOfQ==}
     dependencies:
-      '@types/node': 20.11.0
+      '@types/node': 20.11.16
       deepmerge-ts: 5.1.0
       fast-glob: 3.3.2
     dev: true
@@ -9906,7 +9900,7 @@ packages:
       entities: 4.5.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.26.0
+      terser: 5.27.0
     dev: true
 
   /html-tags@3.3.1:
@@ -13161,19 +13155,13 @@ packages:
       pathe: 1.1.1
     dev: true
 
-  /playwright-core@1.41.1:
-    resolution: {integrity: sha512-/KPO5DzXSMlxSX77wy+HihKGOunh3hqndhqeo/nMxfigiKzogn8kfL0ZBDu0L1RKgan5XHCPmn6zXd2NUJgjhg==}
-    engines: {node: '>=16'}
-    hasBin: true
-    dev: true
-
   /playwright-core@1.41.2:
     resolution: {integrity: sha512-VaTvwCA4Y8kxEe+kfm2+uUUw5Lubf38RxF7FpBxLPmGe5sdNkSg5e3ChEigaGrX7qdqT3pt2m/98LiyvU2x6CA==}
     engines: {node: '>=16'}
     hasBin: true
     dev: true
 
-  /playwright-lighthouse@3.2.6(playwright-core@1.41.1)(typescript@5.3.3):
+  /playwright-lighthouse@3.2.6(playwright-core@1.41.2)(typescript@5.3.3):
     resolution: {integrity: sha512-J8m2ulohHPcEccZ05Azb153ub4YWj0jvMFuleywoFuyjI5l0fZI1KGX97sOZExeV20lRvby0gDB1KD+KdJlg7A==}
     engines: {node: '>=16.x'}
     peerDependencies:
@@ -13184,7 +13172,7 @@ packages:
     dependencies:
       chalk: 4.1.2
       lighthouse: 10.4.0(typescript@5.3.3)
-      playwright-core: 1.41.1
+      playwright-core: 1.41.2
       ua-parser-js: 1.0.37
     transitivePeerDependencies:
       - bufferutil
@@ -15889,6 +15877,17 @@ packages:
 
   /terser@5.26.0:
     resolution: {integrity: sha512-dytTGoE2oHgbNV9nTzgBEPaqAWvcJNl66VZ0BkJqlvp71IjO8CxdBx/ykCNb47cLnCmCvRZ6ZR0tLkqvZCdVBQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      '@jridgewell/source-map': 0.3.5
+      acorn: 8.11.2
+      commander: 2.20.3
+      source-map-support: 0.5.21
+    dev: true
+
+  /terser@5.27.0:
+    resolution: {integrity: sha512-bi1HRwVRskAjheeYl291n3JC4GgO/Ty4z1nVs5AAsmonJulGxpSektecnNedrwK9C7vpvVtcX3cw00VSLt7U2A==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
