@@ -115,7 +115,7 @@
 		"eslint-plugin-markdown": "^3.0.1",
 		"eslint-plugin-vue": "^9.21.1",
 		"husky": "^9.0.10",
-		"knip": "^3.13.2",
+		"knip": "^5.0.0",
 		"lighthouse": "^11.5.0",
 		"lint-staged": "^15.2.2",
 		"npm-package-json-lint": "^7.1.0",
