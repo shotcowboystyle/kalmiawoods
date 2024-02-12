@@ -122,7 +122,7 @@
 		"npm-package-json-lint-config-default": "^6.0.0",
 		"npm-run-all2": "^6.1.2",
 		"playwright": "^1.41.2",
-		"playwright-lighthouse": "^3.2.6",
+		"playwright-lighthouse": "^4.0.0",
 		"postcss": "^8.4.35",
 		"postcss-at-rules-variables": "^0.3.0",
 		"postcss-combine-duplicated-selectors": "10.0.3",
