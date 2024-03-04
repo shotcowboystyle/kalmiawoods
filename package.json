@@ -162,7 +162,7 @@
 		"@astrojs/mdx": "^2.1.1",
 		"@astrojs/prefetch": "^0.4.1",
 		"@astrojs/tailwind": "^5.1.0",
-		"@astrojs/vue": "^3.0.4",
+		"@astrojs/vue": "^4.0.8",
 		"@fontsource-variable/dm-sans": "^5.0.3",
 		"@fontsource-variable/domine": "^5.0.16",
 		"@fontsource-variable/raleway": "^5.0.17",
