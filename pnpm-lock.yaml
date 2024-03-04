@@ -30,8 +30,8 @@ dependencies:
     specifier: ^5.0.16
     version: 5.0.16
   '@lucia-auth/adapter-prisma':
-    specifier: ^3.0.2
-    version: 3.0.2(@prisma/client@5.9.1)(lucia@2.7.7)
+    specifier: ^4.0.0
+    version: 4.0.0(@prisma/client@5.9.1)(lucia@2.7.7)
   '@nanostores/persistent':
     specifier: ^0.9.1
     version: 0.9.1(nanostores@0.9.5)
@@ -4053,11 +4053,11 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.9.1)(lucia@2.7.7):
-    resolution: {integrity: sha512-EyJWZene1/zasPwPctv8wwNErZt5mwwm5JATbhg+kXr3R8pbC7lJfVzDTAeeFClVH5k/FywRcsBl3JkPaNIcow==}
+  /@lucia-auth/adapter-prisma@4.0.0(@prisma/client@5.9.1)(lucia@2.7.7):
+    resolution: {integrity: sha512-TJg4/U1K1slS4A/OzDYCgmHTrIArntIynue14zGIEaMDu+OD+tGyq9WwQWqOabpx2Gm9xtDsoK+tTokAY3Up7A==}
     peerDependencies:
       '@prisma/client': ^4.2.0 || ^5.0.0
-      lucia: ^2.0.0
+      lucia: 3.x
     dependencies:
       '@prisma/client': 5.9.1(prisma@5.9.1)
       lucia: 2.7.7
