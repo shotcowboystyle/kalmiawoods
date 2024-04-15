@@ -293,8 +293,8 @@ devDependencies:
     specifier: ^12.1.1
     version: 12.1.1(postcss@8.4.38)
   postcss-preset-env:
-    specifier: ^9.5.4
-    version: 9.5.4(postcss@8.4.38)
+    specifier: ^9.5.5
+    version: 9.5.5(postcss@8.4.38)
   postcss-random:
     specifier: ^1.0.9
     version: 1.0.9
@@ -1954,6 +1954,7 @@ packages:
   /@commitlint/config-validator@19.0.3:
     resolution: {integrity: sha512-2D3r4PKjoo59zBc2auodrSCaUnCSALCx54yveOFwwP/i2kfEAQrygwOleFWswLqK0UL/F9r07MFi5ev2ohyM4Q==}
     engines: {node: '>=v18'}
+    requiresBuild: true
     dependencies:
       '@commitlint/types': 19.0.3
       ajv: 8.12.0
@@ -1974,6 +1975,7 @@ packages:
   /@commitlint/execute-rule@19.0.0:
     resolution: {integrity: sha512-mtsdpY1qyWgAO/iOK0L6gSGeR7GFcdW7tIjcNFxcWkfLDF5qVbPHKuGATFqRMsxcO8OUKNj0+3WOHB7EHm4Jdw==}
     engines: {node: '>=v18'}
+    requiresBuild: true
     dev: true
 
   /@commitlint/format@19.0.3:
@@ -2049,6 +2051,7 @@ packages:
   /@commitlint/resolve-extends@19.1.0:
     resolution: {integrity: sha512-z2riI+8G3CET5CPgXJPlzftH+RiWYLMYv4C9tSLdLXdr6pBNimSKukYP9MS27ejmscqCTVA4almdLh0ODD2KYg==}
     engines: {node: '>=v18'}
+    requiresBuild: true
     dependencies:
       '@commitlint/config-validator': 19.0.3
       '@commitlint/types': 19.0.3
@@ -7384,6 +7387,7 @@ packages:
   /cosmiconfig-typescript-loader@5.0.0(@types/node@20.12.5)(cosmiconfig@9.0.0)(typescript@5.4.4):
     resolution: {integrity: sha512-+8cK7jRAReYkMwMiG+bxhcNKiHJDM6bR9FD/nGBXOWdMLuYawjF5cGrtLilJ+LGd3ZjCXnJjR5DkfWPoIVlqJA==}
     engines: {node: '>=v16'}
+    requiresBuild: true
     peerDependencies:
       '@types/node': '*'
       cosmiconfig: '>=8.2'
@@ -10072,6 +10076,7 @@ packages:
   /ini@4.1.1:
     resolution: {integrity: sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+    requiresBuild: true
     dev: true
 
   /inline-style-parser@0.1.1:
@@ -10682,6 +10687,7 @@ packages:
 
   /json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
+    requiresBuild: true
     dev: true
 
   /json-schema@0.4.0:
@@ -11138,6 +11144,7 @@ packages:
 
   /lodash.mergewith@4.6.2:
     resolution: {integrity: sha512-GK3g5RPZWTRSeLSpgP8Xhra+pnjBC56q9FZYe1d5RN3TJ35dbkGy3YqBSMbyCrlbi+CM9Z3Jk5yTL7RCsqboyQ==}
+    requiresBuild: true
     dev: true
 
   /lodash.snakecase@4.1.1:
@@ -13605,8 +13612,8 @@ packages:
       postcss: 8.4.38
     dev: true
 
-  /postcss-custom-properties@13.3.6(postcss@8.4.38):
-    resolution: {integrity: sha512-vVVIwQbJiIz+PBLMIWA6XMi53Zg66/f474KolA7x0Das6EwkATc/9ZvM6zZx2gs7ZhcgVHjmWBbHkK9FlCgLeA==}
+  /postcss-custom-properties@13.3.7(postcss@8.4.38):
+    resolution: {integrity: sha512-0N9F/GUCr/D0IazjzHahyYW2bQVDT6qDtEudiGHAhMd3XqhfM3VmfYVlkc/40DOhsPtngSNb54/Ctu8msvFOvQ==}
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       postcss: ^8.4
@@ -14058,8 +14065,8 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /postcss-preset-env@9.5.4(postcss@8.4.38):
-    resolution: {integrity: sha512-o/jOlJjhm4f6rI5q1f+4Og3tz1cjaO50er9ndk7ZdcXHjWOH49kMAhqDC/nQifypQkOAiAmF46dPt3pZM+Cwbg==}
+  /postcss-preset-env@9.5.5(postcss@8.4.38):
+    resolution: {integrity: sha512-tg71KfEgTHMM+C4LpWtKfHFWEunfWj1JThq/Odsw60MOowcffBrMAcSBDE+imftW5/BD3mpOiiTL6c+KcnGaLQ==}
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       postcss: ^8.4
@@ -14106,7 +14113,7 @@ packages:
       postcss-color-hex-alpha: 9.0.4(postcss@8.4.38)
       postcss-color-rebeccapurple: 9.0.3(postcss@8.4.38)
       postcss-custom-media: 10.0.4(postcss@8.4.38)
-      postcss-custom-properties: 13.3.6(postcss@8.4.38)
+      postcss-custom-properties: 13.3.7(postcss@8.4.38)
       postcss-custom-selectors: 7.1.8(postcss@8.4.38)
       postcss-dir-pseudo-class: 8.0.1(postcss@8.4.38)
       postcss-double-position-gradients: 5.0.6(postcss@8.4.38)
@@ -14911,6 +14918,7 @@ packages:
   /require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dev: true
 
   /resolve-dir@1.0.1:
