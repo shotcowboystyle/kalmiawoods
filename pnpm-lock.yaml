@@ -227,8 +227,8 @@ devDependencies:
     specifier: ^3.6.1
     version: 3.6.1(@typescript-eslint/parser@7.7.0)(eslint-plugin-import@2.29.1)(eslint@9.1.1)
   eslint-plugin-astro:
-    specifier: ^0.34.0
-    version: 0.34.0(eslint@9.1.1)(typescript@5.4.5)
+    specifier: ^1.1.0
+    version: 1.1.0(eslint@9.1.1)(typescript@5.4.5)
   eslint-plugin-import:
     specifier: ^2.29.1
     version: 2.29.1(@typescript-eslint/parser@7.7.0)(eslint-import-resolver-typescript@3.6.1)(eslint@9.1.1)
@@ -5504,6 +5504,11 @@ packages:
     engines: {node: ^18.18.0 || >=20.0.0}
     dev: true
 
+  /@typescript-eslint/types@7.7.1:
+    resolution: {integrity: sha512-AmPmnGW1ZLTpWa+/2omPrPfR7BcbUU4oha5VIbSbS1a1Tv966bklvLNXxp3mrbc+P2j4MNOTfDffNsk4o0c6/w==}
+    engines: {node: ^18.18.0 || >=20.0.0}
+    dev: true
+
   /@typescript-eslint/typescript-estree@5.62.0(typescript@5.4.5):
     resolution: {integrity: sha512-CmcQ6uY7b9y694lKdRB8FEel7JbU/40iSAPomu++SjLMntB+2Leay2LO6i8VnJk58MtE9/nQSFIH6jpyRWyYzA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -6303,6 +6308,28 @@ packages:
       - typescript
     dev: true
 
+  /astro-eslint-parser@1.0.1(typescript@5.4.5):
+    resolution: {integrity: sha512-dbBnHjxLjX4G6mFo9GCl8VcHIM8xwtxfqzqefUjOU1PwRJ48qWrVeIl2/mz4Usl3YyT+BFO2AP3it17oLjdqtQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    dependencies:
+      '@astrojs/compiler': 2.7.1
+      '@typescript-eslint/scope-manager': 7.7.0
+      '@typescript-eslint/types': 7.7.1
+      '@typescript-eslint/typescript-estree': 7.7.0(typescript@5.4.5)
+      astrojs-compiler-sync: 1.0.0(@astrojs/compiler@2.7.1)
+      debug: 4.3.4
+      entities: 4.5.0
+      eslint-scope: 8.0.1
+      eslint-visitor-keys: 4.0.0
+      espree: 10.0.1
+      globby: 11.1.0
+      is-glob: 4.0.3
+      semver: 7.6.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+    dev: true
+
   /astro-link@1.2.1:
     resolution: {integrity: sha512-bYMpGBXfucSr7TRjNVaJPjCt3sbaTcSiPdPUreC4PUkplhoAZzXid5zVDL2l9AYWAWvWxKNJdBLH0oziHdOEcA==}
     dev: false
@@ -6561,6 +6588,16 @@ packages:
   /astrojs-compiler-sync@0.3.5(@astrojs/compiler@2.7.1):
     resolution: {integrity: sha512-y420rhIIJ2HHDkYeqKArBHSdJNIIGMztLH90KGIX3zjcJyt/cr9Z2wYA8CP5J1w6KE7xqMh0DAkhfjhNDpQb2Q==}
     engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      '@astrojs/compiler': '>=0.27.0'
+    dependencies:
+      '@astrojs/compiler': 2.7.1
+      synckit: 0.9.0
+    dev: true
+
+  /astrojs-compiler-sync@1.0.0(@astrojs/compiler@2.7.1):
+    resolution: {integrity: sha512-IM6FxpMoBxkGGdKppkFHNQIC9Wge7jspG2MIJff8DOhG41USNJLxJfxRm7wnkTKWlYK5Y1YFFNYr2vUUKkI8sw==}
+    engines: {node: ^18.18.0 || >=20.9.0}
     peerDependencies:
       '@astrojs/compiler': '>=0.27.0'
     dependencies:
@@ -8588,19 +8625,19 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-astro@0.34.0(eslint@9.1.1)(typescript@5.4.5):
-    resolution: {integrity: sha512-nzw2H4g7HPXPLsWVpGUxuJ/ViVPLI8lM/AaUCJ51qTLTWtaMhvlvoe2d7yIPMFc+7xeCzQdo1POK8eR7NFsdKQ==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  /eslint-plugin-astro@1.1.0(eslint@9.1.1)(typescript@5.4.5):
+    resolution: {integrity: sha512-fvvy7nYRqtr9V7hMgpZ3lKXLhbxZdPzerGhesq6bLBl49lRF944EsJsIRNt5kcvRD0ZJlNL7nXbw09xOWXGTqg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
-      eslint: '>=7.0.0'
+      eslint: '>=8.57.0'
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.1.1)
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@typescript-eslint/types': 5.62.0
-      astro-eslint-parser: 0.17.0(typescript@5.4.5)
+      '@typescript-eslint/types': 7.7.1
+      astro-eslint-parser: 1.0.1(typescript@5.4.5)
       eslint: 9.1.1
       eslint-compat-utils: 0.5.0(eslint@9.1.1)
-      globals: 13.24.0
+      globals: 15.1.0
       postcss: 8.4.38
       postcss-selector-parser: 6.0.16
     transitivePeerDependencies:
@@ -9514,6 +9551,11 @@ packages:
 
   /globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+    dev: true
+
+  /globals@15.1.0:
+    resolution: {integrity: sha512-926gJqg+4mkxwYKiFvoomM4J0kWESfk3qfTvRL2/oc/tK/eTDBbrfcKnSa2KtfdxB5onoL7D3A3qIHQFpd4+UA==}
     engines: {node: '>=18'}
     dev: true
 
