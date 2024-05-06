@@ -100,7 +100,7 @@
 		"autoprefixer": "^10.4.17",
 		"ci-info": "^4.0.0",
 		"commitizen": "^4.3.0",
-		"conventional-changelog-conventionalcommits": "^7.0.2",
+		"conventional-changelog-conventionalcommits": "^8.0.0",
 		"cspell": "^8.3.2",
 		"cssnano": "^7.0.1",
 		"cz-conventional-changelog": "^3.3.0",
