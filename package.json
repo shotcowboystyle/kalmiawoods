@@ -159,7 +159,7 @@
 		"workbox-window": "^7.0.0"
 	},
 	"dependencies": {
-		"@astrojs/mdx": "^2.1.1",
+		"@astrojs/mdx": "^3.0.0",
 		"@astrojs/prefetch": "^0.4.1",
 		"@astrojs/tailwind": "^5.1.0",
 		"@astrojs/vue": "^4.0.8",
