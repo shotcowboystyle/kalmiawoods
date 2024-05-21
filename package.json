@@ -172,7 +172,7 @@
 		"@nanostores/query": "^0.2.10",
 		"@nanostores/vue": "^0.10.0",
 		"@prisma/client": "^5.9.1",
-		"@sentry/astro": "^7.101.1",
+		"@sentry/astro": "^8.2.1",
 		"@studio-freight/lenis": "^1.0.35",
 		"@vueuse/core": "^10.7.2",
 		"astro": "3.6.5",
