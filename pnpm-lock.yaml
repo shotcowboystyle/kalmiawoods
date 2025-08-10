@@ -31,7 +31,7 @@ dependencies:
     version: 5.0.19
   '@lucia-auth/adapter-prisma':
     specifier: ^4.0.1
-    version: 4.0.1(@prisma/client@5.17.0)(lucia@2.7.7)
+    version: 4.0.1(@prisma/client@5.17.0)(lucia@3.2.2)
   '@nanostores/persistent':
     specifier: ^0.10.1
     version: 0.10.1(nanostores@0.10.3)
@@ -69,8 +69,8 @@ dependencies:
     specifier: ^1.9.4
     version: 1.9.4
   lucia:
-    specifier: ^2.7.7
-    version: 2.7.7
+    specifier: ^3.2.2
+    version: 3.2.2
   nanoid:
     specifier: ^5.0.7
     version: 5.0.7
@@ -114,7 +114,7 @@ devDependencies:
     version: 7.7.2(astro@3.6.5)
   '@axe-core/playwright':
     specifier: ^4.9.1
-    version: 4.9.1(playwright-core@1.45.2)
+    version: 4.9.1(playwright-core@1.45.3)
   '@commitlint/cli':
     specifier: ^19.3.0
     version: 19.3.0(@types/node@20.14.12)(typescript@5.5.4)
@@ -267,7 +267,7 @@ devDependencies:
     version: 1.45.3
   playwright-lighthouse:
     specifier: ^4.0.0
-    version: 4.0.0(lighthouse@12.1.0)(playwright-core@1.45.2)
+    version: 4.0.0(lighthouse@12.1.0)(playwright-core@1.45.3)
   postcss:
     specifier: ^8.4.39
     version: 8.4.39
@@ -708,13 +708,13 @@ packages:
       undici: 5.28.4
     dev: true
 
-  /@axe-core/playwright@4.9.1(playwright-core@1.45.2):
+  /@axe-core/playwright@4.9.1(playwright-core@1.45.3):
     resolution: {integrity: sha512-8m4WZbZq7/aq7ZY5IG8GqV+ZdvtGn/iJdom+wBg+iv/3BAOBIfNQtIu697a41438DzEEyptXWmC3Xl5Kx/o9/g==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
     dependencies:
       axe-core: 4.9.1
-      playwright-core: 1.45.2
+      playwright-core: 1.45.3
     dev: true
 
   /@babel/code-frame@7.24.7:
@@ -4067,14 +4067,14 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  /@lucia-auth/adapter-prisma@4.0.1(@prisma/client@5.17.0)(lucia@2.7.7):
+  /@lucia-auth/adapter-prisma@4.0.1(@prisma/client@5.17.0)(lucia@3.2.2):
     resolution: {integrity: sha512-3SztRhj1RAHbbhI/0aB7YC5zl6Z6aktPhkWpn2CHhiB03B9x/+A+M6pqJuAt1usU8PzkjVilgRPhrPymMar66A==}
     peerDependencies:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: 3.x
     dependencies:
       '@prisma/client': 5.17.0(prisma@5.17.0)
-      lucia: 2.7.7
+      lucia: 3.2.2
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:
@@ -4609,6 +4609,27 @@ packages:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.25.1(@opentelemetry/api@1.9.0)
+    dev: false
+
+  /@oslojs/asn1@1.0.0:
+    resolution: {integrity: sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==}
+    dependencies:
+      '@oslojs/binary': 1.0.0
+    dev: false
+
+  /@oslojs/binary@1.0.0:
+    resolution: {integrity: sha512-9RCU6OwXU6p67H4NODbuxv2S3eenuQ4/WFLrsq+K/k682xrznH5EVWA7N4VFk9VYVcbFtKqur5YQQZc0ySGhsQ==}
+    dev: false
+
+  /@oslojs/crypto@1.0.1:
+    resolution: {integrity: sha512-7n08G8nWjAr/Yu3vu9zzrd0L9XnrJfpMioQcvCMxBIiF5orECHe5/3J0jmXRVvgfqMm/+4oxlQ+Sq39COYLcNQ==}
+    dependencies:
+      '@oslojs/asn1': 1.0.0
+      '@oslojs/binary': 1.0.0
+    dev: false
+
+  /@oslojs/encoding@1.1.0:
+    resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
     dev: false
 
   /@paulirish/trace_engine@0.0.23:
@@ -11695,8 +11716,12 @@ packages:
     resolution: {integrity: sha512-Pn9cox5CsMYngeDbmChANltQl+5pi6XmTrraMSzhPmMBbmgcxmqWry0U3PGapCU1yB4/LqCcom7qhHZiF/jGfQ==}
     dev: true
 
-  /lucia@2.7.7:
-    resolution: {integrity: sha512-Hy1nMcLquLl3yDvV9zYA9fSBGUDy/Fw2zEUw2Ia4iGdk/O+hI/TvQ1tAfED/U1WE/c5DT1hEger3m7qIx1qbUg==}
+  /lucia@3.2.2:
+    resolution: {integrity: sha512-P1FlFBGCMPMXu+EGdVD9W4Mjm0DqsusmKgO7Xc33mI5X1bklmsQb0hfzPhXomQr9waWIBDsiOjvr1e6BTaUqpA==}
+    deprecated: This package has been deprecated. Please see https://lucia-auth.com/lucia-v3/migrate.
+    dependencies:
+      '@oslojs/crypto': 1.0.1
+      '@oslojs/encoding': 1.1.0
     dev: false
 
   /magic-string@0.25.9:
@@ -13828,19 +13853,13 @@ packages:
       pathe: 1.1.2
     dev: true
 
-  /playwright-core@1.45.2:
-    resolution: {integrity: sha512-ha175tAWb0dTK0X4orvBIqi3jGEt701SMxMhyujxNrgd8K0Uy5wMSwwcQHtyB4om7INUkfndx02XnQ2p6dvLDw==}
-    engines: {node: '>=18'}
-    hasBin: true
-    dev: true
-
   /playwright-core@1.45.3:
     resolution: {integrity: sha512-+ym0jNbcjikaOwwSZycFbwkWgfruWvYlJfThKYAlImbxUgdWFO2oW70ojPm4OpE4t6TAo2FY/smM+hpVTtkhDA==}
     engines: {node: '>=18'}
     hasBin: true
     dev: true
 
-  /playwright-lighthouse@4.0.0(lighthouse@12.1.0)(playwright-core@1.45.2):
+  /playwright-lighthouse@4.0.0(lighthouse@12.1.0)(playwright-core@1.45.3):
     resolution: {integrity: sha512-8sLhKLYD9k08UjKMSPzYBCZZ6Ct+wZPUe+K58hZEHIdyyXHg+jniWgd+C2W57B+MDstHiYSbyBiN9S8mzUH82w==}
     engines: {node: '>=16.x'}
     peerDependencies:
@@ -13852,7 +13871,7 @@ packages:
     dependencies:
       chalk: 4.1.2
       lighthouse: 12.1.0
-      playwright-core: 1.45.2
+      playwright-core: 1.45.3
       ua-parser-js: 1.0.38
     dev: true
 
@@ -15934,6 +15953,7 @@ packages:
   /source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
     dependencies:
       whatwg-url: 7.1.0
     dev: true
