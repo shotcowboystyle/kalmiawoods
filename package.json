@@ -82,7 +82,7 @@
 		"@semantic-release/github": "^10.1.1",
 		"@semantic-release/release-notes-generator": "^14.0.1",
 		"@tailwindcss/aspect-ratio": "^0.4.2",
-		"@types/eslint": "^8.56.11",
+		"@types/eslint": "^9.6.1",
 		"@types/leaflet": "^1.9.12",
 		"@types/node": "^20.14.12",
 		"@typescript-eslint/eslint-plugin": "^7.17.0",

@@ -114,7 +114,7 @@ devDependencies:
     version: 7.7.2(astro@3.6.5)
   '@axe-core/playwright':
     specifier: ^4.9.1
-    version: 4.9.1(playwright-core@1.45.2)
+    version: 4.9.1(playwright-core@1.45.3)
   '@commitlint/cli':
     specifier: ^19.3.0
     version: 19.3.0(@types/node@20.14.12)(typescript@5.5.4)
@@ -146,8 +146,8 @@ devDependencies:
     specifier: ^0.4.2
     version: 0.4.2(tailwindcss@3.4.6)
   '@types/eslint':
-    specifier: ^8.56.11
-    version: 8.56.11
+    specifier: ^9.6.1
+    version: 9.6.1
   '@types/leaflet':
     specifier: ^1.9.12
     version: 1.9.12
@@ -267,7 +267,7 @@ devDependencies:
     version: 1.45.3
   playwright-lighthouse:
     specifier: ^4.0.0
-    version: 4.0.0(lighthouse@12.1.0)(playwright-core@1.45.2)
+    version: 4.0.0(lighthouse@12.1.0)(playwright-core@1.45.3)
   postcss:
     specifier: ^8.4.39
     version: 8.4.39
@@ -708,13 +708,13 @@ packages:
       undici: 5.28.4
     dev: true
 
-  /@axe-core/playwright@4.9.1(playwright-core@1.45.2):
+  /@axe-core/playwright@4.9.1(playwright-core@1.45.3):
     resolution: {integrity: sha512-8m4WZbZq7/aq7ZY5IG8GqV+ZdvtGn/iJdom+wBg+iv/3BAOBIfNQtIu697a41438DzEEyptXWmC3Xl5Kx/o9/g==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
     dependencies:
       axe-core: 4.9.1
-      playwright-core: 1.45.2
+      playwright-core: 1.45.3
     dev: true
 
   /@babel/code-frame@7.24.7:
@@ -5545,8 +5545,8 @@ packages:
     resolution: {integrity: sha512-N2sILR7fxSMnaFaAPwGj4DtHCXjIyQTHt+xJyf9jATpzUsTkMNM0DWtqZB6W7f501B/Y0tq3uqat/VlbjuTpMA==}
     dev: true
 
-  /@types/eslint@8.56.11:
-    resolution: {integrity: sha512-sVBpJMf7UPo/wGecYOpk2aQya2VUGeHhe38WG7/mN5FufNSubf5VT9Uh9Uyp8/eLJpu1/tuhJ/qTo4mhSB4V4Q==}
+  /@types/eslint@9.6.1:
+    resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
     dependencies:
       '@types/estree': 1.0.5
       '@types/json-schema': 7.0.15
@@ -13828,19 +13828,13 @@ packages:
       pathe: 1.1.2
     dev: true
 
-  /playwright-core@1.45.2:
-    resolution: {integrity: sha512-ha175tAWb0dTK0X4orvBIqi3jGEt701SMxMhyujxNrgd8K0Uy5wMSwwcQHtyB4om7INUkfndx02XnQ2p6dvLDw==}
-    engines: {node: '>=18'}
-    hasBin: true
-    dev: true
-
   /playwright-core@1.45.3:
     resolution: {integrity: sha512-+ym0jNbcjikaOwwSZycFbwkWgfruWvYlJfThKYAlImbxUgdWFO2oW70ojPm4OpE4t6TAo2FY/smM+hpVTtkhDA==}
     engines: {node: '>=18'}
     hasBin: true
     dev: true
 
-  /playwright-lighthouse@4.0.0(lighthouse@12.1.0)(playwright-core@1.45.2):
+  /playwright-lighthouse@4.0.0(lighthouse@12.1.0)(playwright-core@1.45.3):
     resolution: {integrity: sha512-8sLhKLYD9k08UjKMSPzYBCZZ6Ct+wZPUe+K58hZEHIdyyXHg+jniWgd+C2W57B+MDstHiYSbyBiN9S8mzUH82w==}
     engines: {node: '>=16.x'}
     peerDependencies:
@@ -13852,7 +13846,7 @@ packages:
     dependencies:
       chalk: 4.1.2
       lighthouse: 12.1.0
-      playwright-core: 1.45.2
+      playwright-core: 1.45.3
       ua-parser-js: 1.0.38
     dev: true
 
@@ -15934,6 +15928,7 @@ packages:
   /source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
     dependencies:
       whatwg-url: 7.1.0
     dev: true
