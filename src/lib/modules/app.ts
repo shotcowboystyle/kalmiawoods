@@ -55,19 +55,27 @@ export default class App {
 	}
 
 	init() {
-		this.backgroundShapeAnimation = new BackgroundShapeAnimation();
-		this.headerAnimation = new HeaderAnimation();
 		this.loaderAnimation = new LoaderAnimation();
-		this.brushTextAnimation = new BrushTextAnimation();
-		this.contentAnimation = new ContentAnimation();
-		this.navigationController = new NavigationController();
-		this.parallaxBackgroundAnimation = new ParallaxBackgroundAnimation();
-		this.sectionSeparatorsAnimation = new SectionSeparatorsAnimation();
-		this.headerLoadAnimation = new HeaderLoadAnimation();
+		this.headerAnimation = new HeaderAnimation();
 		this.smoothScroll = new SmoothScroll();
+		this.navigationController = new NavigationController();
 
-		this.render();
+		this.smoothScroll.init();
+		this.navigationController.init(this.smoothScroll);
+
 		this.initEvents();
+
+		// Defer non-critical animations to reduce main-thread blocking
+		requestAnimationFrame(() => {
+			this.backgroundShapeAnimation = new BackgroundShapeAnimation();
+			this.brushTextAnimation = new BrushTextAnimation();
+			this.contentAnimation = new ContentAnimation();
+			this.parallaxBackgroundAnimation = new ParallaxBackgroundAnimation();
+			this.sectionSeparatorsAnimation = new SectionSeparatorsAnimation();
+			this.headerLoadAnimation = new HeaderLoadAnimation();
+
+			this.renderDeferred();
+		});
 	}
 
 	initEvents() {
@@ -84,18 +92,13 @@ export default class App {
 		this.viewport?.resize();
 	}
 
-	render() {
-		this.smoothScroll?.init();
-		this.navigationController?.init(this.smoothScroll!);
+	renderDeferred() {
 		this.backgroundShapeAnimation?.init();
 		this.brushTextAnimation?.init();
 		this.parallaxBackgroundAnimation?.init();
 		this.sectionSeparatorsAnimation?.init();
-		// this.headerAnimation?.init();
 		this.headerLoadAnimation?.init();
 		this.contentAnimation?.init();
-
-		// window.requestAnimationFrame(this.render.bind(this));
 	}
 
 	/* Events */

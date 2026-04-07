@@ -56,8 +56,10 @@ const ROOMS: Rooms[] = [
 												class="c-responsive-image__img"
 												src={roomImage}
 												formats={['avif', 'webp']}
-												alt="A description of my image."
-												widths={[640, 1140, 2000, roomImage.width]}
+												alt={`${title} room at Kalmia Woods`}
+												widths={[480, 640, 1140, roomImage.width]}
+												sizes="(max-width: 640px) 100vw, 50vw"
+												loading="lazy"
 											/>
 										</figure>
 									</div>

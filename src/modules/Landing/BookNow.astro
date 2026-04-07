@@ -17,8 +17,10 @@ import { Picture } from 'astro:assets';
 				class="c-responsive-image__img js-parallax-item"
 				src={lakeJocasseeBgImage}
 				formats={['avif', 'webp']}
-				alt="A description of my image."
+				alt="Lake Jocassee panoramic view"
 				widths={[640, 1140, 2000, lakeJocasseeBgImage.width]}
+				sizes="100vw"
+				loading="lazy"
 			/>
 		</figure>
 

@@ -92,8 +92,10 @@ const GALLERY_IMAGES: ImageGallery[] = [
 												class="c-responsive-image__img c-responsive-image__img--bottom"
 												src={image}
 												formats={['avif', 'webp']}
-												alt="A description of my image."
-												widths={[640, 1140, 2000, image.width]}
+												alt="Kalmia Woods property photo"
+												widths={[480, 640, 1140, image.width]}
+												sizes="(max-width: 640px) 100vw, 82vw"
+												loading="lazy"
 											/>
 										</figure>
 									</div>

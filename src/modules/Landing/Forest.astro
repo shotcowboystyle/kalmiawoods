@@ -20,6 +20,8 @@ import { Picture } from 'astro:assets';
 				formats={['avif', 'webp']}
 				alt="Lake Jocassee"
 				widths={[640, 1140, 2000, lakeJocasseeImage.width]}
+				sizes="100vw"
+				loading="lazy"
 			/>
 		</figure>
 
@@ -95,7 +97,9 @@ import { Picture } from 'astro:assets';
 								src={destinationOconeeImage}
 								formats={['avif', 'webp']}
 								alt="Destination Oconee"
-								widths={[640, 1140, 2000, destinationOconeeImage.width]}
+								widths={[480, 640, 1140, destinationOconeeImage.width]}
+								sizes="(max-width: 640px) 50vw, 25vw"
+								loading="lazy"
 							/>
 						</figure>
 					</div>
@@ -110,7 +114,9 @@ import { Picture } from 'astro:assets';
 								src={whitewaterFallsImage}
 								formats={['avif', 'webp']}
 								alt="Upper Whitewater Falls"
-								widths={[640, 1140, 2000, whitewaterFallsImage.width]}
+								widths={[480, 640, 1140, whitewaterFallsImage.width]}
+								sizes="(max-width: 640px) 67vw, 33vw"
+								loading="lazy"
 							/>
 						</figure>
 					</div>
@@ -125,7 +131,9 @@ import { Picture } from 'astro:assets';
 								src={devilsForkStateParkBeachImage}
 								formats={['avif', 'webp']}
 								alt="Devils Fork State Park Beach"
-								widths={[640, 1140, 2000, devilsForkStateParkBeachImage.width]}
+								widths={[480, 640, 1140, devilsForkStateParkBeachImage.width]}
+								sizes="(max-width: 640px) 50vw, 25vw"
+								loading="lazy"
 							/>
 						</figure>
 					</div>

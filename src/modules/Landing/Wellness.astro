@@ -20,8 +20,10 @@ import { Picture } from 'astro:assets';
 						class="c-responsive-image__img"
 						src={wellnessImage1}
 						formats={['avif', 'webp']}
-						alt="A description of my image."
-						widths={[640, 1140, 2000, wellnessImage1.width]}
+						alt="Wellness and relaxation at Kalmia Woods"
+						widths={[480, 640, 1140, wellnessImage1.width]}
+						sizes="(max-width: 800px) 25vw, 50vw"
+						loading="lazy"
 					/>
 				</figure>
 			</div>
@@ -55,8 +57,10 @@ import { Picture } from 'astro:assets';
 						class="c-responsive-image__img"
 						src={wellnessImage2}
 						formats={['avif', 'webp']}
-						alt="A description of my image."
-						widths={[640, 1140, 2000, wellnessImage2.width]}
+						alt="Spa and wellness facilities"
+						widths={[480, 640, 1140, wellnessImage2.width]}
+						sizes="(max-width: 800px) 25vw, 50vw"
+						loading="lazy"
 					/>
 				</figure>
 			</div>
