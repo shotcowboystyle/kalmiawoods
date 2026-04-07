@@ -17,10 +17,11 @@ export default class LinkAnimation {
 	}
 
 	init() {
-		0 < this.contextShifting.length &&
+		if (this.contextShifting.length) {
 			this.contextShifting.forEach(($shiftingEl: HTMLElement) => {
 				this.linkEvents($shiftingEl);
 			});
+		}
 	}
 
 	linkEvents($linkEl: HTMLElement) {

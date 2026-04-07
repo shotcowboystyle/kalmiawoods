@@ -172,9 +172,11 @@ export default class NavigationController {
 		this.hamburgers.forEach(($hamburgerEl) => {
 			$hamburgerEl.addEventListener('click', () => {
 				if (!this.isAnimating) {
-					($hamburgerEl as HTMLElement).classList.contains(this.DOM.states.active)
-						? this.closeNav()
-						: this.openNav();
+					if (($hamburgerEl as HTMLElement).classList.contains(this.DOM.states.active)) {
+						this.closeNav();
+					} else {
+						this.openNav();
+					}
 				}
 			});
 		});
@@ -212,9 +214,9 @@ export default class NavigationController {
 		setTimeout(() => {
 			this.mobileNavigationInner.classList.remove(this.DOM.states.active);
 			this.shapeOverlays?.toggle(() => {
-				this.mobileNavigation.classList.remove(this.DOM.states.active),
-					this.done(),
-					this.smoothScroll?.unlockScroll();
+				this.mobileNavigation.classList.remove(this.DOM.states.active);
+				this.done();
+				this.smoothScroll?.unlockScroll();
 			});
 		}, 600);
 	}

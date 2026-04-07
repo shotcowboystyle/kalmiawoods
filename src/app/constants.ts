@@ -1,3 +1,10 @@
+import type {
+	GuestAccommodation,
+	Highlight,
+	SummaryFeature,
+	SummaryHighlight,
+} from '@/types/Landing';
+
 export const SITE_TITLE = 'Kalmia Woods';
 
 export const BASE_APP_URL = import.meta.env.SITE ?? '/';
@@ -8,7 +15,21 @@ export const DARK_MODE_KEY = 'darkMode';
 export const LOCAL_STORAGE_COLOR_SCHEME_KEY = 'color-scheme';
 export const COLOR_SCHEME_OPTIONS = ['light', 'dark', 'system'];
 
-export const SUMMARY_HIGHLIGHTS = [
+export const ROUTES = {
+	home: '/',
+	rooms: '/rooms',
+	dining: '/dining',
+	wellness: '/wellness',
+	discoverOconee: '/discover-oconee',
+	bookNow: '/book-now',
+	contact: '/contact',
+	privacy: '/privacy',
+	terms: '/terms',
+} as const;
+
+export const RESPONSIVE_IMAGE_WIDTHS = [640, 1140, 2000] as const;
+
+export const SUMMARY_HIGHLIGHTS: SummaryHighlight[] = [
 	{
 		title: 'Mountain Bike Trails',
 		description: 'Explore the over 5 miles of private mountain biking trails.',
@@ -35,7 +56,7 @@ export const SUMMARY_HIGHLIGHTS = [
 	},
 ];
 
-export const SUMMARY_FEATURES = [
+export const SUMMARY_FEATURES: SummaryFeature[] = [
 	{ text: 'Private Trails' },
 	{ text: 'Camping' },
 	{ text: 'Zip lines' },
@@ -46,14 +67,14 @@ export const SUMMARY_FEATURES = [
 	{ text: 'Star Gazing' },
 ];
 
-export const GUEST_ACCOMMODATIONS_DATA = [
+export const GUEST_ACCOMMODATIONS_DATA: GuestAccommodation[] = [
 	{ icon: 'users', text: '15 Guests' },
 	{ icon: 'door-open', text: '6 Bedrooms' },
 	{ icon: 'bed-double', text: '9 Beds' },
 	{ icon: 'bath', text: '4 Bathrooms' },
 ];
 
-export const HIGHLIGHTS_DATA = [
+export const HIGHLIGHTS_DATA: Highlight[] = [
 	{ icon: 'wifi', text: 'Wireless broadband internet' },
 	{ icon: 'paw-print', text: 'Pets welcome' },
 	{ icon: 'accessibility', text: 'Handicap accessible' },
