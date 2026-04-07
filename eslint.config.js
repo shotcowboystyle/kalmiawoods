@@ -1,15 +1,17 @@
+// @ts-check
+
 import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import pluginVue from 'eslint-plugin-vue';
 import pluginAstro from 'eslint-plugin-astro';
-import parserAstro from 'astro-eslint-parser';
 import parserVue from 'vue-eslint-parser';
-import pluginMarkdown from 'eslint-plugin-markdown';
+// import markdown from '@eslint/markdown';
 import configPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
-	{
+export default defineConfig(
+{
 		ignores: [
 			'**/node_modules/**',
 			'**/dist/**',
@@ -45,9 +47,8 @@ export default tseslint.config(
 	js.configs.recommended,
 	...tseslint.configs.recommended,
 	...pluginVue.configs['flat/recommended'],
-	...pluginAstro.configs['flat/recommended'],
-	...pluginAstro.configs['flat/jsx-a11y-recommended'],
-	...pluginMarkdown.configs.recommended,
+	...pluginAstro.configs.recommended,
+	// ...markdown.configs.recommended,
 	{
 		languageOptions: {
 			globals: {
@@ -70,29 +71,10 @@ export default tseslint.config(
 		languageOptions: {
 			parser: parserVue,
 			parserOptions: {
-				parser: tseslint.parser,
+				parser: '@typescript-eslint/parser',
 				ecmaVersion: 'latest',
 				sourceType: 'module',
 			},
-		},
-	},
-	{
-		files: ['**/*.astro'],
-		languageOptions: {
-			parser: parserAstro,
-			parserOptions: {
-				parser: tseslint.parser,
-				extraFileExtensions: ['.astro'],
-				sourceType: 'module',
-			},
-		},
-		rules: {
-			'astro/jsx-a11y/no-redundant-roles': [
-				'error',
-				{
-					ul: ['list'],
-				},
-			],
 		},
 	},
 	configPrettier
