@@ -75,10 +75,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 				</a>
 			</div>
 
-			<div class="c-footer__info-item js-focus-shifting-item is-focused">
-				<a href="/dashboard"> Member Login</a>
 			</div>
-		</div>
 
 		<ul class="c-footer__nav u-a1 js-animated-content-element js-focus-shifting uppercase">
 			<li class="c-footer__nav-item">
@@ -193,15 +190,15 @@ import SvgSprite from '@/components/SvgSprite.astro';
 	.c-footer__header {
 		--pb: 72px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pb: calc(5vw + 48px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pb: 120px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pb: 6.25vw;
 		}
 
@@ -235,7 +232,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 	.c-footer__alh-logo a {
 		--width: 60px;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--width: 3.125vw;
 		}
 
@@ -246,15 +243,15 @@ import SvgSprite from '@/components/SvgSprite.astro';
 	.u-a1 {
 		--font-size: 18px;
 
-		@media screen(sm) .u-a1 {
+		@media (min-width: 480px) .u-a1 {
 			--font-size: 18px;
 		}
 
-		@media screen(lg) .u-a1 {
+		@media (min-width: 1440px) .u-a1 {
 			--font-size: 18px;
 		}
 
-		@media screen(xl) .u-a1 {
+		@media (min-width: 1920px) .u-a1 {
 			--font-size: 0.9375vw;
 		}
 
@@ -267,15 +264,15 @@ import SvgSprite from '@/components/SvgSprite.astro';
 		--pb: 12px;
 		--mb: 96px;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pb: 1.0416666667vw;
 			--mb: 9.5833333333vw;
 		}
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pb: 20px;
 			--mb: 184px;
 		}
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pb: calc(0.8333333333vw + 8px);
 			--mb: calc(9.1666666667vw + 52px);
 		}
@@ -314,15 +311,15 @@ import SvgSprite from '@/components/SvgSprite.astro';
 		--row-gap: 16px;
 		--pb: 72px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pb: calc(5vw + 48px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pb: 120px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pb: 6.25vw;
 			--row-gap: 0.8333333333vw;
 		}
@@ -386,7 +383,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 	.u-b1 {
 		--font-size: 13px;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--font-size: 0.6770833333vw;
 		}
 

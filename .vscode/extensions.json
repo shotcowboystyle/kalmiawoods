@@ -6,7 +6,6 @@
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
     "knisterpeter.vscode-commitizen",
-		"laurenttreguier.vscode-simple-icons",
 		"ms-playwright.playwright",
     "Prisma.prisma",
 		"stylelint.vscode-stylelint",

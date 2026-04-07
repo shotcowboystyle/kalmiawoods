@@ -9,7 +9,10 @@ import Descriptions from '@/modules/Rooms/Descriptions.astro';
 import Header from '@/modules/Rooms/Header.astro';
 ---
 
-<Layout>
+<Layout
+	title="Rooms"
+	description="Six bedrooms sleeping up to 15 guests across a house, cottage, and workshop at Kalmia Woods near Lake Jocassee, SC."
+>
 	<Header />
 
 	<div class="o-page__inner">
@@ -22,28 +25,3 @@ import Header from '@/modules/Rooms/Header.astro';
 	</div>
 </Layout>
 
-<!-- <script>
-	import HeaderLoadAnimation from '@/lib/header-load.animation';
-
-	const headerLoadAnimation = new HeaderLoadAnimation();
-
-	function initializeApp() {
-		headerLoadAnimation.init();
-	}
-
-	// document.addEventListener('astro:before-preparation', () => {
-	// 	document.body.classList.add('is-transitioning');
-	// 	loaderAnimation.showLoader();
-	// });
-
-	// document.addEventListener('astro:after-preparation', () => {
-	// 	smoothScroll.kill();
-	// 	// headerAnimation.kill();
-	// });
-
-	// document.addEventListener('astro:after-swap', () => {
-	// 	loaderAnimation.hideLoader();
-	// });
-
-	document.addEventListener('astro:page-load', initializeApp);
-</script> -->

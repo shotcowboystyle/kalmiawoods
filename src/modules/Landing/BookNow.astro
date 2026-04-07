@@ -53,19 +53,19 @@ import { Picture } from 'astro:assets';
 		--gap: 40px;
 		--inset-x: 4.1666666667%;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pt: calc(2.5vw + 44px);
 			--pb: calc(2.5vw + 44px);
 			--gap: calc(2.5vw + 28px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pt: 80px;
 			--pb: 80px;
 			--gap: 64px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pt: 4.1666666667vw;
 			--pb: 4.1666666667vw;
 			--br: 1.0416666667vw;
@@ -103,15 +103,15 @@ import { Picture } from 'astro:assets';
 		line-height: 110%;
 		letter-spacing: -0.02em;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			font-size: calc(2.5vw + 24px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			font-size: 60px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			font-size: 3.125vw;
 		}
 	}
@@ -127,7 +127,7 @@ import { Picture } from 'astro:assets';
 		align-items: center;
 		color: #5b6647;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			gap: 1.0416666667vw;
 		}
 	}

@@ -14,7 +14,10 @@ import Teaser from '@/modules/ComingSoon/Header.astro';
 import Forest from '@/modules/Landing/Forest.astro';
 ---
 
-<Layout>
+<Layout
+	title="Discover Oconee"
+	description="Discover the best of Oconee County — hiking, waterfalls, lakes, and local culture just minutes from Kalmia Woods in Salem, SC."
+>
 	<!-- <Header /> -->
 	<Teaser />
 
@@ -32,28 +35,3 @@ import Forest from '@/modules/Landing/Forest.astro';
 	</div>
 </Layout>
 
-<!-- <script>
-	import HeaderLoadAnimation from '@/lib/header-load.animation';
-
-	const headerLoadAnimation = new HeaderLoadAnimation();
-
-	function initializeApp() {
-		headerLoadAnimation.init();
-	}
-
-	// document.addEventListener('astro:before-preparation', () => {
-	// 	document.body.classList.add('is-transitioning');
-	// 	loaderAnimation.showLoader();
-	// });
-
-	// document.addEventListener('astro:after-preparation', () => {
-	// 	smoothScroll.kill();
-	// 	// headerAnimation.kill();
-	// });
-
-	// document.addEventListener('astro:after-swap', () => {
-	// 	loaderAnimation.hideLoader();
-	// });
-
-	document.addEventListener('astro:page-load', initializeApp);
-</script> -->

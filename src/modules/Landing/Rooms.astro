@@ -120,19 +120,21 @@ import { Picture } from 'astro:assets';
 </section>
 
 <style>
+	@reference "tailwindcss";
+
 	.c-image-grid-cta .c-animated-big-text {
 		--max-width: 930px;
 		--pb: 64px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pb: calc(3.3333333333vw + 48px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pb: 96px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pb: 5vw;
 			--max-width: 48.4375vw;
 		}
@@ -147,15 +149,15 @@ import { Picture } from 'astro:assets';
 	.c-image-grid-cta__content {
 		--pb: 64px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pb: calc(3.3333333333vw + 48px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pb: 96px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pb: 5vw;
 		}
 
@@ -167,7 +169,7 @@ import { Picture } from 'astro:assets';
 
 		grid-template-columns: 45% 1fr;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			gap: 1.0416666667vw;
 		}
 	}
@@ -182,15 +184,15 @@ import { Picture } from 'astro:assets';
 		--max-width: 360px;
 		--pb: 24px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--pb: calc(1.6666666667vw + 16px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--pb: 40px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--pb: 2.0833333333vw;
 			--max-width: 18.75vw;
 		}
@@ -203,7 +205,7 @@ import { Picture } from 'astro:assets';
 	.c-image-grid-cta__image {
 		@apply overflow-hidden rounded-3xl;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			border-radius: 1.0416666667vw;
 		}
 	}
@@ -219,7 +221,7 @@ import { Picture } from 'astro:assets';
 		display: flex;
 		flex-direction: column;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			gap: 1.0416666667vw;
 		}
 	}
@@ -227,7 +229,7 @@ import { Picture } from 'astro:assets';
 	.c-image-grid-cta__image img {
 		border-radius: 20px;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			border-radius: 1.0416666667vw;
 		}
 	}
@@ -235,7 +237,7 @@ import { Picture } from 'astro:assets';
 	.c-image-grid-cta__image--3 {
 		max-width: 280px;
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			max-width: 14.5833333333vw;
 		}
 	}
