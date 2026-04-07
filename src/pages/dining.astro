@@ -8,7 +8,10 @@ import Teaser from '@/modules/ComingSoon/Header.astro';
 import Forest from '@/modules/Landing/Forest.astro';
 ---
 
-<Layout>
+<Layout
+	title="Dining"
+	description="Explore local dining near Kalmia Woods — from breakfast spots and coffee shops to fine dining around Lake Jocassee and Lake Keowee."
+>
 	<!-- <Header /> -->
 	<Teaser />
 
@@ -20,28 +23,3 @@ import Forest from '@/modules/Landing/Forest.astro';
 	</div>
 </Layout>
 
-<!-- <script>
-	import HeaderLoadAnimation from '@/lib/header-load.animation';
-
-	const headerLoadAnimation = new HeaderLoadAnimation();
-
-	function initializeApp() {
-		headerLoadAnimation.init();
-	}
-
-	// document.addEventListener('astro:before-preparation', () => {
-	// 	document.body.classList.add('is-transitioning');
-	// 	loaderAnimation.showLoader();
-	// });
-
-	// document.addEventListener('astro:after-preparation', () => {
-	// 	smoothScroll.kill();
-	// 	// headerAnimation.kill();
-	// });
-
-	// document.addEventListener('astro:after-swap', () => {
-	// 	loaderAnimation.hideLoader();
-	// });
-
-	document.addEventListener('astro:page-load', initializeApp);
-</script> -->

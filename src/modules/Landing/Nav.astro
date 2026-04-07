@@ -118,15 +118,15 @@ const { isHomepage, useLightNavigation } = Astro.props as Props;
 		--py: 12px;
 		--height: 80px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--py: calc(0.8333333333vw + 8px);
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--py: 20px;
 		}
 
-		@media screen(xl) {
+		@media (min-width: 1920px) {
 			--height: 4.6875vw;
 			--py: 1.0416666667vw;
 		}
@@ -171,7 +171,7 @@ const { isHomepage, useLightNavigation } = Astro.props as Props;
 	.c-navigation__logo-wrapper {
 		--py: 12px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--py: calc(0.8333333333vw + 8px);
 		}
 
@@ -197,11 +197,11 @@ const { isHomepage, useLightNavigation } = Astro.props as Props;
 	.c-navigation__logo .u-icon {
 		--height: 32px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--height: 40px;
 		}
 
-		@media screen(lg) {
+		@media (min-width: 1440px) {
 			--height: 50px;
 		}
 
@@ -212,7 +212,7 @@ const { isHomepage, useLightNavigation } = Astro.props as Props;
 	.c-navigation__items {
 		--gap: 8px;
 
-		@media screen(sm) {
+		@media (min-width: 480px) {
 			--gap: calc(0.4166666667vw + 6px);
 		}
 

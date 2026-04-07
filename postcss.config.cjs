@@ -1,13 +1,14 @@
 const browsersList = require('./browserslist.config.cjs');
 
+// Tailwind v4 uses its Vite plugin as the primary integration.
+// PostCSS is only needed for additional transforms.
 module.exports = {
 	plugins: {
 		'postcss-for': {},
 		'postcss-random': { round: true, noSeed: true },
 		'postcss-import': {},
 		'postcss-at-rules-variables': {},
-		'tailwindcss/nesting': 'postcss-nesting',
-		tailwindcss: {},
+		// 'tailwindcss/nesting': 'postcss-nesting',
 		'postcss-preset-env': {
 			stage: 2,
 			browsers: browsersList,

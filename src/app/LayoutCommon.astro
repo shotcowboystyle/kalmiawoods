@@ -1,18 +1,20 @@
 ---
 // import { pwaInfo } from 'virtual:pwa-info';
-import 'vue-toastification/dist/index.css';
 import { SITE_TITLE } from '@/app/constants';
 import SeoLanding from '@/app/SeoLanding.astro';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 // import ReloadPrompt from '@/components/ReloadPrompt.astro';
 import '@fontsource-variable/dm-sans';
 import '@/styles/base.css';
 
 export interface Props {
 	title?: string;
+	description?: string;
 }
 
-const { title } = Astro.props as Props;
+const { title, description } = Astro.props as Props;
+const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
 ---
 
 <!doctype html>
@@ -24,11 +26,20 @@ const { title } = Astro.props as Props;
 	<head>
 		<SeoLanding />
 
-		<title>{SITE_TITLE}</title>
-		<meta
-			name="description"
-			content={title}
-		/>
+		<title>{pageTitle}</title>
+		{description && <meta name="description" content={description} />}
+
+		{canonicalURL && <link rel="canonical" href={canonicalURL} />}
+
+		<meta property="og:type" content="website" />
+		{canonicalURL && <meta property="og:url" content={canonicalURL} />}
+		<meta property="og:title" content={pageTitle} />
+		{description && <meta property="og:description" content={description} />}
+		<meta property="og:site_name" content={SITE_TITLE} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		{description && <meta name="twitter:description" content={description} />}
 
 		<script>
 			import { LOCAL_STORAGE_COLOR_SCHEME_KEY } from '@/app/constants';
@@ -45,7 +56,7 @@ const { title } = Astro.props as Props;
 
 		<!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />} -->
 
-		<ViewTransitions />
+		<ClientRouter />
 	</head>
 
 	<body id="top">
@@ -54,8 +65,6 @@ const { title } = Astro.props as Props;
 		<!-- <ReloadPrompt /> -->
 
 		<style is:global>
-			@import url('https://fonts.cdnfonts.com/css/inter');
-
 			.animate-in {
 				animation: animate-in 0.5s ease-in-out;
 			}

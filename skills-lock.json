@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "astro-expert": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "e3717b805131c66bce388cbf51b61bbfe8b52af67a18bde00a79c1b2ad423b9a"
+    }
+  }
+}
