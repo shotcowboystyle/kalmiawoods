@@ -1,19 +1,19 @@
-export let agent = navigator.userAgent.toLowerCase();
+export const agent = navigator.userAgent.toLowerCase();
 
-export let isLargeScreen = (): boolean => window.innerWidth >= 1500;
+export const isLargeScreen = (): boolean => window.innerWidth >= 1500;
 
-export let isIPad = (): boolean => agent.includes('ipad');
+export const isIPad = (): boolean => agent.includes('ipad');
 
-export let isSafari = (): boolean => agent.includes('safari') && !agent.includes('chrome');
+export const isSafari = (): boolean => agent.includes('safari') && !agent.includes('chrome');
 
-export let isEdge = (): boolean => agent.includes('edge/');
+export const isEdge = (): boolean => agent.includes('edge/');
 
-export let isMobile = (): boolean =>
+export const isMobile = (): boolean =>
 	agent.includes('android') || agent.includes('iphone') || agent.includes('ipad');
 
-export let isTablet = () => isMobile() && window.innerWidth >= 640;
+export const isTablet = () => isMobile() && window.innerWidth >= 640;
 
-export let isMacintoshFirefox = (): boolean => agent.includes('mac') && agent.includes('firefox');
+export const isMacintoshFirefox = (): boolean => agent.includes('mac') && agent.includes('firefox');
 
 export function iOSVersion(): number | undefined {
 	const match = /os (\d+)_(\d+)_?(\d+?)/.exec(agent);
@@ -31,7 +31,7 @@ export function androidVersion(): number | undefined {
 	}
 }
 
-export let isAppleDevice = (): boolean => agent.startsWith('ip');
+export const isAppleDevice = (): boolean => agent.startsWith('ip');
 
 // Older mobile devices will default to non-centred camera mode
 export function isOldAndroid(): boolean {
@@ -53,4 +53,4 @@ export function supportsWebGl(): boolean {
 	}
 }
 
-export let useCenteredCamera = (): boolean => isOldAndroid() || isOldApple() || isIPad();
+export const useCenteredCamera = (): boolean => isOldAndroid() || isOldApple() || isIPad();

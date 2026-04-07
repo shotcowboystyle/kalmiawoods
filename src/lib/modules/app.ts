@@ -71,7 +71,7 @@ export default class App {
 	}
 
 	initEvents() {
-		new ResizeObserver((entry) => this.resize(entry[0])).observe(this.body!);
+		new ResizeObserver(() => this.resize()).observe(this.body!);
 		document.addEventListener(TRANSITION_BEFORE_PREPARATION, (event: Event) =>
 			this.handlePreparationEvent(event),
 		);
@@ -80,11 +80,11 @@ export default class App {
 	}
 
 	// resize({ contentRect }) {
-	resize({ contentRect }: ResizeObserverEntry) {
+	resize() {
 		this.viewport?.resize();
 	}
 
-	render(time?: number) {
+	render() {
 		this.smoothScroll?.init();
 		this.navigationController?.init(this.smoothScroll!);
 		this.backgroundShapeAnimation?.init();

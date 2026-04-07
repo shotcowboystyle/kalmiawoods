@@ -1,0 +1,99 @@
+import js from '@eslint/js';
+import pluginVue from 'eslint-plugin-vue';
+import pluginAstro from 'eslint-plugin-astro';
+import parserAstro from 'astro-eslint-parser';
+import parserVue from 'vue-eslint-parser';
+import pluginMarkdown from 'eslint-plugin-markdown';
+import configPrettier from 'eslint-config-prettier';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+	{
+		ignores: [
+			'**/node_modules/**',
+			'**/dist/**',
+			'.astro/**',
+			'postcss.config.cjs',
+			'.pnp',
+			'.pnp.js',
+			'**/coverage/**',
+			'**/test-results/**',
+			'**/playwright-report/**',
+			'playwright/.cache/**',
+			'**/.DS_Store',
+			'**/*.pem',
+			'**/npm-debug.log*',
+			'**/yarn-debug.log*',
+			'**/yarn-error.log*',
+			'**/.pnpm-debug.log*',
+			'**/.env*.local',
+			'**/.vercel/**',
+			'**/*.tsbuildinfo',
+			'**/next-env.d.ts',
+			'**/public/sw.js',
+			'**/public/animation/**',
+			'**/public/fonts/**',
+			'**/public/geojson/**',
+			'**/.vscode/**',
+			'lefthook.yml',
+			'pnpm-lock.yaml',
+			'cspell.json',
+			'.cspellcache',
+		],
+	},
+	js.configs.recommended,
+	...tseslint.configs.recommended,
+	...pluginVue.configs['flat/recommended'],
+	...pluginAstro.configs['flat/recommended'],
+	...pluginAstro.configs['flat/jsx-a11y-recommended'],
+	...pluginMarkdown.configs.recommended,
+	{
+		languageOptions: {
+			globals: {
+				...globals.node,
+				...globals.browser,
+				...globals.es2022,
+			},
+		},
+		rules: {
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-var-requires': 'off',
+			'@typescript-eslint/no-unused-vars': [
+				'warn',
+				{ varsIgnorePattern: 'Props', ignoreRestSiblings: true },
+			],
+		},
+	},
+	{
+		files: ['**/*.vue'],
+		languageOptions: {
+			parser: parserVue,
+			parserOptions: {
+				parser: tseslint.parser,
+				ecmaVersion: 'latest',
+				sourceType: 'module',
+			},
+		},
+	},
+	{
+		files: ['**/*.astro'],
+		languageOptions: {
+			parser: parserAstro,
+			parserOptions: {
+				parser: tseslint.parser,
+				extraFileExtensions: ['.astro'],
+				sourceType: 'module',
+			},
+		},
+		rules: {
+			'astro/jsx-a11y/no-redundant-roles': [
+				'error',
+				{
+					ul: ['list'],
+				},
+			],
+		},
+	},
+	configPrettier
+);

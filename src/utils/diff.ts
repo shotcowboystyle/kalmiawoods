@@ -4,7 +4,7 @@
  * @param  {Object} obj2 The object to compare against it
  * @return {Object}      An object of differences between the two
  */
-export const diff = (obj1, obj2) => {
+export const diff = (obj1: Record<string, unknown>, obj2: Record<string, unknown>) => {
 	// Make sure an object to compare is provided
 	if (!obj2 || Object.prototype.toString.call(obj2) !== '[object Object]') {
 		return obj1;
@@ -14,8 +14,8 @@ export const diff = (obj1, obj2) => {
 	// Variables
 	//
 
-	const diffs = {};
-	let key;
+	const diffs: Record<string, unknown> = {};
+	let key: string;
 
 	//
 	// Methods
@@ -27,7 +27,7 @@ export const diff = (obj1, obj2) => {
 	 * @param  {Array}   arr2 The second array
 	 * @return {Boolean}      If true, both arrays are equal
 	 */
-	const arraysMatch = (arr1, arr2) => {
+	const arraysMatch = (arr1: unknown[], arr2: unknown[]) => {
 		// Check if the arrays are the same length
 		if (arr1.length !== arr2.length) {
 			return false;
@@ -50,7 +50,7 @@ export const diff = (obj1, obj2) => {
 	 * @param  {*}      item2 The second item
 	 * @param  {String} key   The key in our object
 	 */
-	const compare = (item1, item2, key) => {
+	const compare = (item1: unknown, item2: unknown, key: string) => {
 		// Get the object type
 		const type1 = Object.prototype.toString.call(item1);
 		const type2 = Object.prototype.toString.call(item2);
@@ -69,7 +69,7 @@ export const diff = (obj1, obj2) => {
 
 		// If an object, compare recursively
 		if (type1 === '[object Object]') {
-			const objDiff = diff(item1, item2);
+			const objDiff = diff(item1 as Record<string, unknown>, item2 as Record<string, unknown>);
 			if (Object.keys(objDiff).length > 0) {
 				diffs[key] = objDiff;
 			}
@@ -78,7 +78,7 @@ export const diff = (obj1, obj2) => {
 
 		// If an array, compare
 		if (type1 === '[object Array]') {
-			if (!arraysMatch(item1, item2)) {
+			if (!arraysMatch(item1 as unknown[], item2 as unknown[])) {
 				diffs[key] = item2;
 			}
 			return;
@@ -87,7 +87,7 @@ export const diff = (obj1, obj2) => {
 		// Else if it's a function, convert to a string and compare
 		// Otherwise, just compare
 		if (type1 === '[object Function]') {
-			if (item1.toString() !== item2.toString()) {
+			if (item1?.toString() !== item2?.toString()) {
 				diffs[key] = item2;
 			}
 		} else {
@@ -103,14 +103,14 @@ export const diff = (obj1, obj2) => {
 
 	// Loop through the first object
 	for (key in obj1) {
-		if (obj1.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(obj1, key)) {
 			compare(obj1[key], obj2[key], key);
 		}
 	}
 
 	// Loop through the second object and find missing items
 	for (key in obj2) {
-		if (obj2.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(obj2, key)) {
 			if (!obj1[key] && obj1[key] !== obj2[key]) {
 				diffs[key] = obj2[key];
 			}
