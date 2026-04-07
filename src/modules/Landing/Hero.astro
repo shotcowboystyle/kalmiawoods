@@ -14,9 +14,12 @@ import { Image } from 'astro:assets';
 	<div class="c-home-header__image-wrapper c-parallax-header__wrapper js-home-header-image-wrapper">
 		<Image
 			src={heroBg}
-			alt=""
+			alt="Kalmia Woods mountain retreat aerial view"
 			widths={[640, 828, 2400, heroBg.width]}
+			sizes="100vw"
 			class="parallax-layer absolute inset-0 h-full w-full object-cover"
+			loading="eager"
+			fetchpriority="high"
 		/>
 
 		<Image
@@ -24,6 +27,7 @@ import { Image } from 'astro:assets';
 			alt=""
 			widths={[640, 828, 2400, heroSky.width]}
 			class="parallax-layer parallax__sky__layer absolute inset-0 h-full w-full object-cover"
+			loading="eager"
 		/>
 
 		<Image
@@ -31,6 +35,7 @@ import { Image } from 'astro:assets';
 			alt=""
 			widths={[640, 828, 2400, heroMountains.width]}
 			class="parallax-layer parallax__mountain__layer absolute inset-0 h-full w-full object-cover"
+			loading="eager"
 		/>
 
 		<Image
@@ -38,6 +43,7 @@ import { Image } from 'astro:assets';
 			alt=""
 			widths={[640, 828, 2400, heroLandscape.width]}
 			class="parallax-layer parallax__landscape__layer absolute inset-0 h-full w-full object-cover"
+			loading="eager"
 		/>
 
 		<Image
@@ -45,6 +51,7 @@ import { Image } from 'astro:assets';
 			alt=""
 			widths={[640, 828, 2400, heroForest.width]}
 			class="parallax-layer parallax__forest__layer absolute inset-0 h-full w-full object-cover"
+			loading="eager"
 		/>
 	</div>
 </header>

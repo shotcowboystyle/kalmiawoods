@@ -33,8 +33,10 @@ import { Picture } from 'astro:assets';
 										class="c-responsive-image__img"
 										src={salemBg}
 										formats={['avif', 'webp']}
-										alt="A description of my image."
-										widths={[640, 1140, 2000, salemBg.width]}
+										alt="Salem, South Carolina scenic view"
+										widths={[480, 640, 1140, salemBg.width]}
+										sizes="(max-width: 640px) 100vw, 50vw"
+										loading="lazy"
 									/>
 								</figure>
 							</div>
@@ -80,8 +82,10 @@ import { Picture } from 'astro:assets';
 										class="c-responsive-image__img"
 										src={senecaBg}
 										formats={['avif', 'webp']}
-										alt="A description of my image."
-										widths={[640, 1140, 2000, senecaBg.width]}
+										alt="Seneca historic downtown mural"
+										widths={[480, 640, 1140, senecaBg.width]}
+										sizes="(max-width: 640px) 100vw, 50vw"
+										loading="lazy"
 									/>
 								</figure>
 							</div>

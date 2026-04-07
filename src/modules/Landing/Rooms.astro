@@ -63,8 +63,10 @@ import { Picture } from 'astro:assets';
 									class="c-responsive-image__img !object-bottom"
 									src={roomsImage1}
 									formats={['avif', 'webp']}
-									alt="A description of my image."
+									alt="Kalmia Woods living area with forest views"
 									widths={[640, 1140, 2000, roomsImage1.width]}
+									sizes="(max-width: 640px) 100vw, 45vw"
+									loading="lazy"
 								/>
 							</figure>
 						</div>
@@ -82,8 +84,10 @@ import { Picture } from 'astro:assets';
 									class="c-responsive-image__img"
 									src={roomsImage2}
 									formats={['avif', 'webp']}
-									alt="A description of my image."
-									widths={[640, 1140, 2000, roomsImage2.width]}
+									alt="Kalmia Woods sunroom with natural light"
+									widths={[480, 640, 1140, roomsImage2.width]}
+									sizes="(max-width: 640px) 100vw, 55vw"
+									loading="lazy"
 								/>
 							</figure>
 						</div>
@@ -99,8 +103,10 @@ import { Picture } from 'astro:assets';
 									class="c-responsive-image__img"
 									src={roomsImage3}
 									formats={['avif', 'webp']}
-									alt="A description of my image."
-									widths={[640, 1140, 2000, roomsImage3.width]}
+									alt="Kalmia Woods living area interior"
+									widths={[280, 480, 640, roomsImage3.width]}
+									sizes="(max-width: 640px) 100vw, 280px"
+									loading="lazy"
 								/>
 							</figure>
 						</div>
