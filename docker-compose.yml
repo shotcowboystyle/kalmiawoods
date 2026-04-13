@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: postgres:16.3-alpine
+    image: postgres:16.13-alpine
     container_name: kalmiawoods-db
     restart: unless-stopped
     ports:

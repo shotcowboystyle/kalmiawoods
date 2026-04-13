@@ -18,13 +18,13 @@ jobs:
       - name: Setup Node.js 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: 24.14.1
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.33.7
           run_install: false
 
       - name: Get pnpm store directory
