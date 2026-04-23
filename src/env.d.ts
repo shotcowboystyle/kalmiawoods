@@ -8,7 +8,7 @@ interface ImportMetaEnv {
 	readonly APP_NAME: string;
 	readonly PUBLIC_VERCEL_ANALYTICS_ID: string;
 	readonly SITE: string;
-	readonly DATABASE_URL: string;
+	readonly KW_STORAGE_DATABASE_URL: string;
 }
 
 interface ImportMeta {

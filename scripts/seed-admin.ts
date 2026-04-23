@@ -2,17 +2,17 @@
  * One-time script to create the initial admin user.
  *
  * Usage:
- *   DATABASE_URL="postgres://..." npx tsx scripts/seed-admin.ts
+ *   KW_STORAGE_DATABASE_URL="postgres://..." npx tsx scripts/seed-admin.ts
  *
  * You will be prompted for email and password, or pass them as env vars:
- *   ADMIN_EMAIL="admin@example.com" ADMIN_PASSWORD="secret123" DATABASE_URL="..." npx tsx scripts/seed-admin.ts
+ *   ADMIN_EMAIL="admin@example.com" ADMIN_PASSWORD="secret123" KW_STORAGE_DATABASE_URL="..." npx tsx scripts/seed-admin.ts
  */
 
 import { neon } from '@neondatabase/serverless';
 
-const DATABASE_URL = process.env.DATABASE_URL;
-if (!DATABASE_URL) {
-	console.error('ERROR: DATABASE_URL environment variable is required');
+const KW_STORAGE_DATABASE_URL = process.env.KW_STORAGE_DATABASE_URL;
+if (!KW_STORAGE_DATABASE_URL) {
+	console.error('ERROR: KW_STORAGE_DATABASE_URL environment variable is required');
 	process.exit(1);
 }
 
@@ -22,7 +22,7 @@ const password = process.env.ADMIN_PASSWORD;
 if (!email || !password) {
 	console.error('ERROR: ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required');
 	console.error(
-		'Usage: ADMIN_EMAIL="admin@example.com" ADMIN_PASSWORD="secret" DATABASE_URL="..." npx tsx scripts/seed-admin.ts',
+		'Usage: ADMIN_EMAIL="admin@example.com" ADMIN_PASSWORD="secret" KW_STORAGE_DATABASE_URL="..." npx tsx scripts/seed-admin.ts',
 	);
 	process.exit(1);
 }
@@ -54,7 +54,7 @@ function generateToken(): string {
 		.join('');
 }
 
-const sql = neon(DATABASE_URL);
+const sql = neon(KW_STORAGE_DATABASE_URL);
 
 // Create tables if they don't exist
 await sql`
