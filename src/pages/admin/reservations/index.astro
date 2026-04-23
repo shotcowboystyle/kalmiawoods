@@ -1,0 +1,141 @@
+---
+import AdminLayout from '../../../components/AdminLayout.astro';
+import { getDb } from '../../../lib/db';
+
+export const prerender = false;
+
+const sql = getDb();
+let error = '';
+
+if (Astro.request.method === 'POST') {
+	const formData = await Astro.request.formData();
+	const action = formData.get('action')?.toString();
+	const id = formData.get('id')?.toString();
+
+	if (action === 'delete' && id) {
+		await sql`DELETE FROM reservations WHERE id = ${id}`;
+		return Astro.redirect('/admin/reservations');
+	}
+}
+
+let reservations: Array<{
+	id: string;
+	name: string;
+	check_in: string;
+	check_out: string;
+	property: string;
+}> = [];
+
+try {
+	reservations = await sql`
+		SELECT id, name, check_in, check_out, property
+		FROM reservations
+		ORDER BY check_in ASC
+		LIMIT 500
+	`;
+} catch (e) {
+	error = e instanceof Error ? e.message : 'Failed to load reservations';
+	throw e;
+}
+
+const propertyLabel = (p: string) => p.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+const formatDate = (d: string) => new Date(d).toLocaleDateString();
+---
+
+<AdminLayout>
+	<div class="flex justify-between items-center mb-8">
+		<div>
+			<h2 class="text-3xl font-bold text-gray-800">Reservations</h2>
+			<p class="text-gray-600 mt-2">Manage property bookings.</p>
+		</div>
+		<a
+			href="/admin/reservations/create"
+			class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm"
+		>
+			+ New Reservation
+		</a>
+	</div>
+
+	{error && <p class="text-red-500 text-sm mb-4">{error}</p>}
+
+	<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+		<table class="min-w-full divide-y divide-gray-200">
+			<thead class="bg-gray-50">
+				<tr>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+						>Name</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+						>Check In</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+						>Check Out</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+						>Property</th
+					>
+					<th
+						scope="col"
+						class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+						>Actions</th
+					>
+				</tr>
+			</thead>
+			<tbody class="bg-white divide-y divide-gray-200">
+				{
+					reservations.length === 0 ? (
+						<tr>
+							<td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+								No reservations found
+							</td>
+						</tr>
+					) : (
+						reservations.map((r) => (
+							<tr class="hover:bg-gray-50 transition-colors">
+								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									{r.name}
+								</td>
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									{formatDate(r.check_in)}
+								</td>
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									{formatDate(r.check_out)}
+								</td>
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									{propertyLabel(r.property)}
+								</td>
+								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+									<a
+										href={`/admin/reservations/edit?id=${r.id}`}
+										class="text-blue-600 hover:text-blue-900 mr-3"
+									>
+										Edit
+									</a>
+									<form method="POST" class="inline">
+										<input type="hidden" name="action" value="delete" />
+										<input type="hidden" name="id" value={r.id} />
+										<button
+											type="submit"
+											class="text-red-600 hover:text-red-900 cursor-pointer"
+											onclick="return confirm('Are you sure you want to delete this reservation?')"
+										>
+											Delete
+										</button>
+									</form>
+								</td>
+							</tr>
+						))
+					)
+				}
+			</tbody>
+		</table>
+	</div>
+</AdminLayout>

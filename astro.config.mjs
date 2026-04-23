@@ -1,5 +1,6 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 import compress from 'astro-compress';
 import { defineConfig } from 'astro/config';
@@ -10,7 +11,7 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 export default defineConfig({
 	site: process.env.APP_SITE,
 	trailingSlash: 'never',
-	output: 'static',
+	adapter: vercel(),
 	image: {
 		domains: [process.env.APP_HOST].filter(Boolean),
 	},

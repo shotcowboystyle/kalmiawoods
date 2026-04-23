@@ -8,8 +8,15 @@ interface ImportMetaEnv {
 	readonly APP_NAME: string;
 	readonly PUBLIC_VERCEL_ANALYTICS_ID: string;
 	readonly SITE: string;
+	readonly DATABASE_URL: string;
 }
 
 interface ImportMeta {
 	readonly env: ImportMetaEnv;
+}
+
+declare namespace App {
+	interface Locals {
+		user?: { id: string; email: string };
+	}
 }

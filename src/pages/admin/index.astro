@@ -1,0 +1,29 @@
+---
+import AdminLayout from '../../components/AdminLayout.astro';
+
+export const prerender = false;
+---
+
+<AdminLayout>
+	<div class="mb-8">
+		<h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+		<p class="text-gray-600 mt-2">Welcome back. Manage your reservations and users here.</p>
+	</div>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		<a
+			href="/admin/reservations"
+			class="block p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+		>
+			<h3 class="text-xl font-semibold text-gray-800 mb-2">Reservations</h3>
+			<p class="text-gray-600">View, create, and edit property reservations.</p>
+		</a>
+		<a
+			href="/admin/users"
+			class="block p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+		>
+			<h3 class="text-xl font-semibold text-gray-800 mb-2">Admin Users</h3>
+			<p class="text-gray-600">Manage administrator access to this system.</p>
+		</a>
+	</div>
+</AdminLayout>
