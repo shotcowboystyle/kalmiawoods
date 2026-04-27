@@ -52,7 +52,7 @@
     "lint-staged": "^15.5.2",
     "npm-run-all2": "^6.2.6",
     "playwright": "^1.59.1",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.12",
     "postcss-at-rules-variables": "^0.3.0",
     "postcss-combine-duplicated-selectors": "^10.0.3",
     "postcss-combine-media-query": "^2.1.0",
