@@ -22,12 +22,12 @@
     "validate": "run-p format:check lint types:check"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.9",
     "@astrojs/ts-plugin": "^1.10.7",
-    "@astrojs/vercel": "^10.0.5",
-    "@axe-core/playwright": "^4.11.2",
-    "@commitlint/cli": "^20.5.2",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@astrojs/vercel": "^10.0.6",
+    "@axe-core/playwright": "^4.11.3",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@eslint/js": "^9.39.4",
     "@eslint/markdown": "^8.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
@@ -39,7 +39,7 @@
     "commitizen": "^4.3.1",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "cspell": "^8.19.4",
-    "cssnano": "^7.1.7",
+    "cssnano": "^7.1.8",
     "cz-conventional-changelog": "^3.3.0",
     "daisyui": "^5.5.19",
     "eslint": "^9.39.4",
@@ -48,7 +48,7 @@
     "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "globals": "^17.5.0",
+    "globals": "^17.6.0",
     "lint-staged": "^15.5.2",
     "npm-run-all2": "^6.2.6",
     "playwright": "^1.59.1",
@@ -69,7 +69,7 @@
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.0"
+    "typescript-eslint": "^8.59.1"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",
@@ -88,6 +88,6 @@
     "sharp": "^0.34.5",
     "split-type": "^0.3.4",
     "spotlight.js": "^0.7.8",
-    "swiper": "^12.1.3"
+    "swiper": "^12.1.4"
   }
 }
