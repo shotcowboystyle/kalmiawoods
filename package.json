@@ -37,7 +37,7 @@
     "astro-compress": "^2.4.1",
     "astro-eslint-parser": "^0.17.0",
     "commitizen": "^4.3.1",
-    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "conventional-changelog-conventionalcommits": "^9.3.1",
     "cspell": "^8.19.4",
     "cssnano": "^7.1.9",
     "cz-conventional-changelog": "^3.3.0",
