@@ -2,7 +2,7 @@
   "name": "kalmiawoods",
   "description": "A beautiful mountain vacation rental next to Lake Jocassee and Lake Keowee.",
   "version": "0.0.0",
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@10.34.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -24,10 +24,10 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/ts-plugin": "^1.10.9",
-    "@astrojs/vercel": "^10.0.7",
+    "@astrojs/vercel": "^10.0.8",
     "@axe-core/playwright": "^4.11.3",
-    "@commitlint/cli": "^21.0.1",
-    "@commitlint/config-conventional": "^21.0.1",
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@eslint/js": "^10.0.1",
     "@eslint/markdown": "^8.0.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
@@ -38,7 +38,7 @@
     "astro-eslint-parser": "^0.17.0",
     "commitizen": "^4.3.1",
     "conventional-changelog-conventionalcommits": "^9.3.1",
-    "cspell": "^10.0.0",
+    "cspell": "^10.0.1",
     "cssnano": "^8.0.1",
     "cz-conventional-changelog": "^3.3.0",
     "daisyui": "^5.5.20",
@@ -69,11 +69,11 @@
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.4"
+    "typescript-eslint": "^8.60.1"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/dm-sans": "^5.2.8",
     "@fontsource-variable/domine": "^5.2.8",
     "@fontsource-variable/raleway": "^5.2.8",
@@ -88,6 +88,6 @@
     "sharp": "^0.34.5",
     "split-type": "^0.3.4",
     "spotlight.js": "^0.7.8",
-    "swiper": "^12.1.4"
+    "swiper": "^12.2.0"
   }
 }
