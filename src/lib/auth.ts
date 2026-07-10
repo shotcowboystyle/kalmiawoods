@@ -3,6 +3,9 @@ import { getDb } from './db';
 const SESSION_COOKIE = 'admin_session';
 const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
+export type AdminRole = 'super_admin' | 'admin';
+export type SessionUser = { id: string; email: string; role: AdminRole };
+
 async function pbkdf2Hash(password: string, salt: string): Promise<string> {
 	const enc = new TextEncoder();
 	const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, [
@@ -28,10 +31,10 @@ function generateToken(): string {
 export async function verifyLogin(
 	email: string,
 	password: string,
-): Promise<{ id: string; email: string } | null> {
+): Promise<SessionUser | null> {
 	const sql = getDb();
 	const rows = await sql`
-		SELECT id, email, password_hash, salt
+		SELECT id, email, role, password_hash, salt
 		FROM admin_users
 		WHERE email = ${email}
 		LIMIT 1
@@ -42,7 +45,7 @@ export async function verifyLogin(
 	const hash = await pbkdf2Hash(password, user.salt);
 	if (hash !== user.password_hash) return null;
 
-	return { id: user.id, email: user.email };
+	return { id: user.id, email: user.email, role: user.role };
 }
 
 export async function createSession(userId: string): Promise<string> {
@@ -56,18 +59,18 @@ export async function createSession(userId: string): Promise<string> {
 	return token;
 }
 
-export async function validateSession(
-	token: string,
-): Promise<{ id: string; email: string } | null> {
+export async function validateSession(token: string): Promise<SessionUser | null> {
 	const sql = getDb();
 	const rows = await sql`
-		SELECT u.id, u.email
+		SELECT u.id, u.email, u.role
 		FROM admin_sessions s
 		JOIN admin_users u ON u.id = s.user_id
 		WHERE s.token = ${token} AND s.expires_at > now()
 		LIMIT 1
 	`;
-	return rows.length > 0 ? { id: rows[0].id, email: rows[0].email } : null;
+	return rows.length > 0
+		? { id: rows[0].id, email: rows[0].email, role: rows[0].role }
+		: null;
 }
 
 export async function deleteSession(token: string): Promise<void> {

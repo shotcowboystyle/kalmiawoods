@@ -1,5 +1,7 @@
 ---
 import '../styles/base.css';
+
+const isSuperAdmin = Astro.locals.user?.role === 'super_admin';
 ---
 
 <html lang="en">
@@ -18,7 +20,13 @@ import '../styles/base.css';
 				<a href="/admin/reservations" class="text-gray-600 hover:text-blue-600 font-medium"
 					>Reservations</a
 				>
-				<a href="/admin/users" class="text-gray-600 hover:text-blue-600 font-medium">Users</a>
+				{
+					isSuperAdmin && (
+						<a href="/admin/users" class="text-gray-600 hover:text-blue-600 font-medium">
+							Users
+						</a>
+					)
+				}
 			</nav>
 			<form method="POST" action="/admin/logout" class="mt-auto">
 				<button

@@ -22,5 +22,10 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 	}
 
 	context.locals.user = user;
+
+	if (pathname.startsWith('/admin/users') && user.role !== 'super_admin') {
+		return context.redirect('/admin');
+	}
+
 	return next();
 };
