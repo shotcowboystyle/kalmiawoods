@@ -17,6 +17,6 @@ interface ImportMeta {
 
 declare namespace App {
 	interface Locals {
-		user?: { id: string; email: string };
+		user?: { id: string; email: string; role: 'super_admin' | 'admin' };
 	}
 }

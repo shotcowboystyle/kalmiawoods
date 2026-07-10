@@ -9,6 +9,13 @@ const sql = getDb();
 let error = '';
 let success = '';
 
+const currentUserId = Astro.locals.user?.id;
+
+async function countSuperAdmins(): Promise<number> {
+	const rows = await sql`SELECT COUNT(*)::int AS n FROM admin_users WHERE role = 'super_admin'`;
+	return rows[0]?.n ?? 0;
+}
+
 if (Astro.request.method === 'POST') {
 	const formData = await Astro.request.formData();
 	const action = formData.get('action')?.toString();
@@ -16,6 +23,7 @@ if (Astro.request.method === 'POST') {
 	if (action === 'add') {
 		const email = formData.get('email')?.toString() ?? '';
 		const password = formData.get('password')?.toString() ?? '';
+		const role = formData.get('role')?.toString() === 'super_admin' ? 'super_admin' : 'admin';
 
 		if (!email || !password) {
 			error = 'Email and password are required.';
@@ -25,8 +33,8 @@ if (Astro.request.method === 'POST') {
 			try {
 				const { hash, salt } = await hashPassword(password);
 				await sql`
-					INSERT INTO admin_users (email, password_hash, salt)
-					VALUES (${email}, ${hash}, ${salt})
+					INSERT INTO admin_users (email, password_hash, salt, role)
+					VALUES (${email}, ${hash}, ${salt}, ${role})
 				`;
 				success = `Admin user ${email} added.`;
 			} catch (e) {
@@ -39,17 +47,48 @@ if (Astro.request.method === 'POST') {
 				}
 			}
 		}
+	} else if (action === 'update_role') {
+		const id = formData.get('id')?.toString();
+		const newRole = formData.get('role')?.toString() === 'super_admin' ? 'super_admin' : 'admin';
+		if (id) {
+			const target = await sql`SELECT role FROM admin_users WHERE id = ${id} LIMIT 1`;
+			const currentRole = target[0]?.role;
+			if (currentRole === 'super_admin' && newRole === 'admin') {
+				const count = await countSuperAdmins();
+				if (count <= 1) {
+					error = 'Cannot demote the last super admin.';
+				}
+			}
+			if (!error) {
+				await sql`UPDATE admin_users SET role = ${newRole} WHERE id = ${id}`;
+				return Astro.redirect('/admin/users');
+			}
+		}
 	} else if (action === 'delete') {
 		const id = formData.get('id')?.toString();
 		if (id) {
-			await sql`DELETE FROM admin_users WHERE id = ${id}`;
-			return Astro.redirect('/admin/users');
+			if (id === currentUserId) {
+				error = 'You cannot remove your own account.';
+			} else {
+				const target = await sql`SELECT role FROM admin_users WHERE id = ${id} LIMIT 1`;
+				const targetRole = target[0]?.role;
+				if (targetRole === 'super_admin') {
+					const count = await countSuperAdmins();
+					if (count <= 1) {
+						error = 'Cannot remove the last super admin.';
+					}
+				}
+				if (!error) {
+					await sql`DELETE FROM admin_users WHERE id = ${id}`;
+					return Astro.redirect('/admin/users');
+				}
+			}
 		}
 	}
 }
 
 const users = await sql`
-	SELECT id, email, created_at
+	SELECT id, email, role, created_at
 	FROM admin_users
 	ORDER BY email ASC
 	LIMIT 100
@@ -90,6 +129,16 @@ const users = await sql`
 					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
 					required
 				/>
+			</div>
+			<div>
+				<label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+				<select
+					name="role"
+					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+				>
+					<option value="admin" selected>Admin (standard)</option>
+					<option value="super_admin">Super Admin (can manage users)</option>
+				</select>
 			</div>
 			<button
 				type="submit"
@@ -134,20 +183,50 @@ const users = await sql`
 							<tr class="hover:bg-gray-50 transition-colors">
 								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
 									{user.email}
+									{user.id === currentUserId && (
+										<span class="ml-2 text-xs text-gray-500">(you)</span>
+									)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Admin</td>
-								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-									<form method="POST" class="inline">
-										<input type="hidden" name="action" value="delete" />
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									<form method="POST" class="flex items-center gap-2">
+										<input type="hidden" name="action" value="update_role" />
 										<input type="hidden" name="id" value={user.id} />
+										<select
+											name="role"
+											class="px-2 py-1 border border-gray-300 rounded text-sm"
+										>
+											<option value="admin" selected={user.role === 'admin'}>
+												Admin
+											</option>
+											<option
+												value="super_admin"
+												selected={user.role === 'super_admin'}
+											>
+												Super Admin
+											</option>
+										</select>
 										<button
 											type="submit"
-											class="text-red-600 hover:text-red-900 cursor-pointer"
-											onclick="return confirm('Are you sure you want to remove this admin?')"
+											class="text-blue-600 hover:text-blue-900 text-sm cursor-pointer"
 										>
-											Remove
+											Save
 										</button>
 									</form>
+								</td>
+								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+									{user.id !== currentUserId && (
+										<form method="POST" class="inline">
+											<input type="hidden" name="action" value="delete" />
+											<input type="hidden" name="id" value={user.id} />
+											<button
+												type="submit"
+												class="text-red-600 hover:text-red-900 cursor-pointer"
+												onclick="return confirm('Are you sure you want to remove this admin?')"
+											>
+												Remove
+											</button>
+										</form>
+									)}
 								</td>
 							</tr>
 						))

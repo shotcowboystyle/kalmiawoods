@@ -63,8 +63,20 @@ await sql`
 		email TEXT UNIQUE NOT NULL,
 		password_hash TEXT NOT NULL,
 		salt TEXT NOT NULL,
+		role TEXT NOT NULL DEFAULT 'admin' CHECK (role IN ('super_admin', 'admin')),
 		created_at TIMESTAMPTZ DEFAULT now()
 	)
+`;
+
+await sql`
+	ALTER TABLE admin_users
+	ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'admin'
+	CHECK (role IN ('super_admin', 'admin'))
+`;
+
+await sql`
+	UPDATE admin_users SET role = 'super_admin'
+	WHERE NOT EXISTS (SELECT 1 FROM admin_users WHERE role = 'super_admin')
 `;
 
 await sql`
@@ -102,7 +114,7 @@ if (existing.length > 0) {
 	console.log(`Admin user ${email} already exists — updating password.`);
 	await sql`UPDATE admin_users SET password_hash = ${hash}, salt = ${salt} WHERE email = ${email}`;
 } else {
-	await sql`INSERT INTO admin_users (email, password_hash, salt) VALUES (${email}, ${hash}, ${salt})`;
+	await sql`INSERT INTO admin_users (email, password_hash, salt, role) VALUES (${email}, ${hash}, ${salt}, 'super_admin')`;
 	console.log(`Admin user ${email} created.`);
 }
 
