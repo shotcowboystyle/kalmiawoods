@@ -1,0 +1,345 @@
+---
+import AdminLayout from '../../components/AdminLayout.astro';
+import {
+	deleteOtherSessions,
+	sessionCookieName,
+	updateUserEmail,
+	updateUserPassword,
+	verifyUserPassword,
+} from '../../lib/auth';
+import { getDb } from '../../lib/db';
+import { PASSWORD_MIN_LENGTH, PASSWORD_RULES, validatePassword } from '../../lib/password-policy';
+
+export const prerender = false;
+
+const user = Astro.locals.user!;
+const forced = Astro.url.searchParams.get('force') === '1' || user.mustChangePassword;
+
+let emailError = '';
+let emailSuccess = '';
+let passwordError = '';
+let passwordSuccess = '';
+
+if (Astro.request.method === 'POST') {
+	const formData = await Astro.request.formData();
+	const action = formData.get('action')?.toString();
+
+	if (action === 'change_email') {
+		if (user.mustChangePassword) {
+			emailError = 'You must change your password before changing your email.';
+		} else {
+			const newEmail = formData.get('email')?.toString().trim() ?? '';
+			const currentPassword = formData.get('current_password')?.toString() ?? '';
+
+			if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+				emailError = 'Please enter a valid email address.';
+			} else if (!currentPassword) {
+				emailError = 'Please enter your current password to confirm.';
+			} else if (!(await verifyUserPassword(user.id, currentPassword))) {
+				emailError = 'Current password is incorrect.';
+			} else if (newEmail === user.email) {
+				emailError = 'That is already your email.';
+			} else {
+				try {
+					await updateUserEmail(user.id, newEmail);
+					return Astro.redirect('/admin/account?updated=email');
+				} catch (e) {
+					const msg = e instanceof Error ? e.message : 'Failed to update email';
+					if (msg.includes('unique') || msg.includes('duplicate')) {
+						emailError = 'Another admin already uses that email.';
+					} else {
+						emailError = msg;
+						throw e;
+					}
+				}
+			}
+		}
+	} else if (action === 'change_password') {
+		const currentPassword = formData.get('current_password')?.toString() ?? '';
+		const newPassword = formData.get('new_password')?.toString() ?? '';
+		const confirmPassword = formData.get('confirm_password')?.toString() ?? '';
+
+		if (!currentPassword) {
+			passwordError = 'Please enter your current password.';
+		} else if (!(await verifyUserPassword(user.id, currentPassword))) {
+			passwordError = 'Current password is incorrect.';
+		} else if (newPassword !== confirmPassword) {
+			passwordError = 'New passwords do not match.';
+		} else if (newPassword === currentPassword) {
+			passwordError = 'New password must be different from the current password.';
+		} else {
+			const validation = validatePassword(newPassword, user.email);
+			if (!validation.valid) {
+				passwordError = validation.errors.join(' ');
+			} else {
+				await updateUserPassword(user.id, newPassword, { clearMustChange: true });
+				const token = Astro.cookies.get(sessionCookieName())?.value;
+				if (token) {
+					await deleteOtherSessions(user.id, token);
+				}
+				return Astro.redirect('/admin/account?updated=password');
+			}
+		}
+	}
+}
+
+const updated = Astro.url.searchParams.get('updated');
+if (updated === 'email') emailSuccess = 'Email updated.';
+if (updated === 'password') passwordSuccess = 'Password updated. Other sessions have been signed out.';
+
+const sql = getDb();
+const rows = await sql`
+	SELECT email, role, created_at FROM admin_users WHERE id = ${user.id} LIMIT 1
+`;
+const account = rows[0];
+---
+
+<AdminLayout>
+	<div class="max-w-2xl">
+		<h2 class="text-3xl font-bold text-gray-800">Account</h2>
+		<p class="text-gray-600 mt-2">Manage your admin email and password.</p>
+
+		{
+			forced && (
+				<div class="mt-6 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-900">
+					<p class="font-semibold">Password change required</p>
+					<p class="text-sm mt-1">
+						For security, you must set a new password before you can continue using the admin
+						panel.
+					</p>
+				</div>
+			)
+		}
+
+		<!-- Profile summary -->
+		<div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+			<h3 class="text-lg font-semibold text-gray-800 mb-4">Profile</h3>
+			<dl class="grid grid-cols-3 gap-y-2 text-sm">
+				<dt class="text-gray-500">Email</dt>
+				<dd class="col-span-2 text-gray-900">{account?.email ?? user.email}</dd>
+				<dt class="text-gray-500">Role</dt>
+				<dd class="col-span-2 text-gray-900 capitalize">{(account?.role ?? user.role).replace('_', ' ')}</dd>
+				<dt class="text-gray-500">Created</dt>
+				<dd class="col-span-2 text-gray-900">
+					{account?.created_at ? new Date(account.created_at).toLocaleString() : '—'}
+				</dd>
+			</dl>
+		</div>
+
+		<!-- Change password -->
+		<div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+			<h3 class="text-lg font-semibold text-gray-800 mb-4">Change password</h3>
+			{passwordError && <p class="text-red-600 text-sm mb-4">{passwordError}</p>}
+			{passwordSuccess && <p class="text-green-600 text-sm mb-4">{passwordSuccess}</p>}
+
+			<form method="POST" class="flex flex-col gap-4" id="password-form">
+				<input type="hidden" name="action" value="change_password" />
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Current password</label>
+					<input
+						type="password"
+						name="current_password"
+						autocomplete="current-password"
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						required
+					/>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">New password</label>
+					<input
+						type="password"
+						name="new_password"
+						id="new-password"
+						autocomplete="new-password"
+						minlength={PASSWORD_MIN_LENGTH}
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						required
+					/>
+
+					<!-- Strength meter -->
+					<div class="mt-3" data-strength-meter aria-live="polite">
+						<div class="flex gap-1">
+							<span class="strength-bar h-1.5 flex-1 rounded bg-gray-200"></span>
+							<span class="strength-bar h-1.5 flex-1 rounded bg-gray-200"></span>
+							<span class="strength-bar h-1.5 flex-1 rounded bg-gray-200"></span>
+							<span class="strength-bar h-1.5 flex-1 rounded bg-gray-200"></span>
+						</div>
+						<p class="text-xs mt-2 text-gray-600">
+							Strength: <span class="font-semibold" data-strength-label>—</span>
+						</p>
+						<ul
+							class="mt-3 text-xs text-gray-600 space-y-1"
+							data-strength-rules
+							data-rules={JSON.stringify(PASSWORD_RULES)}
+						>
+							{
+								PASSWORD_RULES.map((rule, i) => (
+									<li class="flex items-center gap-2" data-rule-index={i}>
+										<span
+											class="inline-flex w-4 h-4 items-center justify-center rounded-full bg-gray-200 text-gray-500 text-[10px] leading-none"
+											data-rule-icon
+										>
+											·
+										</span>
+										<span>{rule}</span>
+									</li>
+								))
+							}
+						</ul>
+					</div>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
+					<input
+						type="password"
+						name="confirm_password"
+						id="confirm-password"
+						autocomplete="new-password"
+						minlength={PASSWORD_MIN_LENGTH}
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						required
+					/>
+					<p class="text-xs mt-2 text-red-600 hidden" data-confirm-error>
+						Passwords do not match.
+					</p>
+				</div>
+				<button
+					type="submit"
+					class="self-start bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+					data-password-submit
+					disabled
+				>
+					Update password
+				</button>
+			</form>
+		</div>
+
+		<!-- Change email -->
+		<div
+			class:list={[
+				'mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6',
+				user.mustChangePassword && 'opacity-60 pointer-events-none',
+			]}
+		>
+			<h3 class="text-lg font-semibold text-gray-800 mb-4">Change email</h3>
+			{user.mustChangePassword && (
+				<p class="text-xs text-gray-500 mb-3">
+					Available once you have changed your password.
+				</p>
+			)}
+			{emailError && <p class="text-red-600 text-sm mb-4">{emailError}</p>}
+			{emailSuccess && <p class="text-green-600 text-sm mb-4">{emailSuccess}</p>}
+			<form method="POST" class="flex flex-col gap-4">
+				<input type="hidden" name="action" value="change_email" />
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">New email</label>
+					<input
+						type="email"
+						name="email"
+						value={account?.email ?? user.email}
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						required
+					/>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Current password</label>
+					<input
+						type="password"
+						name="current_password"
+						autocomplete="current-password"
+						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						required
+					/>
+				</div>
+				<button
+					type="submit"
+					class="self-start bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm cursor-pointer"
+					>Update email</button
+				>
+			</form>
+		</div>
+	</div>
+</AdminLayout>
+
+<script>
+	import { validatePassword } from '../../lib/password-policy';
+
+	const form = document.getElementById('password-form') as HTMLFormElement | null;
+	if (form) {
+		const newPw = form.querySelector<HTMLInputElement>('#new-password')!;
+		const confirmPw = form.querySelector<HTMLInputElement>('#confirm-password')!;
+		const submit = form.querySelector<HTMLButtonElement>('[data-password-submit]')!;
+		const meter = form.querySelector<HTMLElement>('[data-strength-meter]')!;
+		const bars = meter.querySelectorAll<HTMLElement>('.strength-bar');
+		const label = meter.querySelector<HTMLElement>('[data-strength-label]')!;
+		const rulesList = meter.querySelector<HTMLElement>('[data-strength-rules]')!;
+		const confirmError = form.querySelector<HTMLElement>('[data-confirm-error]')!;
+
+		const barColors = [
+			'bg-red-500',
+			'bg-orange-500',
+			'bg-yellow-500',
+			'bg-lime-500',
+			'bg-green-500',
+		];
+
+		function checkRule(index: number, password: string): boolean {
+			switch (index) {
+				case 0:
+					return password.length >= 12;
+				case 1:
+					return /[A-Z]/.test(password);
+				case 2:
+					return /[a-z]/.test(password);
+				case 3:
+					return /\d/.test(password);
+				case 4:
+					return /[^A-Za-z0-9]/.test(password);
+				case 5: {
+					const v = validatePassword(password);
+					return !v.errors.some((e) => e.toLowerCase().includes('common'));
+				}
+				default:
+					return false;
+			}
+		}
+
+		function update(): void {
+			const pw = newPw.value;
+			const result = validatePassword(pw);
+
+			bars.forEach((bar, i) => {
+				bar.classList.remove(...barColors, 'bg-gray-200');
+				if (pw.length === 0) {
+					bar.classList.add('bg-gray-200');
+				} else if (i <= result.score) {
+					bar.classList.add(barColors[result.score]);
+				} else {
+					bar.classList.add('bg-gray-200');
+				}
+			});
+
+			label.textContent = pw.length === 0 ? '—' : result.label;
+
+			rulesList.querySelectorAll<HTMLElement>('[data-rule-index]').forEach((li) => {
+				const idx = Number(li.getAttribute('data-rule-index'));
+				const passed = pw.length > 0 && checkRule(idx, pw);
+				const icon = li.querySelector<HTMLElement>('[data-rule-icon]')!;
+				icon.textContent = passed ? '✓' : '·';
+				icon.classList.toggle('bg-green-100', passed);
+				icon.classList.toggle('text-green-700', passed);
+				icon.classList.toggle('bg-gray-200', !passed);
+				icon.classList.toggle('text-gray-500', !passed);
+			});
+
+			const matches = confirmPw.value.length === 0 || confirmPw.value === pw;
+			confirmError.classList.toggle('hidden', matches);
+
+			submit.disabled = !result.valid || !matches || confirmPw.value.length === 0;
+		}
+
+		newPw.addEventListener('input', update);
+		confirmPw.addEventListener('input', update);
+		update();
+	}
+</script>
