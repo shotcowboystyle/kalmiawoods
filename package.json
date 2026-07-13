@@ -24,7 +24,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/ts-plugin": "^1.10.10",
-    "@astrojs/vercel": "^10.0.8",
+    "@astrojs/vercel": "^11.0.2",
     "@axe-core/playwright": "^4.12.1",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
@@ -73,7 +73,7 @@
     "typescript-eslint": "^8.63.0"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.6",
+    "@astrojs/mdx": "^7.0.2",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/dm-sans": "^5.2.8",
     "@fontsource-variable/domine": "^5.2.8",
