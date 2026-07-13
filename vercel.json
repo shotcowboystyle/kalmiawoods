@@ -1,11 +1,8 @@
 {
 	"cleanUrls": true,
 	"git": {
-		"deploymentEnabled": {
-			"renovate/**": false
-		}
+		"deploymentEnabled": false
 	},
-	"ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)README.md' ':(exclude)CHANGELOG.md' ':(exclude)CLAUDE.md' ':(exclude).github'",
 	"github": {
 		"autoJobCancelation": true,
 		"silent": true
