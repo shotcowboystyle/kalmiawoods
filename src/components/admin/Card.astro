@@ -1,0 +1,18 @@
+---
+type Props = {
+	class?: string;
+	padding?: boolean;
+};
+
+const { class: className = '', padding = true } = Astro.props;
+---
+
+<div
+	class:list={[
+		'bg-base-100 border border-base-300 rounded-xl shadow-sm',
+		padding && 'p-6',
+		className,
+	]}
+>
+	<slot />
+</div>

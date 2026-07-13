@@ -1,5 +1,9 @@
 ---
 import AdminLayout from '../../../components/AdminLayout.astro';
+import Card from '../../../components/admin/Card.astro';
+import FieldError from '../../../components/admin/FieldError.astro';
+import FormAlert from '../../../components/admin/FormAlert.astro';
+import SubmitButton from '../../../components/admin/SubmitButton.astro';
 import { hashPassword } from '../../../lib/auth';
 import { getDb } from '../../../lib/db';
 import { PASSWORD_MIN_LENGTH, validatePassword } from '../../../lib/password-policy';
@@ -7,8 +11,12 @@ import { PASSWORD_MIN_LENGTH, validatePassword } from '../../../lib/password-pol
 export const prerender = false;
 
 const sql = getDb();
-let error = '';
+let formError = '';
 let success = '';
+
+type FieldErrors = { email?: string; password?: string };
+let fieldErrors: FieldErrors = {};
+let addValues = { email: '', role: 'admin' };
 
 const currentUserId = Astro.locals.user?.id;
 
@@ -22,16 +30,27 @@ if (Astro.request.method === 'POST') {
 	const action = formData.get('action')?.toString();
 
 	if (action === 'add') {
-		const email = formData.get('email')?.toString() ?? '';
+		const email = formData.get('email')?.toString().trim() ?? '';
 		const password = formData.get('password')?.toString() ?? '';
 		const role = formData.get('role')?.toString() === 'super_admin' ? 'super_admin' : 'admin';
+		addValues = { email, role };
 
-		const validation = validatePassword(password, email);
-		if (!email || !password) {
-			error = 'Email and password are required.';
-		} else if (!validation.valid) {
-			error = validation.errors.join(' ');
+		if (!email) {
+			fieldErrors.email = 'Email is required.';
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+			fieldErrors.email = 'Enter a valid email address.';
+		}
+
+		if (!password) {
+			fieldErrors.password = 'Password is required.';
 		} else {
+			const validation = validatePassword(password, email);
+			if (!validation.valid) {
+				fieldErrors.password = validation.errors.join(' ');
+			}
+		}
+
+		if (Object.keys(fieldErrors).length === 0) {
 			try {
 				const { hash, salt } = await hashPassword(password);
 				await sql`
@@ -39,12 +58,13 @@ if (Astro.request.method === 'POST') {
 					VALUES (${email}, ${hash}, ${salt}, ${role}, true)
 				`;
 				success = `Admin user ${email} added. They will be required to change their password on first login.`;
+				addValues = { email: '', role: 'admin' };
 			} catch (e) {
 				const msg = e instanceof Error ? e.message : 'Failed to add user';
 				if (msg.includes('unique') || msg.includes('duplicate')) {
-					error = 'A user with that email already exists.';
+					fieldErrors.email = 'A user with that email already exists.';
 				} else {
-					error = msg;
+					formError = msg;
 					throw e;
 				}
 			}
@@ -58,10 +78,10 @@ if (Astro.request.method === 'POST') {
 			if (currentRole === 'super_admin' && newRole === 'admin') {
 				const count = await countSuperAdmins();
 				if (count <= 1) {
-					error = 'Cannot demote the last super admin.';
+					formError = 'Cannot demote the last super admin.';
 				}
 			}
-			if (!error) {
+			if (!formError) {
 				await sql`UPDATE admin_users SET role = ${newRole} WHERE id = ${id}`;
 				return Astro.redirect('/admin/users');
 			}
@@ -70,17 +90,17 @@ if (Astro.request.method === 'POST') {
 		const id = formData.get('id')?.toString();
 		if (id) {
 			if (id === currentUserId) {
-				error = 'You cannot remove your own account.';
+				formError = 'You cannot remove your own account.';
 			} else {
 				const target = await sql`SELECT role FROM admin_users WHERE id = ${id} LIMIT 1`;
 				const targetRole = target[0]?.role;
 				if (targetRole === 'super_admin') {
 					const count = await countSuperAdmins();
 					if (count <= 1) {
-						error = 'Cannot remove the last super admin.';
+						formError = 'Cannot remove the last super admin.';
 					}
 				}
-				if (!error) {
+				if (!formError) {
 					await sql`DELETE FROM admin_users WHERE id = ${id}`;
 					return Astro.redirect('/admin/users');
 				}
@@ -100,135 +120,147 @@ const users = await sql`
 <AdminLayout>
 	<div class="flex justify-between items-center mb-8">
 		<div>
-			<h2 class="text-3xl font-bold text-gray-800">Admin Users</h2>
-			<p class="text-gray-600 mt-2">Manage administrators for the property.</p>
+			<h2 class="text-3xl font-bold text-base-content">Admin Users</h2>
+			<p class="text-base-content/70 mt-2">Manage administrators for the property.</p>
 		</div>
 	</div>
 
-	{error && <p class="text-red-500 text-sm mb-4">{error}</p>}
-	{success && <p class="text-green-600 text-sm mb-4">{success}</p>}
+	<FormAlert tone="error" message={formError} />
+	<FormAlert tone="success" message={success} />
 
-	<!-- Add User Form -->
-	<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 max-w-xl">
-		<h3 class="text-lg font-semibold text-gray-800 mb-4">Add Admin User</h3>
-		<form method="POST" class="flex flex-col gap-4">
+	<Card class="mb-8 max-w-xl">
+		<h3 class="text-lg font-semibold text-base-content mb-4">Add Admin User</h3>
+		<form method="POST" class="flex flex-col gap-4" novalidate>
 			<input type="hidden" name="action" value="add" />
 			<div>
-				<label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+				<label for="add-email" class="block text-sm font-medium text-base-content mb-1">Email</label>
 				<input
+					id="add-email"
 					type="email"
 					name="email"
-					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+					value={addValues.email}
+					autocomplete="email"
+					aria-invalid={fieldErrors.email ? 'true' : undefined}
+					aria-describedby={fieldErrors.email ? 'add-email-error' : undefined}
+					class:list={[
+						'input input-bordered w-full bg-base-100',
+						fieldErrors.email && 'input-error',
+					]}
 					required
 				/>
+				<FieldError id="add-email-error" message={fieldErrors.email} />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-gray-700 mb-1">Temporary password</label>
+				<label for="add-password" class="block text-sm font-medium text-base-content mb-1">
+					Temporary password
+				</label>
 				<input
+					id="add-password"
 					type="password"
 					name="password"
+					autocomplete="new-password"
 					minlength={PASSWORD_MIN_LENGTH}
-					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+					aria-invalid={fieldErrors.password ? 'true' : undefined}
+					aria-describedby={fieldErrors.password ? 'add-password-error' : 'add-password-helper'}
+					class:list={[
+						'input input-bordered w-full bg-base-100',
+						fieldErrors.password && 'input-error',
+					]}
 					required
 				/>
-				<p class="text-xs text-gray-500 mt-1">
-					Min {PASSWORD_MIN_LENGTH} chars with upper, lower, digit, and symbol. The user will be
-					required to change this on first login.
-				</p>
+				<FieldError id="add-password-error" message={fieldErrors.password} />
+				{!fieldErrors.password && (
+					<p id="add-password-helper" class="text-xs text-base-content/60 mt-1">
+						Min {PASSWORD_MIN_LENGTH} chars with upper, lower, digit, and symbol. The user will be
+						required to change this on first login.
+					</p>
+				)}
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+				<label for="add-role" class="block text-sm font-medium text-base-content mb-1">Role</label>
 				<select
+					id="add-role"
 					name="role"
-					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+					class="select select-bordered w-full bg-base-100"
 				>
-					<option value="admin" selected>Admin (standard)</option>
-					<option value="super_admin">Super Admin (can manage users)</option>
+					<option value="admin" selected={addValues.role === 'admin'}>Admin (standard)</option>
+					<option value="super_admin" selected={addValues.role === 'super_admin'}>
+						Super Admin (can manage users)
+					</option>
 				</select>
 			</div>
-			<button
-				type="submit"
-				class="self-start bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm cursor-pointer"
-				>Add Admin</button
-			>
+			<SubmitButton label="Add Admin" labelSubmitting="Adding…" class="self-start" />
 		</form>
-	</div>
+	</Card>
 
-	<!-- Users Table -->
-	<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-		<table class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-gray-50">
+	<Card padding={false} class="overflow-hidden">
+		<table class="min-w-full divide-y divide-base-300">
+			<thead class="bg-base-200">
 				<tr>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Email</th
+						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Email
+					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Role</th
+						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Role
+					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Actions</th
+						class="px-6 py-3 text-right text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Actions
+					</th>
 				</tr>
 			</thead>
-			<tbody class="bg-white divide-y divide-gray-200">
+			<tbody class="divide-y divide-base-300">
 				{
 					users.length === 0 ? (
 						<tr>
-							<td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">
+							<td colspan="3" class="px-6 py-4 text-center text-sm text-base-content/60">
 								No admin users found
 							</td>
 						</tr>
 					) : (
 						users.map((user) => (
-							<tr class="hover:bg-gray-50 transition-colors">
-								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+							<tr class="hover:bg-base-200 transition-colors">
+								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
 									{user.email}
 									{user.id === currentUserId && (
-										<span class="ml-2 text-xs text-gray-500">(you)</span>
+										<span class="ml-2 text-xs text-base-content/60">(you)</span>
 									)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 									<form method="POST" class="flex items-center gap-2">
 										<input type="hidden" name="action" value="update_role" />
 										<input type="hidden" name="id" value={user.id} />
 										<select
 											name="role"
-											class="px-2 py-1 border border-gray-300 rounded text-sm"
+											class="select select-bordered select-sm bg-base-100"
+											aria-label={`Role for ${user.email}`}
 										>
 											<option value="admin" selected={user.role === 'admin'}>
 												Admin
 											</option>
-											<option
-												value="super_admin"
-												selected={user.role === 'super_admin'}
-											>
+											<option value="super_admin" selected={user.role === 'super_admin'}>
 												Super Admin
 											</option>
 										</select>
-										<button
-											type="submit"
-											class="text-blue-600 hover:text-blue-900 text-sm cursor-pointer"
-										>
+										<button type="submit" class="text-primary hover:text-primary/80 text-sm cursor-pointer">
 											Save
 										</button>
 									</form>
 								</td>
 								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 									{user.id !== currentUserId && (
-										<form method="POST" class="inline">
+										<form method="POST" class="inline" data-confirm-delete data-email={user.email}>
 											<input type="hidden" name="action" value="delete" />
 											<input type="hidden" name="id" value={user.id} />
-											<button
-												type="submit"
-												class="text-red-600 hover:text-red-900 cursor-pointer"
-												onclick="return confirm('Are you sure you want to remove this admin?')"
-											>
+											<button type="submit" class="text-error hover:text-error/80 cursor-pointer">
 												Remove
 											</button>
 										</form>
@@ -240,5 +272,15 @@ const users = await sql`
 				}
 			</tbody>
 		</table>
-	</div>
+	</Card>
 </AdminLayout>
+
+<script>
+	document.addEventListener('submit', (event) => {
+		const form = event.target as HTMLFormElement | null;
+		if (!form || !form.hasAttribute('data-confirm-delete')) return;
+		const email = form.dataset.email ?? '';
+		const label = email ? `Remove admin ${email}?` : 'Remove this admin?';
+		if (!confirm(label)) event.preventDefault();
+	});
+</script>

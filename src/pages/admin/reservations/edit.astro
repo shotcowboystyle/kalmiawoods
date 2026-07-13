@@ -1,38 +1,82 @@
 ---
 import AdminLayout from '../../../components/AdminLayout.astro';
+import Card from '../../../components/admin/Card.astro';
+import FieldError from '../../../components/admin/FieldError.astro';
+import FormAlert from '../../../components/admin/FormAlert.astro';
+import SubmitButton from '../../../components/admin/SubmitButton.astro';
 import { getDb } from '../../../lib/db';
+import {
+	CHECK_IN_HOUR,
+	CHECK_OUT_HOUR,
+	PROPERTIES,
+	combineDateAndTime,
+	findConflictingReservation,
+	formatReservationDate,
+	isProperty,
+	propertyLabel,
+	toDateInputValue,
+	validateReservationInput,
+	type Property,
+	type ReservationFieldErrors,
+} from '../../../lib/reservations';
 
 export const prerender = false;
 
 const sql = getDb();
 const id = Astro.url.searchParams.get('id');
-let error = '';
 
 if (!id) {
 	return Astro.redirect('/admin/reservations');
 }
 
+let errors: ReservationFieldErrors = {};
+let values: { name: string; check_in: string; check_out: string; property: string } | null = null;
+
 if (Astro.request.method === 'POST') {
 	const formData = await Astro.request.formData();
-	const name = formData.get('name')?.toString() ?? '';
-	const check_in = formData.get('check_in')?.toString() ?? '';
-	const check_out = formData.get('check_out')?.toString() ?? '';
-	const property = formData.get('property')?.toString() ?? '';
+	values = {
+		name: formData.get('name')?.toString() ?? '',
+		check_in: formData.get('check_in')?.toString() ?? '',
+		check_out: formData.get('check_out')?.toString() ?? '',
+		property: formData.get('property')?.toString() ?? '',
+	};
 
-	if (!name || !check_in || !check_out || !property) {
-		error = 'All fields are required.';
-	} else {
-		try {
-			await sql`
-				UPDATE reservations
-				SET name = ${name}, check_in = ${check_in}, check_out = ${check_out},
-				    property = ${property}, updated_at = now()
-				WHERE id = ${id}
-			`;
-			return Astro.redirect('/admin/reservations');
-		} catch (e) {
-			error = e instanceof Error ? e.message : 'Failed to update reservation';
-			throw e;
+	errors = validateReservationInput({
+		name: values.name,
+		checkInDate: values.check_in,
+		checkOutDate: values.check_out,
+		property: values.property,
+	});
+
+	if (Object.keys(errors).length === 0 && isProperty(values.property)) {
+		const checkInAt = combineDateAndTime(values.check_in, CHECK_IN_HOUR);
+		const checkOutAt = combineDateAndTime(values.check_out, CHECK_OUT_HOUR);
+
+		const conflict = await findConflictingReservation(sql, {
+			property: values.property,
+			checkIn: checkInAt,
+			checkOut: checkOutAt,
+			excludeId: id,
+		});
+
+		if (conflict) {
+			errors._form = `Conflicts with existing booking for ${conflict.name} (${propertyLabel(conflict.property)}, ${formatReservationDate(conflict.check_in)} → ${formatReservationDate(conflict.check_out)}).`;
+		} else {
+			try {
+				await sql`
+					UPDATE reservations
+					SET name = ${values.name.trim()},
+					    check_in = ${checkInAt.toISOString()},
+					    check_out = ${checkOutAt.toISOString()},
+					    property = ${values.property},
+					    updated_at = now()
+					WHERE id = ${id}
+				`;
+				return Astro.redirect('/admin/reservations');
+			} catch (e) {
+				errors._form = e instanceof Error ? e.message : 'Failed to update reservation';
+				throw e;
+			}
 		}
 	}
 }
@@ -49,17 +93,36 @@ if (rows.length === 0) {
 }
 
 const reservation = rows[0];
-// Format dates as YYYY-MM-DD for input[type=date]
-const formatDateValue = (d: string | Date) => {
-	const date = new Date(d);
-	return date.toISOString().split('T')[0];
+const display = values ?? {
+	name: reservation.name,
+	check_in: toDateInputValue(reservation.check_in),
+	check_out: toDateInputValue(reservation.check_out),
+	property: reservation.property,
 };
+
+const existingRows = await sql`
+	SELECT id, property, check_in, check_out
+	FROM reservations
+	WHERE check_out >= now()
+	ORDER BY check_in ASC
+	LIMIT 500
+`;
+const existingReservations = existingRows.map((r) => ({
+	id: r.id as string,
+	property: r.property as Property,
+	checkIn: new Date(r.check_in).toISOString(),
+	checkOut: new Date(r.check_out).toISOString(),
+}));
 ---
 
 <AdminLayout>
 	<div class="mb-8">
 		<div class="flex items-center gap-4">
-			<a href="/admin/reservations" class="text-gray-500 hover:text-blue-600 transition-colors">
+			<a
+				href="/admin/reservations"
+				class="text-base-content/60 hover:text-primary transition-colors"
+				aria-label="Back to reservations"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
@@ -73,78 +136,205 @@ const formatDateValue = (d: string | Date) => {
 						d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg
 				>
 			</a>
-			<h2 class="text-3xl font-bold text-gray-800">Edit Reservation</h2>
+			<h2 class="text-3xl font-bold text-base-content">Edit Reservation</h2>
 		</div>
-		<p class="text-gray-600 mt-2 ml-10">Modify an existing property booking.</p>
+		<p class="text-base-content/70 mt-2 ml-10">Modify an existing property booking.</p>
 	</div>
 
-	<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-2xl">
-		<form method="POST" class="flex flex-col gap-6">
-			<div>
-				<label class="block text-sm font-medium text-gray-700 mb-1">Guest Name</label>
-				<input
-					type="text"
-					name="name"
-					value={reservation.name}
-					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-					required
-				/>
-			</div>
-
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<Card class="max-w-2xl" padding={false}>
+		<div class="p-8">
+			<FormAlert tone="error" message={errors._form} />
+			<form
+				method="POST"
+				id="reservation-form"
+				data-exclude-id={id}
+				class="flex flex-col gap-6"
+				novalidate
+			>
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">Check In</label>
+					<label for="name" class="block text-sm font-medium text-base-content mb-1">
+						Guest Name
+					</label>
 					<input
-						type="date"
-						name="check_in"
-						value={formatDateValue(reservation.check_in)}
-						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						id="name"
+						type="text"
+						name="name"
+						value={display.name}
+						maxlength="200"
+						aria-invalid={errors.name ? 'true' : undefined}
+						aria-describedby={errors.name ? 'name-error' : undefined}
+						class:list={[
+							'input input-bordered w-full bg-base-100',
+							errors.name && 'input-error',
+						]}
 						required
 					/>
+					<FieldError id="name-error" message={errors.name} />
 				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div>
+						<label for="check_in" class="block text-sm font-medium text-base-content mb-1">
+							Check In
+						</label>
+						<input
+							id="check_in"
+							type="date"
+							name="check_in"
+							value={display.check_in}
+							aria-invalid={errors.checkInDate ? 'true' : undefined}
+							aria-describedby={errors.checkInDate ? 'check-in-error' : 'check-in-helper'}
+							class:list={[
+								'input input-bordered w-full bg-base-100',
+								errors.checkInDate && 'input-error',
+							]}
+							required
+						/>
+						<FieldError id="check-in-error" message={errors.checkInDate} />
+						{!errors.checkInDate && (
+							<p id="check-in-helper" class="mt-1 text-xs text-base-content/60">
+								Check-in 3:00 PM (Eastern)
+							</p>
+						)}
+					</div>
+					<div>
+						<label for="check_out" class="block text-sm font-medium text-base-content mb-1">
+							Check Out
+						</label>
+						<input
+							id="check_out"
+							type="date"
+							name="check_out"
+							value={display.check_out}
+							aria-invalid={errors.checkOutDate ? 'true' : undefined}
+							aria-describedby={errors.checkOutDate ? 'check-out-error' : 'check-out-helper'}
+							class:list={[
+								'input input-bordered w-full bg-base-100',
+								errors.checkOutDate && 'input-error',
+							]}
+							required
+						/>
+						<FieldError id="check-out-error" message={errors.checkOutDate} />
+						{!errors.checkOutDate && (
+							<p id="check-out-helper" class="mt-1 text-xs text-base-content/60">
+								Check-out 11:00 AM (Eastern)
+							</p>
+						)}
+					</div>
+				</div>
+
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">Check Out</label>
-					<input
-						type="date"
-						name="check_out"
-						value={formatDateValue(reservation.check_out)}
-						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+					<label for="property" class="block text-sm font-medium text-base-content mb-1">
+						Property
+					</label>
+					<select
+						id="property"
+						name="property"
+						aria-invalid={errors.property ? 'true' : undefined}
+						aria-describedby={errors.property ? 'property-error' : undefined}
+						class:list={[
+							'select select-bordered w-full bg-base-100',
+							errors.property && 'select-error',
+						]}
 						required
-					/>
+					>
+						<option value="" disabled>Select property...</option>
+						{
+							PROPERTIES.map((p) => (
+								<option
+									value={p.value}
+									data-base-label={p.label}
+									selected={display.property === p.value}
+								>
+									{p.label}
+								</option>
+							))
+						}
+					</select>
+					<FieldError id="property-error" message={errors.property} />
+					<p
+						data-availability-status
+						class="mt-2 text-xs text-warning hidden"
+						role="status"
+						aria-live="polite"
+					>
+					</p>
 				</div>
-			</div>
 
-			<div>
-				<label class="block text-sm font-medium text-gray-700 mb-1">Property</label>
-				<select
-					name="property"
-					class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-					required
-				>
-					<option value="" disabled>Select property...</option>
-					<option value="main_house" selected={reservation.property === 'main_house'}
-						>Main House</option
-					>
-					<option value="workshop" selected={reservation.property === 'workshop'}
-						>Workshop</option
-					>
-					<option value="both" selected={reservation.property === 'both'}>Both</option>
-				</select>
-			</div>
+				<div class="pt-4 flex justify-end gap-3">
+					<a href="/admin/reservations" class="btn btn-ghost">Cancel</a>
+					<SubmitButton label="Update Reservation" labelSubmitting="Updating…" />
+				</div>
+			</form>
+		</div>
+	</Card>
+	<p class="mt-4 text-xs text-base-content/50">
+		Times are fixed policy: check-in 3:00 PM, check-out 11:00 AM ({CHECK_IN_HOUR}:00 / {CHECK_OUT_HOUR}:00 Eastern).
+	</p>
 
-			<div class="pt-4 flex justify-end gap-3">
-				<a
-					href="/admin/reservations"
-					class="px-5 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors"
-					>Cancel</a
-				>
-				<button
-					type="submit"
-					class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-sm cursor-pointer"
-					>Update Reservation</button
-				>
-			</div>
-			{error && <p class="text-red-500 text-sm">{error}</p>}
-		</form>
-	</div>
+	<script
+		id="existing-reservations"
+		type="application/json"
+		set:html={JSON.stringify(existingReservations)}
+	/>
 </AdminLayout>
+
+<script>
+	import {
+		CHECK_IN_HOUR,
+		CHECK_OUT_HOUR,
+		combineDateAndTime,
+		getBlockedProperties,
+		type ExistingReservationLite,
+		type Property,
+	} from '../../../lib/reservations';
+
+	const form = document.getElementById('reservation-form') as HTMLFormElement | null;
+	const jsonEl = document.getElementById('existing-reservations');
+	if (form && jsonEl?.textContent) {
+		const reservations: ExistingReservationLite[] = JSON.parse(jsonEl.textContent);
+		const excludeId = form.dataset.excludeId || null;
+		const ci = form.querySelector<HTMLInputElement>('#check_in')!;
+		const co = form.querySelector<HTMLInputElement>('#check_out')!;
+		const sel = form.querySelector<HTMLSelectElement>('#property')!;
+		const status = form.querySelector<HTMLElement>('[data-availability-status]')!;
+
+		function update(): void {
+			for (const opt of Array.from(sel.options)) {
+				if (!opt.value) continue;
+				opt.disabled = false;
+				opt.textContent = opt.dataset.baseLabel ?? opt.textContent;
+			}
+			status.textContent = '';
+			status.classList.add('hidden');
+
+			if (!ci.value || !co.value || co.value <= ci.value) return;
+
+			const candStart = combineDateAndTime(ci.value, CHECK_IN_HOUR);
+			const candEnd = combineDateAndTime(co.value, CHECK_OUT_HOUR);
+			const blocked = getBlockedProperties(candStart, candEnd, reservations, excludeId);
+			if (blocked.size === 0) return;
+
+			const blockedLabels: string[] = [];
+			for (const opt of Array.from(sel.options)) {
+				if (!opt.value) continue;
+				if (blocked.has(opt.value as Property)) {
+					opt.disabled = true;
+					const base = opt.dataset.baseLabel ?? opt.value;
+					opt.textContent = `${base} — unavailable`;
+					blockedLabels.push(base);
+				}
+			}
+
+			status.classList.remove('hidden');
+			status.textContent =
+				blockedLabels.length === 3
+					? 'No property is available for these dates. Please choose different dates.'
+					: `Unavailable for these dates: ${blockedLabels.join(', ')}.`;
+		}
+
+		ci.addEventListener('change', update);
+		co.addEventListener('change', update);
+		update();
+	}
+</script>

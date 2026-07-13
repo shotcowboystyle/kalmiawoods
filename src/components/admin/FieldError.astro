@@ -1,0 +1,14 @@
+---
+type Props = {
+	id: string;
+	message?: string;
+};
+
+const { id, message } = Astro.props;
+---
+
+{message && (
+	<p id={id} class="mt-1 text-sm text-error" role="alert">
+		{message}
+	</p>
+)}

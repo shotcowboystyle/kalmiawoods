@@ -1,0 +1,42 @@
+---
+type Props = {
+	label: string;
+	labelSubmitting?: string;
+	variant?: 'primary' | 'error';
+	class?: string;
+	disabled?: boolean;
+};
+
+const {
+	label,
+	labelSubmitting = label,
+	variant = 'primary',
+	class: className = '',
+	disabled = false,
+} = Astro.props;
+
+const btnClass = variant === 'error' ? 'btn btn-error' : 'btn btn-primary';
+---
+
+<button
+	type="submit"
+	class:list={[btnClass, className]}
+	data-submit-once
+	data-label={label}
+	data-label-submitting={labelSubmitting}
+	disabled={disabled}
+>
+	{label}
+</button>
+
+<script>
+	document.addEventListener('submit', (event) => {
+		const form = event.target as HTMLFormElement | null;
+		if (!form || form.tagName !== 'FORM') return;
+		const button = form.querySelector<HTMLButtonElement>('button[data-submit-once]');
+		if (!button || button.disabled) return;
+		const submitting = button.dataset.labelSubmitting;
+		if (submitting) button.textContent = submitting;
+		button.disabled = true;
+	});
+</script>

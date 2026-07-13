@@ -1,6 +1,9 @@
 ---
 import AdminLayout from '../../../components/AdminLayout.astro';
+import Card from '../../../components/admin/Card.astro';
+import FormAlert from '../../../components/admin/FormAlert.astro';
 import { getDb } from '../../../lib/db';
+import { formatReservationDateTime, propertyLabel } from '../../../lib/reservations';
 
 export const prerender = false;
 
@@ -14,119 +17,198 @@ if (Astro.request.method === 'POST') {
 
 	if (action === 'delete' && id) {
 		await sql`DELETE FROM reservations WHERE id = ${id}`;
-		return Astro.redirect('/admin/reservations');
+		return Astro.redirect(Astro.url.pathname + Astro.url.search);
 	}
 }
 
-let reservations: Array<{
+const validFilters = ['upcoming', 'current', 'past', 'all'] as const;
+type Filter = (typeof validFilters)[number];
+const rawFilter = Astro.url.searchParams.get('filter') ?? 'upcoming';
+const filter: Filter = (validFilters as readonly string[]).includes(rawFilter)
+	? (rawFilter as Filter)
+	: 'upcoming';
+
+const rawPage = Number(Astro.url.searchParams.get('page') ?? '1');
+const page = Number.isFinite(rawPage) && rawPage >= 1 ? Math.min(Math.floor(rawPage), 10000) : 1;
+const PAGE_SIZE = 25;
+const offset = (page - 1) * PAGE_SIZE;
+
+type Row = {
 	id: string;
 	name: string;
 	check_in: string;
 	check_out: string;
 	property: string;
-}> = [];
+};
+
+let reservations: Row[] = [];
+let hasNext = false;
 
 try {
-	reservations = await sql`
-		SELECT id, name, check_in, check_out, property
-		FROM reservations
-		ORDER BY check_in ASC
-		LIMIT 500
-	`;
+	const rows = (await (async () => {
+		if (filter === 'upcoming') {
+			return sql`
+				SELECT id, name, check_in, check_out, property
+				FROM reservations
+				WHERE check_in >= now()
+				ORDER BY check_in ASC
+				LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+			`;
+		}
+		if (filter === 'current') {
+			return sql`
+				SELECT id, name, check_in, check_out, property
+				FROM reservations
+				WHERE check_in <= now() AND check_out >= now()
+				ORDER BY check_in ASC
+				LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+			`;
+		}
+		if (filter === 'past') {
+			return sql`
+				SELECT id, name, check_in, check_out, property
+				FROM reservations
+				WHERE check_out < now()
+				ORDER BY check_in DESC
+				LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+			`;
+		}
+		return sql`
+			SELECT id, name, check_in, check_out, property
+			FROM reservations
+			ORDER BY check_in DESC
+			LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+		`;
+	})()) as Row[];
+	hasNext = rows.length > PAGE_SIZE;
+	reservations = rows.slice(0, PAGE_SIZE);
 } catch (e) {
 	error = e instanceof Error ? e.message : 'Failed to load reservations';
 	throw e;
 }
 
-const propertyLabel = (p: string) => p.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-const formatDate = (d: string) => new Date(d).toLocaleDateString();
+const buildLink = (params: Record<string, string | number | undefined>) => {
+	const url = new URL(Astro.url.pathname, Astro.url.origin);
+	if (filter !== 'upcoming') url.searchParams.set('filter', filter);
+	for (const [k, v] of Object.entries(params)) {
+		if (v === undefined || v === null || v === '') url.searchParams.delete(k);
+		else url.searchParams.set(k, String(v));
+	}
+	if (params.filter === 'upcoming') url.searchParams.delete('filter');
+	return url.pathname + (url.search ? url.search : '');
+};
+
+const filterTabs: { key: Filter; label: string }[] = [
+	{ key: 'upcoming', label: 'Upcoming' },
+	{ key: 'current', label: 'Current' },
+	{ key: 'past', label: 'Past' },
+	{ key: 'all', label: 'All' },
+];
 ---
 
 <AdminLayout>
 	<div class="flex justify-between items-center mb-8">
 		<div>
-			<h2 class="text-3xl font-bold text-gray-800">Reservations</h2>
-			<p class="text-gray-600 mt-2">Manage property bookings.</p>
+			<h2 class="text-3xl font-bold text-base-content">Reservations</h2>
+			<p class="text-base-content/70 mt-2">Manage property bookings.</p>
 		</div>
-		<a
-			href="/admin/reservations/create"
-			class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm"
-		>
-			+ New Reservation
-		</a>
+		<a href="/admin/reservations/create" class="btn btn-primary">+ New Reservation</a>
 	</div>
 
-	{error && <p class="text-red-500 text-sm mb-4">{error}</p>}
+	<FormAlert tone="error" message={error} />
 
-	<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-		<table class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-gray-50">
+	<div class="mb-4 flex gap-2">
+		{
+			filterTabs.map((tab) => {
+				const active = filter === tab.key;
+				return (
+					<a
+						href={buildLink({ filter: tab.key, page: undefined })}
+						class:list={[
+							'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+							active
+								? 'bg-primary text-primary-content'
+								: 'bg-base-100 text-base-content/70 border border-base-300 hover:text-primary',
+						]}
+					>
+						{tab.label}
+					</a>
+				);
+			})
+		}
+	</div>
+
+	<Card padding={false} class="overflow-hidden">
+		<table class="min-w-full divide-y divide-base-300">
+			<thead class="bg-base-200">
 				<tr>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Name</th
+						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Name
+					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Check In</th
+						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Check In
+					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Check Out</th
+						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Check Out
+					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Property</th
+						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Property
+					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-						>Actions</th
+						class="px-6 py-3 text-right text-xs font-medium text-base-content/70 uppercase tracking-wider"
 					>
+						Actions
+					</th>
 				</tr>
 			</thead>
-			<tbody class="bg-white divide-y divide-gray-200">
+			<tbody class="divide-y divide-base-300">
 				{
 					reservations.length === 0 ? (
 						<tr>
-							<td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-								No reservations found
+							<td colspan="5" class="px-6 py-8 text-center text-sm text-base-content/60">
+								No reservations found.
 							</td>
 						</tr>
 					) : (
 						reservations.map((r) => (
-							<tr class="hover:bg-gray-50 transition-colors">
-								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+							<tr class="hover:bg-base-200 transition-colors">
+								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
 									{r.name}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									{formatDate(r.check_in)}
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+									{formatReservationDateTime(r.check_in)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									{formatDate(r.check_out)}
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+									{formatReservationDateTime(r.check_out)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 									{propertyLabel(r.property)}
 								</td>
 								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 									<a
 										href={`/admin/reservations/edit?id=${r.id}`}
-										class="text-blue-600 hover:text-blue-900 mr-3"
+										class="text-primary hover:text-primary/80 mr-3"
 									>
 										Edit
 									</a>
-									<form method="POST" class="inline">
+									<form method="POST" class="inline" data-confirm-delete>
 										<input type="hidden" name="action" value="delete" />
 										<input type="hidden" name="id" value={r.id} />
-										<button
-											type="submit"
-											class="text-red-600 hover:text-red-900 cursor-pointer"
-											onclick="return confirm('Are you sure you want to delete this reservation?')"
-										>
+										<input type="hidden" name="guest_name" value={r.name} />
+										<button type="submit" class="text-error hover:text-error/80 cursor-pointer">
 											Delete
 										</button>
 									</form>
@@ -137,5 +219,39 @@ const formatDate = (d: string) => new Date(d).toLocaleDateString();
 				}
 			</tbody>
 		</table>
-	</div>
+	</Card>
+
+	{
+		(page > 1 || hasNext) && (
+			<div class="mt-4 flex items-center justify-between text-sm">
+				<span class="text-base-content/60">Page {page}</span>
+				<div class="flex gap-2">
+					{page > 1 ? (
+						<a href={buildLink({ page: page - 1 })} class="btn btn-ghost btn-sm">
+							← Previous
+						</a>
+					) : (
+						<span class="btn btn-ghost btn-sm btn-disabled">← Previous</span>
+					)}
+					{hasNext ? (
+						<a href={buildLink({ page: page + 1 })} class="btn btn-ghost btn-sm">
+							Next →
+						</a>
+					) : (
+						<span class="btn btn-ghost btn-sm btn-disabled">Next →</span>
+					)}
+				</div>
+			</div>
+		)
+	}
 </AdminLayout>
+
+<script>
+	document.addEventListener('submit', (event) => {
+		const form = event.target as HTMLFormElement | null;
+		if (!form || !form.hasAttribute('data-confirm-delete')) return;
+		const name = form.querySelector<HTMLInputElement>('input[name="guest_name"]')?.value ?? '';
+		const label = name ? `Delete reservation for ${name}?` : 'Delete this reservation?';
+		if (!confirm(label)) event.preventDefault();
+	});
+</script>
