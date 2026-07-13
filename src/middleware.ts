@@ -27,5 +27,13 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 		return context.redirect('/admin');
 	}
 
+	if (
+		user.mustChangePassword &&
+		pathname !== '/admin/account' &&
+		pathname !== '/admin/logout'
+	) {
+		return context.redirect('/admin/account?force=1');
+	}
+
 	return next();
 };

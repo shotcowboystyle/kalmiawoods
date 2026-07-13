@@ -80,6 +80,11 @@ await sql`
 `;
 
 await sql`
+	ALTER TABLE admin_users
+	ADD COLUMN IF NOT EXISTS must_change_password BOOLEAN NOT NULL DEFAULT false
+`;
+
+await sql`
 	CREATE TABLE IF NOT EXISTS admin_sessions (
 		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 		token TEXT UNIQUE NOT NULL,

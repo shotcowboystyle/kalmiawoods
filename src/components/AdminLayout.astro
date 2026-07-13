@@ -27,6 +27,7 @@ const isSuperAdmin = Astro.locals.user?.role === 'super_admin';
 						</a>
 					)
 				}
+				<a href="/admin/account" class="text-gray-600 hover:text-blue-600 font-medium">Account</a>
 			</nav>
 			<form method="POST" action="/admin/logout" class="mt-auto">
 				<button
