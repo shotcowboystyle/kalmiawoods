@@ -21,10 +21,13 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v7
 
-      - name: Setup Node.js 24.x
+      - name: Setup Node.js 22.x
+        # Vercel's Lambda runtime supports up to nodejs22.x — Astro's Vercel
+        # adapter emits `runtime: nodejsXX.x` based on the build's Node major,
+        # so we build on 22 to match what the deployed function can actually run.
         uses: actions/setup-node@v6
         with:
-          node-version: 24.18.0
+          node-version: 22
 
       - uses: pnpm/action-setup@v6
         name: Install pnpm
