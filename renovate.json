@@ -33,5 +33,6 @@
 		}
 	],
 	"prHourlyLimit": 5,
+	"prConcurrentLimit": 3,
 	"rangeStrategy": "bump"
 }
