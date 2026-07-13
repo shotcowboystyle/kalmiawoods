@@ -2,7 +2,7 @@
   "name": "kalmiawoods",
   "description": "A beautiful mountain vacation rental next to Lake Jocassee and Lake Keowee.",
   "version": "0.0.0",
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@11.12.0",
   "private": true,
   "type": "module",
   "scripts": {
