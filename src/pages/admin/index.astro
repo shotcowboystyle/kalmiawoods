@@ -1,6 +1,13 @@
 ---
 import AdminLayout from '../../components/AdminLayout.astro';
+import Card from '../../components/admin/Card.astro';
 import { getDb } from '../../lib/db';
+import {
+	formatReservationDate,
+	formatReservationDateTime,
+	propertyLabel,
+	toDateInputValue,
+} from '../../lib/reservations';
 
 export const prerender = false;
 
@@ -40,17 +47,25 @@ type SessionRow = {
 	role: string;
 };
 
+const UPCOMING_PAGE_SIZE = 10;
+const rawOffset = Number(Astro.url.searchParams.get('upcoming_offset') ?? '0');
+const upcomingOffset =
+	Number.isFinite(rawOffset) && rawOffset >= 0 ? Math.min(Math.floor(rawOffset), 10000) : 0;
+
 let reservations: ReservationRow[] = [];
+let upcomingHasMore = false;
 let loadError = '';
 
 try {
-	reservations = await sql`
+	const rows = (await sql`
 		SELECT id, name, check_in, check_out, property
 		FROM reservations
-		WHERE check_out >= CURRENT_DATE
+		WHERE check_out >= now()
 		ORDER BY check_in ASC
-		LIMIT 10
-	`;
+		LIMIT ${UPCOMING_PAGE_SIZE + 1} OFFSET ${upcomingOffset}
+	`) as ReservationRow[];
+	upcomingHasMore = rows.length > UPCOMING_PAGE_SIZE;
+	reservations = rows.slice(0, UPCOMING_PAGE_SIZE);
 } catch (e) {
 	loadError = e instanceof Error ? e.message : 'Failed to load reservations';
 }
@@ -61,7 +76,7 @@ try {
 	const rows = (await sql`
 		SELECT COUNT(*)::int AS n
 		FROM reservations
-		WHERE check_in <= CURRENT_DATE AND check_out >= CURRENT_DATE
+		WHERE check_in <= now() AND check_out > now()
 	`) as CountRow[];
 	checkedInNow = rows[0]?.n ?? 0;
 } catch (e) {
@@ -75,7 +90,7 @@ try {
 	const rows = (await sql`
 		SELECT COUNT(*)::int AS n
 		FROM reservations
-		WHERE check_in > CURRENT_DATE AND check_in <= CURRENT_DATE + INTERVAL '30 days'
+		WHERE check_in > now() AND check_in <= now() + INTERVAL '30 days'
 	`) as CountRow[];
 	upcoming30 = rows[0]?.n ?? 0;
 } catch (e) {
@@ -89,7 +104,7 @@ try {
 	const rows = (await sql`
 		SELECT COUNT(*)::int AS n
 		FROM reservations
-		WHERE EXTRACT(YEAR FROM check_in) = EXTRACT(YEAR FROM CURRENT_DATE)
+		WHERE EXTRACT(YEAR FROM check_in) = EXTRACT(YEAR FROM now())
 	`) as CountRow[];
 	thisYearCount = rows[0]?.n ?? 0;
 } catch (e) {
@@ -103,13 +118,13 @@ try {
 	const rows = (await sql`
 		SELECT COALESCE(SUM(
 			GREATEST(0,
-				LEAST(check_out, (CURRENT_DATE + INTERVAL '30 days')::date)
-				- GREATEST(check_in, CURRENT_DATE)
+				LEAST(check_out::date, (CURRENT_DATE + INTERVAL '30 days')::date)
+				- GREATEST(check_in::date, CURRENT_DATE)
 			)
 		), 0)::int AS n
 		FROM reservations
-		WHERE check_out >= CURRENT_DATE
-		  AND check_in <= CURRENT_DATE + INTERVAL '30 days'
+		WHERE check_out >= now()
+		  AND check_in <= now() + INTERVAL '30 days'
 	`) as CountRow[];
 	nightsNext30 = rows[0]?.n ?? 0;
 } catch (e) {
@@ -123,8 +138,8 @@ try {
 	occupancyRows = (await sql`
 		SELECT id, name, property, check_in, check_out
 		FROM reservations
-		WHERE check_out >= date_trunc('month', CURRENT_DATE)::date
-		  AND check_in  <  (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month')::date
+		WHERE check_out >= date_trunc('month', CURRENT_DATE)::timestamptz
+		  AND check_in  <  (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month')::timestamptz
 		ORDER BY check_in ASC
 		LIMIT 200
 	`) as ReservationRow[];
@@ -139,9 +154,9 @@ try {
 	propertyBreakdown = (await sql`
 		SELECT property,
 		       COUNT(*)::int AS reservation_count,
-		       COALESCE(SUM(check_out - check_in), 0)::int AS nights
+		       COALESCE(SUM(check_out::date - check_in::date), 0)::int AS nights
 		FROM reservations
-		WHERE EXTRACT(YEAR FROM check_in) = EXTRACT(YEAR FROM CURRENT_DATE)
+		WHERE EXTRACT(YEAR FROM check_in) = EXTRACT(YEAR FROM now())
 		GROUP BY property
 		ORDER BY property
 	`) as PropertyBreakdownRow[];
@@ -209,19 +224,12 @@ if (isSuperAdmin) {
 	}
 }
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const propertyLabel = (p: string) => p.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-const formatDate = (d: string) =>
-	new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
+const now = new Date();
 const isCurrent = (r: ReservationRow) => {
-	const checkIn = new Date(r.check_in);
-	const checkOut = new Date(r.check_out);
-	checkIn.setHours(0, 0, 0, 0);
-	checkOut.setHours(0, 0, 0, 0);
-	return checkIn <= today && today <= checkOut;
+	const checkIn = new Date(r.check_in).getTime();
+	const checkOut = new Date(r.check_out).getTime();
+	const t = now.getTime();
+	return checkIn <= t && t <= checkOut;
 };
 
 const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
@@ -237,144 +245,157 @@ const relativeTime = (iso: string) => {
 	return rtf.format(Math.round(diffSec / 31536000), 'year');
 };
 
-// Occupancy grid data
-const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+// Occupancy grid data (computed in America/New_York wall-clock)
+const nowInET = new Date(
+	new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
+);
+const monthStart = new Date(nowInET.getFullYear(), nowInET.getMonth(), 1);
+const monthEnd = new Date(nowInET.getFullYear(), nowInET.getMonth() + 1, 0);
 const daysInMonth = monthEnd.getDate();
 const monthLabel = monthStart.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-const todayDay = today.getDate();
+const todayDay = nowInET.getDate();
+const monthYear = nowInET.getFullYear();
+const monthNumber = nowInET.getMonth();
 
 const occupancyProperties: { key: string; label: string }[] = [
 	{ key: 'main_house', label: 'Main House' },
 	{ key: 'workshop', label: 'Workshop' },
 ];
 
+function ymd(y: number, mIdx: number, d: number): string {
+	return `${y}-${String(mIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+
 function isDayBooked(propertyKey: string, day: number): boolean {
-	const dayDate = new Date(today.getFullYear(), today.getMonth(), day);
-	dayDate.setHours(0, 0, 0, 0);
+	const dayStr = ymd(monthYear, monthNumber, day);
 	return occupancyRows.some((r) => {
 		if (r.property !== propertyKey && r.property !== 'both') return false;
-		const ci = new Date(r.check_in);
-		const co = new Date(r.check_out);
-		ci.setHours(0, 0, 0, 0);
-		co.setHours(0, 0, 0, 0);
-		return ci <= dayDate && dayDate < co;
+		const ciStr = toDateInputValue(r.check_in);
+		const coStr = toDateInputValue(r.check_out);
+		return ciStr <= dayStr && dayStr < coStr;
 	});
 }
+
+const buildUpcomingLink = (offset: number) => {
+	const url = new URL(Astro.url.pathname, Astro.url.origin);
+	if (offset > 0) url.searchParams.set('upcoming_offset', String(offset));
+	return url.pathname + (url.search ? url.search : '');
+};
 ---
 
 <AdminLayout>
 	<div class="mb-8">
-		<h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
-		<p class="text-gray-600 mt-2">Welcome back. Manage your reservations and users here.</p>
+		<h2 class="text-3xl font-bold text-base-content">Dashboard</h2>
+		<p class="text-base-content/70 mt-2">Welcome back. Manage your reservations and users here.</p>
 	</div>
 
 	<!-- Quick Stats -->
 	<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-			<p class="text-sm text-gray-500">Currently checked in</p>
+		<Card>
+			<p class="text-sm text-base-content/60">Currently checked in</p>
 			{
 				checkedInError ? (
-					<p class="text-sm text-red-500 mt-1">{checkedInError}</p>
+					<p class="text-sm text-error mt-1">{checkedInError}</p>
 				) : (
-					<p class="text-3xl font-bold text-gray-900 mt-1">{checkedInNow}</p>
+					<p class="text-3xl font-bold text-base-content mt-1">{checkedInNow}</p>
 				)
 			}
-		</div>
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-			<p class="text-sm text-gray-500">Upcoming (next 30 days)</p>
+		</Card>
+		<Card>
+			<p class="text-sm text-base-content/60">Upcoming (next 30 days)</p>
 			{
 				upcoming30Error ? (
-					<p class="text-sm text-red-500 mt-1">{upcoming30Error}</p>
+					<p class="text-sm text-error mt-1">{upcoming30Error}</p>
 				) : (
-					<p class="text-3xl font-bold text-gray-900 mt-1">{upcoming30}</p>
+					<p class="text-3xl font-bold text-base-content mt-1">{upcoming30}</p>
 				)
 			}
-		</div>
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-			<p class="text-sm text-gray-500">Reservations this year</p>
+		</Card>
+		<Card>
+			<p class="text-sm text-base-content/60">Reservations this year</p>
 			{
 				thisYearError ? (
-					<p class="text-sm text-red-500 mt-1">{thisYearError}</p>
+					<p class="text-sm text-error mt-1">{thisYearError}</p>
 				) : (
-					<p class="text-3xl font-bold text-gray-900 mt-1">{thisYearCount}</p>
+					<p class="text-3xl font-bold text-base-content mt-1">{thisYearCount}</p>
 				)
 			}
-		</div>
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-			<p class="text-sm text-gray-500">Nights booked (next 30d)</p>
+		</Card>
+		<Card>
+			<p class="text-sm text-base-content/60">Nights booked (next 30d)</p>
 			{
 				nightsNext30Error ? (
-					<p class="text-sm text-red-500 mt-1">{nightsNext30Error}</p>
+					<p class="text-sm text-error mt-1">{nightsNext30Error}</p>
 				) : (
-					<p class="text-3xl font-bold text-gray-900 mt-1">{nightsNext30}</p>
+					<p class="text-3xl font-bold text-base-content mt-1">{nightsNext30}</p>
 				)
 			}
-		</div>
+		</Card>
 	</div>
 
 	<!-- Current & Upcoming Reservations -->
-	<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-		<div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-			<h3 class="text-lg font-semibold text-gray-800">Current & Upcoming Reservations</h3>
-			<a href="/admin/reservations" class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+	<Card padding={false} class="overflow-hidden mb-6">
+		<div class="flex justify-between items-center px-6 py-4 border-b border-base-300">
+			<h3 class="text-lg font-semibold text-base-content">Current & Upcoming Reservations</h3>
+			<a href="/admin/reservations" class="text-sm text-primary hover:text-primary/80 font-medium"
 				>View all →</a
 			>
 		</div>
 		{
 			loadError ? (
-				<p class="px-6 py-4 text-sm text-red-500">{loadError}</p>
+				<p class="px-6 py-4 text-sm text-error">{loadError}</p>
 			) : reservations.length === 0 ? (
-				<p class="px-6 py-8 text-sm text-gray-500 text-center">
-					No current or upcoming reservations.
+				<p class="px-6 py-8 text-sm text-base-content/60 text-center">
+					{upcomingOffset === 0
+						? 'No current or upcoming reservations.'
+						: 'No more upcoming reservations.'}
 				</p>
 			) : (
-				<table class="min-w-full divide-y divide-gray-200">
-					<thead class="bg-gray-50">
+				<table class="min-w-full divide-y divide-base-300">
+					<thead class="bg-base-200">
 						<tr>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Status
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Name
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Check In
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Check Out
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Property
 							</th>
 						</tr>
 					</thead>
-					<tbody class="bg-white divide-y divide-gray-200">
+					<tbody class="divide-y divide-base-300">
 						{reservations.map((r) => {
 							const current = isCurrent(r);
 							return (
-								<tr class="hover:bg-gray-50 transition-colors">
+								<tr class="hover:bg-base-200 transition-colors">
 									<td class="px-6 py-4 whitespace-nowrap">
 										<span
-											class={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-												current
-													? 'bg-green-100 text-green-800'
-													: 'bg-blue-100 text-blue-800'
-											}`}
+											class:list={[
+												'badge badge-sm',
+												current ? 'badge-success' : 'badge-info',
+											]}
 										>
 											{current ? 'Current' : 'Upcoming'}
 										</span>
 									</td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
 										{r.name}
 									</td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{formatDate(r.check_in)}
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+										{formatReservationDateTime(r.check_in)}
 									</td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{formatDate(r.check_out)}
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+										{formatReservationDateTime(r.check_out)}
 									</td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 										{propertyLabel(r.property)}
 									</td>
 								</tr>
@@ -384,24 +405,55 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 				</table>
 			)
 		}
-	</div>
+		{
+			(upcomingOffset > 0 || upcomingHasMore) && (
+				<div class="flex items-center justify-between px-6 py-3 border-t border-base-300 text-sm">
+					<span class="text-base-content/60">
+						Showing {upcomingOffset + 1}
+						{reservations.length > 0 ? `–${upcomingOffset + reservations.length}` : ''}
+					</span>
+					<div class="flex gap-2">
+						{upcomingOffset > 0 ? (
+							<a
+								href={buildUpcomingLink(Math.max(0, upcomingOffset - UPCOMING_PAGE_SIZE))}
+								class="btn btn-ghost btn-sm"
+							>
+								← Previous
+							</a>
+						) : (
+							<span class="btn btn-ghost btn-sm btn-disabled">← Previous</span>
+						)}
+						{upcomingHasMore ? (
+							<a
+								href={buildUpcomingLink(upcomingOffset + UPCOMING_PAGE_SIZE)}
+								class="btn btn-ghost btn-sm"
+							>
+								Next →
+							</a>
+						) : (
+							<span class="btn btn-ghost btn-sm btn-disabled">Next →</span>
+						)}
+					</div>
+				</div>
+			)
+		}
+	</Card>
 
 	<!-- Occupancy + Property Breakdown -->
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-		<!-- Occupancy This Month -->
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-			<div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-				<h3 class="text-lg font-semibold text-gray-800">Occupancy — {monthLabel}</h3>
+		<Card padding={false} class="overflow-hidden">
+			<div class="flex justify-between items-center px-6 py-4 border-b border-base-300">
+				<h3 class="text-lg font-semibold text-base-content">Occupancy — {monthLabel}</h3>
 			</div>
 			<div class="p-6">
 				{
 					occupancyError ? (
-						<p class="text-sm text-red-500">{occupancyError}</p>
+						<p class="text-sm text-error">{occupancyError}</p>
 					) : (
 						<div class="space-y-3">
 							{occupancyProperties.map((prop) => (
 								<div>
-									<p class="text-xs font-medium text-gray-600 mb-1">{prop.label}</p>
+									<p class="text-xs font-medium text-base-content/70 mb-1">{prop.label}</p>
 									<div class="flex flex-wrap gap-1">
 										{Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
 											const booked = isDayBooked(prop.key, day);
@@ -409,13 +461,13 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 											return (
 												<div
 													title={`${prop.label} · Day ${day}${booked ? ' · Booked' : ''}`}
-													class={[
+													class:list={[
 														'w-6 h-6 rounded text-[10px] leading-6 text-center',
-														booked ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500',
-														isToday ? 'ring-2 ring-blue-600' : '',
-													]
-														.filter(Boolean)
-														.join(' ')}
+														booked
+															? 'bg-primary text-primary-content'
+															: 'bg-base-200 text-base-content/60',
+														isToday && 'ring-2 ring-primary',
+													]}
 												>
 													{day}
 												</div>
@@ -424,123 +476,125 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 									</div>
 								</div>
 							))}
-							<div class="flex items-center gap-4 pt-2 text-xs text-gray-500">
+							<div class="flex items-center gap-4 pt-2 text-xs text-base-content/60">
 								<span class="flex items-center gap-1">
-									<span class="inline-block w-3 h-3 rounded bg-blue-500" /> Booked
+									<span class="inline-block w-3 h-3 rounded bg-primary" /> Booked
 								</span>
 								<span class="flex items-center gap-1">
-									<span class="inline-block w-3 h-3 rounded bg-gray-100 border border-gray-200" />{' '}
+									<span class="inline-block w-3 h-3 rounded bg-base-200 border border-base-300" />
 									Free
 								</span>
 								<span class="flex items-center gap-1">
-									<span class="inline-block w-3 h-3 rounded ring-2 ring-blue-600" /> Today
+									<span class="inline-block w-3 h-3 rounded ring-2 ring-primary" /> Today
 								</span>
 							</div>
 						</div>
 					)
 				}
 			</div>
-		</div>
+		</Card>
 
-		<!-- Property Breakdown -->
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-			<div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-				<h3 class="text-lg font-semibold text-gray-800">Property Breakdown (this year)</h3>
+		<Card padding={false} class="overflow-hidden">
+			<div class="flex justify-between items-center px-6 py-4 border-b border-base-300">
+				<h3 class="text-lg font-semibold text-base-content">Property Breakdown (this year)</h3>
 			</div>
 			{
 				propertyBreakdownError ? (
-					<p class="px-6 py-4 text-sm text-red-500">{propertyBreakdownError}</p>
+					<p class="px-6 py-4 text-sm text-error">{propertyBreakdownError}</p>
 				) : propertyBreakdown.length === 0 ? (
-					<p class="px-6 py-8 text-sm text-gray-500 text-center">No reservations this year.</p>
+					<p class="px-6 py-8 text-sm text-base-content/60 text-center">
+						No reservations this year.
+					</p>
 				) : (
-					<table class="min-w-full divide-y divide-gray-200">
-						<thead class="bg-gray-50">
+					<table class="min-w-full divide-y divide-base-300">
+						<thead class="bg-base-200">
 							<tr>
-								<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 									Property
 								</th>
-								<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 									Reservations
 								</th>
-								<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 									Nights
 								</th>
 							</tr>
 						</thead>
-						<tbody class="bg-white divide-y divide-gray-200">
+						<tbody class="divide-y divide-base-300">
 							{propertyBreakdown.map((row) => (
-								<tr class="hover:bg-gray-50 transition-colors">
-									<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+								<tr class="hover:bg-base-200 transition-colors">
+									<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
 										{propertyLabel(row.property)}
 									</td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 										{row.reservation_count}
 									</td>
-									<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.nights}</td>
+									<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+										{row.nights}
+									</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
 				)
 			}
-		</div>
+		</Card>
 	</div>
 
 	<!-- Recent Activity -->
-	<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-		<div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-			<h3 class="text-lg font-semibold text-gray-800">Recent Activity</h3>
+	<Card padding={false} class="overflow-hidden mb-6">
+		<div class="flex justify-between items-center px-6 py-4 border-b border-base-300">
+			<h3 class="text-lg font-semibold text-base-content">Recent Activity</h3>
 		</div>
 		{
 			recentActivityError ? (
-				<p class="px-6 py-4 text-sm text-red-500">{recentActivityError}</p>
+				<p class="px-6 py-4 text-sm text-error">{recentActivityError}</p>
 			) : recentActivity.length === 0 ? (
-				<p class="px-6 py-8 text-sm text-gray-500 text-center">No activity yet.</p>
+				<p class="px-6 py-8 text-sm text-base-content/60 text-center">No activity yet.</p>
 			) : (
-				<table class="min-w-full divide-y divide-gray-200">
-					<thead class="bg-gray-50">
+				<table class="min-w-full divide-y divide-base-300">
+					<thead class="bg-base-200">
 						<tr>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Action
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Name
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Property
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								Dates
 							</th>
-							<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 								When
 							</th>
 						</tr>
 					</thead>
-					<tbody class="bg-white divide-y divide-gray-200">
+					<tbody class="divide-y divide-base-300">
 						{recentActivity.map((row) => (
-							<tr class="hover:bg-gray-50 transition-colors">
+							<tr class="hover:bg-base-200 transition-colors">
 								<td class="px-6 py-4 whitespace-nowrap">
 									<span
-										class={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-											row.was_updated
-												? 'bg-amber-100 text-amber-800'
-												: 'bg-emerald-100 text-emerald-800'
-										}`}
+										class:list={[
+											'badge badge-sm',
+											row.was_updated ? 'badge-warning' : 'badge-success',
+										]}
 									>
 										{row.was_updated ? 'Updated' : 'Created'}
 									</span>
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
 									{row.name}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 									{propertyLabel(row.property)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									{formatDate(row.check_in)} → {formatDate(row.check_out)}
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+									{formatReservationDate(row.check_in)} → {formatReservationDate(row.check_out)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 									{relativeTime(row.last_change)}
 								</td>
 							</tr>
@@ -549,24 +603,24 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 				</table>
 			)
 		}
-	</div>
+	</Card>
 
 	{
 		isSuperAdmin && (
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-				<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-					<div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-						<h3 class="text-lg font-semibold text-gray-800">Admin Team</h3>
+				<Card padding={false} class="overflow-hidden">
+					<div class="flex justify-between items-center px-6 py-4 border-b border-base-300">
+						<h3 class="text-lg font-semibold text-base-content">Admin Team</h3>
 						<a
 							href="/admin/users"
-							class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+							class="text-sm text-primary hover:text-primary/80 font-medium"
 						>
 							Manage →
 						</a>
 					</div>
 					<div class="p-6">
 						{teamError ? (
-							<p class="text-sm text-red-500">{teamError}</p>
+							<p class="text-sm text-error">{teamError}</p>
 						) : (
 							<>
 								<div class="flex gap-6 mb-4">
@@ -574,27 +628,27 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 										const found = teamCounts.find((t) => t.role === role);
 										return (
 											<div>
-												<p class="text-xs text-gray-500 uppercase tracking-wider">
+												<p class="text-xs text-base-content/60 uppercase tracking-wider">
 													{role.replace('_', ' ')}
 												</p>
-												<p class="text-2xl font-bold text-gray-900">{found?.n ?? 0}</p>
+												<p class="text-2xl font-bold text-base-content">{found?.n ?? 0}</p>
 											</div>
 										);
 									})}
 								</div>
 								{recentAdmins.length > 0 && (
 									<div>
-										<p class="text-xs font-medium text-gray-600 mb-2">Recently added</p>
+										<p class="text-xs font-medium text-base-content/70 mb-2">Recently added</p>
 										<ul class="space-y-1">
 											{recentAdmins.map((a) => (
-												<li class="text-sm text-gray-700 flex justify-between">
+												<li class="text-sm text-base-content/80 flex justify-between">
 													<span>
 														{a.email}
-														<span class="ml-2 text-xs text-gray-500">
+														<span class="ml-2 text-xs text-base-content/60">
 															({a.role.replace('_', ' ')})
 														</span>
 													</span>
-													<span class="text-xs text-gray-500">
+													<span class="text-xs text-base-content/60">
 														{relativeTime(a.created_at)}
 													</span>
 												</li>
@@ -605,48 +659,48 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 							</>
 						)}
 					</div>
-				</div>
+				</Card>
 
-				<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-					<div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-						<h3 class="text-lg font-semibold text-gray-800">Active Sessions</h3>
-						<span class="text-sm text-gray-500">{activeSessionCount} active</span>
+				<Card padding={false} class="overflow-hidden">
+					<div class="flex justify-between items-center px-6 py-4 border-b border-base-300">
+						<h3 class="text-lg font-semibold text-base-content">Active Sessions</h3>
+						<span class="text-sm text-base-content/60">{activeSessionCount} active</span>
 					</div>
 					{sessionError ? (
-						<p class="px-6 py-4 text-sm text-red-500">{sessionError}</p>
+						<p class="px-6 py-4 text-sm text-error">{sessionError}</p>
 					) : recentSessions.length === 0 ? (
-						<p class="px-6 py-8 text-sm text-gray-500 text-center">No active sessions.</p>
+						<p class="px-6 py-8 text-sm text-base-content/60 text-center">No active sessions.</p>
 					) : (
-						<table class="min-w-full divide-y divide-gray-200">
-							<thead class="bg-gray-50">
+						<table class="min-w-full divide-y divide-base-300">
+							<thead class="bg-base-200">
 								<tr>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 										Email
 									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 										Role
 									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 										Signed in
 									</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									<th class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider">
 										Expires
 									</th>
 								</tr>
 							</thead>
-							<tbody class="bg-white divide-y divide-gray-200">
+							<tbody class="divide-y divide-base-300">
 								{recentSessions.map((s) => (
-									<tr class="hover:bg-gray-50 transition-colors">
-										<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+									<tr class="hover:bg-base-200 transition-colors">
+										<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
 											{s.email}
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 											{s.role.replace('_', ' ')}
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 											{relativeTime(s.created_at)}
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
 											{relativeTime(s.expires_at)}
 										</td>
 									</tr>
@@ -654,7 +708,7 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 							</tbody>
 						</table>
 					)}
-				</div>
+				</Card>
 			</div>
 		)
 	}
@@ -662,19 +716,19 @@ function isDayBooked(propertyKey: string, day: number): boolean {
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 		<a
 			href="/admin/reservations"
-			class="block p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+			class="block p-6 bg-base-100 border border-base-300 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
 		>
-			<h3 class="text-xl font-semibold text-gray-800 mb-2">Reservations</h3>
-			<p class="text-gray-600">View, create, and edit property reservations.</p>
+			<h3 class="text-xl font-semibold text-base-content mb-2">Reservations</h3>
+			<p class="text-base-content/70">View, create, and edit property reservations.</p>
 		</a>
 		{
 			isSuperAdmin && (
 				<a
 					href="/admin/users"
-					class="block p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+					class="block p-6 bg-base-100 border border-base-300 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
 				>
-					<h3 class="text-xl font-semibold text-gray-800 mb-2">Admin Users</h3>
-					<p class="text-gray-600">Manage administrator access to this system.</p>
+					<h3 class="text-xl font-semibold text-base-content mb-2">Admin Users</h3>
+					<p class="text-base-content/70">Manage administrator access to this system.</p>
 				</a>
 			)
 		}

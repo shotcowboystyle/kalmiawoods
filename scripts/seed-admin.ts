@@ -102,12 +102,17 @@ await sql`
 	CREATE TABLE IF NOT EXISTS reservations (
 		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 		name TEXT NOT NULL,
-		check_in DATE NOT NULL,
-		check_out DATE NOT NULL,
+		check_in TIMESTAMPTZ NOT NULL,
+		check_out TIMESTAMPTZ NOT NULL,
 		property TEXT NOT NULL CHECK (property IN ('main_house', 'workshop', 'both')),
 		created_at TIMESTAMPTZ DEFAULT now(),
 		updated_at TIMESTAMPTZ DEFAULT now()
 	)
+`;
+
+await sql`
+	CREATE INDEX IF NOT EXISTS idx_reservations_property_dates
+	ON reservations (property, check_in, check_out)
 `;
 
 // Create admin user

@@ -1,5 +1,7 @@
 ---
 import '../../styles/base.css';
+import FormAlert from '../../components/admin/FormAlert.astro';
+import SubmitButton from '../../components/admin/SubmitButton.astro';
 import {
 	createSession,
 	sessionCookieName,
@@ -12,7 +14,6 @@ export const prerender = false;
 
 let error = '';
 
-// If already logged in, redirect
 const existingToken = Astro.cookies.get(sessionCookieName())?.value;
 if (existingToken) {
 	const user = await validateSession(existingToken);
@@ -42,35 +43,43 @@ if (Astro.request.method === 'POST') {
 		<meta name="viewport" content="width=device-width" />
 		<meta name="robots" content="noindex, nofollow" />
 		<title>Admin Login - Kalmia Woods</title>
+		<script is:inline>
+			document.documentElement.setAttribute('data-theme', 'dark');
+			document.documentElement.style.colorScheme = 'dark';
+		</script>
 	</head>
-	<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans">
-		<div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-100">
-			<h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Admin Login</h1>
-			<form method="POST" class="flex flex-col gap-4">
+	<body class="bg-base-200 text-base-content flex items-center justify-center min-h-screen font-sans">
+		<div class="bg-base-100 p-8 rounded-xl shadow-lg w-full max-w-md border border-base-300">
+			<h1 class="text-3xl font-bold text-center text-base-content mb-8">Admin Login</h1>
+			<FormAlert tone="error" message={error} />
+			<form method="POST" class="flex flex-col gap-4" novalidate>
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+					<label for="email" class="block text-sm font-medium text-base-content mb-1">Email</label>
 					<input
+						id="email"
 						type="email"
 						name="email"
-						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						autocomplete="email"
+						aria-invalid={error ? 'true' : undefined}
+						class="input input-bordered w-full bg-base-100"
 						required
 					/>
 				</div>
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+					<label for="password" class="block text-sm font-medium text-base-content mb-1">
+						Password
+					</label>
 					<input
+						id="password"
 						type="password"
 						name="password"
-						class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+						autocomplete="current-password"
+						aria-invalid={error ? 'true' : undefined}
+						class="input input-bordered w-full bg-base-100"
 						required
 					/>
 				</div>
-				<button
-					type="submit"
-					class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors mt-2 cursor-pointer"
-					>Login</button
-				>
-				{error && <p class="text-red-500 text-sm text-center">{error}</p>}
+				<SubmitButton label="Login" labelSubmitting="Signing in…" class="w-full mt-2" />
 			</form>
 		</div>
 	</body>
