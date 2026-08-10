@@ -34,7 +34,7 @@
     "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^25.9.5",
-    "astro-compress": "^2.4.1",
+    "astro-compress": "^2.4.3",
     "astro-eslint-parser": "^1.4.0",
     "commitizen": "^4.3.2",
     "conventional-changelog-conventionalcommits": "^10.2.1",
