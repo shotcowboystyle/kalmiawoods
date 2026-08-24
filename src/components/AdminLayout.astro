@@ -1,5 +1,12 @@
 ---
-import '../styles/base.css';
+import '../styles/admin.css';
+import PwaHead from './admin/PwaHead.astro';
+import UpdateBanner from './admin/UpdateBanner.astro';
+
+interface Props {
+	/** Overrides the title derived from the matched nav item. */
+	title?: string;
+}
 
 const isSuperAdmin = Astro.locals.user?.role === 'super_admin';
 const userEmail = Astro.locals.user?.email;
@@ -27,66 +34,271 @@ const navItems = [
 		match: (p: string) => p.startsWith('/admin/account'),
 	},
 ];
+
+const pageTitle =
+	Astro.props.title ?? navItems.find((item) => item.match(pathname))?.label ?? 'Admin';
 ---
 
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="robots" content="noindex, nofollow" />
-		<title>Admin Dashboard</title>
-		<script is:inline>
-			document.documentElement.setAttribute('data-theme', 'dark');
-			document.documentElement.style.colorScheme = 'dark';
-		</script>
+		<PwaHead title={`${pageTitle} - KW Admin`} />
 	</head>
-	<body class="bg-base-200 text-base-content min-h-screen font-sans antialiased flex">
-		<aside class="w-64 bg-base-100 border-r border-base-300 p-6 flex flex-col gap-4">
-			<h1 class="text-2xl font-bold text-base-content">Admin</h1>
-			<nav class="flex flex-col gap-1 mt-4">
-				{
-					navItems.map((item) => {
-						const active = item.match(pathname);
-						return (
-							<a
-								href={item.href}
-								aria-current={active ? 'page' : undefined}
-								class:list={[
-									'px-3 py-2 rounded-lg font-medium transition-colors',
-									active
-										? 'bg-primary/10 text-primary'
-										: 'text-base-content/70 hover:text-primary hover:bg-base-200',
-								]}
-							>
-								{item.label}
-							</a>
-						);
-					})
-				}
-			</nav>
-			<div class="mt-auto flex flex-col gap-3">
-				{
-					userEmail && (
-						<p class="text-xs text-base-content/60 break-all" title={userEmail}>
-							Signed in as
-							<br />
-							<span class="text-base-content/80">{userEmail}</span>
-						</p>
-					)
-				}
-				<form method="POST" action="/admin/logout">
-					<button
-						type="submit"
-						class="w-full text-left text-error hover:text-error/80 font-medium cursor-pointer"
+	<body class="bg-base-200 text-base-content font-sans antialiased">
+		<UpdateBanner />
+
+		<a
+			href="#admin-content"
+			class="admin-skip-link"
+			>Skip to content</a
+		>
+
+		<div class="app-shell">
+			{
+				/*
+				One nav, two behaviours: a static column at lg+, an off-canvas drawer
+				below it. The dialog semantics are added by script only while it is
+				acting as a drawer — a permanently-visible sidebar is not a dialog.
+			*/
+			}
+			<aside
+				id="admin-nav"
+				class="app-sidebar bg-base-100 border-base-300 fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col gap-4 border-r pr-6 transition-transform duration-200 lg:static lg:translate-x-0"
+				aria-label="Admin navigation"
+			>
+				<h1 class="text-base-content text-2xl font-bold">Admin</h1>
+
+				<nav class="mt-4 flex flex-col gap-1">
+					{
+						navItems.map((item) => {
+							const active = item.match(pathname);
+							return (
+								<a
+									href={item.href}
+									aria-current={active ? 'page' : undefined}
+									class:list={[
+										'flex items-center rounded-lg px-3 py-2 font-medium transition-colors',
+										active
+											? 'bg-primary/10 text-primary'
+											: 'text-base-content/70 hover:text-primary hover:bg-base-200',
+									]}
+								>
+									{item.label}
+								</a>
+							);
+						})
+					}
+				</nav>
+
+				<div class="mt-auto flex flex-col gap-3">
+					{
+						userEmail && (
+							<p class="text-base-content/60 text-xs break-all">
+								Signed in as
+								<br />
+								<span class="text-base-content/80 selectable">{userEmail}</span>
+							</p>
+						)
+					}
+					<form
+						method="POST"
+						action="/admin/logout"
 					>
-						Logout
-					</button>
-				</form>
+						<button
+							type="submit"
+							class="text-error hover:text-error/80 w-full cursor-pointer text-left font-medium"
+						>
+							Logout
+						</button>
+					</form>
+				</div>
+			</aside>
+
+			{/* Scrim: closes the drawer, and blocks taps reaching the content behind it. */}
+			<div
+				id="admin-scrim"
+				hidden
+				class="fixed inset-0 z-30 bg-black/50 lg:hidden"
+				aria-hidden="true"
+			>
 			</div>
-		</aside>
-		<main class="flex-1 p-8 overflow-y-auto">
-			<slot />
-		</main>
+
+			<div class="app-main">
+				<header
+					class="bg-base-100 border-base-300 safe-top safe-x flex shrink-0 items-center gap-3 border-b pb-3"
+				>
+					<button
+						type="button"
+						id="admin-nav-toggle"
+						class="btn btn-square btn-ghost lg:hidden"
+						aria-controls="admin-nav"
+						aria-expanded="false"
+						aria-label="Open navigation"
+						data-no-callout
+					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							class="h-6 w-6"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+						>
+							<path d="M4 7h16M4 12h16M4 17h16"></path>
+						</svg>
+					</button>
+
+					<h2 class="flex-1 truncate text-lg font-semibold">{pageTitle}</h2>
+
+					<span
+						id="admin-offline-chip"
+						hidden
+						class="badge badge-warning badge-sm shrink-0 gap-1"
+						role="status"
+						>Offline</span
+					>
+				</header>
+
+				<main
+					id="admin-content"
+					class="app-content safe-x pt-6"
+				>
+					<slot />
+				</main>
+			</div>
+		</div>
+
+		<script>
+			const nav = document.getElementById('admin-nav') as HTMLElement | null;
+			const toggle = document.getElementById('admin-nav-toggle') as HTMLButtonElement | null;
+			const scrim = document.getElementById('admin-scrim') as HTMLElement | null;
+
+			const DRAWER_QUERY = '(width < 64rem)';
+			const isDrawer = () => window.matchMedia(DRAWER_QUERY).matches;
+
+			let lastFocused: HTMLElement | null = null;
+
+			function focusables(): HTMLElement[] {
+				if (!nav) return [];
+				// getClientRects rather than offsetParent: the drawer is position:fixed,
+				// which makes offsetParent null for everything inside it.
+				return [...nav.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter(
+					(el) => el.getClientRects().length > 0,
+				);
+			}
+
+			function openDrawer() {
+				if (!nav || !toggle || !scrim) return;
+				lastFocused = document.activeElement as HTMLElement | null;
+				nav.classList.remove('-translate-x-full');
+				// Dialog semantics only while it is a drawer; the lg+ sidebar is
+				// permanently visible and must not be announced as a modal.
+				nav.setAttribute('role', 'dialog');
+				nav.setAttribute('aria-modal', 'true');
+				scrim.hidden = false;
+				toggle.setAttribute('aria-expanded', 'true');
+				toggle.setAttribute('aria-label', 'Close navigation');
+				focusables()[0]?.focus();
+			}
+
+			function closeDrawer() {
+				if (!nav || !toggle || !scrim) return;
+				nav.classList.add('-translate-x-full');
+				nav.removeAttribute('role');
+				nav.removeAttribute('aria-modal');
+				scrim.hidden = true;
+				toggle.setAttribute('aria-expanded', 'false');
+				toggle.setAttribute('aria-label', 'Open navigation');
+				lastFocused?.focus();
+				lastFocused = null;
+			}
+
+			const isOpen = () => toggle?.getAttribute('aria-expanded') === 'true';
+
+			// pointerdown, not click: the touchstart handler below preventDefaults on
+			// [data-no-callout] elements to suppress iOS's Copy/Look Up bar, which
+			// also suppresses the click that would otherwise follow.
+			toggle?.addEventListener('pointerdown', (event) => {
+				event.preventDefault();
+				if (isOpen()) closeDrawer();
+				else openDrawer();
+			});
+
+			scrim?.addEventListener('pointerdown', closeDrawer);
+
+			document.addEventListener('keydown', (event) => {
+				if (!isOpen()) return;
+
+				if (event.key === 'Escape') {
+					closeDrawer();
+					return;
+				}
+
+				if (event.key !== 'Tab') return;
+
+				const items = focusables();
+				if (items.length === 0) return;
+
+				const first = items[0]!;
+				const last = items[items.length - 1]!;
+				const active = document.activeElement;
+
+				if (event.shiftKey && active === first) {
+					event.preventDefault();
+					last.focus();
+				} else if (!event.shiftKey && active === last) {
+					event.preventDefault();
+					first.focus();
+				}
+			});
+
+			// Resizing past the breakpoint leaves the drawer state stale: the aside
+			// becomes a static sidebar but keeps role="dialog" and the scrim.
+			window.matchMedia(DRAWER_QUERY).addEventListener('change', () => {
+				if (!isDrawer() && isOpen()) closeDrawer();
+			});
+
+			// iOS hangs selection and the callout off the touch event, so
+			// preventDefault on touchstart suppresses the Copy/Look Up bar where
+			// preventDefault on pointerdown does not. Scoped to repeat-tap controls:
+			// applying it globally would break scrolling and text-field focus.
+			document.addEventListener(
+				'touchstart',
+				(event) => {
+					const target = event.target as HTMLElement | null;
+					if (target?.closest('[data-no-callout]')) event.preventDefault();
+				},
+				{ passive: false },
+			);
+
+			// navigator.onLine reports true behind a captive portal, so this is a
+			// hint. The authoritative signal is the service worker's offline
+			// response to a write.
+			const chip = document.getElementById('admin-offline-chip') as HTMLElement | null;
+			const syncOnline = () => {
+				if (chip) chip.hidden = navigator.onLine;
+			};
+			window.addEventListener('online', syncOnline);
+			window.addEventListener('offline', syncOnline);
+			syncOnline();
+		</script>
+
+		<script>
+			// Dynamically imported so an installed app never downloads it. A couple
+			// of hundred KB that can only ever render for someone who has *not*
+			// installed the app has no business on the installed app's critical path.
+			const installed =
+				window.matchMedia('(display-mode: standalone)').matches ||
+				(navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+			if (!installed && !localStorage.getItem('kw-install-dismissed')) {
+				import('../scripts/install-prompt')
+					.then((module) => module.mountInstallPrompt())
+					.catch(() => {
+						// Offline and not installed: nothing to prompt with. The chunk is
+						// intentionally not precached.
+					});
+			}
+		</script>
 	</body>
 </html>

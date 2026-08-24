@@ -1,7 +1,7 @@
 ---
-import AdminLayout from '../../../components/AdminLayout.astro';
 import Card from '../../../components/admin/Card.astro';
 import FormAlert from '../../../components/admin/FormAlert.astro';
+import AdminLayout from '../../../components/AdminLayout.astro';
 import { getDb } from '../../../lib/db';
 import { formatReservationDateTime, propertyLabel } from '../../../lib/reservations';
 
@@ -107,17 +107,24 @@ const filterTabs: { key: Filter; label: string }[] = [
 ---
 
 <AdminLayout>
-	<div class="flex justify-between items-center mb-8">
+	<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h2 class="text-3xl font-bold text-base-content">Reservations</h2>
+			<h2 class="text-base-content text-3xl font-bold">Reservations</h2>
 			<p class="text-base-content/70 mt-2">Manage property bookings.</p>
 		</div>
-		<a href="/admin/reservations/create" class="btn btn-primary">+ New Reservation</a>
+		<a
+			href="/admin/reservations/create"
+			class="btn btn-primary shrink-0"
+			>+ New Reservation</a
+		>
 	</div>
 
-	<FormAlert tone="error" message={error} />
+	<FormAlert
+		tone="error"
+		message={error}
+	/>
 
-	<div class="mb-4 flex gap-2">
+	<div class="mb-4 flex flex-wrap gap-2">
 		{
 			filterTabs.map((tab) => {
 				const active = filter === tab.key;
@@ -125,10 +132,10 @@ const filterTabs: { key: Filter; label: string }[] = [
 					<a
 						href={buildLink({ filter: tab.key, page: undefined })}
 						class:list={[
-							'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+							'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
 							active
 								? 'bg-primary text-primary-content'
-								: 'bg-base-100 text-base-content/70 border border-base-300 hover:text-primary',
+								: 'bg-base-100 text-base-content/70 border-base-300 hover:text-primary border',
 						]}
 					>
 						{tab.label}
@@ -138,77 +145,128 @@ const filterTabs: { key: Filter; label: string }[] = [
 		}
 	</div>
 
-	<Card padding={false} class="overflow-hidden">
-		<table class="min-w-full divide-y divide-base-300">
+	<Card
+		padding={false}
+		class="overflow-hidden"
+	>
+		<table
+			class="stacked-table divide-base-300 min-w-full divide-y"
+			role="table"
+		>
 			<thead class="bg-base-200">
-				<tr>
+				<tr role="row">
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
 					>
 						Name
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
 					>
 						Check In
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
 					>
 						Check Out
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
 					>
 						Property
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-right text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-right text-xs font-medium tracking-wider uppercase"
 					>
 						Actions
 					</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-base-300">
+			<tbody class="divide-base-300 divide-y">
 				{
 					reservations.length === 0 ? (
-						<tr>
-							<td colspan="5" class="px-6 py-8 text-center text-sm text-base-content/60">
+						<tr role="row">
+							<td
+								colspan="5"
+								class="text-base-content/60 px-6 py-8 text-center text-sm"
+								role="cell"
+							>
 								No reservations found.
 							</td>
 						</tr>
 					) : (
 						reservations.map((r) => (
-							<tr class="hover:bg-base-200 transition-colors">
-								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
+							<tr
+								class="hover:bg-base-200 transition-colors"
+								role="row"
+							>
+								<td
+									role="cell"
+									data-label="Name"
+									class="text-base-content selectable px-6 py-4 text-sm font-medium whitespace-nowrap"
+								>
 									{r.name}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+								<td
+									role="cell"
+									data-label="Check in"
+									class="text-base-content/70 px-6 py-4 text-sm whitespace-nowrap"
+								>
 									{formatReservationDateTime(r.check_in)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+								<td
+									role="cell"
+									data-label="Check out"
+									class="text-base-content/70 px-6 py-4 text-sm whitespace-nowrap"
+								>
 									{formatReservationDateTime(r.check_out)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
+								<td
+									role="cell"
+									data-label="Property"
+									class="text-base-content/70 px-6 py-4 text-sm whitespace-nowrap"
+								>
 									{propertyLabel(r.property)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+								<td
+									role="cell"
+									class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap max-lg:justify-end"
+								>
 									<a
 										href={`/admin/reservations/edit?id=${r.id}`}
 										class="text-primary hover:text-primary/80 mr-3"
 									>
 										Edit
 									</a>
-									<form method="POST" class="inline" data-confirm-delete>
-										<input type="hidden" name="action" value="delete" />
-										<input type="hidden" name="id" value={r.id} />
-										<input type="hidden" name="guest_name" value={r.name} />
-										<button type="submit" class="text-error hover:text-error/80 cursor-pointer">
+									<form
+										method="POST"
+										class="inline"
+										data-confirm-delete
+									>
+										<input
+											type="hidden"
+											name="action"
+											value="delete"
+										/>
+										<input
+											type="hidden"
+											name="id"
+											value={r.id}
+										/>
+										<input
+											type="hidden"
+											name="guest_name"
+											value={r.name}
+										/>
+										<button
+											type="submit"
+											class="text-error hover:text-error/80 cursor-pointer"
+										>
 											Delete
 										</button>
 									</form>
@@ -227,14 +285,20 @@ const filterTabs: { key: Filter; label: string }[] = [
 				<span class="text-base-content/60">Page {page}</span>
 				<div class="flex gap-2">
 					{page > 1 ? (
-						<a href={buildLink({ page: page - 1 })} class="btn btn-ghost btn-sm">
+						<a
+							href={buildLink({ page: page - 1 })}
+							class="btn btn-ghost btn-sm"
+						>
 							← Previous
 						</a>
 					) : (
 						<span class="btn btn-ghost btn-sm btn-disabled">← Previous</span>
 					)}
 					{hasNext ? (
-						<a href={buildLink({ page: page + 1 })} class="btn btn-ghost btn-sm">
+						<a
+							href={buildLink({ page: page + 1 })}
+							class="btn btn-ghost btn-sm"
+						>
 							Next →
 						</a>
 					) : (

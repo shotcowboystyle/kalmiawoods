@@ -24,12 +24,15 @@
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
 
-		"types": ["vite/client"],
+		// `vite` is not a direct dependency, so "types": ["vite/client"] could not
+		// resolve. src/env.d.ts already references astro/client, which pulls in
+		// vite's client types through Astro's own resolution.
 		"plugins": [{ "name": "@astrojs/ts-plugin" }],
 
 		"rootDir": "./",
-		"baseUrl": ".",
 
+		// No baseUrl: TypeScript 7 removed it, and its presence made astro check
+		// crash in getTsconfig. `paths` resolve relative to this file without it.
 		"paths": {
 			"@/*": ["./src/*"]
 		}

@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import compress from 'astro-compress';
 import { defineConfig } from 'astro/config';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { getBuildId } from './scripts/build-id.mjs';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -28,6 +29,11 @@ export default defineConfig({
 		}),
 	],
 	vite: {
+		// Same value the service worker is stamped with, so a page can tell the worker
+		// which build the server is currently serving. See scripts/build-sw.mjs.
+		define: {
+			__BUILD_ID__: JSON.stringify(getBuildId()),
+		},
 		plugins: [
 			tailwindcss(),
 			IS_PROD && visualizer({ open: false, filename: 'stats.html', gzipSize: true }),
@@ -37,7 +43,7 @@ export default defineConfig({
 			rollupOptions: {
 				treeshake: true,
 				output: {
-					manualChunks: id => {
+					manualChunks: (id) => {
 						if (id.includes('leaflet')) return 'leaflet';
 						if (id.includes('spotlight.js')) return 'spotlight';
 					},

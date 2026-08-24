@@ -1,8 +1,8 @@
 ---
-import AdminLayout from '../../components/AdminLayout.astro';
 import Card from '../../components/admin/Card.astro';
 import FormAlert from '../../components/admin/FormAlert.astro';
 import SubmitButton from '../../components/admin/SubmitButton.astro';
+import AdminLayout from '../../components/AdminLayout.astro';
 import {
 	deleteOtherSessions,
 	sessionCookieName,
@@ -88,7 +88,8 @@ if (Astro.request.method === 'POST') {
 
 const updated = Astro.url.searchParams.get('updated');
 if (updated === 'email') emailSuccess = 'Email updated.';
-if (updated === 'password') passwordSuccess = 'Password updated. Other sessions have been signed out.';
+if (updated === 'password')
+	passwordSuccess = 'Password updated. Other sessions have been signed out.';
 
 const sql = getDb();
 const rows = await sql`
@@ -99,46 +100,65 @@ const account = rows[0];
 
 <AdminLayout>
 	<div class="max-w-2xl">
-		<h2 class="text-3xl font-bold text-base-content">Account</h2>
+		<h2 class="text-base-content text-3xl font-bold">Account</h2>
 		<p class="text-base-content/70 mt-2">Manage your admin email and password.</p>
 
 		{
 			forced && (
-				<div class="mt-6 rounded-lg border border-warning/40 bg-warning/10 p-4 text-warning">
+				<div class="border-warning/40 bg-warning/10 text-warning mt-6 rounded-lg border p-4">
 					<p class="font-semibold">Password change required</p>
-					<p class="text-sm mt-1">
-						For security, you must set a new password before you can continue using the admin
-						panel.
+					<p class="mt-1 text-sm">
+						For security, you must set a new password before you can continue using the admin panel.
 					</p>
 				</div>
 			)
 		}
 
 		<Card class="mt-8">
-			<h3 class="text-lg font-semibold text-base-content mb-4">Profile</h3>
-			<dl class="grid grid-cols-3 gap-y-2 text-sm">
+			<h3 class="text-base-content mb-4 text-lg font-semibold">Profile</h3>
+			<dl class="grid grid-cols-1 gap-y-2 text-sm sm:grid-cols-3">
 				<dt class="text-base-content/60">Email</dt>
-				<dd class="col-span-2 text-base-content">{account?.email ?? user.email}</dd>
+				<dd class="text-base-content selectable break-all sm:col-span-2">
+					{account?.email ?? user.email}
+				</dd>
 				<dt class="text-base-content/60">Role</dt>
-				<dd class="col-span-2 text-base-content capitalize">
+				<dd class="text-base-content capitalize sm:col-span-2">
 					{(account?.role ?? user.role).replace('_', ' ')}
 				</dd>
 				<dt class="text-base-content/60">Created</dt>
-				<dd class="col-span-2 text-base-content">
+				<dd class="text-base-content sm:col-span-2">
 					{account?.created_at ? new Date(account.created_at).toLocaleString() : '—'}
 				</dd>
 			</dl>
 		</Card>
 
 		<Card class="mt-8">
-			<h3 class="text-lg font-semibold text-base-content mb-4">Change password</h3>
-			<FormAlert tone="error" message={passwordError} />
-			<FormAlert tone="success" message={passwordSuccess} />
+			<h3 class="text-base-content mb-4 text-lg font-semibold">Change password</h3>
+			<FormAlert
+				tone="error"
+				message={passwordError}
+			/>
+			<FormAlert
+				tone="success"
+				message={passwordSuccess}
+			/>
 
-			<form method="POST" class="flex flex-col gap-4" id="password-form" novalidate>
-				<input type="hidden" name="action" value="change_password" />
+			<form
+				method="POST"
+				class="flex flex-col gap-4"
+				id="password-form"
+				novalidate
+			>
+				<input
+					type="hidden"
+					name="action"
+					value="change_password"
+				/>
 				<div>
-					<label for="current-password" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="current-password"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						Current password
 					</label>
 					<input
@@ -146,12 +166,15 @@ const account = rows[0];
 						type="password"
 						name="current_password"
 						autocomplete="current-password"
-						class="input input-bordered w-full bg-base-100"
+						class="input input-bordered bg-base-100 w-full"
 						required
 					/>
 				</div>
 				<div>
-					<label for="new-password" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="new-password"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						New password
 					</label>
 					<input
@@ -160,30 +183,41 @@ const account = rows[0];
 						name="new_password"
 						autocomplete="new-password"
 						minlength={PASSWORD_MIN_LENGTH}
-						class="input input-bordered w-full bg-base-100"
+						class="input input-bordered bg-base-100 w-full"
 						required
 					/>
 
-					<div class="mt-3" data-strength-meter aria-live="polite">
+					<div
+						class="mt-3"
+						data-strength-meter
+						aria-live="polite"
+					>
 						<div class="flex gap-1">
-							<span class="strength-bar h-1.5 flex-1 rounded bg-base-300"></span>
-							<span class="strength-bar h-1.5 flex-1 rounded bg-base-300"></span>
-							<span class="strength-bar h-1.5 flex-1 rounded bg-base-300"></span>
-							<span class="strength-bar h-1.5 flex-1 rounded bg-base-300"></span>
+							<span class="strength-bar bg-base-300 h-1.5 flex-1 rounded"></span>
+							<span class="strength-bar bg-base-300 h-1.5 flex-1 rounded"></span>
+							<span class="strength-bar bg-base-300 h-1.5 flex-1 rounded"></span>
+							<span class="strength-bar bg-base-300 h-1.5 flex-1 rounded"></span>
 						</div>
-						<p class="text-xs mt-2 text-base-content/70">
-							Strength: <span class="font-semibold" data-strength-label>—</span>
+						<p class="text-base-content/70 mt-2 text-xs">
+							Strength: <span
+								class="font-semibold"
+								data-strength-label
+								>—</span
+							>
 						</p>
 						<ul
-							class="mt-3 text-xs text-base-content/70 space-y-1"
+							class="text-base-content/70 mt-3 space-y-1 text-xs"
 							data-strength-rules
 							data-rules={JSON.stringify(PASSWORD_RULES)}
 						>
 							{
 								PASSWORD_RULES.map((rule, i) => (
-									<li class="flex items-center gap-2" data-rule-index={i}>
+									<li
+										class="flex items-center gap-2"
+										data-rule-index={i}
+									>
 										<span
-											class="inline-flex w-4 h-4 items-center justify-center rounded-full bg-base-300 text-base-content/60 text-[10px] leading-none"
+											class="bg-base-300 text-base-content/60 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] leading-none"
 											data-rule-icon
 										>
 											·
@@ -196,7 +230,10 @@ const account = rows[0];
 					</div>
 				</div>
 				<div>
-					<label for="confirm-password" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="confirm-password"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						Confirm new password
 					</label>
 					<input
@@ -205,32 +242,57 @@ const account = rows[0];
 						name="confirm_password"
 						autocomplete="new-password"
 						minlength={PASSWORD_MIN_LENGTH}
-						class="input input-bordered w-full bg-base-100"
+						class="input input-bordered bg-base-100 w-full"
 						required
 					/>
-					<p class="text-xs mt-2 text-error hidden" data-confirm-error>
+					<p
+						class="text-error mt-2 hidden text-xs"
+						data-confirm-error
+					>
 						Passwords do not match.
 					</p>
 				</div>
-				<SubmitButton label="Update password" labelSubmitting="Updating…" class="self-start" disabled />
+				<SubmitButton
+					label="Update password"
+					labelSubmitting="Updating…"
+					class="self-start"
+					disabled
+				/>
 			</form>
 		</Card>
 
-		<Card
-			class:list={['mt-8', user.mustChangePassword && 'opacity-60 pointer-events-none']}
-		>
-			<h3 class="text-lg font-semibold text-base-content mb-4">Change email</h3>
-			{user.mustChangePassword && (
-				<p class="text-xs text-base-content/60 mb-3">
-					Available once you have changed your password.
-				</p>
-			)}
-			<FormAlert tone="error" message={emailError} />
-			<FormAlert tone="success" message={emailSuccess} />
-			<form method="POST" class="flex flex-col gap-4" novalidate>
-				<input type="hidden" name="action" value="change_email" />
+		<Card class:list={['mt-8', user.mustChangePassword && 'pointer-events-none opacity-60']}>
+			<h3 class="text-base-content mb-4 text-lg font-semibold">Change email</h3>
+			{
+				user.mustChangePassword && (
+					<p class="text-base-content/60 mb-3 text-xs">
+						Available once you have changed your password.
+					</p>
+				)
+			}
+			<FormAlert
+				tone="error"
+				message={emailError}
+			/>
+			<FormAlert
+				tone="success"
+				message={emailSuccess}
+			/>
+			<form
+				method="POST"
+				class="flex flex-col gap-4"
+				novalidate
+			>
+				<input
+					type="hidden"
+					name="action"
+					value="change_email"
+				/>
 				<div>
-					<label for="new-email" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="new-email"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						New email
 					</label>
 					<input
@@ -239,12 +301,15 @@ const account = rows[0];
 						name="email"
 						value={account?.email ?? user.email}
 						autocomplete="email"
-						class="input input-bordered w-full bg-base-100"
+						class="input input-bordered bg-base-100 w-full"
 						required
 					/>
 				</div>
 				<div>
-					<label for="email-current-password" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="email-current-password"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						Current password
 					</label>
 					<input
@@ -252,11 +317,15 @@ const account = rows[0];
 						type="password"
 						name="current_password"
 						autocomplete="current-password"
-						class="input input-bordered w-full bg-base-100"
+						class="input input-bordered bg-base-100 w-full"
 						required
 					/>
 				</div>
-				<SubmitButton label="Update email" labelSubmitting="Updating…" class="self-start" />
+				<SubmitButton
+					label="Update email"
+					labelSubmitting="Updating…"
+					class="self-start"
+				/>
 			</form>
 		</Card>
 	</div>

@@ -1,0 +1,44 @@
+{
+	"id": "/admin",
+	"name": "Kalmia Woods Admin",
+	"short_name": "KW Admin",
+	"description": "Reservations and account management for Kalmia Woods.",
+	"start_url": "/admin",
+	"scope": "/admin",
+	"display": "standalone",
+	"orientation": "any",
+	"theme_color": "#172c33",
+	"background_color": "#172c33",
+	"icons": [
+		{
+			"src": "/favicons/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/favicons/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/favicons/maskable_icon.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	],
+	"shortcuts": [
+		{
+			"name": "Reservations",
+			"short_name": "Reservations",
+			"url": "/admin/reservations"
+		},
+		{
+			"name": "New reservation",
+			"short_name": "New",
+			"url": "/admin/reservations/create"
+		}
+	]
+}

@@ -1,0 +1,97 @@
+---
+/**
+ * Everything the /admin PWA needs in <head>, shared by AdminLayout and the
+ * login page (which renders its own document).
+ *
+ * Order matters here: the standalone probe and the worker registration are
+ * inline and run during parse. Registering on window.load would wait for
+ * every subresource, warming the cache last on exactly the slow connection
+ * where it matters most — and registration does not block rendering.
+ */
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+const buildId = __BUILD_ID__;
+
+// `astro dev` serves no sw.js, and a stale worker registered against the dev
+// server would then hand cached HTML back to the next dev session. `astro
+// preview` is a production build, so this still leaves the worker testable
+// locally — which is where it has to be tested.
+const registerWorker = import.meta.env.PROD;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>{title}</title>
+
+{/* Read by the service worker's background refresh to detect a new deploy. */}
+<meta name="x-build-id" content={buildId} />
+
+<link rel="manifest" href="/manifest-admin.webmanifest" />
+<meta name="theme-color" content="#172c33" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+{/* iOS takes the home screen icon and title from these, not from the manifest. */}
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="KW Admin" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<script is:inline>
+	document.documentElement.setAttribute('data-theme', 'dark');
+	document.documentElement.style.colorScheme = 'dark';
+
+	// Set during parse so browser-only chrome never flashes before it is hidden.
+	if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) {
+		document.documentElement.dataset.standalone = 'true';
+	}
+</script>
+
+{
+	registerWorker && (
+		<script is:inline>
+			(() => {
+				if (!('serviceWorker' in navigator)) return;
+
+				// Captured before registering. "Already controlled" is not the same
+				// test as "there is an update": a worker with a broader scope
+				// controls this page from the moment we arrive, so controllerchange
+				// would fire a second later with nothing new anywhere. Same
+				// scriptURL means a new version of the same worker; a different one
+				// is just a handover.
+				const previousScript = navigator.serviceWorker.controller?.scriptURL ?? null;
+
+				const showBanner = () => {
+					const banner = document.getElementById('kw-update-banner');
+					if (!banner || banner.dataset.shown === 'true') return;
+					banner.dataset.shown = 'true';
+					banner.hidden = false;
+					// Deliberately not focused: role="status" aria-live="polite"
+					// announces it, and stealing focus mid-form-entry is worse than
+					// a late announcement.
+				};
+
+				navigator.serviceWorker.addEventListener('controllerchange', () => {
+					const current = navigator.serviceWorker.controller?.scriptURL ?? null;
+					if (previousScript && current === previousScript) showBanner();
+				});
+
+				navigator.serviceWorker.addEventListener('message', event => {
+					if (event.data?.type === 'UPDATE_AVAILABLE') showBanner();
+				});
+
+				navigator.serviceWorker.register('/sw.js', { scope: '/admin' }).then(registration => {
+					// Covers an installed app left open for days.
+					const poll = () => registration.update().catch(() => {});
+					document.addEventListener('visibilitychange', () => {
+						if (document.visibilityState === 'visible') poll();
+					});
+					setInterval(poll, 60 * 60 * 1000);
+				});
+			})();
+		</script>
+	)
+}

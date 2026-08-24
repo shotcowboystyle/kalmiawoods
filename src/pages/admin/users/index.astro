@@ -1,9 +1,9 @@
 ---
-import AdminLayout from '../../../components/AdminLayout.astro';
 import Card from '../../../components/admin/Card.astro';
 import FieldError from '../../../components/admin/FieldError.astro';
 import FormAlert from '../../../components/admin/FormAlert.astro';
 import SubmitButton from '../../../components/admin/SubmitButton.astro';
+import AdminLayout from '../../../components/AdminLayout.astro';
 import { hashPassword } from '../../../lib/auth';
 import { getDb } from '../../../lib/db';
 import { PASSWORD_MIN_LENGTH, validatePassword } from '../../../lib/password-policy';
@@ -118,22 +118,38 @@ const users = await sql`
 ---
 
 <AdminLayout>
-	<div class="flex justify-between items-center mb-8">
-		<div>
-			<h2 class="text-3xl font-bold text-base-content">Admin Users</h2>
-			<p class="text-base-content/70 mt-2">Manage administrators for the property.</p>
-		</div>
+	<div class="mb-8">
+		<h2 class="text-base-content text-3xl font-bold">Admin Users</h2>
+		<p class="text-base-content/70 mt-2">Manage administrators for the property.</p>
 	</div>
 
-	<FormAlert tone="error" message={formError} />
-	<FormAlert tone="success" message={success} />
+	<FormAlert
+		tone="error"
+		message={formError}
+	/>
+	<FormAlert
+		tone="success"
+		message={success}
+	/>
 
 	<Card class="mb-8 max-w-xl">
-		<h3 class="text-lg font-semibold text-base-content mb-4">Add Admin User</h3>
-		<form method="POST" class="flex flex-col gap-4" novalidate>
-			<input type="hidden" name="action" value="add" />
+		<h3 class="text-base-content mb-4 text-lg font-semibold">Add Admin User</h3>
+		<form
+			method="POST"
+			class="flex flex-col gap-4"
+			novalidate
+		>
+			<input
+				type="hidden"
+				name="action"
+				value="add"
+			/>
 			<div>
-				<label for="add-email" class="block text-sm font-medium text-base-content mb-1">Email</label>
+				<label
+					for="add-email"
+					class="text-base-content mb-1 block text-sm font-medium"
+					>Email</label
+				>
 				<input
 					id="add-email"
 					type="email"
@@ -143,15 +159,21 @@ const users = await sql`
 					aria-invalid={fieldErrors.email ? 'true' : undefined}
 					aria-describedby={fieldErrors.email ? 'add-email-error' : undefined}
 					class:list={[
-						'input input-bordered w-full bg-base-100',
+						'input input-bordered bg-base-100 w-full',
 						fieldErrors.email && 'input-error',
 					]}
 					required
 				/>
-				<FieldError id="add-email-error" message={fieldErrors.email} />
+				<FieldError
+					id="add-email-error"
+					message={fieldErrors.email}
+				/>
 			</div>
 			<div>
-				<label for="add-password" class="block text-sm font-medium text-base-content mb-1">
+				<label
+					for="add-password"
+					class="text-base-content mb-1 block text-sm font-medium"
+				>
 					Temporary password
 				</label>
 				<input
@@ -163,104 +185,187 @@ const users = await sql`
 					aria-invalid={fieldErrors.password ? 'true' : undefined}
 					aria-describedby={fieldErrors.password ? 'add-password-error' : 'add-password-helper'}
 					class:list={[
-						'input input-bordered w-full bg-base-100',
+						'input input-bordered bg-base-100 w-full',
 						fieldErrors.password && 'input-error',
 					]}
 					required
 				/>
-				<FieldError id="add-password-error" message={fieldErrors.password} />
-				{!fieldErrors.password && (
-					<p id="add-password-helper" class="text-xs text-base-content/60 mt-1">
-						Min {PASSWORD_MIN_LENGTH} chars with upper, lower, digit, and symbol. The user will be
-						required to change this on first login.
-					</p>
-				)}
+				<FieldError
+					id="add-password-error"
+					message={fieldErrors.password}
+				/>
+				{
+					!fieldErrors.password && (
+						<p
+							id="add-password-helper"
+							class="text-base-content/60 mt-1 text-xs"
+						>
+							Min {PASSWORD_MIN_LENGTH} chars with upper, lower, digit, and symbol. The user will be
+							required to change this on first login.
+						</p>
+					)
+				}
 			</div>
 			<div>
-				<label for="add-role" class="block text-sm font-medium text-base-content mb-1">Role</label>
+				<label
+					for="add-role"
+					class="text-base-content mb-1 block text-sm font-medium"
+					>Role</label
+				>
 				<select
 					id="add-role"
 					name="role"
-					class="select select-bordered w-full bg-base-100"
+					class="select select-bordered bg-base-100 w-full"
 				>
-					<option value="admin" selected={addValues.role === 'admin'}>Admin (standard)</option>
-					<option value="super_admin" selected={addValues.role === 'super_admin'}>
+					<option
+						value="admin"
+						selected={addValues.role === 'admin'}
+						>Admin (standard)</option
+					>
+					<option
+						value="super_admin"
+						selected={addValues.role === 'super_admin'}
+					>
 						Super Admin (can manage users)
 					</option>
 				</select>
 			</div>
-			<SubmitButton label="Add Admin" labelSubmitting="Adding…" class="self-start" />
+			<SubmitButton
+				label="Add Admin"
+				labelSubmitting="Adding…"
+				class="self-start"
+			/>
 		</form>
 	</Card>
 
-	<Card padding={false} class="overflow-hidden">
-		<table class="min-w-full divide-y divide-base-300">
+	<Card
+		padding={false}
+		class="overflow-hidden"
+	>
+		<table
+			class="stacked-table divide-base-300 min-w-full divide-y"
+			role="table"
+		>
 			<thead class="bg-base-200">
-				<tr>
+				<tr role="row">
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
 					>
 						Email
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-left text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-left text-xs font-medium tracking-wider uppercase"
 					>
 						Role
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-right text-xs font-medium text-base-content/70 uppercase tracking-wider"
+						class="text-base-content/70 px-6 py-3 text-right text-xs font-medium tracking-wider uppercase"
 					>
 						Actions
 					</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-base-300">
+			<tbody class="divide-base-300 divide-y">
 				{
 					users.length === 0 ? (
-						<tr>
-							<td colspan="3" class="px-6 py-4 text-center text-sm text-base-content/60">
+						<tr role="row">
+							<td
+								colspan="3"
+								class="text-base-content/60 px-6 py-4 text-center text-sm"
+								role="cell"
+							>
 								No admin users found
 							</td>
 						</tr>
 					) : (
 						users.map((user) => (
-							<tr class="hover:bg-base-200 transition-colors">
-								<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-base-content">
-									{user.email}
+							<tr
+								class="hover:bg-base-200 transition-colors"
+								role="row"
+							>
+								<td
+									role="cell"
+									data-label="Email"
+									class="text-base-content px-6 py-4 text-sm font-medium"
+								>
+									<span class="selectable break-all">{user.email}</span>
 									{user.id === currentUserId && (
-										<span class="ml-2 text-xs text-base-content/60">(you)</span>
+										<span class="text-base-content/60 ml-2 text-xs">(you)</span>
 									)}
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">
-									<form method="POST" class="flex items-center gap-2">
-										<input type="hidden" name="action" value="update_role" />
-										<input type="hidden" name="id" value={user.id} />
+								<td
+									role="cell"
+									data-label="Role"
+									class="text-base-content/70 px-6 py-4 text-sm whitespace-nowrap"
+								>
+									<form
+										method="POST"
+										class="flex items-center gap-2"
+									>
+										<input
+											type="hidden"
+											name="action"
+											value="update_role"
+										/>
+										<input
+											type="hidden"
+											name="id"
+											value={user.id}
+										/>
 										<select
 											name="role"
 											class="select select-bordered select-sm bg-base-100"
 											aria-label={`Role for ${user.email}`}
 										>
-											<option value="admin" selected={user.role === 'admin'}>
+											<option
+												value="admin"
+												selected={user.role === 'admin'}
+											>
 												Admin
 											</option>
-											<option value="super_admin" selected={user.role === 'super_admin'}>
+											<option
+												value="super_admin"
+												selected={user.role === 'super_admin'}
+											>
 												Super Admin
 											</option>
 										</select>
-										<button type="submit" class="text-primary hover:text-primary/80 text-sm cursor-pointer">
+										<button
+											type="submit"
+											class="text-primary hover:text-primary/80 cursor-pointer text-sm"
+										>
 											Save
 										</button>
 									</form>
 								</td>
-								<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+								<td
+									role="cell"
+									class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap max-lg:justify-end"
+								>
 									{user.id !== currentUserId && (
-										<form method="POST" class="inline" data-confirm-delete data-email={user.email}>
-											<input type="hidden" name="action" value="delete" />
-											<input type="hidden" name="id" value={user.id} />
-											<button type="submit" class="text-error hover:text-error/80 cursor-pointer">
+										<form
+											method="POST"
+											class="inline"
+											data-confirm-delete
+											data-email={user.email}
+										>
+											<input
+												type="hidden"
+												name="action"
+												value="delete"
+											/>
+											<input
+												type="hidden"
+												name="id"
+												value={user.id}
+											/>
+											<button
+												type="submit"
+												class="text-error hover:text-error/80 cursor-pointer"
+											>
 												Remove
 											</button>
 										</form>
