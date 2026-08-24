@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "astro": "astro",
-    "build": "astro build",
+    "build": "astro build && node scripts/build-sw.mjs",
     "clean": "rm -rf .astro dist node_modules pnpm-lock.yaml",
     "dev": "astro dev",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx,astro,cjs,mjs,js,css}\"",

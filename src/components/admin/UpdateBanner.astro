@@ -1,0 +1,34 @@
+---
+/**
+ * Shown when the service worker reports a newer build. Revealed by the
+ * inline script in PwaHead.astro, which owns the "is this actually an
+ * update" decision.
+ */
+---
+
+<div
+	id="kw-update-banner"
+	role="status"
+	aria-live="polite"
+	hidden
+	class="safe-top-offset bg-primary text-primary-content fixed inset-x-2 z-50 mx-auto flex max-w-md items-center gap-3 rounded-xl px-4 py-3 shadow-lg"
+>
+	<p class="flex-1 text-sm font-medium">A new version is available.</p>
+	<button
+		type="button"
+		id="kw-update-reload"
+		class="btn btn-sm btn-neutral"
+		data-no-callout
+	>
+		Refresh
+	</button>
+</div>
+
+<script>
+	// pointerdown rather than click: the touchstart handler that suppresses
+	// iOS's Copy/Look Up bar on [data-no-callout] controls also swallows the
+	// click that would otherwise follow.
+	document.getElementById('kw-update-reload')?.addEventListener('pointerdown', () => {
+		location.reload();
+	});
+</script>

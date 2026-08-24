@@ -1,0 +1,264 @@
+/* ============================================================
+   Admin app stylesheet.
+
+   Deliberately NOT src/styles/base.css: that file is the marketing
+   site's (~2900 lines of landing-page CSS, a fluid type scale, and an
+   @font-face for PP Woodland). None of it is used here, and all of it
+   would land in the service worker's precache.
+
+   No @font-face, no webfont. --font-sans is left at Tailwind's system
+   stack — a render-blocking font request has no business on the critical
+   path of an app whose whole point is opening instantly offline.
+
+   Tailwind v4 breakpoint defaults apply (sm 40rem / md 48rem / lg 64rem).
+   base.css redefines these to 480px/1140px, which would push tablets onto
+   the mobile layout; keeping them separate avoids that.
+   ============================================================ */
+
+@import 'tailwindcss';
+@plugin 'daisyui' {
+	themes: dark --default;
+}
+
+@plugin 'daisyui/theme' {
+	name: 'dark';
+	default: true;
+	color-scheme: dark;
+	--color-base-100: oklch(28% 0.03 220);
+	--color-primary: oklch(95% 0.08 150);
+	--color-primary-content: oklch(22% 0.05 150);
+	--color-secondary: oklch(75% 0.22 150);
+	--color-accent: oklch(75% 0.22 150);
+	--color-neutral: oklch(12% 0.04 150);
+	--color-info: oklch(82% 0.07 200);
+	--color-success: oklch(75% 0.22 150);
+	--color-warning: oklch(50% 0.08 75);
+	--color-error: oklch(58% 0.17 40);
+}
+
+/* ============================================================
+   App shell — the page itself never scrolls.
+
+   100dvh flex column with overflow hidden; the content pane is the
+   flex:1/min-height:0 slot that carries overflow-y:auto. An app that
+   scrolls as a page does not read as an app, and on iOS a scrolling
+   body drags the whole viewport away from the status bar.
+   ============================================================ */
+
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+	overscroll-behavior: none;
+}
+
+.app-shell {
+	display: flex;
+	height: 100dvh;
+	overflow: hidden;
+}
+
+.app-main {
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.app-content {
+	min-height: 0;
+	flex: 1;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+/* ============================================================
+   Safe areas.
+
+   Always max(env(...), <minimum>), never a bare env(): the inset is 0 in
+   a normal browser tab and on devices that expose none, so a bare env()
+   reserves nothing and the first row of UI slides under the status bar,
+   notch or dynamic island.
+   ============================================================ */
+
+.safe-top {
+	padding-top: max(env(safe-area-inset-top), 0.75rem);
+}
+
+.safe-x {
+	padding-left: max(env(safe-area-inset-left), 1rem);
+	padding-right: max(env(safe-area-inset-right), 1rem);
+}
+
+.safe-bottom {
+	padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+}
+
+/* Anything fixed to the top edge adds the inset to its own offset too. */
+.safe-top-offset {
+	top: max(env(safe-area-inset-top), 0.5rem);
+}
+
+/* Sidebar spans the full height, so it owns both vertical insets. */
+.app-sidebar {
+	padding-top: max(env(safe-area-inset-top), 1.5rem);
+	padding-bottom: max(env(safe-area-inset-bottom), 1.5rem);
+	padding-left: max(env(safe-area-inset-left), 1.5rem);
+}
+
+/* ============================================================
+   iOS "Copy / Look Up" callout suppression.
+
+   Applied to the whole layout, not just the elements being tapped: the
+   callout belongs to whichever element takes the tap, so scoping this to
+   buttons alone leaves the surrounding UI exposed. iOS reads a fast
+   second tap as a double tap, selects whatever is underneath, and pops
+   its selection bar over the app.
+
+   The JS half (a touchstart listener calling preventDefault) lives in
+   AdminLayout.astro — preventDefault on pointerdown does NOT suppress
+   this, only touchstart does.
+
+   Chrome does not implement -webkit-touch-callout and drops it from
+   cssRules and computed styles, so this half can only be confirmed on a
+   real iPhone.
+   ============================================================ */
+
+body {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+}
+
+/* The admin still has to be able to copy guest emails and reservation ids,
+   and type into every form on the site. Opt those back in explicitly. */
+input,
+textarea,
+select,
+[contenteditable],
+.selectable {
+	-webkit-touch-callout: default;
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+/* ============================================================
+   Touch targets and motion
+   ============================================================ */
+
+@media (pointer: coarse) {
+	a,
+	button,
+	[role='button'],
+	summary {
+		min-height: 2.75rem; /* 44px — Apple's minimum */
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Hides chrome that only makes sense in a browser tab. The attribute is set
+   by the inline standalone probe in <head> during parse, so this applies
+   before first paint rather than flashing the chrome and then removing it. */
+[data-standalone='true'] .browser-only {
+	display: none !important;
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+/* The UA stylesheet's [hidden] rule is only `display: none`, so any Tailwind
+   or daisyUI class that sets display (flex, badge, btn...) silently defeats
+   the hidden attribute. The update banner and offline chip both rely on it. */
+[hidden] {
+	display: none !important;
+}
+
+.admin-skip-link {
+	position: fixed;
+	left: 0.5rem;
+	top: max(env(safe-area-inset-top), 0.5rem);
+	z-index: 60;
+	transform: translateY(-200%);
+	border-radius: 0.5rem;
+	background: var(--color-primary);
+	color: var(--color-primary-content);
+	padding: 0.5rem 0.75rem;
+	font-weight: 600;
+}
+
+.admin-skip-link:focus-visible {
+	transform: translateY(0);
+}
+
+/* ============================================================
+   Stacked tables
+
+   A five-column table is unreadable at 390px no matter how the shell is
+   laid out. Below the sidebar breakpoint each row collapses into a card
+   and every cell labels itself from its data-label attribute, so the data
+   is not duplicated in the markup.
+
+   `display: block` on table elements normally strips their semantics from
+   assistive tech, which is why the tables using this carry explicit
+   role="table" / "row" / "cell" — an explicit role survives the display
+   change. The visual labels replace the hidden column headers.
+   ============================================================ */
+
+@media (width < 64rem) {
+	.stacked-table,
+	.stacked-table tbody,
+	.stacked-table tr,
+	.stacked-table td {
+		display: block;
+		width: 100%;
+	}
+
+	.stacked-table thead {
+		display: none;
+	}
+
+	.stacked-table tr {
+		padding: 0.75rem 1rem;
+	}
+
+	.stacked-table td {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.25rem 0;
+		text-align: left;
+		white-space: normal;
+	}
+
+	.stacked-table td[data-label]::before {
+		content: attr(data-label);
+		flex: none;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: color-mix(in oklab, currentcolor 60%, transparent);
+	}
+
+	/* The empty-state row spans every column and needs no label column. */
+	.stacked-table td[colspan] {
+		display: block;
+		text-align: center;
+	}
+}

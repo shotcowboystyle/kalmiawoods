@@ -1,9 +1,7 @@
 ---
-// import { pwaInfo } from 'virtual:pwa-info';
 import { SITE_TITLE } from '@/app/constants';
 import SeoLanding from '@/app/SeoLanding.astro';
 import { ClientRouter } from 'astro:transitions';
-// import ReloadPrompt from '@/components/ReloadPrompt.astro';
 import '@fontsource-variable/dm-sans';
 import '@/styles/base.css';
 
@@ -26,22 +24,78 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
 	<head>
 		<SeoLanding />
 
-		<link rel="preload" href="/fonts/PPWoodland-Regular.woff2?1" as="font" type="font/woff2" crossorigin />
+		<link
+			rel="preload"
+			href="/fonts/PPWoodland-Regular.woff2?1"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
 
 		<title>{pageTitle}</title>
-		{description && <meta name="description" content={description} />}
+		{
+			description && (
+				<meta
+					name="description"
+					content={description}
+				/>
+			)
+		}
 
-		{canonicalURL && <link rel="canonical" href={canonicalURL} />}
+		{
+			canonicalURL && (
+				<link
+					rel="canonical"
+					href={canonicalURL}
+				/>
+			)
+		}
 
-		<meta property="og:type" content="website" />
-		{canonicalURL && <meta property="og:url" content={canonicalURL} />}
-		<meta property="og:title" content={pageTitle} />
-		{description && <meta property="og:description" content={description} />}
-		<meta property="og:site_name" content={SITE_TITLE} />
+		<meta
+			property="og:type"
+			content="website"
+		/>
+		{
+			canonicalURL && (
+				<meta
+					property="og:url"
+					content={canonicalURL}
+				/>
+			)
+		}
+		<meta
+			property="og:title"
+			content={pageTitle}
+		/>
+		{
+			description && (
+				<meta
+					property="og:description"
+					content={description}
+				/>
+			)
+		}
+		<meta
+			property="og:site_name"
+			content={SITE_TITLE}
+		/>
 
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={pageTitle} />
-		{description && <meta name="twitter:description" content={description} />}
+		<meta
+			name="twitter:card"
+			content="summary_large_image"
+		/>
+		<meta
+			name="twitter:title"
+			content={pageTitle}
+		/>
+		{
+			description && (
+				<meta
+					name="twitter:description"
+					content={description}
+				/>
+			)
+		}
 
 		<script>
 			import { LOCAL_STORAGE_COLOR_SCHEME_KEY } from '@/app/constants';
@@ -56,15 +110,11 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
 			});
 		</script>
 
-		<!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />} -->
-
 		<ClientRouter />
 	</head>
 
 	<body id="top">
 		<slot />
-
-		<!-- <ReloadPrompt /> -->
 
 		<style is:global>
 			.animate-in {

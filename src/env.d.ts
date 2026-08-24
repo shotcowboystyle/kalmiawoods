@@ -4,6 +4,9 @@
 
 declare module 'spotlight.js/src/js/spotlight.js';
 
+/** Injected by `vite.define` in astro.config.mjs — see scripts/build-id.mjs. */
+declare const __BUILD_ID__: string;
+
 interface ImportMetaEnv {
 	readonly APP_NAME: string;
 	readonly PUBLIC_VERCEL_ANALYTICS_ID: string;
