@@ -51,7 +51,6 @@ if (Astro.request.method === 'POST') {
 					if (msg.includes('unique') || msg.includes('duplicate')) {
 						emailError = 'Another admin already uses that email.';
 					} else {
-						emailError = msg;
 						throw e;
 					}
 				}

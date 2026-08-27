@@ -11,7 +11,7 @@
 
 <div
 	id="color-scheme-switcher"
-	class="flex h-full flex-col rounded-2xl bg-base-200 p-3.5 text-center sm:p-5"
+	class="bg-base-200 flex h-full flex-col rounded-2xl p-3.5 text-center sm:p-5"
 >
 	<div
 		id="circle"
@@ -19,7 +19,7 @@
 	>
 		<div
 			id="crescent"
-			class="absolute right-0 h-16 w-16 rounded-full bg-base-200"
+			class="bg-base-200 absolute right-0 h-16 w-16 rounded-full"
 		>
 		</div>
 	</div>
@@ -89,7 +89,7 @@
 	}
 
 	#switch-button {
-		@apply relative mx-auto mt-7 w-full cursor-pointer bg-black/5 dark:bg-base-100/60;
+		@apply dark:bg-base-100/60 relative mx-auto mt-7 w-full cursor-pointer bg-black/5;
 	}
 
 	#color-scheme-toggle {
@@ -100,7 +100,7 @@
 	}
 
 	#color-schemes {
-		@apply absolute mx-auto flex w-full select-none items-center justify-around font-extrabold text-black;
+		@apply absolute mx-auto flex w-full items-center justify-around font-extrabold text-black select-none;
 
 		#color-scheme-light-name,
 		#color-scheme-dark-name {
@@ -111,7 +111,7 @@
 	/* -------- Switch Styles ------------*/
 	/* Toggle */
 	#switch-input:checked + #color-scheme-switcher #color-scheme-toggle {
-		@apply translate-x-full bg-neutral;
+		@apply bg-neutral translate-x-full;
 	}
 
 	#switch-input:checked + #color-scheme-switcher #color-scheme-dark-name,
@@ -121,7 +121,7 @@
 
 	/* App */
 	#switch-input:checked + #color-scheme-switcher #body {
-		@apply rounded-2xl bg-base-300 text-base-content;
+		@apply bg-base-300 text-base-content rounded-2xl;
 	}
 
 	/* Circle */

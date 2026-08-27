@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /**
  * Offline-first service worker for the /admin app.
  *

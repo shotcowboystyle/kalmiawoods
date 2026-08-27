@@ -7,8 +7,14 @@ type Props = {
 const { id, message } = Astro.props;
 ---
 
-{message && (
-	<p id={id} class="mt-1 text-sm text-error" role="alert">
-		{message}
-	</p>
-)}
+{
+	message && (
+		<p
+			id={id}
+			class="text-error mt-1 text-sm"
+			role="alert"
+		>
+			{message}
+		</p>
+	)
+}

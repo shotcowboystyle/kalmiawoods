@@ -5,7 +5,7 @@ import type { SleepingArrangements } from '@/types/Landing';
 ---
 
 <section class="section">
-	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+	<div class="w-full max-xl:overflow-hidden max-xl:px-6 sm:container">
 		<h3 class="mb-4 text-2xl">Sleeping Arrangements</h3>
 		<div class="flex flex-nowrap gap-4 lg:grid-cols-4 lg:gap-x-4">
 			{
@@ -19,8 +19,8 @@ import type { SleepingArrangements } from '@/types/Landing';
 								/>
 							))}
 						</div>
-						<div class="my-0 font-semibold leading-5">{title}</div>
-						<div class="text-muted my-0 leading-5 text-sm">{text}</div>
+						<div class="my-0 leading-5 font-semibold">{title}</div>
+						<div class="text-muted my-0 text-sm leading-5">{text}</div>
 					</div>
 				))
 			}

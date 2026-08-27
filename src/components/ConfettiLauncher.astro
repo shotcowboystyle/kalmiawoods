@@ -32,6 +32,7 @@
 			target: confettiElement,
 			start_from_edge: true,
 		};
+		// @ts-expect-error - this library is loaded via script tag above
 		const confetti = new ConfettiGenerator(confettiSettings);
 		confetti.render();
 	}

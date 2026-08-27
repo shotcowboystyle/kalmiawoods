@@ -46,3 +46,4 @@ cspell.json
 .changeset
 .turbo
 @generated
+src/components/admin/PwaHead.astro

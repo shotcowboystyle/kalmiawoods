@@ -9,6 +9,7 @@ This is a vacation rental website for Kalmia Woods, a mountain rental property n
 ## Architecture
 
 ### Tech Stack
+
 - **Framework**: Astro with Vue 3 integration and SSR
 - **Styling**: Tailwind CSS with DaisyUI components
 - **Database**: PostgreSQL with Prisma ORM
@@ -19,6 +20,7 @@ This is a vacation rental website for Kalmia Woods, a mountain rental property n
 - **Build Tool**: Turbo for monorepo management
 
 ### Key Directories
+
 - `src/pages/` - Astro pages (both .astro and .vue files)
 - `src/components/` - Vue and Astro components (prefixed with `Kw` for custom components)
 - `src/lib/` - Core utilities (database, auth, logging, sentry)
@@ -26,7 +28,9 @@ This is a vacation rental website for Kalmia Woods, a mountain rental property n
 - `e2e/tests/` - Playwright tests organized by type (accessibility, pages, performance, visual)
 
 ### Database Schema
+
 Uses Prisma with PostgreSQL featuring:
+
 - **User management**: Users, UserProfile, authentication sessions
 - **Reservations**: Guest booking system with check-in/out dates
 - **Email tracking**: Sent email history
@@ -35,6 +39,7 @@ Uses Prisma with PostgreSQL featuring:
 ## Common Development Commands
 
 ### Development
+
 ```bash
 pnpm dev                    # Start development server
 pnpm build                  # Build for production
@@ -42,6 +47,7 @@ pnpm preview                # Preview production build
 ```
 
 ### Database Operations
+
 ```bash
 pnpm db:generate            # Generate Prisma client
 pnpm db:migrate:dev         # Run migrations in development
@@ -52,6 +58,7 @@ pnpm prisma:studio          # Open Prisma Studio
 ```
 
 ### Code Quality
+
 ```bash
 pnpm lint                   # Run ESLint
 pnpm lint:fix               # Fix linting issues
@@ -61,6 +68,7 @@ pnpm validate               # Run all checks (format, lint, types, test)
 ```
 
 ### Testing
+
 ```bash
 pnpm test                   # Run all Playwright tests
 pnpm test:e2e:accessibility # Run accessibility tests
@@ -73,30 +81,35 @@ pnpm test:playwright:ui     # Open Playwright UI
 ## Development Notes
 
 ### Vue Integration
+
 - Vue components use `<script setup>` with TypeScript
 - Custom components are prefixed with `Kw` (e.g., `KwButton`, `KwForm`)
 - Auto-imports configured for Vue composables and VueUse
 - Astro pages can import Vue components directly
 
 ### Authentication Flow
+
 - Uses Lucia Auth v2 with Prisma adapter
 - Session-based authentication with database storage
 - User profiles separate from auth users
 - Email verification and password reset tokens supported
 
 ### Styling Conventions
+
 - Tailwind CSS with custom configuration
 - DaisyUI component library integration
 - PostCSS with nesting and preset-env
 - Responsive design with mobile-first approach
 
 ### Build Process
+
 - Astro builds to `dist/` with Vercel adapter
 - Turbo manages build pipeline dependencies
 - Prisma client generation required before builds
 - Bundle analysis available with rollup visualizer
 
 ### Environment Setup
+
 - Uses pnpm workspaces (though appears to be single package)
 - Husky for git hooks with lint-staged
 - Commitizen for conventional commits

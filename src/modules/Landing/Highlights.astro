@@ -4,7 +4,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 ---
 
 <section class="section">
-	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
+	<div class="w-full max-xl:overflow-hidden max-xl:px-6 sm:container">
 		<h3 class="mb-4 text-2xl">Highlights</h3>
 		<div class="flex flex-row gap-4 py-0">
 			{
@@ -18,7 +18,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 								name={highlight.icon}
 								class="h-5 w-5 dark:fill-white"
 							/>
-							<span class="whitespace-nowrap leading-6 text-sm">{highlight.text}</span>
+							<span class="text-sm leading-6 whitespace-nowrap">{highlight.text}</span>
 						</i>
 					</div>
 				))

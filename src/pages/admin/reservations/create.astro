@@ -1,18 +1,18 @@
 ---
-import AdminLayout from '../../../components/AdminLayout.astro';
 import Card from '../../../components/admin/Card.astro';
 import FieldError from '../../../components/admin/FieldError.astro';
 import FormAlert from '../../../components/admin/FormAlert.astro';
 import SubmitButton from '../../../components/admin/SubmitButton.astro';
+import AdminLayout from '../../../components/AdminLayout.astro';
 import { getDb } from '../../../lib/db';
 import {
 	CHECK_IN_HOUR,
 	CHECK_OUT_HOUR,
-	PROPERTIES,
 	combineDateAndTime,
 	findConflictingReservation,
 	formatReservationDate,
 	isProperty,
+	PROPERTIES,
 	propertyLabel,
 	validateReservationInput,
 	type Property,
@@ -102,20 +102,35 @@ const existingReservations = existingRows.map((r) => ({
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						stroke-width="2"
-						d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg
+						d="M10 19l-7-7m0 0l7-7m-7 7h18"
+					></path></svg
 				>
 			</a>
-			<h2 class="text-3xl font-bold text-base-content">New Reservation</h2>
+			<h2 class="text-base-content text-3xl font-bold">New Reservation</h2>
 		</div>
 		<p class="text-base-content/70 mt-2 ml-10">Add a new property booking.</p>
 	</div>
 
-	<Card class="max-w-2xl" padding={false}>
+	<Card
+		class="max-w-2xl"
+		padding={false}
+	>
 		<div class="p-8">
-			<FormAlert tone="error" message={errors._form} />
-			<form method="POST" id="reservation-form" class="flex flex-col gap-6" novalidate>
+			<FormAlert
+				tone="error"
+				message={errors._form}
+			/>
+			<form
+				method="POST"
+				id="reservation-form"
+				class="flex flex-col gap-6"
+				novalidate
+			>
 				<div>
-					<label for="name" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="name"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						Guest Name
 					</label>
 					<input
@@ -126,18 +141,21 @@ const existingReservations = existingRows.map((r) => ({
 						maxlength="200"
 						aria-invalid={errors.name ? 'true' : undefined}
 						aria-describedby={errors.name ? 'name-error' : undefined}
-						class:list={[
-							'input input-bordered w-full bg-base-100',
-							errors.name && 'input-error',
-						]}
+						class:list={['input input-bordered bg-base-100 w-full', errors.name && 'input-error']}
 						required
 					/>
-					<FieldError id="name-error" message={errors.name} />
+					<FieldError
+						id="name-error"
+						message={errors.name}
+					/>
 				</div>
 
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div>
-						<label for="check_in" class="block text-sm font-medium text-base-content mb-1">
+						<label
+							for="check_in"
+							class="text-base-content mb-1 block text-sm font-medium"
+						>
 							Check In
 						</label>
 						<input
@@ -148,20 +166,31 @@ const existingReservations = existingRows.map((r) => ({
 							aria-invalid={errors.checkInDate ? 'true' : undefined}
 							aria-describedby={errors.checkInDate ? 'check-in-error' : 'check-in-helper'}
 							class:list={[
-								'input input-bordered w-full bg-base-100',
+								'input input-bordered bg-base-100 w-full',
 								errors.checkInDate && 'input-error',
 							]}
 							required
 						/>
-						<FieldError id="check-in-error" message={errors.checkInDate} />
-						{!errors.checkInDate && (
-							<p id="check-in-helper" class="mt-1 text-xs text-base-content/60">
-								Check-in 3:00 PM (Eastern)
-							</p>
-						)}
+						<FieldError
+							id="check-in-error"
+							message={errors.checkInDate}
+						/>
+						{
+							!errors.checkInDate && (
+								<p
+									id="check-in-helper"
+									class="text-base-content/60 mt-1 text-xs"
+								>
+									Check-in 3:00 PM (Eastern)
+								</p>
+							)
+						}
 					</div>
 					<div>
-						<label for="check_out" class="block text-sm font-medium text-base-content mb-1">
+						<label
+							for="check_out"
+							class="text-base-content mb-1 block text-sm font-medium"
+						>
 							Check Out
 						</label>
 						<input
@@ -172,22 +201,33 @@ const existingReservations = existingRows.map((r) => ({
 							aria-invalid={errors.checkOutDate ? 'true' : undefined}
 							aria-describedby={errors.checkOutDate ? 'check-out-error' : 'check-out-helper'}
 							class:list={[
-								'input input-bordered w-full bg-base-100',
+								'input input-bordered bg-base-100 w-full',
 								errors.checkOutDate && 'input-error',
 							]}
 							required
 						/>
-						<FieldError id="check-out-error" message={errors.checkOutDate} />
-						{!errors.checkOutDate && (
-							<p id="check-out-helper" class="mt-1 text-xs text-base-content/60">
-								Check-out 11:00 AM (Eastern)
-							</p>
-						)}
+						<FieldError
+							id="check-out-error"
+							message={errors.checkOutDate}
+						/>
+						{
+							!errors.checkOutDate && (
+								<p
+									id="check-out-helper"
+									class="text-base-content/60 mt-1 text-xs"
+								>
+									Check-out 11:00 AM (Eastern)
+								</p>
+							)
+						}
 					</div>
 				</div>
 
 				<div>
-					<label for="property" class="block text-sm font-medium text-base-content mb-1">
+					<label
+						for="property"
+						class="text-base-content mb-1 block text-sm font-medium"
+					>
 						Property
 					</label>
 					<select
@@ -196,12 +236,17 @@ const existingReservations = existingRows.map((r) => ({
 						aria-invalid={errors.property ? 'true' : undefined}
 						aria-describedby={errors.property ? 'property-error' : undefined}
 						class:list={[
-							'select select-bordered w-full bg-base-100',
+							'select select-bordered bg-base-100 w-full',
 							errors.property && 'select-error',
 						]}
 						required
 					>
-						<option value="" disabled selected={!values.property}>Select property...</option>
+						<option
+							value=""
+							disabled
+							selected={!values.property}
+							>Select property...</option
+						>
 						{
 							PROPERTIES.map((p) => (
 								<option
@@ -214,30 +259,38 @@ const existingReservations = existingRows.map((r) => ({
 							))
 						}
 					</select>
-					<FieldError id="property-error" message={errors.property} />
+					<FieldError
+						id="property-error"
+						message={errors.property}
+					/>
 					<p
 						data-availability-status
-						class="mt-2 text-xs text-warning hidden"
+						class="text-warning mt-2 hidden text-xs"
 						role="status"
 						aria-live="polite"
 					>
 					</p>
 				</div>
 
-				<div class="pt-4 flex justify-end gap-3">
+				<div class="flex justify-end gap-3 pt-4">
 					<a
 						href="/admin/reservations"
 						class="btn btn-ghost"
 					>
 						Cancel
 					</a>
-					<SubmitButton label="Save Reservation" labelSubmitting="Saving…" />
+					<SubmitButton
+						label="Save Reservation"
+						labelSubmitting="Saving…"
+					/>
 				</div>
 			</form>
 		</div>
 	</Card>
-	<p class="mt-4 text-xs text-base-content/50">
-		Times are fixed policy: check-in 3:00 PM, check-out 11:00 AM ({CHECK_IN_HOUR}:00 / {CHECK_OUT_HOUR}:00 Eastern).
+	<p class="text-base-content/50 mt-4 text-xs">
+		Times are fixed policy: check-in 3:00 PM, check-out 11:00 AM ({CHECK_IN_HOUR}:00 / {
+			CHECK_OUT_HOUR
+		}:00 Eastern).
 	</p>
 
 	<script

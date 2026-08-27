@@ -41,51 +41,43 @@ type Row = {
 	property: string;
 };
 
-let reservations: Row[] = [];
-let hasNext = false;
-
-try {
-	const rows = (await (async () => {
-		if (filter === 'upcoming') {
-			return sql`
-				SELECT id, name, check_in, check_out, property
-				FROM reservations
-				WHERE check_in >= now()
-				ORDER BY check_in ASC
-				LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
-			`;
-		}
-		if (filter === 'current') {
-			return sql`
-				SELECT id, name, check_in, check_out, property
-				FROM reservations
-				WHERE check_in <= now() AND check_out >= now()
-				ORDER BY check_in ASC
-				LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
-			`;
-		}
-		if (filter === 'past') {
-			return sql`
-				SELECT id, name, check_in, check_out, property
-				FROM reservations
-				WHERE check_out < now()
-				ORDER BY check_in DESC
-				LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
-			`;
-		}
+const rows = (await (async () => {
+	if (filter === 'upcoming') {
 		return sql`
 			SELECT id, name, check_in, check_out, property
 			FROM reservations
+			WHERE check_in >= now()
+			ORDER BY check_in ASC
+			LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+		`;
+	}
+	if (filter === 'current') {
+		return sql`
+			SELECT id, name, check_in, check_out, property
+			FROM reservations
+			WHERE check_in <= now() AND check_out >= now()
+			ORDER BY check_in ASC
+			LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+		`;
+	}
+	if (filter === 'past') {
+		return sql`
+			SELECT id, name, check_in, check_out, property
+			FROM reservations
+			WHERE check_out < now()
 			ORDER BY check_in DESC
 			LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
 		`;
-	})()) as Row[];
-	hasNext = rows.length > PAGE_SIZE;
-	reservations = rows.slice(0, PAGE_SIZE);
-} catch (e) {
-	error = e instanceof Error ? e.message : 'Failed to load reservations';
-	throw e;
-}
+	}
+	return sql`
+		SELECT id, name, check_in, check_out, property
+		FROM reservations
+		ORDER BY check_in DESC
+		LIMIT ${PAGE_SIZE + 1} OFFSET ${offset}
+	`;
+})()) as Row[];
+const hasNext = rows.length > PAGE_SIZE;
+const reservations = rows.slice(0, PAGE_SIZE);
 
 const buildLink = (params: Record<string, string | number | undefined>) => {
 	const url = new URL(Astro.url.pathname, Astro.url.origin);

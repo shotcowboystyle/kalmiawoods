@@ -13,8 +13,11 @@ export const applyColorScheme = (colorScheme: ColorScheme) => {
 };
 
 export const getPreferredColorScheme = (): ColorScheme => {
-	if (typeof localStorage !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_COLOR_SCHEME_KEY)) {
-		return localStorage.getItem(LOCAL_STORAGE_COLOR_SCHEME_KEY);
+	if (typeof localStorage !== 'undefined') {
+		const stored = localStorage.getItem(LOCAL_STORAGE_COLOR_SCHEME_KEY);
+		if (stored === 'light' || stored === 'dark') {
+			return stored;
+		}
 	}
 
 	if (window?.matchMedia('(prefers-color-scheme: dark)').matches) {
