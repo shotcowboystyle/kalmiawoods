@@ -4,7 +4,7 @@ import SvgSprite from '@/components/SvgSprite.astro';
 ---
 
 <!-- <section class="mt-16 bg-gradient-to-r from-primary to-secondary py-6 xl:py-24"> -->
-<section class="section flex items-center justify-center bg-secondary">
+<section class="section bg-secondary flex items-center justify-center">
 	<div class="flex flex-wrap items-center sm:container">
 		<div class="w-full px-4 sm:px-8 lg:px-0 xl:w-1/2">
 			<div class="relative flex flex-wrap justify-center sm:flex-nowrap sm:gap-x-8">
@@ -17,13 +17,13 @@ import SvgSprite from '@/components/SvgSprite.astro';
 									containerClass,
 								]}
 							>
-								<div class="mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md dark:bg-neutral">
+								<div class="dark:bg-neutral mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md">
 									<SvgSprite
 										name={icon}
 										class="h-8 w-8 text-black dark:fill-white dark:text-white"
 									/>
 								</div>
-								<div class="ml-4 md:ml-0 md:mt-4">
+								<div class="ml-4 md:mt-4 md:ml-0">
 									<p class="font-semibold">{title}</p>
 									<p class="mt-1 text-sm md:mt-2">{description}</p>
 								</div>
@@ -41,13 +41,13 @@ import SvgSprite from '@/components/SvgSprite.astro';
 									containerClass,
 								]}
 							>
-								<div class="mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md dark:bg-neutral">
+								<div class="dark:bg-neutral mx-auto h-full w-12 max-w-full rounded-full bg-white p-2 shadow-md">
 									<SvgSprite
 										name={icon}
 										class="h-8 w-8 text-black dark:fill-white dark:text-white"
 									/>
 								</div>
-								<div class="ml-4 md:ml-0 md:mt-4">
+								<div class="ml-4 md:mt-4 md:ml-0">
 									<p class="font-semibold">{title}</p>
 									<p class="mt-1 text-sm md:mt-2">{description}</p>
 								</div>
@@ -58,30 +58,30 @@ import SvgSprite from '@/components/SvgSprite.astro';
 			</div>
 		</div>
 
-		<div class="mt-6 w-full px-4 leading-relaxed text-white text-base sm:px-8 lg:px-12 xl:w-1/2">
+		<div class="mt-6 w-full px-4 text-base leading-relaxed text-white sm:px-8 lg:px-12 xl:w-1/2">
 			<div
-				class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center text-slate-500 shadow-lg dark:bg-neutral"
+				class="dark:bg-neutral mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white p-3 text-center text-slate-500 shadow-lg"
 			>
 				<SvgSprite
 					name="trees"
 					class="h-16 w-16 stroke-black dark:stroke-white"
 				/>
 			</div>
-			<h3 class="mb-2 font-semibold leading-normal text-2xl">Rustic Meets Modern</h3>
-			<p class="mb-4 mt-4">We have something for everyone. Fun and excitement for all ages.</p>
-			<p class="mb-4 mt-4">
+			<h3 class="mb-2 text-2xl leading-normal font-semibold">Rustic Meets Modern</h3>
+			<p class="mt-4 mb-4">We have something for everyone. Fun and excitement for all ages.</p>
+			<p class="mt-4 mb-4">
 				Boasts ceiling beams, stone walls, and a wood-burning stove. Set over 2 floors, sleeps 4
 				people and includes a dog bed in the living room. The garden is made up of a vegetable
 				patch, patio furniture and a barbeque.
 			</p>
-			<p class="mb-4 mt-4">
+			<p class="mt-4 mb-4">
 				The local area offers lovely walking routes, historical castle, horse riding and mushroom
 				picking.
 			</p>
 			<div class="block pb-6">
 				{
 					SUMMARY_FEATURES.map(({ text }) => (
-						<span class="last:mr-xs mr-2 mt-2 inline-block rounded-full bg-white px-2 py-1 font-semibold uppercase text-base-content text-xs dark:bg-neutral dark:text-neutral-content">
+						<span class="last:mr-xs text-base-content dark:bg-neutral dark:text-neutral-content mt-2 mr-2 inline-block rounded-full bg-white px-2 py-1 text-xs font-semibold uppercase">
 							{text}
 						</span>
 					))

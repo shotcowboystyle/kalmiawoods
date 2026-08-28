@@ -39,7 +39,7 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 							</div>
 
 							<div class="mt-0">
-								<span class="block font-semibold text-base-content">{attraction.data.name}</span>
+								<span class="text-base-content block font-semibold">{attraction.data.name}</span>
 								<span class="text-base-content text-sm">{attraction.data.description}</span>
 							</div>
 						</div>
@@ -54,7 +54,7 @@ const nearbyAttractions = (await getCollection('attractions')).sort(
 			src={bgImage}
 			alt=""
 			widths={[640, 828, 2400, bgImage.width]}
-			class="section-bg-image mask mask-hexagon-2 absolute left-1/2 top-0 p-0 brightness-200"
+			class="section-bg-image mask mask-hexagon-2 absolute top-0 left-1/2 p-0 brightness-200"
 		/>
 	</div>
 </section>

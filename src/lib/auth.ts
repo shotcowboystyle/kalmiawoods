@@ -33,10 +33,7 @@ function generateToken(): string {
 		.join('');
 }
 
-export async function verifyLogin(
-	email: string,
-	password: string,
-): Promise<SessionUser | null> {
+export async function verifyLogin(email: string, password: string): Promise<SessionUser | null> {
 	const sql = getDb();
 	const rows = await sql`
 		SELECT id, email, role, password_hash, salt, must_change_password

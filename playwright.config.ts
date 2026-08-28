@@ -88,7 +88,7 @@ export default defineConfig({
 	/* Run your local dev server before starting the tests */
 	...(!process.env.PLAYWRIGHT_TEST_BASE_URL && {
 		webServer: {
-			command: 'pnpm preview',
+			command: 'pnpm dev',
 			url: 'http://localhost:4321/',
 			timeout: (isCI ? 300 : 60) * 1000,
 			reuseExistingServer: !isCI,

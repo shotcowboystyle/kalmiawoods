@@ -64,7 +64,6 @@ if (Astro.request.method === 'POST') {
 				if (msg.includes('unique') || msg.includes('duplicate')) {
 					fieldErrors.email = 'A user with that email already exists.';
 				} else {
-					formError = msg;
 					throw e;
 				}
 			}

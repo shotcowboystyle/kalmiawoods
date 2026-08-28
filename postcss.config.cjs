@@ -16,11 +16,11 @@ module.exports = {
 				'custom-properties': {
 					strict: false,
 					warnings: false,
-					preserve: true
+					preserve: true,
 				},
 				// 'custom-media-queries': true,
-				'nesting-rules': false
-			}
+				'nesting-rules': false,
+			},
 		},
 		// 'postcss-combine-media-query': {},
 		// 'postcss-combine-duplicated-selectors': {

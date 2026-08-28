@@ -1,8 +1,11 @@
-<h2 class="title-font mb-1 font-medium text-gray-800 text-lg">Have a question?</h2>
+<h2 class="title-font mb-1 text-lg font-medium text-gray-800">Have a question?</h2>
 <p class="mb-4 leading-relaxed text-gray-800">Drop us a line and we'll get right back to you.</p>
 <div class="form-control mb-4 w-full">
-	<label class="label" for="name">
-		<span class="label-text text-gray-800 text-base">Name</span>
+	<label
+		class="label"
+		for="name"
+	>
+		<span class="label-text text-base text-gray-800">Name</span>
 	</label>
 	<input
 		id="name"
@@ -12,8 +15,11 @@
 	/>
 </div>
 <div class="form-control mb-4 w-full">
-	<label class="label" for="email">
-		<span class="label-text text-gray-800 text-base">Email</span>
+	<label
+		class="label"
+		for="email"
+	>
+		<span class="label-text text-base text-gray-800">Email</span>
 	</label>
 	<input
 		id="email"
@@ -23,8 +29,11 @@
 	/>
 </div>
 <div class="form-control mb-4 w-full">
-	<label class="label" for="message">
-		<span class="label-text text-gray-800 text-base">Message</span>
+	<label
+		class="label"
+		for="message"
+	>
+		<span class="label-text text-base text-gray-800">Message</span>
 	</label>
 	<textarea
 		id="message"
@@ -33,12 +42,29 @@
 	></textarea>
 </div>
 
-<button id="btn-send-message" class="btn-send-message self-center">
+<button
+	id="btn-send-message"
+	class="btn-send-message self-center"
+>
 	<span class="default">Send Message</span>
 	<span class="success">
-		<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-			<circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-			<path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+		<svg
+			class="checkmark"
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 52 52"
+		>
+			<circle
+				class="checkmark__circle"
+				cx="26"
+				cy="26"
+				r="25"
+				fill="none"
+			></circle>
+			<path
+				class="checkmark__check"
+				fill="none"
+				d="M14.1 27.2l7.1 7.2 16.7-16.8"
+			></path>
 		</svg>
 		<span class="success-text">Message Sent</span>
 	</span>
@@ -46,9 +72,7 @@
 	<div class="right"></div>
 </button>
 
-<p class="mt-3 text-gray-800 text-sm">
-	Give us one business day to respond before getting upset!
-</p>
+<p class="mt-3 text-sm text-gray-800">Give us one business day to respond before getting upset!</p>
 
 <script>
 	import gsap from 'gsap';

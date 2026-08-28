@@ -28,7 +28,7 @@ const allAmenitiesItems = amenitiesCollection.reduce(
 >
 	<div class="modal-box !w-3/5 !max-w-3xl">
 		<form method="dialog">
-			<button class="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">✕</button>
+			<button class="btn btn-circle btn-ghost btn-sm absolute top-2 right-2">✕</button>
 		</form>
 
 		<div class="mb-8">
@@ -43,7 +43,7 @@ const allAmenitiesItems = amenitiesCollection.reduce(
 		{
 			amenitiesCollection.map((amenity) => (
 				<div class="-mt-4 mb-12">
-					<div class="mb-0 py-4 text-lg font-semibold text-base-content">
+					<div class="text-base-content mb-0 py-4 text-lg font-semibold">
 						<h3
 							class="amenity-section-title"
 							tabindex="-1"
@@ -66,7 +66,7 @@ const allAmenitiesItems = amenitiesCollection.reduce(
 								<div class="rounded-sm py-6">
 									<div class="flex">
 										<div class="mr-4">
-											<div class="min-h-6 flex items-center">
+											<div class="flex min-h-6 items-center">
 												<SvgSprite
 													name={icon}
 													class="h-6 w-6 dark:fill-white"
@@ -77,7 +77,7 @@ const allAmenitiesItems = amenitiesCollection.reduce(
 										<div class="flex w-full flex-auto flex-col justify-center">
 											<div class="text-base-content">{title}</div>
 											{description && (
-												<div class="text-muted mt-1 break-words text-sm">{description}</div>
+												<div class="text-muted mt-1 text-sm break-words">{description}</div>
 											)}
 										</div>
 									</div>

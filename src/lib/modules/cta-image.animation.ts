@@ -19,7 +19,9 @@ export default class CtaImageAnimation {
 			},
 		};
 
-		this.sections = $el.querySelectorAll(this.DOM.section);
+		this.sections = $el
+			? $el.querySelectorAll(this.DOM.section)
+			: document.createDocumentFragment().childNodes;
 	}
 
 	init() {

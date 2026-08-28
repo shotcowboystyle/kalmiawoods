@@ -1,17 +1,17 @@
 // @ts-check
 
 import js from '@eslint/js';
-import { defineConfig } from 'eslint/config';
-import pluginVue from 'eslint-plugin-vue';
-import pluginAstro from 'eslint-plugin-astro';
-import parserVue from 'vue-eslint-parser';
 // import markdown from '@eslint/markdown';
 import configPrettier from 'eslint-config-prettier';
+import pluginAstro from 'eslint-plugin-astro';
+import pluginVue from 'eslint-plugin-vue';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import parserVue from 'vue-eslint-parser';
 
 export default defineConfig(
-{
+	{
 		ignores: [
 			'**/node_modules/**',
 			'**/dist/**',
@@ -55,6 +55,7 @@ export default defineConfig(
 				...globals.node,
 				...globals.browser,
 				...globals.es2022,
+				__BUILD_ID__: 'readonly',
 			},
 		},
 		rules: {
@@ -77,5 +78,5 @@ export default defineConfig(
 			},
 		},
 	},
-	configPrettier
+	configPrettier,
 );

@@ -14,7 +14,9 @@ const { src, alt, aspectRatio, imgClass } = Astro.props;
 
 <figure class="c-responsive-image">
 	<Picture
-		pictureAttributes={{ class: `c-responsive-image__inner c-responsive-image__inner--${aspectRatio}` }}
+		pictureAttributes={{
+			class: `c-responsive-image__inner c-responsive-image__inner--${aspectRatio}`,
+		}}
 		class:list={['c-responsive-image__img', imgClass]}
 		src={src}
 		formats={['avif', 'webp']}

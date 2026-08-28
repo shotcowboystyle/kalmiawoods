@@ -11,7 +11,7 @@ import { fetchLocalImages } from '@/utils/images';
 import { Picture } from 'astro:assets';
 import 'spotlight.js/dist/css/spotlight.min.css';
 
-export const PHOTO_GALLERY = [
+const PHOTO_GALLERY = [
 	{
 		text: 'House Overview',
 		image: houseOverviewCoverPhoto,
@@ -59,16 +59,16 @@ images = images.filter((image) => !!image);
 ---
 
 <section
-	class="section flex items-center justify-center bg-primary"
+	class="section bg-primary flex items-center justify-center"
 	data-images={JSON.stringify(images)}
 	id="gallery-root"
 >
-	<div class="w-full sm:container max-xl:overflow-hidden max-xl:px-6">
-		<h2 class="mb-4 font-bold text-base-content text-2xl md:text-3xl lg:mb-8 lg:text-4xl">
+	<div class="w-full max-xl:overflow-hidden max-xl:px-6 sm:container">
+		<h2 class="text-base-content mb-4 text-2xl font-bold md:text-3xl lg:mb-8 lg:text-4xl">
 			Explore Inside
 		</h2>
 		<div
-			class="py-2 max-xl:carousel max-xl:w-full max-xl:space-x-8 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-2 xl:gap-y-8"
+			class="max-xl:carousel py-2 max-xl:w-full max-xl:space-x-8 max-xl:px-0 xl:grid xl:grid-cols-4 xl:gap-x-2 xl:gap-y-8"
 		>
 			{
 				PHOTO_GALLERY.map(({ image, text }) => (
@@ -82,14 +82,14 @@ images = images.filter((image) => !!image);
 									<Picture
 										alt={text}
 										src={image}
-										class="duration-300 hover:scale-105 hover:bg-gray-200 hover:bg-opacity-40"
+										class="hover:bg-opacity-40 duration-300 hover:scale-105 hover:bg-gray-200"
 										formats={['avif', 'webp']}
 										widths={[168, 336, 672, image.width]}
 									/>
 								</div>
 							</div>
 
-							<span class="text-md font-medium leading-5 text-base-content">{text}</span>
+							<span class="text-md text-base-content leading-5 font-medium">{text}</span>
 						</div>
 					</div>
 				))

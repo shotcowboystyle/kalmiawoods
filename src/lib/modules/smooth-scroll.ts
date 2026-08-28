@@ -1,8 +1,8 @@
 import type { StringObject } from '@/types/common';
 import { easeOutExpo } from '@/utils/easings';
-import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
+import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +17,6 @@ export default class SmoothScroll extends Lenis {
 			smoothWheel: true,
 			easing: easeOutExpo,
 			orientation: 'vertical',
-			smoothTouch: false,
 			touchMultiplier: 2,
 		});
 
@@ -86,7 +85,7 @@ export default class SmoothScroll extends Lenis {
 	resize() {}
 
 	render(time?: number) {
-		if (!this.isActive) {
+		if (!this.isActive || time === undefined) {
 			return;
 		}
 
