@@ -45,7 +45,7 @@
     "cssnano": "^8.0.9",
     "cz-conventional-changelog": "^3.3.0",
     "daisyui": "^5.7.22",
-    "eslint": "^10.9.0",
+    "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-astro": "^3.1.0",
