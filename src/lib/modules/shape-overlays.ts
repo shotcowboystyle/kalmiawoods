@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '@/utils/motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 
@@ -39,26 +40,44 @@ export default class ShapeOverlays {
 			this.delayPointsArray[i] = ((Math.sin(radian + range) + 1) / 2) * this.delayPointsMax;
 		}
 
+		// Assigned before the render loop starts: under reduced motion the loop
+		// reaches its end state on the first frame, so a callback set afterwards
+		// would never fire.
+		this.done = callback;
+
 		if (!this.isOpened) {
 			await this.open();
 		} else {
 			await this.close();
 		}
+	}
 
-		this.done = callback;
+	/**
+	 * Total time the wipe needs before every path has reached its end state.
+	 * Backdating timeStart by this much makes the first render paint the final
+	 * geometry, so the overlay snaps instead of animating.
+	 */
+	get totalDuration() {
+		return (
+			this.duration + this.delayPerPath * ((this.path?.length ?? 1) - 1) + this.delayPointsMax + 1
+		);
+	}
+
+	startTime() {
+		return prefersReducedMotion() ? Date.now() - this.totalDuration : Date.now();
 	}
 
 	async open() {
 		this.isOpened = true;
 		this.elm.classList.add('is-opened');
-		this.timeStart = Date.now();
+		this.timeStart = this.startTime();
 		await this.renderLoop();
 	}
 
 	async close() {
 		this.isOpened = false;
 		this.elm.classList.remove('is-opened');
-		this.timeStart = Date.now();
+		this.timeStart = this.startTime();
 		await this.renderLoop();
 	}
 

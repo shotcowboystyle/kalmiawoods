@@ -1,6 +1,7 @@
 import ShapeOverlays from '@/lib/modules/shape-overlays';
 import SmoothScroll from '@/lib/modules/smooth-scroll';
 import type { GenericObject } from '@/types/common';
+import { prefersReducedMotion } from '@/utils/motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 
@@ -94,7 +95,7 @@ export default class NavigationController {
 	isAnimating = false;
 	shapeOverlays: ShapeOverlays | null = null;
 
-	init(smoothScrollInstance: SmoothScroll) {
+	init(smoothScrollInstance: SmoothScroll | null) {
 		if (this.navigation !== null) {
 			this.navigationController();
 		} else {
@@ -182,7 +183,17 @@ export default class NavigationController {
 		});
 	}
 
+	/**
+	 * Multiplier applied to every menu duration, delay and stagger. Reduced
+	 * motion collapses the sequence to zero so the end states land at once.
+	 */
+	get motionScale() {
+		return prefersReducedMotion() ? 0 : 1;
+	}
+
 	closeNav() {
+		const scale = this.motionScale;
+
 		this.isAnimating = true;
 		this.hamburgers.forEach(($hamburgerEl) => {
 			($hamburgerEl as HTMLElement).classList.remove(this.DOM.states.active);
@@ -190,9 +201,9 @@ export default class NavigationController {
 
 		gsap.to(this.mobileNavigationItems, {
 			autoAlpha: 0,
-			duration: 0.4,
+			duration: 0.4 * scale,
 			stagger: {
-				each: 0.1,
+				each: 0.1 * scale,
 				grid: 'auto',
 				ease: 'power2.inOut',
 			},
@@ -200,15 +211,15 @@ export default class NavigationController {
 
 		gsap.to(this.mobileNavigationItemWrapper, {
 			y: 20,
-			duration: 0.8,
+			duration: 0.8 * scale,
 			delay: 0,
 		});
 
 		gsap.to(this.mobileNavigationLogo, {
 			autoAlpha: 0,
 			y: 20,
-			duration: 0.3,
-			delay: 0.2,
+			duration: 0.3 * scale,
+			delay: 0.2 * scale,
 		});
 
 		setTimeout(() => {
@@ -216,9 +227,19 @@ export default class NavigationController {
 			this.shapeOverlays?.toggle(() => {
 				this.mobileNavigation.classList.remove(this.DOM.states.active);
 				this.done();
-				this.smoothScroll?.unlockScroll();
+				this.unlockScroll();
 			});
-		}, 600);
+		}, 600 * scale);
+	}
+
+	lockScroll() {
+		document.documentElement.classList.add('is-scroll-locked');
+		this.smoothScroll?.scrollLock();
+	}
+
+	unlockScroll() {
+		document.documentElement.classList.remove('is-scroll-locked');
+		this.smoothScroll?.unlockScroll();
 	}
 
 	done() {
@@ -226,13 +247,15 @@ export default class NavigationController {
 	}
 
 	openNav() {
+		const scale = this.motionScale;
+
 		this.isAnimating = true;
 		this.hamburgers.forEach(($hamburgerEl) => {
 			($hamburgerEl as HTMLElement).classList.add(this.DOM.states.active);
 		});
 		this.mobileNavigationInner.classList.add(this.DOM.states.active);
 		this.mobileNavigation.classList.add(this.DOM.states.active);
-		this.smoothScroll?.scrollLock();
+		this.lockScroll();
 		this.shapeOverlays?.toggle(() => this.done());
 
 		gsap.fromTo(
@@ -242,13 +265,13 @@ export default class NavigationController {
 			},
 			{
 				autoAlpha: 1,
-				duration: 0.4,
+				duration: 0.4 * scale,
 				stagger: {
-					each: 0.1,
+					each: 0.1 * scale,
 					grid: 'auto',
 					ease: 'power2.inOut',
 				},
-				delay: 0.8,
+				delay: 0.8 * scale,
 			},
 		);
 
@@ -259,8 +282,8 @@ export default class NavigationController {
 			},
 			{
 				y: 0,
-				duration: 0.8,
-				delay: 0.7,
+				duration: 0.8 * scale,
+				delay: 0.7 * scale,
 			},
 		);
 
@@ -273,8 +296,8 @@ export default class NavigationController {
 			{
 				y: 0,
 				autoAlpha: 1,
-				duration: 0.3,
-				delay: 0.6,
+				duration: 0.3 * scale,
+				delay: 0.6 * scale,
 			},
 		);
 	}

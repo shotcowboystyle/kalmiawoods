@@ -19,7 +19,10 @@ module.exports = {
 					preserve: true,
 				},
 				// 'custom-media-queries': true,
-				'nesting-rules': false,
+				// Must stay on: cssnano runs after this and silently discards any
+				// nested rule it is handed, which drops every `&.is-active` /
+				// `&.has-loaded` state block in the component styles.
+				'nesting-rules': true,
 			},
 		},
 		// 'postcss-combine-media-query': {},

@@ -60,6 +60,12 @@ const { isHomepage, useLightNavigation, title, description } = Astro.props as Pr
 			overflow: hidden;
 		}
 
+		/* Scroll lock for the mobile menu when Lenis is not running
+		   (reduced motion). Mirrors what .lenis-stopped does otherwise. */
+		html.is-scroll-locked {
+			overflow: hidden;
+		}
+
 		.lenis.lenis-scrolling iframe {
 			pointer-events: none;
 		}

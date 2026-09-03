@@ -117,8 +117,10 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
 		<slot />
 
 		<style is:global>
-			.animate-in {
-				animation: animate-in 0.5s ease-in-out;
+			@media (prefers-reduced-motion: no-preference) {
+				.animate-in {
+					animation: animate-in 0.5s ease-in-out;
+				}
 			}
 
 			@keyframes animate-in {

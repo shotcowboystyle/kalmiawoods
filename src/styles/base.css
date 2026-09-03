@@ -987,7 +987,6 @@ body {
 	border: none;
 	margin: 0;
 	padding: 0;
-	outline: 0;
 	border-radius: 0;
 	box-shadow: none;
 	text-decoration: none;
@@ -1013,7 +1012,11 @@ body {
 	line-height: 1;
 	background-color: #5b6647;
 	color: #f7f7ee;
-	transition: all 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+	/* Named rather than `all`: `all` also animated the focus ring, which faded
+	   in from currentColor and left the control looking unfocused for 200ms. */
+	transition:
+		background-color 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53),
+		color 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
 
 	&.is-disabled,
 	&:disabled {
@@ -1192,7 +1195,6 @@ body {
 .c-hamburger {
 	border: none;
 	margin: 0;
-	outline: 0;
 	border-radius: 0;
 	box-shadow: none;
 	text-decoration: none;
@@ -3024,4 +3026,28 @@ body {
 	.c-content-image-card__image:nth-child(3) {
 	grid-column: 9/-1;
 	grid-row: 2;
+}
+
+/* ============================================================
+   Focus indicator
+
+   Two-tone on purpose. The chrome sits over cream (#f7f7ee nav and page),
+   the dark green button fill, the hero photography and the navy footer,
+   so a single-colour ring disappears against one of them. The inner cream
+   band reads on the dark surfaces, the outer navy band on the light ones.
+
+   The browser's own `outline: auto` is not enough here: it resolves to
+   currentColor, which on .c-button is #f7f7ee — the exact colour of the
+   scrolled navigation bar behind it.
+   ============================================================ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+	outline: 2px solid #03364f;
+	outline-offset: 2px;
+	box-shadow: 0 0 0 2px #f7f7ee;
 }

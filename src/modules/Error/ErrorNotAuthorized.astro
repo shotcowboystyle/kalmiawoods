@@ -1,16 +1,10 @@
 ---
-import { asset, url } from '@/utils/site';
+import { url } from '@/utils/site';
 ---
 
 <div
 	class="mx-auto flex h-screen flex-col items-center justify-center px-6 xl:px-0 dark:bg-gray-900"
 >
-	<div class="block md:max-w-lg">
-		<img
-			src={asset('images/illustrations/403.svg')}
-			alt="vault"
-		/>
-	</div>
 	<div class="text-center xl:max-w-4xl">
 		<h1
 			class="mb-3 text-2xl leading-tight font-bold text-gray-900 sm:text-4xl lg:text-5xl dark:text-white"
@@ -23,7 +17,7 @@ import { asset, url } from '@/utils/site';
 		</p>
 		<a
 			href={url('')}
-			class="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mr-3 inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:ring-4"
+			class="c-button"
 		>
 			<svg
 				class="mr-2 -ml-1 h-5 w-5"
