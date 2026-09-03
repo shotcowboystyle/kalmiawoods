@@ -249,6 +249,12 @@ against an ORM that isn't installed. Both files need rewriting from scratch.
 - **`@eslint/markdown`** — imported and then commented out in `eslint.config.js`.
 - **`@types/canvas-confetti`** — the repo doesn't use `canvas-confetti`; the orphaned
   `ConfettiLauncher.astro` loads `confetti-js`, a different package.
+- **`changeset-bot` is installed on the repository** but there is no `.changeset/`
+  directory, no `@changesets/cli` dependency, and no changesets workflow. It comments
+  "No Changeset found" on every PR, and its own suggested changeset names the package
+  `@fake-scope/fake-pkg` — proof it has no config to read. The package is `private: true`
+  at version `0.0.0` and is never published, so changesets is the wrong tool here
+  entirely. Uninstall the app; it is pure PR noise.
 - **`docker-compose.yml`** mounts `./initdb` — that directory doesn't exist — and reads
   `.env.local` for `POSTGRES_*` vars that `env.example` never documents. Since the app
   connects to Neon via `KW_STORAGE_DATABASE_URL`, this local Postgres appears to be a
