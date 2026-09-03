@@ -57,6 +57,7 @@ import { Image } from 'astro:assets';
 </header>
 
 <script>
+	import { prefersReducedMotion } from '@/utils/motion';
 	import { parallaxScroll } from '@/utils/parallax';
 	import { gsap } from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -76,6 +77,9 @@ import { Image } from 'astro:assets';
 	};
 
 	const init = () => {
+		// The five hero layers only ever translate, so leaving them un-tweened
+		// renders the composed scene exactly as authored.
+		if (prefersReducedMotion()) return;
 		initHeaderTilt();
 	};
 

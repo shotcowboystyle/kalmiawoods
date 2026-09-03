@@ -1,4 +1,5 @@
 import type { GenericObject } from '@/types/common';
+import { prefersReducedMotion } from '@/utils/motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 
@@ -36,9 +37,27 @@ export default class HeaderAnimation {
 	init() {
 		// if (this.logo && this.wrapper && this.image && this.imageWrapper && this.navigation) {
 		if (this.logo && this.navigation && this.wrapper && this.imageWrapper) {
+			if (prefersReducedMotion()) {
+				this.reveal();
+				return;
+			}
+
 			document.body.classList.add(this.DOM.states.scrollLockTop);
 			this.animate();
 		}
+	}
+
+	/**
+	 * The homepage navigation is held at opacity 0 until `has-loaded` lands, so
+	 * reduced motion still needs the end state applied — just without the
+	 * entrance timeline or the scroll-scrubbed logo.
+	 */
+	reveal() {
+		this.navigation.classList.add(this.DOM.states.hasLoaded);
+		document.body.classList.remove(this.DOM.states.scrollLockTop);
+		setTimeout(() => {
+			ScrollTrigger.refresh();
+		}, 100);
 	}
 
 	animate() {

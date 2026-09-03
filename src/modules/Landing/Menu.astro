@@ -395,7 +395,11 @@ import SvgSprite from '@/components/SvgSprite.astro';
 		justify-content: space-between;
 		height: 100%;
 		color: #434b34;
-		transition: all 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+		/* Named rather than `all`, so the focus ring appears immediately
+		   instead of fading in over the hover transition. */
+		transition:
+			background-color 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53),
+			color 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
 	}
 
 	@media (max-width: 480px) {

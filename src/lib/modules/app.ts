@@ -10,6 +10,7 @@ import SectionSeparatorsAnimation from '@/lib/modules/section-separators.animati
 import SmoothScroll from '@/lib/modules/smooth-scroll';
 import { Viewport } from '@/lib/modules/viewport';
 import { delay } from '@/utils/delay';
+import { prefersReducedMotion } from '@/utils/motion';
 import {
 	isTransitionBeforePreparationEvent,
 	TRANSITION_AFTER_PREPARATION,
@@ -55,15 +56,31 @@ export default class App {
 	}
 
 	init() {
+		const reducedMotion = prefersReducedMotion();
+
 		this.loaderAnimation = new LoaderAnimation();
 		this.headerAnimation = new HeaderAnimation();
-		this.smoothScroll = new SmoothScroll();
 		this.navigationController = new NavigationController();
 
-		this.smoothScroll.init();
+		// Lenis hijacks the native scroll from its constructor, so under reduced
+		// motion it is never built. NavigationController falls back to a plain
+		// overflow lock when it has no instance.
+		if (!reducedMotion) {
+			this.smoothScroll = new SmoothScroll();
+			this.smoothScroll.init();
+		}
+
 		this.navigationController.init(this.smoothScroll);
 
 		this.initEvents();
+
+		// Every deferred module is decoration: parallax, drifting background
+		// shapes and reveal-on-scroll tweens. None of their targets are hidden by
+		// CSS, so skipping them under reduced motion leaves the content in its
+		// natural, fully visible state.
+		if (reducedMotion) {
+			return;
+		}
 
 		// Defer non-critical animations to reduce main-thread blocking
 		requestAnimationFrame(() => {
@@ -110,7 +127,9 @@ export default class App {
 				this.loaderAnimation?.showLoader();
 			}
 			await originalLoader();
-			await delay(1000);
+			// The wipe snaps under reduced motion, so holding the transition open
+			// for it would just be a second of blank screen.
+			await delay(prefersReducedMotion() ? 0 : 1000);
 		};
 	}
 
