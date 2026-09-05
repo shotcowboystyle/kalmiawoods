@@ -20,8 +20,6 @@ export const convertArrayToObjectsByKey = (array: any, key: string) =>
 export const getRandomItem = (items: [string | number]) =>
 	items[Math.floor(Math.random() * items.length)];
 
-export const dedupeFlatArray = (arr: [string | number]) => [...new Set(arr)];
-
 export const sortByKey = (arr: [GenericObject], key: string) =>
 	arr.sort((a, b) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0));
 
