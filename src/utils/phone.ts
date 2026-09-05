@@ -20,7 +20,7 @@ export const phoneFormatUSA = (input: string) => {
 
 /*******************************************************
  * formatPhoneText
- * returns a string that is in XXX-XXX-XXXX format
+ * returns a string that is in NNN-NNN-NNNN format
  *******************************************************/
 export const formatPhoneInputUSA = (value: string) => {
 	let formattedValue = value.trim().replaceAll('-', '');
