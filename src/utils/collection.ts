@@ -28,8 +28,6 @@ export const sortByKey = (arr: [GenericObject], key: string) =>
 export const isEqual = (a: GenericObject | [GenericObject], b: GenericObject | [GenericObject]) =>
 	JSON.stringify(a) === JSON.stringify(b);
 
-export const countOccurrences = (arr: [string | number], value: string | number) =>
-	arr.reduce((a, v) => (v === value ? (a as number) + 1 : a), 0 as number);
 
 export const pluck = (objs: [GenericObject], key: string) => objs.map((obj) => obj[key]);
 
