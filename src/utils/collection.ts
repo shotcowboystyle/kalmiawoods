@@ -32,9 +32,3 @@ export const countOccurrences = (arr: [string | number], value: string | number)
 	arr.reduce((a, v) => (v === value ? (a as number) + 1 : a), 0 as number);
 
 export const pluck = (objs: [GenericObject], key: string) => objs.map((obj) => obj[key]);
-
-export const insertAt = (arr: [GenericObject], index: number, newItem: GenericObject | any) => [
-	...arr.slice(0, index),
-	newItem,
-	...arr.slice(index),
-];
