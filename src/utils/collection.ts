@@ -17,9 +17,6 @@ export function removeObjectFromArrayByProperty<T>(
 export const convertArrayToObjectsByKey = (array: any, key: string) =>
 	Object.fromEntries(array.map((obj: any) => [obj[key], obj]));
 
-export const getRandomItem = (items: [string | number]) =>
-	items[Math.floor(Math.random() * items.length)];
-
 export const dedupeFlatArray = (arr: [string | number]) => [...new Set(arr)];
 
 export const sortByKey = (arr: [GenericObject], key: string) =>
