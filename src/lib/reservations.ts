@@ -29,23 +29,24 @@ export function propertyLabel(value: string): string {
 export function combineDateAndTime(dateYYYYMMDD: string, hour: number): Date {
 	const [y, m, d] = dateYYYYMMDD.split('-').map(Number);
 	const utcGuess = new Date(Date.UTC(y, m - 1, d, hour, 0, 0));
-	const offMin = tzOffsetMinutes(PROPERTY_TIMEZONE, utcGuess);
+	const offMin = tzOffsetMinutes(utcGuess);
 	return new Date(utcGuess.getTime() - offMin * 60000);
 }
 
-function tzOffsetMinutes(zone: string, at: Date): number {
-	const dtf = new Intl.DateTimeFormat('en-US', {
-		timeZone: zone,
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-		hour12: false,
-	});
+const tzOffsetDtf = new Intl.DateTimeFormat('en-US', {
+	timeZone: PROPERTY_TIMEZONE,
+	year: 'numeric',
+	month: '2-digit',
+	day: '2-digit',
+	hour: '2-digit',
+	minute: '2-digit',
+	second: '2-digit',
+	hour12: false,
+});
+
+function tzOffsetMinutes(at: Date): number {
 	const map: Record<string, string> = {};
-	for (const p of dtf.formatToParts(at)) map[p.type] = p.value;
+	for (const p of tzOffsetDtf.formatToParts(at)) map[p.type] = p.value;
 	const asUTC = Date.UTC(
 		Number(map.year),
 		Number(map.month) - 1,
@@ -57,44 +58,49 @@ function tzOffsetMinutes(zone: string, at: Date): number {
 	return (asUTC - at.getTime()) / 60000;
 }
 
+const dateTimeDtf = new Intl.DateTimeFormat('en-US', {
+	timeZone: PROPERTY_TIMEZONE,
+	month: 'short',
+	day: 'numeric',
+	year: 'numeric',
+	hour: 'numeric',
+	minute: '2-digit',
+});
+
 /**
  * Format a TIMESTAMPTZ (as ISO string or Date) as a wall-clock string in PROPERTY_TIMEZONE.
  */
 export function formatReservationDateTime(value: string | Date): string {
 	const d = value instanceof Date ? value : new Date(value);
-	return d.toLocaleString('en-US', {
-		timeZone: PROPERTY_TIMEZONE,
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric',
-		hour: 'numeric',
-		minute: '2-digit',
-	});
+	return dateTimeDtf.format(d);
 }
+
+const dateDtf = new Intl.DateTimeFormat('en-US', {
+	timeZone: PROPERTY_TIMEZONE,
+	month: 'short',
+	day: 'numeric',
+	year: 'numeric',
+});
 
 export function formatReservationDate(value: string | Date): string {
 	const d = value instanceof Date ? value : new Date(value);
-	return d.toLocaleDateString('en-US', {
-		timeZone: PROPERTY_TIMEZONE,
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric',
-	});
+	return dateDtf.format(d);
 }
 
 /**
  * Return YYYY-MM-DD for the wall-clock date in PROPERTY_TIMEZONE of a stored timestamp.
  * Used to hydrate <input type="date"> from a TIMESTAMPTZ row.
  */
+const inputDateDtf = new Intl.DateTimeFormat('en-CA', {
+	timeZone: PROPERTY_TIMEZONE,
+	year: 'numeric',
+	month: '2-digit',
+	day: '2-digit',
+});
+
 export function toDateInputValue(value: string | Date): string {
 	const d = value instanceof Date ? value : new Date(value);
-	const dtf = new Intl.DateTimeFormat('en-CA', {
-		timeZone: PROPERTY_TIMEZONE,
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	});
-	return dtf.format(d);
+	return inputDateDtf.format(d);
 }
 
 export type ReservationFormInput = {
