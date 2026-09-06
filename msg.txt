@@ -1,5 +1,0 @@
-🧪 [testing improvement] Add unit tests for isValidEmail
-
-🎯 What: Added unit tests for the regex-based `isValidEmail` utility function in `src/utils/email.ts`.
-📊 Coverage: Added tests to ensure valid emails return true, missing or invalid string formats return false, and various non-string types gracefully return false due to the type guard check.
-✨ Result: `isValidEmail` now has proper automated test coverage, preventing regressions if the regex string is tweaked.
