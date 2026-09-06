@@ -8,7 +8,7 @@ const attractionsCollection = defineCollection({
 			order: z.number(),
 			name: z.string(),
 			description: z.string(),
-			href: z.string().url(),
+			href: z.string(),
 			image: image(),
 		}),
 });
@@ -36,7 +36,7 @@ const restaurantsCollection = defineCollection({
 			name: z.string(),
 			description: z.string(),
 			location: z.string(),
-			locationLink: z.string().url(),
+			locationLink: z.string(),
 			image: image(),
 		}),
 });
