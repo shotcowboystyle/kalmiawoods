@@ -19,7 +19,8 @@
     "test:playwright:ui": "playwright test --ui",
     "types:check": "astro sync && tsc --noEmit && astro check",
     "update:deps": "pnpm update -Li",
-    "validate": "run-p format:check lint types:check"
+    "validate": "run-p format:check lint types:check",
+    "test:unit": "vitest run"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -75,6 +76,7 @@
     "tsx": "^4.23.13",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.68.0",
+    "vitest": "^5.0.0",
     "vue-eslint-parser": "^10.4.1"
   },
   "dependencies": {
@@ -97,5 +99,17 @@
     "spotlight.js": "^0.7.8",
     "swiper": "^12.2.0",
     "zod": "^4.5.4"
-  }
+  },
+  "main": ".lintstagedrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shotcowboystyle/kalmiawoods.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shotcowboystyle/kalmiawoods/issues"
+  },
+  "homepage": "https://github.com/shotcowboystyle/kalmiawoods#readme"
 }
