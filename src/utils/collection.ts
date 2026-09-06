@@ -22,9 +22,6 @@ export const getRandomItem = (items: [string | number]) =>
 
 export const dedupeFlatArray = (arr: [string | number]) => [...new Set(arr)];
 
-export const sortByKey = (arr: [GenericObject], key: string) =>
-	arr.sort((a, b) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0));
-
 export const isEqual = (a: GenericObject | [GenericObject], b: GenericObject | [GenericObject]) =>
 	JSON.stringify(a) === JSON.stringify(b);
 
