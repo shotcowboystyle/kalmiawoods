@@ -1,1 +1,4 @@
-export const calculatePercent = (value: number, total: number) => Math.round((value / total) * 100);
+export const calculatePercent = (value: number, total: number) => {
+	if (total === 0) return 0;
+	return Math.round((value / total) * 100);
+};
