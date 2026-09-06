@@ -75,6 +75,7 @@
     "tsx": "^4.23.13",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.68.0",
+    "vitest": "^5.0.0",
     "vue-eslint-parser": "^10.4.1"
   },
   "dependencies": {
