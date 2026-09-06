@@ -10,20 +10,20 @@ Vercel, Neon Postgres for the admin data.
 
 ## 1. What this actually is
 
-| | |
-|---|---|
-| **Framework** | Astro 6.4 (`^6.4.8`), SSR via `@astrojs/vercel` |
-| **UI layer** | `.astro` components only — **no Vue, no React** |
-| **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + DaisyUI 5 |
-| **Data** | Neon serverless Postgres (`@neondatabase/serverless`), raw tagged-template SQL |
-| **Auth** | Hand-rolled: PBKDF2 password hashing + DB-backed session cookie |
-| **Content** | MDX integration + JSON collections under `src/content/` |
-| **Animation** | GSAP, Lenis (smooth scroll), Swiper, SplitType |
-| **Maps / gallery** | Leaflet, spotlight.js |
-| **Validation** | Zod 4 (17 files) |
-| **Tests** | Playwright E2E — 3 spec files |
-| **Package manager** | pnpm 10.34.5 |
-| **Deploy** | Vercel, driven by GitHub Actions (Vercel's own git integration is **disabled**) |
+|                     |                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------- |
+| **Framework**       | Astro 6.4 (`^6.4.8`), SSR via `@astrojs/vercel`                                 |
+| **UI layer**        | `.astro` components only — **no Vue, no React**                                 |
+| **Styling**         | Tailwind CSS v4 (`@tailwindcss/vite`) + DaisyUI 5                               |
+| **Data**            | Neon serverless Postgres (`@neondatabase/serverless`), raw tagged-template SQL  |
+| **Auth**            | Hand-rolled: PBKDF2 password hashing + DB-backed session cookie                 |
+| **Content**         | MDX integration + JSON collections under `src/content/`                         |
+| **Animation**       | GSAP, Lenis (smooth scroll), Swiper, SplitType                                  |
+| **Maps / gallery**  | Leaflet, spotlight.js                                                           |
+| **Validation**      | Zod 4 (17 files)                                                                |
+| **Tests**           | Playwright E2E — 3 spec files                                                   |
+| **Package manager** | pnpm 10.34.5                                                                    |
+| **Deploy**          | Vercel, driven by GitHub Actions (Vercel's own git integration is **disabled**) |
 
 **Scale:** ~19,200 LOC across `src/` (103 `.astro`, 64 `.ts`, 6 `.css`), plus 131 SVGs
 and ~75 raster images. 394 files under `src/`.
@@ -51,7 +51,7 @@ src/content/{amenities,attractions,restaurants}/*.json
 src/lib/modules/*.animation.ts  ← GSAP/scroll behaviours
 ```
 
-`src/modules/` is the interesting convention: components are grouped by the *page* they
+`src/modules/` is the interesting convention: components are grouped by the _page_ they
 compose (`Landing/`, `Wellness/`, `Discover/`, `Dining/`, `Rooms/`, `Contact/`, `Error/`),
 not by type. `Landing/` alone holds 25 files. It reads well for a site whose pages are
 each a bespoke long-scroll layout.
@@ -94,7 +94,7 @@ The most carefully engineered part of the repo, and it shows in the comments:
 - The worker precaches admin routes at install time, then **scans the returned HTML**
   for `/_astro/` references rather than maintaining a hand-written asset list — the
   list can't drift from the build.
-- `build-sw.mjs` runs *after* `astro build` rather than as an integration, because
+- `build-sw.mjs` runs _after_ `astro build` rather than as an integration, because
   `astro-compress` and the Vercel adapter both hook `astro:build:done` and the adapter
   relocates client output during its hook. The comment says it outright: relative hook
   ordering is "not a thing to stake a deploy on."
@@ -119,15 +119,14 @@ Three tables, all defined **only** inside `scripts/seed-admin.ts`:
 
 ## 3. What's solid
 
-- **SQL is safe.** All 30 `sql\`\`` call sites across the admin pages use
-  `@neondatabase/serverless` tagged templates with parameter interpolation. No string
-  concatenation anywhere. Pagination offsets are bounds-checked
-  (`Math.min(Math.floor(rawOffset), 10000)`) before use.
+- **SQL is safe.** All 30 `sql\`\``call sites across the admin pages use`@neondatabase/serverless` tagged templates with parameter interpolation. No string
+concatenation anywhere. Pagination offsets are bounds-checked
+(`Math.min(Math.floor(rawOffset), 10000)`) before use.
 - **Password policy is real** (`src/lib/password-policy.ts`): 12-char minimum, four
   character classes, a common-password denylist that includes property-specific terms
   (`kalmiawoods`, `jocassee`, `keowee`), rejection of passwords containing the email
   local-part, and a 0–4 strength score surfaced to the user.
-- **Comments explain *why*, not *what*.** `build-id.mjs`, `build-sw.mjs`,
+- **Comments explain _why_, not _what_.** `build-id.mjs`, `build-sw.mjs`,
   `middleware.ts`, `tsconfig.json`, and both CI workflows carry non-obvious rationale
   for non-obvious choices. This is above average.
 - **TypeScript is strict** — extends `astro/tsconfigs/strict`, plus `strictNullChecks`,
@@ -220,17 +219,17 @@ opens.
 
 **`CLAUDE.md` describes a stack this repo abandoned.** Every one of these claims is false:
 
-| CLAUDE.md says | Reality |
-|---|---|
-| Astro 3.6.5 | Astro 6.4.8 |
-| Vue 3 components, `<script setup>`, `Kw`-prefixed | Zero `.vue` files exist |
-| PostgreSQL with **Prisma ORM** | Raw SQL on Neon; no `prisma/` dir, no Prisma dep |
-| **Lucia Auth v2** with Prisma adapter | Hand-rolled PBKDF2 + session table |
-| **Turbo** for monorepo management | Not a dependency |
-| `pnpm db:generate`, `db:migrate:dev`, `db:seed`, `prisma:studio` | None of these scripts exist |
-| `pnpm test:e2e:{accessibility,pages,performance,visual}` | None exist |
-| `src/components/` prefixed with `Kw` | No component uses that prefix |
-| Husky git hooks | Not installed |
+| CLAUDE.md says                                                                        | Reality                                                                            |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Astro 3.6.5                                                                           | Astro 6.4.8                                                                        |
+| Vue 3 components, `<script setup>`, `Kw`-prefixed                                     | Zero `.vue` files exist                                                            |
+| PostgreSQL with **Prisma ORM**                                                        | Raw SQL on Neon; no `prisma/` dir, no Prisma dep                                   |
+| **Lucia Auth v2** with Prisma adapter                                                 | Hand-rolled PBKDF2 + session table                                                 |
+| **Turbo** for monorepo management                                                     | Not a dependency                                                                   |
+| `pnpm db:generate`, `db:migrate:dev`, `db:seed`, `prisma:studio`                      | None of these scripts exist                                                        |
+| `pnpm test:e2e:{accessibility,pages,performance,visual}`                              | None exist                                                                         |
+| `src/components/` prefixed with `Kw`                                                  | No component uses that prefix                                                      |
+| Husky git hooks                                                                       | Not installed                                                                      |
 | Users/UserProfile/Email tracking tables, USER/ADMIN roles, HOUSE/GARAGE/WORKSHOP enum | Actual: `admin_users`/`admin_sessions`/`reservations`, roles `admin`/`super_admin` |
 
 An agent or new contributor following `CLAUDE.md` would run commands that don't exist
@@ -329,18 +328,18 @@ Recorded so a future refactor doesn't undo them by accident:
 
 ## 6. Recommended order of work
 
-| # | Action | Effort |
-|---|---|---|
-| 1 | Add a `validate` + `test` CI job; gate both deploy workflows on it | ~1h |
-| 2 | Install `husky`, add `prepare` script, wire the existing lint-staged/commitlint configs | ~30m |
-| 3 | Determine whether the contact form is meant to submit; wire it or document the stub | ~2h |
-| 4 | Rewrite `README.md` and `CLAUDE.md` to describe the actual stack | ~2h |
-| 5 | Extract DDL into versioned migrations; slim `seed-admin.ts` | ~3h |
-| 6 | Add login rate limiting / lockout; comment the SameSite-as-CSRF-defence decision | ~2h |
-| 7 | Declare `APP_SITE`/`APP_HOST` in `env.d.ts`; complete `env.example` | ~30m |
-| 8 | Delete dead config and deps (stylelint, markdownlint, vue eslint, ConfettiLauncher, docker-compose) — or install and use them | ~1h |
-| 9 | Add Playwright coverage for the admin auth + reservation CRUD paths | ~1d |
-| 10 | Fix the `Restaraunt` filenames; align `mise.toml` to Node 22 | ~30m |
+| #   | Action                                                                                                                        | Effort |
+| --- | ----------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 1   | Add a `validate` + `test` CI job; gate both deploy workflows on it                                                            | ~1h    |
+| 2   | Install `husky`, add `prepare` script, wire the existing lint-staged/commitlint configs                                       | ~30m   |
+| 3   | Determine whether the contact form is meant to submit; wire it or document the stub                                           | ~2h    |
+| 4   | Rewrite `README.md` and `CLAUDE.md` to describe the actual stack                                                              | ~2h    |
+| 5   | Extract DDL into versioned migrations; slim `seed-admin.ts`                                                                   | ~3h    |
+| 6   | Add login rate limiting / lockout; comment the SameSite-as-CSRF-defence decision                                              | ~2h    |
+| 7   | Declare `APP_SITE`/`APP_HOST` in `env.d.ts`; complete `env.example`                                                           | ~30m   |
+| 8   | Delete dead config and deps (stylelint, markdownlint, vue eslint, ConfettiLauncher, docker-compose) — or install and use them | ~1h    |
+| 9   | Add Playwright coverage for the admin auth + reservation CRUD paths                                                           | ~1d    |
+| 10  | Fix the `Restaraunt` filenames; align `mise.toml` to Node 22                                                                  | ~30m   |
 
 Items 1 and 2 are the ones that change the repo's risk profile. Everything else is
 cleanup that becomes safer once they're in place.

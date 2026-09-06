@@ -296,7 +296,10 @@ const existingReservations = existingRows.map((r) => ({
 	<script
 		id="existing-reservations"
 		type="application/json"
-		set:html={JSON.stringify(existingReservations)}
+		set:html={JSON.stringify(existingReservations)
+			.replace(/</g, '\\u003c')
+			.replace(/>/g, '\\u003e')
+			.replace(/&/g, '\\u0026')}
 	/>
 </AdminLayout>
 
