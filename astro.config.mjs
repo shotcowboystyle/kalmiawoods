@@ -9,11 +9,11 @@ import { getBuildId } from './scripts/build-id.mjs';
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
-	site: process.env.APP_SITE,
+	site: process.env.APP_SITE || 'https://kalmiawoods.com',
 	trailingSlash: 'never',
 	adapter: vercel(),
 	image: {
-		domains: [process.env.APP_HOST].filter(Boolean),
+		domains: [process.env.APP_HOST || 'kalmiawoods.com'].filter(Boolean),
 	},
 	integrations: [mdx(), sitemap()],
 	vite: {
