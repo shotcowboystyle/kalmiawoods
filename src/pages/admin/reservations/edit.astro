@@ -19,6 +19,7 @@ import {
 	type Property,
 	type ReservationFieldErrors,
 } from '../../../lib/reservations';
+import { safeJsonStringify } from '../../../utils/json';
 
 export const prerender = false;
 
@@ -326,7 +327,7 @@ const existingReservations = existingRows.map((r) => ({
 	<script
 		id="existing-reservations"
 		type="application/json"
-		set:html={JSON.stringify(existingReservations)}
+		set:html={safeJsonStringify(existingReservations)}
 	/>
 </AdminLayout>
 
