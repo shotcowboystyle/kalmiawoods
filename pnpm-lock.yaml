@@ -109,8 +109,8 @@ importers:
         specifier: ^25.9.5
         version: 25.9.5
       astro-compress:
-        specifier: ^2.4.3
-        version: 2.4.3(@types/node@25.9.5)(@vercel/functions@3.9.5)(jiti@2.7.0)(rollup@4.63.1)(tsx@4.23.13)(yaml@2.9.0)
+        specifier: ^2.4.2
+        version: 2.4.2(@types/node@25.9.5)(@vercel/functions@3.9.5)(jiti@2.7.0)(rollup@4.63.1)(tsx@4.23.13)(yaml@2.9.0)
       astro-eslint-parser:
         specifier: ^1.4.0
         version: 1.4.0
@@ -2871,8 +2871,8 @@ packages:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
 
-  astro-compress@2.4.3:
-    resolution: {integrity: sha512-HQGC4EZyRDG0Ccw0T0s3Q2PNiENPP2PcjZp55LXLikraUSW9KK3ky0lYHVtbUjhFg3nqujdwtIc9iJjJ7FZQsQ==}
+  astro-compress@2.4.2:
+    resolution: {integrity: sha512-ERjC/csa7+JRu5Ko11kiaTZ7Xc9QZy7v2mCy6dhcCllJ6g2pTtU2jtzLdFJ58nWNDtiicX7/6XeoppwIV9gOhA==}
 
   astro-eslint-parser@1.4.0:
     resolution: {integrity: sha512-+QDcgc7e+au6EZ0YjMmRRjNoQo5bDMlaR45aWDoFsuxQTCM9qmCHRoiKJPELgckJ8Wmr7vcfpa9eCDHBFh6G4w==}
@@ -9086,7 +9086,7 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-compress@2.4.3(@types/node@25.9.5)(@vercel/functions@3.9.5)(jiti@2.7.0)(rollup@4.63.1)(tsx@4.23.13)(yaml@2.9.0):
+  astro-compress@2.4.2(@types/node@25.9.5)(@vercel/functions@3.9.5)(jiti@2.7.0)(rollup@4.63.1)(tsx@4.23.13)(yaml@2.9.0):
     dependencies:
       '@playform/pipe': 0.1.6
       '@types/csso': 5.0.5
