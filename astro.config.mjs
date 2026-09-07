@@ -2,7 +2,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
-import compress from 'astro-compress';
 import { defineConfig } from 'astro/config';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { getBuildId } from './scripts/build-id.mjs';
@@ -10,24 +9,13 @@ import { getBuildId } from './scripts/build-id.mjs';
 const IS_PROD = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
-	site: process.env.APP_SITE,
+	site: process.env.APP_SITE || 'https://kalmiawoods.com',
 	trailingSlash: 'never',
 	adapter: vercel(),
 	image: {
-		domains: [process.env.APP_HOST].filter(Boolean),
+		domains: [process.env.APP_HOST || 'kalmiawoods.com'].filter(Boolean),
 	},
-	integrations: [
-		mdx(),
-		sitemap(),
-		compress({
-			CSS: true,
-			HTML: { removeAttributeQuotes: false },
-			Image: false,
-			JavaScript: true,
-			SVG: true,
-			Logger: 1,
-		}),
-	],
+	integrations: [mdx(), sitemap()],
 	vite: {
 		// Same value the service worker is stamped with, so a page can tell the worker
 		// which build the server is currently serving. See scripts/build-sw.mjs.
