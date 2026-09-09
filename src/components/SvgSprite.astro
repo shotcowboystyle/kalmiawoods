@@ -10,5 +10,5 @@ const { class: className, name, ...rest } = Astro.props;
 	class={className}
 	{...rest}
 >
-	<use xlink:href=`${Astro.site}assets/images/sprite.svg#${name}`></use>
+	<use href={`/assets/images/sprite.svg#${name}`}></use>
 </svg>
