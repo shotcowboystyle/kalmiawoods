@@ -24,7 +24,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/ts-plugin": "^1.10.11",
-    "@astrojs/vercel": "^10.0.8",
+    "@astrojs/vercel": "^11.0.10",
     "@axe-core/playwright": "^4.13.0",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
@@ -78,7 +78,7 @@
     "vue-eslint-parser": "^10.4.1"
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.6",
+    "@astrojs/mdx": "^8.0.1",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource-variable/domine": "^5.3.0",
