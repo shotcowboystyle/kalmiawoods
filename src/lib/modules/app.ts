@@ -11,13 +11,14 @@ import SmoothScroll from '@/lib/modules/smooth-scroll';
 import { Viewport } from '@/lib/modules/viewport';
 import { delay } from '@/utils/delay';
 import { prefersReducedMotion } from '@/utils/motion';
-import {
-	isTransitionBeforePreparationEvent,
-	TRANSITION_AFTER_PREPARATION,
-	TRANSITION_AFTER_SWAP,
-	TRANSITION_BEFORE_PREPARATION,
-	type TransitionBeforePreparationEvent,
-} from 'astro:transitions/client';
+import { TransitionBeforePreparationEvent } from 'astro:transitions/client';
+
+// Astro 7 narrowed `astro:transitions/client` to the event classes only — the
+// TRANSITION_* name constants and the isTransition*Event guards are no longer
+// re-exported, so the event names are inlined and `instanceof` does the narrowing.
+const TRANSITION_BEFORE_PREPARATION = 'astro:before-preparation';
+const TRANSITION_AFTER_PREPARATION = 'astro:after-preparation';
+const TRANSITION_AFTER_SWAP = 'astro:after-swap';
 
 export default class App {
 	viewport: Viewport;
@@ -144,7 +145,7 @@ export default class App {
 	}
 
 	handlePreparationEvent(preparationEvent: Event) {
-		if (isTransitionBeforePreparationEvent(preparationEvent)) {
+		if (preparationEvent instanceof TransitionBeforePreparationEvent) {
 			this.handleOnTransitionStart(preparationEvent);
 		}
 	}
